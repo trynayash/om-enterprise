@@ -1,0 +1,323 @@
+import { Suspense } from "react";
+import Link from "next/link";
+import { ArrowRight, BadgeCheck, Globe, Plus, ReceiptText, Wallet } from "lucide-react";
+import { requirePageActor } from "@/server/auth/session";
+import { can } from "@/server/auth/actor";
+import { getSettings } from "@/server/settings";
+import { bestSellers, salesByDay, salesSummary } from "@/server/services/reports";
+import { listPendingApprovals, listSales } from "@/server/services/sales";
+import { listPendingPriceChanges } from "@/server/services/pricing";
+import { newOrderCount } from "@/server/services/website-orders";
+import { istStartOfDay, istStartOfMonth } from "@/lib/india";
+import { D, formatINR } from "@/lib/money";
+import { Card, CardBody, CardHeader, Stat } from "@/components/ui/card";
+import { Alert, EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
+import { LinkButton } from "@/components/ui/button";
+import { Money, DateTime, Qty } from "@/components/ui/money";
+import { SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { SalesChart, type DayPoint } from "@/components/dashboard/ops/sales-chart";
+import { istDateKey } from "@/components/dashboard/ops/params";
+
+export const metadata = { title: "Overview" };
+
+export default function OverviewPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <Overview />
+    </Suspense>
+  );
+}
+
+function greeting(now: Date) {
+  const h = new Date(now.getTime() + 5.5 * 3600_000).getUTCHours();
+  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
+}
+
+async function Overview() {
+  const actor = await requirePageActor("dashboard.view");
+  const now = new Date();
+  const dayStart = istStartOfDay(now);
+  const tomorrow = new Date(dayStart.getTime() + 86400_000);
+  const monthStart = istStartOfMonth(now);
+  const chartStart = new Date(dayStart.getTime() - 29 * 86400_000);
+
+  const tax = await getSettings("tax");
+  const payments = await getSettings("payments");
+  const canReports = can(actor, "reports.view");
+  const canProfit = can(actor, "reports.profit") && can(actor, "costs.view");
+
+  const today = canReports ? await salesSummary(actor, { from: dayStart, to: tomorrow }) : null;
+  const month = canReports ? await salesSummary(actor, { from: monthStart, to: tomorrow }) : null;
+  const daily = canReports ? await salesByDay(actor, { from: chartStart, to: tomorrow }) : [];
+  const best = canReports ? await bestSellers(actor, { from: monthStart, to: tomorrow }, 5) : [];
+
+  const pendingDiscounts = can(actor, "discounts.approve") ? (await listPendingApprovals(actor)).length : 0;
+  const pendingPrices = can(actor, "prices.approve") ? (await listPendingPriceChanges()).length : 0;
+  const newOrders = can(actor, "orders.view") ? await newOrderCount() : 0;
+  const canSales = can(actor, "sales.view_all") || can(actor, "sales.create");
+  const recent = canSales ? await listSales(actor, { pageSize: 6 }) : null;
+  const withTraining = canSales ? await listSales(actor, { pageSize: 1, includeTraining: true }) : null;
+  const hiddenTraining = recent && withTraining ? withTraining.total - recent.total : 0;
+
+  const points: DayPoint[] = Array.from({ length: 30 }, (_, i) => {
+    const key = istDateKey(new Date(chartStart.getTime() + i * 86400_000));
+    const row = daily.find((d) => d.day === key);
+    return { day: key, value: row ? Number(row.taxable) : 0, bills: row ? row.bills : 0 };
+  });
+  const thirtyDayTotal = points.reduce((a, p) => a.plus(p.value), D(0));
+
+  const todayLabel = now.toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", weekday: "long", day: "numeric", month: "long", year: "numeric" });
+
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow={todayLabel}
+        title={`${greeting(now)}, ${actor.displayName.split(" ")[0]}`}
+        description="Live figures from saved bills and verified payments. Training (sample) transactions are never included."
+        actions={
+          <>
+            {can(actor, "sales.create") && (
+              <LinkButton href="/pos" variant="gold" icon={<Plus className="h-4 w-4" />}>
+                New sale
+              </LinkButton>
+            )}
+            {canReports && (
+              <LinkButton href="/dashboard/reports" variant="outline">
+                Reports
+              </LinkButton>
+            )}
+          </>
+        }
+      />
+
+      {tax.registrationType === null && (
+        <Alert tone="warning" title="GST registration not confirmed">
+          Real bills are blocked until GST registration is confirmed in Settings → Tax. Only training (sample) sales can be completed.
+          {actor.isSuperAdmin && (
+            <>
+              {" "}
+              <Link href="/dashboard/settings" className="font-semibold underline">
+                Configure now
+              </Link>
+            </>
+          )}
+        </Alert>
+      )}
+      {!payments.upiEnabled && payments.gatewayProvider === "none" && (
+        <Alert tone="info" title="UPI QR is not set up">
+          Payment QR codes need the shop&apos;s UPI ID in Settings → Payments. Cash and other configured methods still work.
+        </Alert>
+      )}
+
+      {canReports && today && month ? (
+        <>
+          <section aria-labelledby="today-h">
+            <h2 id="today-h" className="mb-3 text-sm font-bold uppercase tracking-[0.14em] text-navy-500">
+              Today
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <Stat label="Net sales (excl. GST)" value={formatINR(today.netRevenue)} hint={`${today.bills.count} bill${today.bills.count === 1 ? "" : "s"} · GST ${formatINR(today.netTax)}`} />
+              <Stat
+                label="Collections (cash flow)"
+                value={formatINR(today.collections.net)}
+                hint={`Received ${formatINR(today.collections.received)}${D(today.collections.refunded).greaterThan(0) ? ` · refunded ${formatINR(today.collections.refunded)}` : ""}`}
+                tone="green"
+              />
+              <Stat
+                label="Pending payments"
+                value={formatINR(today.pendingPayments.amount)}
+                hint={`${today.pendingPayments.count} sale${today.pendingPayments.count === 1 ? "" : "s"} awaiting payment (all dates)`}
+                tone={today.pendingPayments.count ? "gold" : "navy"}
+              />
+              <Stat label="Discounts given" value={formatINR(today.bills.discounts)} hint={`${today.discountPercentOfGross}% of gross sales`} />
+            </div>
+          </section>
+
+          <section aria-labelledby="month-h">
+            <h2 id="month-h" className="mb-3 text-sm font-bold uppercase tracking-[0.14em] text-navy-500">
+              This month
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+              <Stat label="Net sales (excl. GST)" value={formatINR(month.netRevenue)} hint={`Invoiced ${formatINR(month.netInvoiced)} incl. GST`} />
+              <Stat label="Bills issued" value={month.bills.count.toLocaleString("en-IN")} hint={`Average bill ${formatINR(month.averageBill)}${month.creditNotes.count ? ` · ${month.creditNotes.count} credit note(s)` : ""}`} />
+              <Stat label="GST collected" value={formatINR(month.netTax)} hint="Output tax on bills, less credit notes" />
+              {canProfit && month.profit ? (
+                <Stat
+                  label="Gross profit — not net profit"
+                  value={formatINR(month.profit.grossProfit)}
+                  tone="green"
+                  hint={
+                    month.profit.grossMarginPercent === null
+                      ? "No sales with known cost yet"
+                      : `Margin ${month.profit.grossMarginPercent}%${
+                          Number(month.profit.costCoveragePercent) < 100 ? ` · based on ${month.profit.costCoveragePercent}% of sales with known cost` : ""
+                        }`
+                  }
+                />
+              ) : (
+                <Stat label="Collections (cash flow)" value={formatINR(month.collections.net)} tone="green" hint="Money received less refunds" />
+              )}
+            </div>
+          </section>
+
+          <div className="grid gap-6 xl:grid-cols-3">
+            <Card className="xl:col-span-2">
+              <CardHeader title="Net sales — last 30 days" description={`Excluding GST · total ${formatINR(thirtyDayTotal.toFixed(2))}`} />
+              <CardBody>
+                {thirtyDayTotal.isZero() ? (
+                  <EmptyState title="No sales recorded yet" description="Bars appear here as real bills are issued." />
+                ) : (
+                  <SalesChart points={points} caption="Daily net sales for the last 30 days" />
+                )}
+              </CardBody>
+            </Card>
+            <ActionItems pendingDiscounts={pendingDiscounts} pendingPrices={pendingPrices} newOrders={newOrders} pendingPayments={today.pendingPayments} showOrders={can(actor, "orders.view")} showApprovals={can(actor, "discounts.approve") || can(actor, "prices.approve")} />
+          </div>
+        </>
+      ) : (
+        <ActionItems pendingDiscounts={pendingDiscounts} pendingPrices={pendingPrices} newOrders={newOrders} pendingPayments={null} showOrders={can(actor, "orders.view")} showApprovals={can(actor, "discounts.approve") || can(actor, "prices.approve")} />
+      )}
+
+      <div className="grid gap-6 xl:grid-cols-2">
+        {canReports && (
+          <Card>
+            <CardHeader title="Best sellers this month" description="By net sales (excl. GST), after returns" />
+            {best.length ? (
+              <TableWrap className="rounded-none border-0 shadow-none">
+                <table className="w-full">
+                  <thead>
+                    <tr>
+                      <th className={th}>Product</th>
+                      <th className={`${th} text-right`}>Qty</th>
+                      <th className={`${th} text-right`}>Net sales</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {best.map((b) => (
+                      <tr key={b.variantId}>
+                        <td className={td}>
+                          <div className="font-medium">{b.product}</div>
+                          <div className="text-xs text-navy-500">
+                            {b.sku} · {b.category}
+                          </div>
+                        </td>
+                        <td className={`${td} text-right`}>
+                          <Qty value={b.quantity} unit={b.unit} />
+                        </td>
+                        <td className={`${td} text-right font-semibold`}>
+                          <Money value={b.revenue} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </TableWrap>
+            ) : (
+              <CardBody>
+                <EmptyState title="No sales recorded yet" description="Best sellers appear once bills are issued this month." />
+              </CardBody>
+            )}
+          </Card>
+        )}
+        {recent && (
+          <Card>
+            <CardHeader
+              title="Recent sales"
+              actions={
+                <Link href="/dashboard/sales" className="inline-flex items-center gap-1 text-sm font-semibold text-navy-700 hover:text-navy-900">
+                  All sales <ArrowRight className="h-4 w-4" />
+                </Link>
+              }
+            />
+            {recent.items.length ? (
+              <ul className="divide-y divide-navy-50">
+                {recent.items.map((s) => (
+                  <li key={s.id}>
+                    <Link href={`/dashboard/sales/${s.id}`} className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-navy-50/60">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 font-semibold">
+                          {s.saleNumber}
+                          {s.isTraining && <SampleBadge label="Training" />}
+                        </div>
+                        <div className="truncate text-xs text-navy-500">
+                          {s.customerName ?? "Walk-in customer"} · <DateTime value={s.createdAt} /> · {s.createdByName}
+                        </div>
+                      </div>
+                      <div className="flex shrink-0 flex-col items-end gap-1">
+                        <Money value={s.grandTotal} className="font-semibold" />
+                        <StatusBadge status={s.status === "completed" ? s.paymentStatus : s.status} />
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <CardBody>
+                <EmptyState title="No sales recorded yet" description={hiddenTraining > 0 ? `${hiddenTraining} training sale(s) are hidden — open Sales and tick “Include training” to see them.` : "Start one from the Point of Sale."} />
+              </CardBody>
+            )}
+          </Card>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ActionItems({
+  pendingDiscounts,
+  pendingPrices,
+  newOrders,
+  pendingPayments,
+  showOrders,
+  showApprovals,
+}: {
+  pendingDiscounts: number;
+  pendingPrices: number;
+  newOrders: number;
+  pendingPayments: { count: number; amount: string } | null;
+  showOrders: boolean;
+  showApprovals: boolean;
+}) {
+  const items = [
+    showApprovals && {
+      href: "/dashboard/approvals",
+      icon: BadgeCheck,
+      label: "Approvals waiting",
+      value: pendingDiscounts + pendingPrices,
+      hint: `${pendingDiscounts} discount · ${pendingPrices} price change`,
+    },
+    showOrders && { href: "/dashboard/orders", icon: Globe, label: "New website orders", value: newOrders, hint: "Enquiries & order requests to answer" },
+    pendingPayments && {
+      href: "/dashboard/payments?view=pending",
+      icon: Wallet,
+      label: "Sales awaiting payment",
+      value: pendingPayments.count,
+      hint: `${formatINR(pendingPayments.amount)} outstanding`,
+    },
+    { href: "/dashboard/documents", icon: ReceiptText, label: "Bills & documents", value: null, hint: "Reprint, download or share" },
+  ].filter(Boolean) as { href: string; icon: typeof Globe; label: string; value: number | null; hint: string }[];
+  return (
+    <Card>
+      <CardHeader title="Needs attention" />
+      <ul className="divide-y divide-navy-50">
+        {items.map((i) => (
+          <li key={i.href}>
+            <Link href={i.href} className="flex items-center gap-3 px-5 py-3.5 hover:bg-navy-50/60">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
+                <i.icon className="h-4.5 w-4.5" />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-semibold">{i.label}</span>
+                <span className="block truncate text-xs text-navy-500">{i.hint}</span>
+              </span>
+              {i.value !== null && (
+                <span className={`min-w-8 rounded-full px-2 py-0.5 text-center text-sm font-bold tabular ${i.value ? "bg-gold-100 text-gold-700" : "bg-navy-50 text-navy-400"}`}>{i.value}</span>
+              )}
+              <ArrowRight className="h-4 w-4 text-navy-300" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
