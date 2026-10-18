@@ -334,6 +334,29 @@ export async function updateLine(actor: Actor, saleId: string, lineId: string, i
     }
 
     await tx.update(saleLines).set(set).where(eq(saleLines.id, lineId));
+    if (input.discount !== undefined || (input.overridePrice !== undefined && line.lineType === "item")) {
+      await audit(tx, auditActorOf(actor), {
+        action: input.overridePrice !== undefined ? "discount.price_override" : "discount.line_applied",
+        entityType: "sale",
+        entityId: saleId,
+        summary:
+          input.overridePrice !== undefined
+            ? input.overridePrice === null
+              ? `Removed price override on ${line.sku} (${sale.saleNumber})`
+              : `Changed price of ${line.sku} on ${sale.saleNumber}: ₹${line.priceListUnitPrice} → ₹${m(input.overridePrice)} (${input.overrideReason?.trim()})`
+            : set.lineDiscountType
+              ? `Applied ${set.lineDiscountType === "percent" ? `${set.lineDiscountValue}%` : `₹${set.lineDiscountValue}`} discount on ${line.sku} (${sale.saleNumber})`
+              : `Removed discount on ${line.sku} (${sale.saleNumber})`,
+        data: {
+          lineId,
+          sku: line.sku,
+          listUnitPrice: line.priceListUnitPrice,
+          discount: set.lineDiscountType ? { type: set.lineDiscountType, value: set.lineDiscountValue, reason: set.lineDiscountReason } : null,
+          overridePrice: input.overridePrice ?? null,
+          overrideReason: input.overrideReason ?? null,
+        },
+      });
+    }
     return recalculate(tx, actor, saleId);
   });
 }
@@ -414,6 +437,15 @@ export async function setCartDiscount(actor: Actor, saleId: string, discount: Di
         updatedAt: new Date(),
       })
       .where(eq(sales.id, saleId));
+    await audit(tx, auditActorOf(actor), {
+      action: "discount.cart_applied",
+      entityType: "sale",
+      entityId: saleId,
+      summary: has
+        ? `Applied ${discount!.type === "percent" ? `${m(discount!.value)}%` : `₹${m(discount!.value)}`} bill discount on ${sale.saleNumber}`
+        : `Removed bill discount on ${sale.saleNumber}`,
+      data: { discount: has ? { type: discount!.type, value: m(discount!.value) } : null, reason: reason ?? null },
+    });
     return recalculate(tx, actor, saleId);
   });
 }

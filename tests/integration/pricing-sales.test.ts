@@ -129,6 +129,10 @@ describe("POS sale flow — Sachin works independently", () => {
     expect(lines[0].unitCost).toBeNull();
 
     await setCartDiscount(sachin, sale.id, { type: "percent", value: "5" }); // within 5% limit
+    const { auditLogs } = await import("@/server/db/schema");
+    const trail = await getDb().select().from(auditLogs).where(eq(auditLogs.entityId, sale.id));
+    const applied = trail.find((a) => a.action === "discount.cart_applied");
+    expect(applied?.actorUserId).toBe(sachin.id);
     const finalized = await finalizeSale(sachin, sale.id);
     expect(finalized.status).toBe("finalized");
     expect(finalized.grandTotal).toBe("4484.00");
