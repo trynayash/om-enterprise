@@ -22,11 +22,17 @@ function priceLabel(r: SearchResult, taxCharged: boolean) {
   return `${formatINR(r.price)}${taxCharged ? (r.priceIncludesTax ? " incl. GST" : " + GST") : ""}`;
 }
 
+function findExact(rows: SearchResult[], term: string) {
+  const t = term.toUpperCase();
+  return rows.find((r) => r.sku.toUpperCase() === t || (r.barcode && r.barcode.toUpperCase() === t));
+}
+
 /** Product finder for the cart. "/" focuses it; Enter on an exact SKU/barcode adds one unit instantly. */
 export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded, onError }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [q, setQ] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [resultsFor, setResultsFor] = useState("");
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const [selected, setSelected] = useState<SearchResult | null>(null);
@@ -55,6 +61,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
       try {
         const rows = await apiFetch<SearchResult[]>(`/api/pos/search?q=${encodeURIComponent(term)}&limit=30&priceListId=${priceListId}`, { signal: ctrl.signal });
         setResults(rows);
+        setResultsFor(term);
         setActive(0);
       } catch (err) {
         if ((err as Error).name !== "AbortError") onError(errorMessage(err));
@@ -105,13 +112,35 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
       reset();
     } else if (e.key === "Enter") {
       e.preventDefault();
-      const term = q.trim().toUpperCase();
-      const exact = visible.find((r) => r.sku.toUpperCase() === term || (r.barcode && r.barcode.toUpperCase() === term));
+      const term = q.trim();
+      if (!term || adding) return;
+      if (resultsFor !== term) {
+        // A barcode scanner types the code and presses Enter before the debounced search runs.
+        void addExactNow(term);
+        return;
+      }
+      const exact = findExact(visible, term);
       if (exact && exact.price) {
         void add(exact, "1", exact.unitCode);
         return;
       }
       if (visible[active]) setSelected(visible[active]);
+    }
+  };
+
+  const addExactNow = async (term: string) => {
+    try {
+      const rows = await apiFetch<SearchResult[]>(`/api/pos/search?q=${encodeURIComponent(term)}&limit=30&priceListId=${priceListId}`);
+      const exact = findExact(rows, term);
+      if (exact && exact.price) {
+        await add(exact, "1", exact.unitCode);
+        return;
+      }
+      setResults(rows);
+      setResultsFor(term);
+      setActive(0);
+    } catch (err) {
+      onError(errorMessage(err));
     }
   };
 

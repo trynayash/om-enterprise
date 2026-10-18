@@ -8,11 +8,17 @@ test.describe("dashboard operations", () => {
   });
 
   test("overview never invents numbers and training sales stay out of it", async ({ page }) => {
-    await makeTrainingBill(page);
+    const today = page.getByRole("region", { name: "Today" });
     await page.goto("/dashboard");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    // Only training sales exist in the e2e database → business totals stay at zero.
-    await expect(page.getByText("₹0.00").first()).toBeVisible();
+    const before = await today.innerText();
+    // Figures come from recorded sales only, never placeholders.
+    expect(before).toMatch(/Net sales \(excl\. GST\)\s*₹[\d,]+\.\d{2}/i);
+    // A paid training bill must not move any business total.
+    await makeTrainingBill(page);
+    await page.reload();
+    await expect(today).toBeVisible();
+    expect(await today.innerText()).toBe(before);
   });
 
   test("a billed training sale is fully traceable: sale, payment, document", async ({ page }) => {
