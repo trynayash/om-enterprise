@@ -17,7 +17,8 @@
     "create-super-admin": "tsx --conditions=react-server scripts/create-super-admin.ts",
     "reset-login-secret": "tsx --conditions=react-server scripts/reset-login-secret.ts",
     "seed:demo": "tsx --conditions=react-server scripts/seed-demo.ts",
-    "import:products": "tsx --conditions=react-server scripts/import-products.ts"
+    "import:products": "tsx --conditions=react-server scripts/import-products.ts",
+    "walkthrough": "tsx --conditions=react-server scripts/walkthrough-prepare.ts && playwright test -c playwright.walkthrough.config.ts; tsx scripts/walkthrough-report.ts"
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.3.0",

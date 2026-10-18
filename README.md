@@ -499,6 +499,17 @@ npm run typecheck && npm run lint
 
 Last full run (18 Oct 2026, this repository): **51 unit, 72 integration and 34 browser tests passed.** Four browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
 
+### Recorded walkthrough (videos)
+
+```bash
+npm run build && npm run walkthrough
+```
+
+This rebuilds the e2e database, then records a narrated video of every page and feature in the real app. The owner "Kishan" is created exactly as in the handover note, but with a demo password. The run covers sign-in, website, settings, staff, catalogue, price approval, import, the full counter sale, payments, returns, reports, audit log, access control, training mode and the phone layouts. Each video has captions and on-screen ✅/❌ checks. Results go to `walkthrough-output/`:
+
+- `videos/*.mp4`: one file per video, plus extra files for a second device (for example the manager approving from another screen).
+- `REPORT.md`: every check with its result, and the error for any that failed.
+
 **Coverage of the required checks:**
 
 | # | Requirement | Where |
