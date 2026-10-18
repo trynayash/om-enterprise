@@ -377,7 +377,8 @@ export async function verifyApproverCredentials(
   const rows = await db.select().from(users).where(sql`lower(${users.username}) = ${uname}`);
   const user = rows[0];
   const who: AuditActor = { userId: requestedBy.id, label: `approver:${uname.slice(0, 40)}`, ip: client.ip, userAgent: client.userAgent };
-  const fail = () => new AppError("UNAUTHENTICATED", "Approver username, password or secret key is incorrect");
+  // A form error, not 401: the cashier's own session is fine and must not be signed out.
+  const fail = () => invalid("Approver username, password or secret key is incorrect");
   if (!user) {
     await verifyPassword(password, await getDummyHash()); // equalise timing
     await db.transaction((tx) => audit(tx, who, { action: "auth.approver_check_failed", summary: "In-person approval: unknown approver username" }));
@@ -402,7 +403,7 @@ export async function verifyApproverCredentials(
   }
   if (user.failedLoginCount > 0) await db.update(users).set({ failedLoginCount: 0 }).where(eq(users.id, user.id));
   const actor = await loadActor(user.id);
-  if (!actor) throw new AppError("UNAUTHENTICATED", "Approver account is not active");
+  if (!actor) throw invalid("Approver account is not active");
   actor.ip = client.ip;
   actor.userAgent = client.userAgent;
   return actor;

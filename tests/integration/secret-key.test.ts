@@ -119,7 +119,10 @@ describe("sign-in secret key", () => {
     const { lines } = await getSale(sachin, sale.id);
     await updateLine(sachin, sale.id, lines[0].id, { discount: { type: "percent", value: "8" }, discountReason: "contractor" });
     const name = (await reload(kishan)).username;
-    expect((await rejects(approveInPerson(sachin, sale.id, name, TEST_PASSWORD, null, freshClient()))).message).toMatch(/secret key is incorrect/);
+    const refused = await rejects(approveInPerson(sachin, sale.id, name, TEST_PASSWORD, null, freshClient()));
+    expect(refused.message).toMatch(/secret key is incorrect/);
+    // A form error for the cashier — never "unauthenticated", which the app treats as a sign-out.
+    expect(refused.code).toBe("VALIDATION");
     const ok = await approveInPerson(sachin, sale.id, name, TEST_PASSWORD, null, freshClient(), KEY);
     expect(ok).toBeTruthy();
     expect((await getSale(sachin, sale.id)).sale.approvalStatus).toBe("approved");

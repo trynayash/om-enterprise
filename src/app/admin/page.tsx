@@ -22,14 +22,18 @@ const card = (
 /** /admin — the owner's sign-in address. Already signed in? Go straight in. */
 export default function AdminPage() {
   return (
-    <Suspense fallback={card}>
-      <AdminGate />
-    </Suspense>
+    <>
+      {/* Only the redirect check waits for the session; the form itself renders once, immediately. */}
+      <Suspense fallback={null}>
+        <RedirectIfSignedIn />
+      </Suspense>
+      {card}
+    </>
   );
 }
 
-async function AdminGate() {
+async function RedirectIfSignedIn() {
   const actor = await getCurrentActor();
   if (actor) redirect(actor.mustChangePassword ? "/account/password?required=1" : landingPath(actor.permissions, actor.isSuperAdmin));
-  return card;
+  return null;
 }
