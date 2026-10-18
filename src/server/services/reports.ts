@@ -26,11 +26,11 @@ export interface Period {
 
 const BILL_TYPES = sql`('tax_invoice','bill_of_supply','cash_memo')`;
 
-type Row = Record<string, string | number | null>;
+type Row = Record<string, string | number | boolean | null>;
 
 async function q<T extends Row>(query: ReturnType<typeof sql>): Promise<T[]> {
-  const res = await getDb().execute<T>(query);
-  return res.rows;
+  const res = await getDb().execute(query);
+  return res.rows as T[];
 }
 
 function requireProfit(actor: Actor) {

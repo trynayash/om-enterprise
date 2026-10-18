@@ -29,6 +29,8 @@ interface Options {
   webhook?: boolean;
   /** Allow even when the user must change their password. */
   allowPasswordChangePending?: boolean;
+  /** Override the default 256 KB JSON body limit (e.g. CSV import). */
+  maxBodyBytes?: number;
 }
 
 type RouteCtx = { params: Promise<Record<string, string | string[]>> };
@@ -98,7 +100,7 @@ export function api<O extends Options>(
             if (!ct.includes("application/json")) throw invalid("Expected a JSON request body");
           }
           const text = await req.text();
-          if (text.length > MAX_BODY_BYTES) throw invalid("Request body is too large");
+          if (text.length > (opts.maxBodyBytes ?? MAX_BODY_BYTES)) throw invalid("Request body is too large");
           let json: unknown;
           try {
             json = text ? JSON.parse(text) : {};
