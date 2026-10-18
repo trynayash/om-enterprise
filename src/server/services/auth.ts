@@ -336,7 +336,9 @@ export async function changePassword(actor: Actor, currentPassword: string, newP
   }
   if (currentPassword === newPassword) throw invalid("Choose a different password from the current one");
   const security = await getSettings("security");
-  const weak = checkPasswordStrength(newPassword, { minLength: security.minPasswordLength, username: user.username });
+  // The owner's account guards everything: at least 12 characters, whatever the general minimum.
+  const minLength = actor.isSuperAdmin ? Math.max(12, security.minPasswordLength) : security.minPasswordLength;
+  const weak = checkPasswordStrength(newPassword, { minLength, username: user.username });
   if (weak) throw invalid(weak);
   const hash = await hashPassword(newPassword);
   await db.transaction(async (tx) => {

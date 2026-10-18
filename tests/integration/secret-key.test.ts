@@ -32,6 +32,10 @@ describe("first Super Admin from the command line", () => {
     const { actor } = await sessionLogin(username, "Handover-Temp-Pass-2026!", freshClient());
     expect(actor.isSuperAdmin).toBe(true);
     expect(actor.mustChangePassword).toBe(true);
+    const { changePassword } = await import("@/server/services/auth");
+    expect((await rejects(changePassword(actor, "Handover-Temp-Pass-2026!", "Short-Pas-1"))).message).toMatch(/at least 12/);
+    await changePassword(actor, "Handover-Temp-Pass-2026!", "Owner-Chosen-Pass-26");
+    expect((await reload(actor)).mustChangePassword).toBe(false);
   });
 });
 

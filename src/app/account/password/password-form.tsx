@@ -49,7 +49,7 @@ export function PasswordForm() {
       <Field label="Current password" htmlFor="cur">
         <Input id="cur" type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} required />
       </Field>
-      <Field label="New password" htmlFor="new" hint="At least 10 characters, mixing letters with numbers or symbols. Don't include your username.">
+      <Field label="New password" htmlFor="new" hint="At least 10 characters (12 for the Super Admin), mixing letters with numbers or symbols. Don't include your username.">
         <Input id="new" type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} required />
       </Field>
       <Field label="Confirm new password" htmlFor="conf">
