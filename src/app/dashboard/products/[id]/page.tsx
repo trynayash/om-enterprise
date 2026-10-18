@@ -188,6 +188,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
           <ProductForm
             mode="edit"
             canEdit={perms.canEdit}
+            canMarkSample={actor.isSuperAdmin}
             product={{
               id: p.id,
               slug: p.slug,

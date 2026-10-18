@@ -17,7 +17,7 @@ export default function NewProductPage(props: PageProps<"/dashboard/products/new
 }
 
 async function NewProductContent({ searchParams }: { searchParams: PageProps<"/dashboard/products/new">["searchParams"] }) {
-  await requirePageActor("catalog.create");
+  const actor = await requirePageActor("catalog.create");
   const sp = await searchParams;
   const [categories, brands, units, taxClasses] = [await listCategories(), await listBrands(), await listUnits(), await listTaxClasses()];
   return (
@@ -29,6 +29,7 @@ async function NewProductContent({ searchParams }: { searchParams: PageProps<"/d
       <ProductForm
         mode="create"
         canEdit
+        canMarkSample={actor.isSuperAdmin}
         defaultCategoryId={typeof sp.categoryId === "string" ? sp.categoryId : undefined}
         categories={categories.map((c) => ({ id: c.id, name: c.name, parentId: c.parentId, sortOrder: c.sortOrder, isActive: c.isActive }))}
         brands={brands.filter((b) => b.isActive).map((b) => ({ id: b.id, name: b.name }))}

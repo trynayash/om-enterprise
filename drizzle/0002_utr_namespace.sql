@@ -1,0 +1,2 @@
+DROP INDEX "payments_reference_uq";--> statement-breakpoint
+CREATE UNIQUE INDEX "payments_reference_uq" ON "payments" USING btree ((case when "method" in ('upi','bank_transfer') then 'bank' else "method" end),upper("reference")) WHERE "payments"."reference" is not null and "payments"."direction" = 'in' and "payments"."status" = 'successful';

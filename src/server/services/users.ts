@@ -111,6 +111,24 @@ function assertCanManageTarget(actor: Actor, targetRoleKey: string, targetId?: s
   if (targetRoleKey !== "sales") throw forbidden("Only the Super Admin can manage administrator accounts");
 }
 
+/**
+ * A sales-role account the Super Admin has individually elevated (extra permissions, or limits above
+ * the role's defaults) is managed by the Super Admin only: otherwise a users.manage holder could reset
+ * its password, or reactivate it, and act with those powers.
+ */
+async function assertMayManageElevated(tx: Tx, actor: Actor, u: typeof users.$inferSelect, r: typeof roles.$inferSelect) {
+  if (actor.isSuperAdmin) return;
+  const [grant] = await tx
+    .select({ p: userPermissionOverrides.permission })
+    .from(userPermissionOverrides)
+    .where(and(eq(userPermissionOverrides.userId, u.id), eq(userPermissionOverrides.effect, "grant")))
+    .limit(1);
+  const above = (v: string | null, roleDefault: string) => v !== null && D(v).greaterThan(D(roleDefault));
+  if (grant || above(u.discountLimitPercent, r.defaultDiscountLimitPercent) || above(u.approvalLimitPercent, r.defaultApprovalLimitPercent)) {
+    throw forbidden("This account has extra powers granted by the Super Admin, so only the Super Admin can reset or reactivate it");
+  }
+}
+
 function validLimit(v: string | null | undefined): string | null {
   if (v === null || v === undefined || v === "") return null;
   if (!/^\d{1,3}(\.\d{1,2})?$/.test(v) || D(v).greaterThan(100)) throw invalid("Limits must be a percentage between 0 and 100");
@@ -189,6 +207,7 @@ export async function updateStaff(
     const { u, r } = await targetUser(tx, userId);
     assertCanManageTarget(actor, r.key, userId);
     if (r.key === "super_admin") requireSuperAdmin(actor);
+    if (input.isActive === true && !u.isActive) await assertMayManageElevated(tx, actor, u, r);
 
     const set: Partial<typeof users.$inferInsert> = { updatedAt: new Date() };
     const changes: Record<string, unknown> = {};
@@ -255,6 +274,7 @@ export async function resetStaffPassword(actor: Actor, userId: string, temporary
     const { u, r } = await targetUser(tx, userId);
     assertCanManageTarget(actor, r.key, userId);
     if (r.key === "super_admin") requireSuperAdmin(actor);
+    await assertMayManageElevated(tx, actor, u, r);
     const weak = checkPasswordStrength(temporaryPassword, { minLength: security.minPasswordLength, username: u.username });
     if (weak) throw invalid(`Temporary password: ${weak}`);
     await tx

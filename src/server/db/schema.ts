@@ -881,9 +881,10 @@ export const payments = pgTable(
     uniqueIndex("payments_provider_payment_uq")
       .on(t.provider, t.providerPaymentId)
       .where(sql`${t.providerPaymentId} is not null`),
-    // The same UTR/reference cannot confirm two incoming payments.
+    // The same UTR/reference cannot confirm two incoming payments. UPI and bank transfers share one
+    // namespace because both carry bank UTRs; card codes and cheque numbers are only unique per method.
     uniqueIndex("payments_reference_uq")
-      .on(t.method, sql`upper(${t.reference})`)
+      .on(sql`(case when ${t.method} in ('upi','bank_transfer') then 'bank' else ${t.method} end)`, sql`upper(${t.reference})`)
       .where(sql`${t.reference} is not null and ${t.direction} = 'in' and ${t.status} = 'successful'`),
     check("payments_direction", sql`${t.direction} in ('in','refund')`),
     check("payments_method", sql`${t.method} in ('upi','cash','card','bank_transfer','cheque','other')`),

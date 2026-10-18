@@ -153,7 +153,8 @@ npm run dev                     # http://localhost:3000  (staff: /login)
 | `APP_BASE_URL` | yes (prod) | Public URL, e.g. `https://omenterprise.in`. Used for the same-origin check and share links. |
 | `APP_SECRET` | yes | ≥ 32 random characters. Keyed hashing of IP addresses for rate limits and enquiries. Generate: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
 | `UPLOAD_DIR` | no | Where product images are stored (default `./storage/uploads`). Must be persistent storage. |
-| `TRUST_PROXY` | no | `true` (default) trusts `X-Forwarded-For` from your reverse proxy for client IPs. |
+| `TRUST_PROXY` | no | `true` (default) reads client IPs from `X-Forwarded-For` set by your reverse proxy. Keep the app port private (only the proxy may reach it). |
+| `TRUST_PROXY_HOPS` | no | Number of reverse proxies in front of the app (default `1`). The client IP is taken that many entries from the right of `X-Forwarded-For`, so a forged header can't dodge rate limits. |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | optional | Only for the Razorpay dynamic-QR integration. |
 | `DB_POOL_MAX` | no | Connection pool size (default 10). |
 
@@ -311,7 +312,8 @@ Returns create credit notes against the original bill and record refunds. Cancel
   1. checks the shop's UPI or bank app;
   2. records the **12-digit UTR / UPI Ref. No.**;
   3. ticks an explicit "I have checked and confirm ₹X was received".
-- A UTR can confirm only one payment (enforced by a database unique index).
+- A UTR can confirm only one payment, across UPI and bank transfers (enforced by a database unique index).
+- A QR request can only be confirmed as UPI, with its UTR. If the customer pays cash instead, close the QR ("Customer couldn't pay") and record the cash separately.
 - Customers should **scan** the QR. NPCI blocks "pay via UPI app" intent links to personal or unverified UPI IDs, and "share & pay" from the gallery is capped at ₹2,000 for unverified merchants.
 - **Per-payment limit:** most UPI merchant payments are limited to ₹1,00,000 each (configurable). Larger bills are paid in parts.
 - A merchant category code (MCC) should be set only if the UPI ID is a verified merchant account.
@@ -418,6 +420,8 @@ CSV export needs `reports.export`. Profit, costs and margins need `reports.profi
   - Its documents are watermarked *"TRAINING / SAMPLE DATA — NOT A VALID BILL"*.
   - It is excluded from all reports and dashboards.
 - Training sales work even before GST registration is configured, so staff can practise safely.
+- A sale is either all-sample or all-real: the POS refuses to mix them, so real goods can never be hidden inside a training sale.
+- Only the Super Admin can mark a product as sample data or remove that marking (including via CSV import).
 - Before going live:
   1. Unpublish or deactivate the sample products (Products → filter "Sample").
   2. Enter real products with verified data.
@@ -437,15 +441,18 @@ CSV export needs `reports.export`. Profit, costs and margins need `reports.profi
   - Sessions expire after inactivity and have a maximum age.
   - Password changes, resets, deactivation and role changes revoke sessions.
 - **Lockout & rate limits:**
-  - Account lockout after repeated failures.
-  - Rate limits stored in the database, so they work across instances, on: sign-in, in-person approvals, enquiries and share links.
+  - Account lockout after repeated wrong passwords, whether at sign-in or when a manager's password is typed for an in-person approval.
+  - Rate limits stored in the database, so they work across instances, on: sign-in, in-person approvals (per device, per cashier and per approver account), enquiries and share links.
+  - Client IPs are read from the trusted proxy hop of `X-Forwarded-For` (`TRUST_PROXY_HOPS`), so a forged header can't dodge the limits.
 - **CSRF:** every state-changing API call must come from the same origin (Origin / Sec-Fetch-Site check) and be JSON; the cookie is SameSite.
 - **Headers:** CSP, `X-Frame-Options: DENY`, `nosniff`, Referrer-Policy, Permissions-Policy, HSTS in production, and `noindex` on staff pages.
 - **Validation:** zod schemas on every API input; parameterised SQL only.
 - **Uploads:** images are decoded and re-encoded with sharp (WebP, max 1600px, metadata stripped), size-limited and content-addressed.
 - **Data protection:**
   - Public endpoints return only explicitly built DTOs: no costs, margins, staff or internal data.
-  - Cost and profit fields are stripped server-side for users without `costs.view`.
+  - Cost and profit fields are stripped server-side for users without `costs.view`, including the per-line "below cost" flags and category margin targets. Their approval message says only "below the allowed minimum".
+  - Staff without `sales.view_all` can only open, print, share or see payments of their own sales; shop-wide payment reports need report access.
+  - A sales account the Super Admin has given extra powers (extra permissions or higher limits) can only be reset or reactivated by the Super Admin.
   - Enquiry IP addresses are stored only as keyed hashes.
 - **Audit log** (append-only; Dashboard → Audit log) covers:
   - sign-ins and failures, user and permission changes;
@@ -570,6 +577,7 @@ docker compose --env-file .env.production run --rm tools npm run create-super-ad
 - **Content Security Policy:** uses `'unsafe-inline'` for scripts (Next.js without nonces). A nonce-based CSP would force fully dynamic rendering; React's escaping is the primary XSS defence.
 - **Images:** stored on local disk by default; use object storage on hosts with ephemeral disks.
 - **Two-factor authentication** is not implemented. Recommended next for the Super Admin.
+- **Cost privacy at the counter:** cashiers never receive cost figures, but by trying different discounts they can find the point where approval becomes necessary. Without a minimum margin, that point is the cost. Setting a minimum margin above 0% (Settings → Discounts) keeps the exact cost hidden.
 - **Offline POS:** the POS needs network access to the server; there is no offline queue.
 - **Operating expenses:** not recorded, so there is no net-profit or full cash-flow statement.
 - **Out of scope for this release:** customer accounts, loyalty, automated WhatsApp/email notifications, accounting-software export and barcode-scanner hardware integration. The data model leaves room for them; the POS search already accepts barcodes typed or scanned as keyboard input.

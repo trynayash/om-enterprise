@@ -768,12 +768,20 @@ export async function getDocumentByShareToken(token: string) {
   return { id: d.id, docNumber: d.docNumber, docType: d.docType, status: d.status, issuedAt: d.issuedAt, snapshot: d.snapshot as DocSnapshot, cancelReason: d.cancelReason };
 }
 
+/** Lock a document for update after checking the actor may see its sale. */
+async function lockVisibleDocument(tx: Tx, actor: Actor, documentId: string) {
+  const [d] = await tx.select().from(documents).where(eq(documents.id, documentId)).for("update");
+  if (!d) throw notFound("Document");
+  const [sale] = await tx.select({ createdBy: sales.createdBy }).from(sales).where(eq(sales.id, d.saleId));
+  if (!sale || !canSeeSale(actor, sale)) throw forbidden();
+  return d;
+}
+
 export async function recordPrint(actor: Actor, documentId: string, kind: "print" | "pdf") {
   requirePermission(actor, ["documents.reprint", "documents.issue"]);
   const db = getDb();
   await db.transaction(async (tx) => {
-    const [d] = await tx.select().from(documents).where(eq(documents.id, documentId)).for("update");
-    if (!d) throw notFound("Document");
+    const d = await lockVisibleDocument(tx, actor, documentId);
     await tx.update(documents).set({ printCount: d.printCount + 1, lastPrintedAt: new Date() }).where(eq(documents.id, documentId));
     if (d.printCount > 0) {
       await audit(tx, auditActorOf(actor), { action: "document.reprint", entityType: "document", entityId: d.id, summary: `${kind === "pdf" ? "Downloaded" : "Reprinted"} ${d.docNumber} (copy ${d.printCount + 1})` });
@@ -785,8 +793,7 @@ export async function setShareLink(actor: Actor, documentId: string, enabled: bo
   requirePermission(actor, "documents.share");
   const db = getDb();
   return db.transaction(async (tx) => {
-    const [d] = await tx.select().from(documents).where(eq(documents.id, documentId)).for("update");
-    if (!d) throw notFound("Document");
+    const d = await lockVisibleDocument(tx, actor, documentId);
     const token = enabled ? d.shareToken ?? randomBytes(24).toString("base64url") : null;
     await tx.update(documents).set({ shareToken: token }).where(eq(documents.id, documentId));
     await audit(tx, auditActorOf(actor), {

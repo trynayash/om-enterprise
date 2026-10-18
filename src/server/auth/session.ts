@@ -22,8 +22,14 @@ export function sessionCookieOptions(expiresAt: Date) {
 }
 
 export function clientInfoFromHeaders(h: Headers) {
-  const trustProxy = process.env.TRUST_PROXY !== "false";
-  const fwd = trustProxy ? h.get("x-forwarded-for")?.split(",")[0]?.trim() : undefined;
+  // Behind N trusted reverse proxies the client's address is the Nth X-Forwarded-For entry from the
+  // right; anything further left was sent by the client itself and can be forged.
+  const hops = process.env.TRUST_PROXY === "false" ? 0 : Math.max(1, Math.floor(Number(process.env.TRUST_PROXY_HOPS ?? 1)) || 1);
+  const chain = (h.get("x-forwarded-for") ?? "")
+    .split(",")
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const fwd = hops > 0 && chain.length ? chain[Math.max(0, chain.length - hops)] : undefined;
   return {
     ip: fwd || h.get("x-real-ip") || "unknown",
     userAgent: h.get("user-agent") ?? "",

@@ -18,12 +18,14 @@ interface Props {
   units: UnitOption[];
   taxClasses: TaxOption[];
   canEdit: boolean;
+  /** Only the Super Admin may mark or unmark sample (training) data. */
+  canMarkSample?: boolean;
   defaultCategoryId?: string;
 }
 
 type SpecRow = { label: string; value: string };
 
-export function ProductForm({ mode, product, categories, brands, units, taxClasses, canEdit, defaultCategoryId }: Props) {
+export function ProductForm({ mode, product, categories, brands, units, taxClasses, canEdit, canMarkSample = false, defaultCategoryId }: Props) {
   const router = useRouter();
   const toast = useToast();
   const tree = useMemo(() => categoryTree(categories), [categories]);
@@ -259,11 +261,15 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
               <Checkbox checked={f.isFeatured} onChange={(e) => set("isFeatured", e.target.checked)} label={<><b>Featured</b> on the website home page</>} />
               <Checkbox
                 checked={f.isSample}
+                disabled={!canMarkSample}
                 onChange={(e) => set("isSample", e.target.checked)}
                 label={
                   <>
                     <b className="text-red-700">Sample / demonstration data</b>
-                    <span className="block text-xs text-navy-500">Shown with a SAMPLE badge. Any sale containing it becomes a training sale (TRN numbering, watermarked, excluded from reports).</span>
+                    <span className="block text-xs text-navy-500">
+                      Shown with a SAMPLE badge. Sales of it are training sales (TRN numbering, watermarked, excluded from reports) and can&apos;t include real items.
+                      {!canMarkSample && " Only the Super Admin can change this."}
+                    </span>
                   </>
                 }
               />

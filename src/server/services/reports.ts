@@ -283,7 +283,10 @@ export async function belowCostSales(actor: Actor, p: Period) {
 }
 
 export async function paymentSummary(actor: Actor, p: Period) {
-  requirePermission(actor, ["payments.view", "reports.view"]);
+  // Shop-wide collections: report viewers, or payment viewers who may see every sale (e.g. the accountant).
+  if (!can(actor, "reports.view") && !(can(actor, "payments.view") && can(actor, "sales.view_all"))) {
+    throw forbidden("You can't view shop-wide payment reports");
+  }
   const byMethod = await q<{ method: string; verification_method: string | null; direction: string; count: number; amount: string }>(sql`
     select p.method, p.verification_method, p.direction, count(*)::int as count, sum(p.amount)::text as amount
     from payments p join sales s on s.id = p.sale_id

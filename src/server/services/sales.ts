@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { and, asc, desc, eq, gte, ilike, inArray, lte, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, lte, ne, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { getDb, type Tx } from "@/server/db/client";
 import {
@@ -123,7 +123,19 @@ function stripCosts<T extends Record<string, unknown>>(row: T, keys: string[]): 
   return copy as T;
 }
 
-const LINE_COST_KEYS = ["unitCost", "costVersionId", "costTotal", "grossProfit"];
+const LINE_COST_KEYS = ["unitCost", "costVersionId", "costTotal", "grossProfit", "belowCost", "belowMarginFloor"];
+
+/** Approval details carry per-line cost flags; hide them from users without cost access. */
+function redactApprovalDetails(details: unknown) {
+  const d = (details ?? {}) as Record<string, unknown>;
+  const lines = Array.isArray(d.lines) ? (d.lines as Record<string, unknown>[]) : [];
+  return {
+    ...d,
+    anyBelowCost: null,
+    anyBelowMarginFloor: null,
+    lines: lines.map((l) => ({ ...l, belowCost: null, belowMarginFloor: null })),
+  };
+}
 const SALE_COST_KEYS = ["costTotal", "grossProfit"];
 
 export async function getSale(actor: Actor, saleId: string) {
@@ -174,6 +186,7 @@ export async function getSale(actor: Actor, saleId: string) {
     documents: docs,
     approvals: approvals.map((a) => ({
       ...a.a,
+      details: showCost ? a.a.details : redactApprovalDetails(a.a.details),
       requestedByName: a.requestedByName,
       decidedByName: deciders.find((d) => d.id === a.a.decidedBy)?.name ?? null,
     })),
@@ -185,6 +198,9 @@ export async function getSale(actor: Actor, saleId: string) {
 /* ------------------------------------------------------------------ */
 /* Cart mutations                                                      */
 /* ------------------------------------------------------------------ */
+
+// A training sale is excluded from reports and uses its own numbering, so real goods must never ride along.
+const MIXED_SAMPLE_MESSAGE = "SAMPLE (training) items and real items can't be in the same sale. Start a separate sale.";
 
 export interface AddLineInput {
   variantId: string;
@@ -206,6 +222,12 @@ export async function addLine(actor: Actor, saleId: string, input: AddLineInput)
       .where(eq(productVariants.id, input.variantId));
     if (!row) throw notFound("Product variant");
     if (!row.v.isActive || !row.p.isActive) throw invalid(`${row.p.name} — ${row.v.name} is not available for sale`);
+    const [other] = await tx
+      .select({ id: saleLines.id })
+      .from(saleLines)
+      .where(and(eq(saleLines.saleId, saleId), eq(saleLines.lineType, "item"), ne(saleLines.isSample, row.p.isSample)))
+      .limit(1);
+    if (other) throw invalid(MIXED_SAMPLE_MESSAGE);
 
     const unitCode = input.unitCode ?? row.v.unitCode;
     if (unitCode !== row.v.unitCode) {
@@ -298,6 +320,9 @@ export async function updateLine(actor: Actor, saleId: string, lineId: string, i
       const [unit] = await tx.select().from(units).where(eq(units.code, line.unitCode));
       validateQuantity(input.quantity, line.lineType === "charge" ? 2 : (unit?.decimals ?? 0), unit?.name ?? line.unitCode);
       set.quantity = D(input.quantity).toString();
+      // A quoted price holds only for the quoted quantity (it may be a bulk-tier price):
+      // a different quantity is priced at today's price for that quantity.
+      if (line.priceSource === "quotation" && !D(input.quantity).equals(D(line.quantity))) set.priceSource = "price_list";
     }
 
     if (input.discount !== undefined) {
@@ -525,9 +550,11 @@ export function approvalReasonsFor(
     const pct = D(totals.maxLineDiscountPercent).greaterThan(D(totals.effectiveDiscountPercent)) ? totals.maxLineDiscountPercent : totals.effectiveDiscountPercent;
     reasons.push(`Discount ${pct}% exceeds ${operator.displayName}'s limit of ${limit.toFixed(2)}%`);
   }
-  if (!can(operator, "pricing.sell_below_cost")) {
-    if (totals.anyBelowCost) reasons.push("One or more items would be sold below cost");
-    else if (totals.anyBelowMarginFloor) reasons.push("One or more items would be sold below the minimum margin");
+  if (!can(operator, "pricing.sell_below_cost") && (totals.anyBelowCost || totals.anyBelowMarginFloor)) {
+    // Without cost access, don't say which threshold was crossed (it would reveal the cost).
+    if (!can(operator, "costs.view")) reasons.push("One or more prices are below the allowed minimum");
+    else if (totals.anyBelowCost) reasons.push("One or more items would be sold below cost");
+    else reasons.push("One or more items would be sold below the minimum margin");
   }
   return reasons;
 }
@@ -723,6 +750,7 @@ export async function recalculate(tx: Tx, operator: Actor, saleId: string) {
     })
     .where(eq(sales.id, saleId));
 
+  const seesCost = can(operator, "costs.view");
   return {
     approvalNeeded: reasons.length > 0 && approvalStatus !== "approved",
     approvalReasons: reasons,
@@ -740,9 +768,10 @@ export async function recalculate(tx: Tx, operator: Actor, saleId: string) {
     totals: {
       maxLineDiscountPercent: t.maxLineDiscountPercent.toFixed(2),
       effectiveDiscountPercent: t.effectiveDiscountPercent.toFixed(2),
-      anyBelowCost: t.anyBelowCost,
-      anyBelowMarginFloor: t.anyBelowMarginFloor,
-      anyCostUnknown: t.anyCostUnknown,
+      // Cost signals only for users with cost access (they would otherwise reveal the cost).
+      anyBelowCost: seesCost ? t.anyBelowCost : null,
+      anyBelowMarginFloor: seesCost ? t.anyBelowMarginFloor : null,
+      anyCostUnknown: seesCost ? t.anyCostUnknown : null,
       totalReduction: m(t.totalReduction),
     },
   };
@@ -904,7 +933,11 @@ export async function approveInPerson(
 ) {
   const settings = await getSettings("discounts");
   if (!settings.inPersonApprovalEnabled) throw forbidden("In-person approval is disabled");
-  const approver = await verifyApproverCredentials(approverUsername, approverPassword, client);
+  // Only the cashier who may edit this draft can ask for a password at the counter.
+  const [pre] = await getDb().select().from(sales).where(eq(sales.id, saleId));
+  if (!pre) throw notFound("Sale");
+  assertCanEditDraft(cashier, pre);
+  const approver = await verifyApproverCredentials(approverUsername, approverPassword, client, cashier);
   if (approver.id === cashier.id && !approver.isSuperAdmin) throw forbidden("A different authorised person must approve");
   const db = getDb();
   return db.transaction(async (tx) => {
@@ -956,6 +989,8 @@ export async function finalizeSale(actor: Actor, saleId: string) {
     }
     const lines = await tx.select().from(saleLines).where(eq(saleLines.saleId, saleId));
     if (!lines.some((l) => l.lineType === "item")) throw invalid("Add at least one item before finalising");
+    const items = lines.filter((l) => l.lineType === "item");
+    if (items.some((l) => l.isSample) && items.some((l) => !l.isSample)) throw invalid(MIXED_SAMPLE_MESSAGE);
     if (evalRes.approvalNeeded) {
       throw new AppError("APPROVAL_REQUIRED", `Approval needed: ${evalRes.approvalReasons.join("; ")}`, { reasons: evalRes.approvalReasons });
     }

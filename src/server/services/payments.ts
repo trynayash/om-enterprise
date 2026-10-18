@@ -231,6 +231,12 @@ export async function recordVerifiedPayment(actor: Actor, saleId: string, input:
       const [intent] = await tx.select().from(payments).where(and(eq(payments.id, input.paymentId), eq(payments.saleId, saleId))).for("update");
       if (!intent) throw notFound("Payment request");
       if (intent.status !== "initiated" && intent.status !== "pending") throw conflict(`This payment is already ${intent.status}`);
+      if (intent.direction !== "in") throw invalid("Only incoming payment requests can be confirmed here");
+      // A QR request can only be confirmed with its own method's evidence (a UPI QR needs its UTR).
+      // Money received another way is recorded as a separate payment after closing the QR.
+      if (intent.method !== input.method) {
+        throw invalid(`This is a ${intent.method.toUpperCase()} payment request. Confirm it as ${intent.method.toUpperCase()}, or close it and record the ${input.method.replace("_", " ")} payment separately.`);
+      }
       if (!D(intent.amount).equals(amount)) {
         throw invalid(`The QR was for ₹${intent.amount}. If a different amount was received, record it as a separate payment.`);
       }
@@ -512,7 +518,7 @@ export async function getPayment(actor: Actor, paymentId: string) {
   const [p] = await db.select().from(payments).where(eq(payments.id, paymentId));
   if (!p) throw notFound("Payment");
   const [sale] = await db.select().from(sales).where(eq(sales.id, p.saleId));
-  if (!canSeeSale(actor, sale) && !can(actor, "payments.view")) throw forbidden();
+  if (!canSeeSale(actor, sale)) throw forbidden();
   return { payment: p, sale: { id: sale.id, saleNumber: sale.saleNumber, grandTotal: sale.grandTotal, amountPaid: sale.amountPaid, paymentStatus: sale.paymentStatus, status: sale.status } };
 }
 

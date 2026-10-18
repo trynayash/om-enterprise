@@ -171,6 +171,7 @@ export async function validateImport(actor: Actor, csv: string) {
     if (data.selling_price && data.mrp && /^\d/.test(data.mrp) && /^\d/.test(data.selling_price) && yes(data.price_includes_tax || "yes") && D(data.selling_price).greaterThan(D(data.mrp))) {
       msgs.push("Selling price cannot exceed MRP");
     }
+    if (yes(data.is_sample) && !actor.isSuperAdmin) msgs.push("Only the Super Admin can add SAMPLE (training) products");
     if (data.selling_price && !canPrice) warn.push("You can't set prices — selling_price will be ignored");
     if (data.purchase_cost && !canCost) warn.push("You can't record costs — cost columns will be ignored");
     if (!data.selling_price) warn.push("No selling price — the item can't be sold until a price is set");

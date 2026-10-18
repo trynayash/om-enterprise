@@ -224,8 +224,14 @@ async function uniqueSlug(tx: Tx, base: string, excludeId?: string): Promise<str
   throw conflict("Could not generate a unique URL for this product");
 }
 
+/** Sample (training) products bypass reports and real numbering, so only the Super Admin designates them. */
+function assertMaySetSample(actor: Actor) {
+  if (!actor.isSuperAdmin) throw forbidden("Only the Super Admin can mark a product as SAMPLE (training) data or change that marking");
+}
+
 export async function createProduct(actor: Actor, input: ProductInput) {
   requirePermission(actor, "catalog.create");
+  if (input.isSample) assertMaySetSample(actor);
   const db = getDb();
   return db.transaction(async (tx) => {
     const slug = input.slug ? await uniqueSlug(tx, input.slug) : await uniqueSlug(tx, input.name);
@@ -258,6 +264,7 @@ export async function updateProduct(actor: Actor, id: string, input: Partial<Pro
   return db.transaction(async (tx) => {
     const [before] = await tx.select().from(products).where(eq(products.id, id));
     if (!before) throw notFound("Product");
+    if (input.isSample !== undefined && input.isSample !== before.isSample) assertMaySetSample(actor);
     const set: Partial<typeof products.$inferInsert> = { ...input, updatedAt: new Date(), updatedBy: actor.id };
     if (input.slug && input.slug !== before.slug) set.slug = await uniqueSlug(tx, input.slug, id);
     // Material edits to a reviewed product send it back for review (stays published until re-reviewed).

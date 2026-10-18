@@ -14,6 +14,32 @@ export function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
 }
 
+/**
+ * Count a wrong password against the account and lock it after too many in a row.
+ * Shared by sign-in and in-person approval, so neither can be used to guess a password freely.
+ */
+async function registerWrongPassword(tx: Tx, user: typeof users.$inferSelect, who: AuditActor, summary: string) {
+  const security = await getSettings("security", tx);
+  const now = new Date();
+  // Re-read under lock so concurrent failures are all counted.
+  const [current] = await tx.select({ failed: users.failedLoginCount }).from(users).where(eq(users.id, user.id)).for("update");
+  const failed = (current?.failed ?? user.failedLoginCount) + 1;
+  const lock = failed >= security.maxFailedLogins;
+  await tx
+    .update(users)
+    .set({
+      failedLoginCount: lock ? 0 : failed,
+      lockedUntil: lock ? new Date(now.getTime() + security.lockoutMinutes * 60000) : user.lockedUntil,
+    })
+    .where(eq(users.id, user.id));
+  await audit(tx, who, {
+    action: lock ? "auth.account_locked" : who.label.startsWith("approver") ? "auth.approver_check_failed" : "auth.login_failed",
+    entityType: "user",
+    entityId: user.id,
+    summary: lock ? `Account locked after ${failed} wrong passwords` : summary,
+  });
+}
+
 interface ClientInfo {
   ip: string;
   userAgent: string;
@@ -54,21 +80,7 @@ export async function login(
   if (!ok || !user.isActive) {
     await db.transaction(async (tx) => {
       if (!ok) {
-        const failed = user.failedLoginCount + 1;
-        const lock = failed >= security.maxFailedLogins;
-        await tx
-          .update(users)
-          .set({
-            failedLoginCount: lock ? 0 : failed,
-            lockedUntil: lock ? new Date(now.getTime() + security.lockoutMinutes * 60000) : user.lockedUntil,
-          })
-          .where(eq(users.id, user.id));
-        await audit(tx, { ...anon, userId: user.id }, {
-          action: lock ? "auth.account_locked" : "auth.login_failed",
-          entityType: "user",
-          entityId: user.id,
-          summary: lock ? `Account locked after ${failed} failed sign-ins` : "Sign-in failed: wrong password",
-        });
+        await registerWrongPassword(tx, user, { ...anon, userId: user.id }, "Sign-in failed: wrong password");
       } else {
         await audit(tx, { ...anon, userId: user.id }, {
           action: "auth.login_failed",
@@ -191,23 +203,38 @@ export async function changePassword(actor: Actor, currentPassword: string, newP
 
 /**
  * Re-verify a different user's credentials at the counter (in-person approval by a manager).
- * Rate limited; failures are audited. Returns the approver as an Actor.
+ * Rate limited per device, per requesting cashier and per approver account; wrong passwords count
+ * towards the approver's account lockout exactly like failed sign-ins. Failures are audited.
  */
-export async function verifyApproverCredentials(username: string, password: string, client: ClientInfo): Promise<Actor> {
-  await enforceRateLimit(`approver:ip:${client.ip}`, 10, 15 * 60, "Too many approval attempts. Wait 15 minutes.");
+export async function verifyApproverCredentials(username: string, password: string, client: ClientInfo, requestedBy: Actor): Promise<Actor> {
+  const uname = username.trim().toLowerCase();
+  const tooMany = "Too many approval attempts. Wait 15 minutes.";
+  await enforceRateLimit(`approver:ip:${client.ip}`, 10, 15 * 60, tooMany);
+  await enforceRateLimit(`approver:by:${requestedBy.id}`, 5, 15 * 60, tooMany);
+  await enforceRateLimit(`approver:target:${uname.slice(0, 60)}`, 5, 15 * 60, tooMany);
   const db = getDb();
-  const rows = await db.select().from(users).where(sql`lower(${users.username}) = lower(${username.trim()})`);
+  const rows = await db.select().from(users).where(sql`lower(${users.username}) = ${uname}`);
   const user = rows[0];
-  const ok = user ? await verifyPassword(password, user.passwordHash) : (await verifyPassword(password, await getDummyHash()), false);
-  if (!user || !ok || !user.isActive || (user.lockedUntil && user.lockedUntil > new Date())) {
-    await db.transaction((tx) =>
-      audit(tx, { userId: user?.id ?? null, label: `approver:${username.slice(0, 40)}`, ip: client.ip }, {
-        action: "auth.approver_check_failed",
-        summary: "In-person approval: credential check failed",
-      }),
-    );
-    throw new AppError("UNAUTHENTICATED", "Approver username or password is incorrect");
+  const who: AuditActor = { userId: requestedBy.id, label: `approver:${uname.slice(0, 40)}`, ip: client.ip, userAgent: client.userAgent };
+  const fail = () => new AppError("UNAUTHENTICATED", "Approver username or password is incorrect");
+  if (!user) {
+    await verifyPassword(password, await getDummyHash()); // equalise timing
+    await db.transaction((tx) => audit(tx, who, { action: "auth.approver_check_failed", summary: "In-person approval: unknown approver username" }));
+    throw fail();
   }
+  if (user.lockedUntil && user.lockedUntil > new Date()) {
+    throw new AppError("RATE_LIMITED", "That approver account is temporarily locked after wrong passwords. Use a remote approval request instead.");
+  }
+  const ok = await verifyPassword(password, user.passwordHash);
+  if (!ok) {
+    await db.transaction((tx) => registerWrongPassword(tx, user, who, `In-person approval: wrong password for ${user.displayName}`));
+    throw fail();
+  }
+  if (!user.isActive) {
+    await db.transaction((tx) => audit(tx, who, { action: "auth.approver_check_failed", entityType: "user", entityId: user.id, summary: "In-person approval: approver account is deactivated" }));
+    throw fail();
+  }
+  if (user.failedLoginCount > 0) await db.update(users).set({ failedLoginCount: 0 }).where(eq(users.id, user.id));
   const actor = await loadActor(user.id);
   if (!actor) throw new AppError("UNAUTHENTICATED", "Approver account is not active");
   actor.ip = client.ip;
