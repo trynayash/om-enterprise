@@ -32,12 +32,15 @@ export async function apiFetch<T = unknown>(path: string, opts: { method?: Metho
   }
   if (!res.ok || json.ok === false) {
     const err = json.error ?? { code: "INTERNAL", message: `Request failed (${res.status})`, details: null };
+    // Session ended / password change required: full navigation so no stale client state remains.
+    /* eslint-disable @next/next/no-location-assign-relative-destination */
     if (res.status === 401 && typeof window !== "undefined" && !path.startsWith("/api/auth/login") && !path.startsWith("/api/public")) {
       window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`;
     }
     if (err.details?.mustChangePassword && typeof window !== "undefined") {
       window.location.href = "/account/password?required=1";
     }
+    /* eslint-enable @next/next/no-location-assign-relative-destination */
     throw new ApiError(res.status, err.code, err.message, err.details);
   }
   return json.data as T;

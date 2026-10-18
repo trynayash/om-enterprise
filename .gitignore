@@ -47,3 +47,5 @@ next-env.d.ts
 /backups/
 
 !.env.example
+
+# Agent worktrees

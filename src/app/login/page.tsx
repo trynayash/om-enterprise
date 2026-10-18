@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { LoginForm } from "./login-form";
 
@@ -20,7 +21,7 @@ export default function LoginPage() {
           </Suspense>
         </div>
         <p className="mt-6 text-center text-xs text-navy-300">
-          Customers: <a href="/" className="font-semibold text-gold-400 hover:underline">visit our website</a>
+          Customers: <Link href="/" className="font-semibold text-gold-400 hover:underline">visit our website</Link>
         </p>
       </div>
     </div>

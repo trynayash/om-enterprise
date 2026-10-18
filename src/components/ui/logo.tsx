@@ -2,7 +2,7 @@ import { cn } from "./cn";
 
 export function LogoMark({ className, title = "OM Enterprise" }: { className?: string; title?: string }) {
   return (
-    <svg viewBox="0 0 64 64" className={cn("h-10 w-10 shrink-0", className)} role="img" aria-label={title}>
+    <svg viewBox="0 0 64 64" className={cn("shrink-0", className ?? "h-10 w-10")} role="img" aria-label={title}>
       <rect width="64" height="64" rx="14" fill="#0B1F3A" />
       <rect x="2.5" y="2.5" width="59" height="59" rx="12" fill="none" stroke="#D4A537" strokeOpacity="0.35" strokeWidth="1" />
       <path d="M12 29 L32 13 L52 29" fill="none" stroke="#D4A537" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />

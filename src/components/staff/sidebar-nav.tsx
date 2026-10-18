@@ -15,6 +15,8 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
   const isActive = (href: string) => (href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`));
   const logout = async () => {
     await apiFetch("/api/auth/logout", { method: "POST", body: {} }).catch(() => {});
+    // Full page load on sign-out so no client-side state of the previous user survives.
+    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
     window.location.href = "/login";
   };
 
