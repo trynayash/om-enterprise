@@ -34,6 +34,18 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // pdfkit reads its own font metric files at runtime; keep it out of the bundle.
   serverExternalPackages: ["pdfkit"],
+  // Never ship secrets, backups, uploads or dev-only files in the standalone server bundle.
+  outputFileTracingExcludes: {
+    "/**": [
+      "./.env*",
+      "./backups/**",
+      "./storage/**",
+      "./tests/**",
+      "./test-results/**",
+      "./playwright-report/**",
+      "./scripts/**",
+    ],
+  },
   outputFileTracingIncludes: {
     "/api/documents/[id]/pdf": ["./assets/fonts/**"],
     "/d/[token]/pdf": ["./assets/fonts/**"],

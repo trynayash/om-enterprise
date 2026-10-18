@@ -523,6 +523,7 @@ docker compose --env-file .env.production run --rm tools npm run create-super-ad
 - **Database:** any managed PostgreSQL (Supabase, Neon, RDS…). Use `sslmode=require`.
   - With Supabase, use the direct or session-pooler connection string. The RLS lockdown keeps its public REST API from exposing tables.
 - **App:** run `npm ci && npm run build && npm run db:migrate && npm start` on any Node 20+ host.
+  - If you ship only the `.next/standalone` folder to another machine, note that Next.js copies the `.env` files present at build time into it. Build with production settings only, or delete `.next/standalone/.env` before copying. Docker builds never contain `.env` (see `.dockerignore`), and build tracing is configured to leave out backups, uploads, tests and scripts.
 - **Image storage:** if the host's disk is ephemeral (most serverless platforms), move image storage to S3-compatible storage. The storage functions are isolated in `src/server/services/uploads.ts`.
 - **Vercel:** usable, but the Hobby plan is for non-commercial use only, and uploads need object storage.
 

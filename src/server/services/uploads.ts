@@ -20,7 +20,9 @@ const MAX_BYTES = 6 * 1024 * 1024;
 const ALLOWED = new Set(["jpeg", "png", "webp", "avif"]);
 
 function uploadRoot() {
-  return path.resolve(process.env.UPLOAD_DIR ?? "./storage/uploads");
+  // Runtime-only location: the ignore hint stops build tracing from copying the whole project
+  // (including .env and database backups) into the standalone output.
+  return path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.UPLOAD_DIR ?? "storage/uploads");
 }
 
 async function writeObject(key: string, data: Buffer) {
