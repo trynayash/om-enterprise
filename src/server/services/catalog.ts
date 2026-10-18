@@ -370,7 +370,7 @@ export async function listProductsAdmin(actor: Actor, f: AdminProductFilter) {
       p: products,
       brandName: brands.name,
       categoryName: categories.name,
-      variantCount: sql<number>`(select count(*)::int from product_variants pv where pv.product_id = ${products.id})`,
+      variantCount: sql<number>`(select count(*)::int from product_variants pv where pv.product_id = "products"."id")`,
       total: sql<number>`count(*) over ()::int`,
     })
     .from(products)

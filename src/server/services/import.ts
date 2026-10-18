@@ -14,7 +14,7 @@ import { audit } from "@/server/audit";
 import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
 import { invalid } from "@/server/errors";
 import { getSettings } from "@/server/settings";
-import { getDefaultPriceList } from "@/server/services/pricing";
+import { getDefaultPriceList, itcPolicyFor } from "@/server/services/pricing";
 import { isValidHsn, slugify } from "@/lib/india";
 import { D, m } from "@/lib/money";
 import { landedUnitCost } from "@/lib/pricing/engine";
@@ -204,7 +204,7 @@ export async function commitImport(actor: Actor, csv: string) {
   const canCost = can(actor, "costs.edit");
   const autoApprove = can(actor, "prices.approve") || !(await getSettings("pricing")).priceChangeRequiresApproval;
   const tax = await getSettings("tax");
-  const itcPolicy = tax.registrationType === "regular" ? "recoverable" : "non_recoverable";
+  const itcPolicy = itcPolicyFor(tax.registrationType);
   const db = getDb();
   return db.transaction(async (tx) => {
     const cats = await tx.select().from(categories);

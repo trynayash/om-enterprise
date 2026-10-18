@@ -139,7 +139,7 @@ export async function getCustomer(actor: Actor, id: string) {
       grandTotal: sales.grandTotal,
       amountPaid: sales.amountPaid,
       createdAt: sales.createdAt,
-      docNumber: sql<string | null>`(select d.doc_number from documents d where d.sale_id = ${sales.id} and d.doc_type not in ('quotation','credit_note') order by d.issued_at desc limit 1)`,
+      docNumber: sql<string | null>`(select d.doc_number from documents d where d.sale_id = "sales"."id" and d.doc_type not in ('quotation','credit_note') order by d.issued_at desc limit 1)`,
     })
     .from(sales)
     .where(and(eq(sales.customerId, id), eq(sales.isTraining, false), scope))
@@ -155,8 +155,8 @@ export async function listCustomers(actor: Actor, q?: string, page = 1, pageSize
   const rows = await db
     .select({
       c: customers,
-      saleCount: sql<number>`(select count(*)::int from sales s where s.customer_id = ${customers.id} and s.status = 'completed' and not s.is_training)`,
-      lifetime: sql<string>`(select coalesce(sum(s.grand_total),0)::text from sales s where s.customer_id = ${customers.id} and s.status = 'completed' and not s.is_training)`,
+      saleCount: sql<number>`(select count(*)::int from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training)`,
+      lifetime: sql<string>`(select coalesce(sum(s.grand_total),0)::text from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training)`,
       total: sql<number>`count(*) over ()::int`,
     })
     .from(customers)

@@ -91,7 +91,7 @@ export async function stockLevels(actor: Actor) {
       name: sql<string>`${products.name} || ' — ' || ${productVariants.name}`,
       reorderLevel: productVariants.reorderLevel,
       onHand: sql<string>`coalesce((select sum(m.quantity_change) from stock_movements m where m.variant_id = ${productVariants.id}), 0)::text`,
-      movements: sql<number>`(select count(*)::int from stock_movements m where m.variant_id = ${productVariants.id})`,
+      movements: sql<number>`(select count(*)::int from stock_movements m where m.variant_id = "product_variants"."id")`,
     })
     .from(productVariants)
     .innerJoin(products, eq(products.id, productVariants.productId))

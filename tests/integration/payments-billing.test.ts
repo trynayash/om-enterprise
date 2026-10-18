@@ -372,7 +372,40 @@ describe("billing documents", () => {
   });
 });
 
+describe("customer history", () => {
+  it("lists bills, counts and lifetime value per customer correctly", async () => {
+    const kishan = await makeUser("super_admin");
+    const { sale } = await finalizedSale(kishan, kishan, { price: "1180", qty: "2" });
+    await payInFull(kishan, sale.id);
+    const doc = await issueBill(kishan, sale.id, { customer: { name: "History Check Customer", mobile: "9898989898" } });
+    const s = await getSale(kishan, sale.id);
+    const { getCustomer, listCustomers } = await import("@/server/services/customers");
+    const detail = await getCustomer(kishan, s.sale.customerId!);
+    expect(detail.history[0].docNumber).toBe(doc.docNumber);
+    const list = await listCustomers(kishan, "History Check Customer");
+    expect(list.items[0].saleCount).toBe(1);
+    expect(list.items[0].lifetimeValue).toBe("2360.00");
+  });
+});
+
 describe("training data & report reconciliation", () => {
+  it("a training bill before GST is confirmed is labelled as such and shows the GST it was priced with", async () => {
+    await setRegistration(null);
+    try {
+      const kishan = await makeUser("super_admin");
+      const { sale } = await finalizedSale(kishan, kishan, { price: "1180", isSample: true });
+      await payInFull(kishan, sale.id);
+      const doc = await issueBill(kishan, sale.id);
+      const snap = (await getDocument(kishan, doc.id)).snapshot;
+      expect(snap.title).toBe("TRAINING BILL");
+      expect(snap.showTax).toBe(true);
+      expect(snap.totals.cgst).toBe("90.00");
+      expect(doc.docNumber).toMatch(/^TRN\//);
+    } finally {
+      await setRegistration("regular");
+    }
+  });
+
   it("sample-product sales are training records: separate numbering, watermark, excluded from reports", async () => {
     const kishan = await makeUser("super_admin");
     const p = { from: testStart, to: new Date(Date.now() + 3600_000) };

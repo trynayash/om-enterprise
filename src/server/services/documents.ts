@@ -74,7 +74,10 @@ export function billingDocType(
   buyerGstin: string | null,
 ): { docType: Exclude<DocType, "quotation" | "credit_note">; title: string; subtitle: string | null } {
   if (regType === "composition") return { docType: "bill_of_supply", title: "BILL OF SUPPLY", subtitle: null };
-  if (regType === "unregistered" || regType === null) return { docType: "cash_memo", title: "CASH MEMO", subtitle: "Retail bill — GST not charged" };
+  if (regType === "unregistered") return { docType: "cash_memo", title: "CASH MEMO", subtitle: "Retail bill — GST not charged" };
+  // Unconfirmed registration only ever reaches here for TRAINING sales (real bills are blocked);
+  // they are calculated with GST like a regular registrant, so present them that way.
+  if (regType === null) return { docType: "tax_invoice", title: "TRAINING BILL", subtitle: "GST registration not yet confirmed — practice document only" };
   const items = lines.filter((l) => l.lineType === "item");
   const taxable = items.filter((l) => D(l.gstRate).greaterThan(0));
   const exempt = items.filter((l) => D(l.gstRate).isZero());

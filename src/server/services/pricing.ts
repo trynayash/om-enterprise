@@ -135,10 +135,18 @@ export async function getVariantPricingContext(variantIds: string[], tx?: Tx): P
   return out;
 }
 
+/**
+ * Input tax credit is recoverable for regular GST registration. While the registration type is
+ * still unconfirmed, sales are previewed WITH GST (as a regular registrant), so costs are treated
+ * the same way for consistent margins. Composition / unregistered businesses cannot claim ITC,
+ * so purchase GST is part of their cost.
+ */
+export function itcPolicyFor(registrationType: "regular" | "composition" | "unregistered" | null): "recoverable" | "non_recoverable" {
+  return registrationType === "composition" || registrationType === "unregistered" ? "non_recoverable" : "recoverable";
+}
+
 async function itcPolicyFromSettings(tx?: Tx): Promise<"recoverable" | "non_recoverable"> {
-  const tax = await getSettings("tax", tx);
-  // Input tax credit is only recoverable for regular GST-registered businesses.
-  return tax.registrationType === "regular" ? "recoverable" : "non_recoverable";
+  return itcPolicyFor((await getSettings("tax", tx)).registrationType);
 }
 
 function marginFor(price: string, includesTax: boolean, gstRate: string, cessRate: string, landed: string | null, taxMode: "charged" | "none") {
@@ -198,7 +206,7 @@ export async function proposePrice(
 
     const current = (await getActivePrices([variant.id], priceList.id, now, tx)).get(variant.id) ?? null;
     const cost = (await getActiveCosts([variant.id], now, tx)).get(variant.id) ?? null;
-    const taxMode = taxSettings.registrationType === "regular" ? "charged" : "none";
+    const taxMode = taxSettings.registrationType === "composition" || taxSettings.registrationType === "unregistered" ? "none" : "charged";
     const newMargin = marginFor(m(price), input.priceIncludesTax, ctx.gstRate, ctx.cessRate, cost?.landedCost ?? null, taxMode);
     const prevMargin = current
       ? marginFor(current.price, current.priceIncludesTax, ctx.gstRate, ctx.cessRate, cost?.landedCost ?? null, taxMode)
@@ -426,7 +434,7 @@ export async function recordCost(
     const price = (await getActivePrices([variant.id], list.id, now, tx)).get(variant.id);
     const ctx = (await getVariantPricingContext([variant.id], tx)).get(variant.id)!;
     const taxSettings = await getSettings("tax", tx);
-    const taxMode = taxSettings.registrationType === "regular" ? "charged" : "none";
+    const taxMode = taxSettings.registrationType === "composition" || taxSettings.registrationType === "unregistered" ? "none" : "charged";
     const before = price && previous ? marginFor(price.price, price.priceIncludesTax, ctx.gstRate, ctx.cessRate, previous.landedCost, taxMode) : null;
     const after = price ? marginFor(price.price, price.priceIncludesTax, ctx.gstRate, ctx.cessRate, row.landedCost, taxMode) : null;
 

@@ -383,7 +383,9 @@ export async function productsNeedingReview(actor: Actor) {
     let margin: string | null = null;
     if (r.price && r.landed_cost) {
       const excl =
-        tax.registrationType === "regular" && r.price_includes_tax ? D(r.price).times(100).div(D(100).plus(D(r.gst_rate))) : D(r.price);
+        tax.registrationType !== "composition" && tax.registrationType !== "unregistered" && r.price_includes_tax
+          ? D(r.price).times(100).div(D(100).plus(D(r.gst_rate)))
+          : D(r.price);
       const mg = excl.isZero() ? null : excl.minus(D(r.landed_cost)).div(excl).times(100);
       margin = mg ? mg.toFixed(2) : null;
       const floor = r.min_margin ?? (discounts.minMarginPercent || null);

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Copy, Download, MessageCircle, Printer } from "lucide-react";
 import { Button, buttonClass } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
@@ -29,7 +29,13 @@ export function DocumentActions({
 }) {
   const toast = useToast();
   const [printing, setPrinting] = useState(false);
-  const shareUrl = shareToken && typeof window !== "undefined" ? `${window.location.origin}/d/${shareToken}` : null;
+  // Read the origin without a server/client mismatch (null during SSR, real value after hydration).
+  const origin = useSyncExternalStore(
+    () => () => {},
+    () => window.location.origin,
+    () => null,
+  );
+  const shareUrl = shareToken && origin ? `${origin}/d/${shareToken}` : null;
 
   const print = async () => {
     setPrinting(true);

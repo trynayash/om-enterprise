@@ -1096,10 +1096,10 @@ export async function listSales(actor: Actor, f: SaleFilter) {
       createdByName: creator.displayName,
       customerName: customers.name,
       customerMobile: customers.mobile,
-      docNumber: sql<string | null>`(select d.doc_number from documents d where d.sale_id = ${sales.id} and d.doc_type <> 'quotation' and d.doc_type <> 'credit_note' order by d.issued_at desc limit 1)`,
-      docStatus: sql<string | null>`(select d.status from documents d where d.sale_id = ${sales.id} and d.doc_type <> 'quotation' and d.doc_type <> 'credit_note' order by d.issued_at desc limit 1)`,
-      paymentMethods: sql<string | null>`(select string_agg(distinct p.method, ', ') from payments p where p.sale_id = ${sales.id} and p.status = 'successful')`,
-      itemCount: sql<number>`(select count(*)::int from sale_lines l where l.sale_id = ${sales.id} and l.line_type = 'item')`,
+      docNumber: sql<string | null>`(select d.doc_number from documents d where d.sale_id = "sales"."id" and d.doc_type <> 'quotation' and d.doc_type <> 'credit_note' order by d.issued_at desc limit 1)`,
+      docStatus: sql<string | null>`(select d.status from documents d where d.sale_id = "sales"."id" and d.doc_type <> 'quotation' and d.doc_type <> 'credit_note' order by d.issued_at desc limit 1)`,
+      paymentMethods: sql<string | null>`(select string_agg(distinct p.method, ', ') from payments p where p.sale_id = "sales"."id" and p.status = 'successful')`,
+      itemCount: sql<number>`(select count(*)::int from sale_lines l where l.sale_id = "sales"."id" and l.line_type = 'item')`,
       total: sql<number>`count(*) over ()::int`,
     })
     .from(sales)

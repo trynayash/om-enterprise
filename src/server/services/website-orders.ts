@@ -88,7 +88,7 @@ export async function listWebsiteOrders(actor: Actor, status?: string) {
   requirePermission(actor, "orders.view");
   const db = getDb();
   const rows = await db
-    .select({ o: websiteOrders, handledByName: users.displayName, itemCount: sql<number>`(select count(*)::int from website_order_lines l where l.order_id = ${websiteOrders.id})` })
+    .select({ o: websiteOrders, handledByName: users.displayName, itemCount: sql<number>`(select count(*)::int from website_order_lines l where l.order_id = "website_orders"."id")` })
     .from(websiteOrders)
     .leftJoin(users, eq(users.id, websiteOrders.handledBy))
     .where(status ? eq(websiteOrders.status, status as typeof websiteOrders.$inferSelect.status) : undefined)
