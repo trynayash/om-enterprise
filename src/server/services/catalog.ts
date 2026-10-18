@@ -25,6 +25,7 @@ import {
   getActivePrices,
   getDefaultPriceList,
   getVariantPricingContext,
+  redactPriceVersion,
   unitPriceForQuantity,
 } from "@/server/services/pricing";
 
@@ -399,7 +400,7 @@ export async function getProductAdmin(actor: Actor, id: string) {
   const pricesByList: Record<string, Record<string, unknown>> = {};
   for (const l of lists) {
     const active = await getActivePrices(ids, l.id);
-    pricesByList[l.id] = Object.fromEntries([...active].map(([k, v]) => [k, v]));
+    pricesByList[l.id] = Object.fromEntries([...active].map(([k, v]) => [k, redactPriceVersion(actor, v)]));
   }
   const pending = ids.length
     ? await db.select().from(variantPrices).where(and(inArray(variantPrices.variantId, ids), eq(variantPrices.status, "pending")))
@@ -432,7 +433,20 @@ export async function getProductAdmin(actor: Actor, id: string) {
         .innerJoin(products, eq(products.id, productVariants.productId))
         .where(inArray(productVariants.id, otherIds))
     : [];
-  return { product: p, variants, priceLists: lists, pricesByList, pending, scheduled, costs, context: ctx, images, conversions, compat, compatVariants: others };
+  return {
+    product: p,
+    variants,
+    priceLists: lists,
+    pricesByList,
+    pending: pending.map((v) => redactPriceVersion(actor, v)),
+    scheduled: scheduled.map((v) => redactPriceVersion(actor, v)),
+    costs,
+    context: ctx,
+    images,
+    conversions,
+    compat,
+    compatVariants: others,
+  };
 }
 
 /* ------------------------------------------------------------------ */

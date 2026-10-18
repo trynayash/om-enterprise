@@ -318,7 +318,13 @@ export async function cancelScheduledPrice(actor: Actor, versionId: string, reas
   });
 }
 
-export async function listPendingPriceChanges() {
+/** Strip cost/margin snapshots from price versions for users without costs.view. */
+export function redactPriceVersion<T extends Partial<PriceVersion>>(actor: Actor, v: T): T {
+  if (can(actor, "costs.view")) return v;
+  return { ...v, landedCostSnapshot: null, marginPercentSnapshot: null, previousMarginPercent: null };
+}
+
+export async function listPendingPriceChanges(actor: Actor) {
   const db = getDb();
   const creator = alias(users, "creator");
   return db
@@ -337,7 +343,8 @@ export async function listPendingPriceChanges() {
     .innerJoin(priceLists, eq(priceLists.id, variantPrices.priceListId))
     .innerJoin(creator, eq(creator.id, variantPrices.createdBy))
     .where(eq(variantPrices.status, "pending"))
-    .orderBy(desc(variantPrices.createdAt));
+    .orderBy(desc(variantPrices.createdAt))
+    .then((rows) => rows.map((r) => ({ ...r, version: redactPriceVersion(actor, r.version) })));
 }
 
 export async function priceHistory(actor: Actor, variantId: string) {

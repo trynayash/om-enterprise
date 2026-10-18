@@ -54,6 +54,29 @@ describe("centralised prices & protection", () => {
     expect(pending.marginPercentSnapshot).toBe("24.48");
   });
 
+  it("cost and margin snapshots are hidden from approvers without cost access", async () => {
+    const kishan = await makeUser("super_admin");
+    const yash = await makeUser("admin");
+    const vikram = await makeUser("admin");
+    await setPermissionOverrides(kishan, vikram.id, [
+      { permission: "prices.approve", effect: "grant" },
+      { permission: "costs.view", effect: "deny" },
+    ]);
+    const v = await reload(vikram);
+    const item = await makeItem(kishan, { price: "1180", cost: "800" });
+    await proposePrice(yash, { variantId: item.variantId, price: "1300", priceIncludesTax: true, reason: "increase" });
+    const { listPendingPriceChanges } = await import("@/server/services/pricing");
+    const { getProductAdmin } = await import("@/server/services/catalog");
+    const seenByVikram = (await listPendingPriceChanges(v)).find((r) => r.version.variantId === item.variantId)!;
+    expect(seenByVikram.version.landedCostSnapshot).toBeNull();
+    expect(seenByVikram.version.marginPercentSnapshot).toBeNull();
+    const seenByKishan = (await listPendingPriceChanges(kishan)).find((r) => r.version.variantId === item.variantId)!;
+    expect(seenByKishan.version.landedCostSnapshot).toBe("800.0000");
+    const editor = await getProductAdmin(v, item.productId);
+    expect(editor.costs).toBeNull();
+    expect(editor.pending[0].landedCostSnapshot).toBeNull();
+  });
+
   it("price versions are immutable in the database", async () => {
     const kishan = await makeUser("super_admin");
     const item = await makeItem(kishan, { price: "500" });
