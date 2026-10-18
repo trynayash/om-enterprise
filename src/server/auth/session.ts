@@ -2,7 +2,7 @@ import "server-only";
 import { cache } from "react";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import type { NextRequest } from "next/server";
+import { connection, type NextRequest } from "next/server";
 import { actorFromToken } from "@/server/services/auth";
 import { can, type Actor } from "@/server/auth/actor";
 import type { Permission } from "@/lib/permissions";
@@ -32,6 +32,8 @@ export function clientInfoFromHeaders(h: Headers) {
 
 /** Current staff member for Server Components (memoised per request). */
 export const getCurrentActor = cache(async (): Promise<Actor | null> => {
+  // Session checks depend on the current time: always evaluate at request time.
+  await connection();
   const token = (await cookies()).get(SESSION_COOKIE)?.value;
   if (!token) return null;
   return actorFromToken(token, clientInfoFromHeaders(await headers()));
