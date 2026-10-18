@@ -46,13 +46,29 @@ export function Field({
   children: ReactNode;
   className?: string;
 }) {
+  const help = error ? <p className="mt-1 text-xs text-red-700">{error}</p> : hint ? <p className="mt-1 text-xs text-navy-500">{hint}</p> : null;
+  if (htmlFor) {
+    return (
+      <div className={className}>
+        <Label htmlFor={htmlFor} required={required}>
+          {label}
+        </Label>
+        {children}
+        {help}
+      </div>
+    );
+  }
+  // No id given: wrap the control in the <label> so it is still programmatically labelled.
   return (
     <div className={className}>
-      <Label htmlFor={htmlFor} required={required}>
-        {label}
-      </Label>
-      {children}
-      {error ? <p className="mt-1 text-xs text-red-700">{error}</p> : hint ? <p className="mt-1 text-xs text-navy-500">{hint}</p> : null}
+      <label className="block">
+        <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">
+          {label}
+          {required && <span className="ml-0.5 text-red-600">*</span>}
+        </span>
+        {children}
+      </label>
+      {help}
     </div>
   );
 }

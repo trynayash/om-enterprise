@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { existsSync } from "node:fs";
 import { defineConfig, devices } from "@playwright/test";
 
@@ -23,7 +24,13 @@ export default defineConfig({
   webServer: {
     command: `npx next start -p ${port}`,
     port,
-    reuseExistingServer: true,
+    reuseExistingServer: false,
     timeout: 120_000,
+    env: {
+      DATABASE_URL: process.env.E2E_DATABASE_URL ?? "",
+      APP_BASE_URL: `http://localhost:${port}`,
+      APP_SECRET: process.env.APP_SECRET ?? "e2e-secret-e2e-secret-e2e-secret-e2e",
+      UPLOAD_DIR: "./storage/e2e-uploads",
+    },
   },
 });

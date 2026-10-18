@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
-    "test:e2e": "playwright test",
+    "test:e2e": "tsx --conditions=react-server scripts/e2e-prepare.ts && playwright test",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --conditions=react-server scripts/migrate.ts",
     "create-super-admin": "tsx --conditions=react-server scripts/create-super-admin.ts",
