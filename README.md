@@ -466,6 +466,18 @@ npm run build && npm run test:e2e   # Playwright browser tests (desktop + mobile
 npm run typecheck && npm run lint
 ```
 
+`test:e2e` rebuilds the separate `E2E_DATABASE_URL` database from migrations (with SAMPLE products, a test GSTIN and a test UPI ID), starts the production build on port 3200 and runs each spec on a desktop and a Pixel 7 profile:
+
+| Spec | What it drives in a real browser |
+|---|---|
+| `auth-access.spec.ts` | Generic wrong-password message, sign-in redirect, forced password change, sales staff kept out of admin pages and APIs, cross-site POST refusal, security headers, owner admin pages |
+| `public-site.spec.ts` | Homepage and WhatsApp contact, catalogue search with SAMPLE marking, product page warning, visitor order request visible to staff, invalid share link reveals nothing |
+| `catalogue.spec.ts` | Product editor, price review, CSV import validation, cost/margin data never sent to an admin without cost access |
+| `dashboard-ops.spec.ts` | Overview totals unchanged by training sales; sale → payment → document → PDF traceability |
+| `pos.spec.ts` | **The acceptance scenario:** sales staff over-discounts → server blocks finalising → admin approves remotely → customer agrees → UPI QR (not treated as paid) → 12-digit UTR + explicit confirmation → GST tax invoice `OE/yy-yy/n` → PDF; 403 on price/cost edits; UTR reuse rejected; scanner-style SKU + Enter |
+
+Last full run (18 Oct 2026, this repository): **51 unit, 55 integration and 33 browser tests passed.** Three browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
+
 **Coverage of the required checks:**
 
 | # | Requirement | Where |
@@ -473,16 +485,16 @@ npm run typecheck && npm run lint
 | 1–3 | Super Admin / Admin / Sales permissions | `tests/integration/auth-rbac.test.ts`, `tests/unit/permissions-csv.test.ts` |
 | 4 | Unauthorised users can't change master prices | `pricing-sales.test.ts` "unauthorised users cannot change master prices" |
 | 5–6 | Exact variants; quantity & money maths | `tests/unit/pricing-engine.test.ts`, `pricing-sales.test.ts` |
-| 7–8 | Discount limits; exceptional discounts need approval | `pricing-sales.test.ts` (limits, remote/in-person approval, cart-bound approvals, approver limits) |
+| 7–8 | Discount limits; exceptional discounts need approval | `pricing-sales.test.ts` (limits, remote/in-person approval, cart-bound approvals, approver limits); `tests/e2e/pos.spec.ts` |
 | 9 | Tax & rounding | `pricing-engine.test.ts` (inclusive/exclusive, CGST/SGST/IGST, cess, round-off) |
 | 10 | Historical invoices unchanged by price/settings changes | `payments-billing.test.ts` |
 | 11 | QR amount = finalised payable | `payments-billing.test.ts` |
-| 12 | Unverified payments never marked paid | `payments-billing.test.ts` |
+| 12 | Unverified payments never marked paid | `payments-billing.test.ts`; `tests/e2e/pos.spec.ts` (QR shown ≠ paid; UTR + confirmation required) |
 | 13 | Duplicate notifications don't duplicate payments | `payments-billing.test.ts` (webhook duplicate / retry / amount mismatch; reused UTR) |
 | 14 | Customer validation | `payments-billing.test.ts` (GSTIN checksum, B2B details, ₹50,000 rule, place of supply), `tests/unit/india.test.ts` |
 | 15 | Correct document types | `payments-billing.test.ts` (tax invoice, bill of supply for composition, training) |
 | 16 | Unique numbering | `payments-billing.test.ts` (12 concurrent bills → gapless & unique) |
-| 17 | Historical retrieval & printing | `payments-billing.test.ts` snapshot tests; PDF route; e2e |
+| 17 | Historical retrieval & printing | `payments-billing.test.ts` snapshot tests; PDF route; `dashboard-ops.spec.ts`, `pos.spec.ts` |
 | 18 | Refunds/cancellations keep audit history | `payments-billing.test.ts` (cancel with refund, credit notes, audit entries; DB rejects deletes) |
 | 19 | Reports reconcile with source records | `payments-billing.test.ts` "reports reconcile…" |
 | 20 | Server-side protection of sensitive data | RBAC tests; cost stripping; `tests/e2e` forbidden pages |
