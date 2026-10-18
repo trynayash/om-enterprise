@@ -167,7 +167,8 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
           compat={data.compat}
           compatVariants={data.compatVariants}
           suppliers={suppliers.filter((s) => s.isActive).map((s) => ({ id: s.id, name: s.name }))}
-          regType={tax.registrationType}
+          // Unconfirmed registration is previewed exactly like regular GST (same as the POS and cost rules).
+          regType={tax.registrationType ?? "regular"}
           defaultIncludesTax={tax.pricesIncludeTaxByDefault}
           perms={perms}
           aside={
