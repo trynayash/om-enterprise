@@ -26,12 +26,18 @@ export function Dialog({
     if (!d) return;
     if (open && !d.open) d.showModal();
     if (!open && d.open) d.close();
+    // Close on unmount / when the route is hidden (Next keeps previous routes in a hidden
+    // <Activity>): an open modal left in the top layer would make the new page inert.
+    return () => {
+      if (d.open) d.close();
+    };
   }, [open]);
   const widths = { sm: "max-w-sm", md: "max-w-lg", lg: "max-w-2xl", xl: "max-w-4xl" };
   return (
     <dialog
       ref={ref}
-      onClose={onClose}
+      // Esc is handled via onCancel; the native "close" event is not wired to onClose because
+      // programmatic closes (cleanup, Strict Mode re-runs) must not unmount the parent's dialog.
       onCancel={(e) => {
         e.preventDefault();
         onClose();
