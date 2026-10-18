@@ -12,7 +12,7 @@ import {
   setRolePermissions,
   updateStaff,
 } from "@/server/services/users";
-import { client, makeUser, rejects, reload, TEST_PASSWORD, uid } from "./helpers";
+import { client, makeUser, rejects, reload, sessionLogin, TEST_PASSWORD, uid } from "./helpers";
 
 describe("roles & permissions", () => {
   it("Super Admin (Kishan) holds every permission", async () => {
@@ -136,7 +136,7 @@ describe("privilege escalation guards", () => {
 describe("authentication", () => {
   it("logs in, validates the session, and audits the sign-in", async () => {
     const sachin = await makeUser("sales");
-    const { token } = await login(sachin.username, TEST_PASSWORD, client);
+    const { token } = await sessionLogin(sachin.username, TEST_PASSWORD, client);
     const session = await validateSession(token);
     expect(session?.userId).toBe(sachin.id);
     const actor = await actorFromToken(token);
@@ -164,7 +164,7 @@ describe("authentication", () => {
   it("refuses deactivated accounts and revokes their sessions", async () => {
     const kishan = await makeUser("super_admin");
     const u = await makeUser("sales");
-    const { token } = await login(u.username, TEST_PASSWORD, client);
+    const { token } = await sessionLogin(u.username, TEST_PASSWORD, client);
     await updateStaff(kishan, u.id, { isActive: false });
     expect(await validateSession(token)).toBeNull();
     expect((await rejects(login(u.username, TEST_PASSWORD, client))).message).toBe("Invalid username or password");
@@ -172,8 +172,8 @@ describe("authentication", () => {
 
   it("password change enforces strength and signs out other sessions", async () => {
     const u = await makeUser("sales");
-    const a = await login(u.username, TEST_PASSWORD, client);
-    const b = await login(u.username, TEST_PASSWORD, client);
+    const a = await sessionLogin(u.username, TEST_PASSWORD, client);
+    const b = await sessionLogin(u.username, TEST_PASSWORD, client);
     expect((await rejects(changePassword(u, TEST_PASSWORD, "short"))).message).toMatch(/at least/);
     await changePassword(u, TEST_PASSWORD, "Brand-New-Secret-77", a.token);
     expect(await validateSession(a.token)).not.toBeNull();
@@ -185,7 +185,7 @@ describe("authentication", () => {
     const kishan = await makeUser("super_admin");
     const u = await makeUser("sales");
     await resetStaffPassword(kishan, u.id, "Temp-Reset-Pass-42");
-    const { actor } = await login(u.username, "Temp-Reset-Pass-42", client);
+    const { actor } = await sessionLogin(u.username, "Temp-Reset-Pass-42", client);
     expect(actor.mustChangePassword).toBe(true);
   });
 });

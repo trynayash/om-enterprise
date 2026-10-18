@@ -15,6 +15,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --conditions=react-server scripts/migrate.ts",
     "create-super-admin": "tsx --conditions=react-server scripts/create-super-admin.ts",
+    "reset-login-secret": "tsx --conditions=react-server scripts/reset-login-secret.ts",
     "seed:demo": "tsx --conditions=react-server scripts/seed-demo.ts",
     "import:products": "tsx --conditions=react-server scripts/import-products.ts"
   },

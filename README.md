@@ -130,7 +130,7 @@ createdb -O om om_test          # used by integration tests (wiped on every run)
 npm run db:migrate              # schema + integrity rules + reference data
 npm run create-super-admin      # prompts for Kishan's username & password
 npm run seed:demo               # OPTIONAL: SAMPLE products for training (see below)
-npm run dev                     # http://localhost:3000  (staff: /login)
+npm run dev                     # http://localhost:3000  (owner: /admin, staff: /login)
 ```
 
 ---
@@ -168,21 +168,33 @@ There is **no default administrator password**.
 
 1. **Kishan Suthar (Super Admin)**: run `npm run create-super-admin`, or with Docker:
    ```bash
-   docker compose run --rm tools npm run create-super-admin
+   docker compose --env-file .env.production run --rm tools npm run create-super-admin
    ```
    Non-interactive form (values are never logged):
    ```bash
-   SA_USERNAME=kishan SA_NAME="Kishan Suthar" SA_PASSWORD='…' npm run create-super-admin
+   SA_USERNAME=Kishan SA_NAME="Kishan Suthar" SA_PASSWORD='…' npm run create-super-admin
    ```
    - The password must be at least 12 characters and must not contain the username.
+   - A password given in the environment (for example from a handover note) is **temporary**: it must be changed at the first sign-in. A password typed at the interactive prompt is not.
    - The command refuses to run if a Super Admin already exists. Pass `--additional` only to add a second owner deliberately.
-2. Kishan signs in at `/login` and opens **Dashboard → Staff & access → Add staff member**:
+2. Kishan signs in at **`/admin`** (staff use `/login`; both lead to the same accounts), replaces the temporary password, and is offered a **secret key** (see below). Then he opens **Dashboard → Staff & access → Add staff member**:
    - **Yash**, role *Admin*
    - **Vikram Uncle**, role *Admin*
    - **Sachin**, role *Sales & Operations*
 
    Each person gets a generated temporary password and must choose their own at first sign-in.
 3. Adjust each person individually (shield icon): grant or deny single permissions, and set discount and approval limits.
+
+### Secret key (second sign-in step)
+
+- Anyone can add a secret key at **Account → Secret key** (`/account/security`). It is asked after a correct username and password at every sign-in, and also when that person approves a discount in person at the counter.
+- Adding, changing or removing the key needs the current password (and the current key). Adding or changing it signs out other devices.
+- The key step allows 3 tries per sign-in and expires after 5 minutes. Wrong keys count towards the same account lockout as wrong passwords.
+- Keys are stored only as scrypt hashes, like passwords.
+- **Forgotten key:**
+  - Staff: the Super Admin clears it in Staff & access (shield-off icon).
+  - The Super Admin's own key: run `npm run reset-login-secret -- Kishan` on the server (with Docker: `docker compose --env-file .env.production run --rm tools npm run reset-login-secret -- Kishan`). It signs out all of that account's sessions.
+- **Forgotten Super Admin password** with no other Super Admin: create a second owner with `npm run create-super-admin -- --additional`, sign in as them and reset Kishan's password from Staff & access.
 
 ---
 
@@ -435,6 +447,7 @@ CSV export needs `reports.export`. Profit, costs and margins need `reports.profi
   - scrypt hashing (N=2¹⁵), minimum length 10 (12 for the Super Admin).
   - Common passwords and passwords containing the username are rejected.
   - Temporary passwords must be changed at first sign-in.
+  - Optional **secret key**: a second step after the password at every sign-in and for in-person approvals (see [Secret key](#secret-key-second-sign-in-step)).
 - **Sessions:**
   - A random 256-bit token in an `HttpOnly`, `SameSite=Lax` cookie, which is `Secure` with the `__Host-` prefix in production.
   - Only a SHA-256 of the token is stored.
@@ -477,13 +490,14 @@ npm run typecheck && npm run lint
 
 | Spec | What it drives in a real browser |
 |---|---|
+| `admin-signin.spec.ts` | Owner at `/admin`: temporary password → forced change → add secret key → sign out → sign-in asks for the key after the password (wrong key refused, no session until it's right) |
 | `auth-access.spec.ts` | Generic wrong-password message, sign-in redirect, forced password change, sales staff kept out of admin pages and APIs, cross-site POST refusal, security headers, owner admin pages |
 | `public-site.spec.ts` | Homepage and WhatsApp contact, catalogue search with SAMPLE marking, product page warning, visitor order request visible to staff, invalid share link reveals nothing |
 | `catalogue.spec.ts` | Product editor, price review, CSV import validation, cost/margin data never sent to an admin without cost access |
 | `dashboard-ops.spec.ts` | Overview totals unchanged by training sales; sale → payment → document → PDF traceability |
 | `pos.spec.ts` | **The acceptance scenario:** sales staff over-discounts → server blocks finalising → admin approves remotely → customer agrees → UPI QR (not treated as paid) → 12-digit UTR + explicit confirmation → GST tax invoice `OE/yy-yy/n` → PDF; 403 on price/cost edits; UTR reuse rejected; scanner-style SKU + Enter |
 
-Last full run (18 Oct 2026, this repository): **51 unit, 66 integration and 33 browser tests passed.** Three browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
+Last full run (18 Oct 2026, this repository): **51 unit, 72 integration and 34 browser tests passed.** Four browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
 
 **Coverage of the required checks:**
 

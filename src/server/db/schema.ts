@@ -83,6 +83,9 @@ export const users = pgTable(
     lockedUntil: ts("locked_until"),
     lastLoginAt: ts("last_login_at"),
     passwordChangedAt: ts("password_changed_at"),
+    /** Optional second sign-in step: scrypt hash of the user's secret key (null = not set). */
+    loginSecretHash: text("login_secret_hash"),
+    loginSecretSetAt: ts("login_secret_set_at"),
     createdAt: ts("created_at").notNull().defaultNow(),
     createdBy: uuid("created_by"),
     updatedAt: ts("updated_at").notNull().defaultNow(),
@@ -108,6 +111,25 @@ export const userPermissionOverrides = pgTable(
     primaryKey({ columns: [t.userId, t.permission] }),
     check("upo_effect", sql`${t.effect} in ('grant','deny')`),
   ],
+);
+
+/**
+ * Sign-in that passed the password step and now waits for the secret key. Short-lived, single use,
+ * limited attempts. Only sha256(token) is stored.
+ */
+export const loginChallenges = pgTable(
+  "login_challenges",
+  {
+    id: text("id").primaryKey(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    expiresAt: ts("expires_at").notNull(),
+    attempts: integer("attempts").notNull().default(0),
+    ip: text("ip"),
+    createdAt: ts("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("login_challenges_user_idx").on(t.userId)],
 );
 
 export const sessions = pgTable(

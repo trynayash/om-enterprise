@@ -28,6 +28,7 @@ export interface StaffRow {
   lastLoginAt: Date | null;
   createdAt: Date;
   lockedUntil: Date | null;
+  hasSecretKey: boolean;
   overrides: { permission: string; effect: "grant" | "deny" }[];
 }
 
@@ -61,6 +62,7 @@ export async function listStaff(actor: Actor): Promise<StaffRow[]> {
     lastLoginAt: u.lastLoginAt,
     createdAt: u.createdAt,
     lockedUntil: u.lockedUntil,
+    hasSecretKey: u.loginSecretHash !== null,
     overrides: overrides.filter((o) => o.userId === u.id).map((o) => ({ permission: o.permission, effect: o.effect })),
   }));
 }
@@ -388,6 +390,8 @@ export async function createInitialSuperAdmin(input: {
   mobile?: string;
   email?: string;
   allowAdditional?: boolean;
+  /** A temporary password (e.g. one handed over in writing) must be changed at first sign-in. */
+  temporary?: boolean;
 }) {
   const db = getDb();
   const security = await getSettings("security");
@@ -409,7 +413,7 @@ export async function createInitialSuperAdmin(input: {
         email: input.email ?? null,
         passwordHash: hash,
         roleId: role.id,
-        mustChangePassword: false,
+        mustChangePassword: input.temporary ?? false,
         passwordChangedAt: new Date(),
       })
       .returning({ id: users.id });

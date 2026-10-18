@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { KeyRound, Lock, Pencil, Plus, ShieldCheck, UserCheck, UserX } from "lucide-react";
+import { KeyRound, Lock, Pencil, Plus, ShieldCheck, ShieldOff, UserCheck, UserX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -29,6 +29,7 @@ type Staff = {
   roleApprovalLimitPercent: string;
   lastLoginAt: string | null;
   lockedUntil: string | null;
+  hasSecretKey: boolean;
   overrides: { permission: string; effect: "grant" | "deny" }[];
 };
 type Role = { key: string; name: string; description: string | null; permissions: string[]; defaultDiscountLimitPercent: string; defaultApprovalLimitPercent: string };
@@ -56,6 +57,17 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
     try {
       await apiFetch(`/api/admin/staff/${s.id}`, { method: "PATCH", body: { isActive: !s.isActive } });
       toast(`${s.displayName} ${s.isActive ? "deactivated" : "reactivated"}`);
+      router.refresh();
+    } catch (err) {
+      toast(errorMessage(err), "error");
+    }
+  };
+
+  const clearSecretKey = async (s: Staff) => {
+    if (!confirm(`Clear ${s.displayName}'s secret key? They will sign in with their password only until they add a new key.`)) return;
+    try {
+      await apiFetch(`/api/admin/staff/${s.id}/secret-key`, { method: "DELETE", body: {} });
+      toast(`Secret key cleared for ${s.displayName}`);
       router.refresh();
     } catch (err) {
       toast(errorMessage(err), "error");
@@ -115,6 +127,11 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                     ) : (
                       <Badge tone="green">Active</Badge>
                     )}
+                    {s.hasSecretKey && (
+                      <Badge tone="blue" className="ml-1">
+                        <ShieldCheck className="h-3 w-3" /> Secret key
+                      </Badge>
+                    )}
                   </td>
                   <td className={cn(td, "text-right tabular")}>
                     {s.roleKey === "super_admin" ? "No limit" : `${Number(s.discountLimitPercent ?? s.roleDiscountLimitPercent)}%`}
@@ -133,6 +150,9 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                         <Button size="sm" variant="ghost" title="Reset password" onClick={() => setResetFor(s)} icon={<KeyRound className="h-4 w-4" />} />
                         {me.isSuperAdmin && s.roleKey !== "super_admin" && (
                           <Button size="sm" variant="ghost" title="Individual permissions" onClick={() => setPermsFor(s)} icon={<ShieldCheck className="h-4 w-4" />} />
+                        )}
+                        {me.isSuperAdmin && s.hasSecretKey && (
+                          <Button size="sm" variant="ghost" title="Clear forgotten secret key" onClick={() => clearSecretKey(s)} icon={<ShieldOff className="h-4 w-4" />} />
                         )}
                         <Button
                           size="sm"

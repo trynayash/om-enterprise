@@ -28,7 +28,7 @@ async function main() {
   const env = { ...process.env, DATABASE_URL: url };
   const tsx = ["tsx", "--conditions=react-server"];
   execFileSync("npx", [...tsx, "scripts/create-super-admin.ts"], {
-    env: { ...env, SA_USERNAME: E2E_OWNER.username, SA_NAME: "E2E Owner", SA_PASSWORD: E2E_OWNER.password },
+    env: { ...env, SA_USERNAME: E2E_OWNER.username, SA_NAME: "E2E Owner", SA_PASSWORD: E2E_OWNER.password, SA_TEMPORARY: "false" },
     stdio: "inherit",
   });
   execFileSync("npx", [...tsx, "scripts/seed-demo.ts"], { env, stdio: "inherit" });

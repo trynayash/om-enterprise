@@ -44,6 +44,14 @@ export async function reload(actor: Actor): Promise<Actor> {
 
 export const client = { ip: "127.0.0.1", userAgent: "vitest" };
 
+/** Sign in an account without a secret key; fails if a second step is required. */
+export async function sessionLogin(username: string, password: string, c = client) {
+  const { login } = await import("@/server/services/auth");
+  const r = await login(username, password, c);
+  if (r.kind !== "session") throw new Error("expected a session, got a secret-key challenge");
+  return r;
+}
+
 /** Message of a DB error raised by a trigger (drizzle wraps the driver error in `cause`). */
 export async function dbErrorMessage(p: Promise<unknown>): Promise<string> {
   const e = (await rejects(p)) as Error & { cause?: Error };

@@ -930,6 +930,7 @@ export async function approveInPerson(
   approverPassword: string,
   note: string | null,
   client: { ip: string; userAgent: string },
+  approverSecretKey?: string | null,
 ) {
   const settings = await getSettings("discounts");
   if (!settings.inPersonApprovalEnabled) throw forbidden("In-person approval is disabled");
@@ -937,7 +938,7 @@ export async function approveInPerson(
   const [pre] = await getDb().select().from(sales).where(eq(sales.id, saleId));
   if (!pre) throw notFound("Sale");
   assertCanEditDraft(cashier, pre);
-  const approver = await verifyApproverCredentials(approverUsername, approverPassword, client, cashier);
+  const approver = await verifyApproverCredentials(approverUsername, approverPassword, client, cashier, approverSecretKey);
   if (approver.id === cashier.id && !approver.isSuperAdmin) throw forbidden("A different authorised person must approve");
   const db = getDb();
   return db.transaction(async (tx) => {

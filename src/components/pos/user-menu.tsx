@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown, KeyRound, LayoutDashboard, LogOut } from "lucide-react";
+import { ChevronDown, KeyRound, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
 import { apiFetch } from "@/lib/api-client";
 
 export function PosUserMenu({ name, role, canDashboard }: { name: string; role: string; canDashboard: boolean }) {
@@ -25,6 +25,9 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
           )}
           <Link href="/account/password" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-navy-50">
             <KeyRound className="h-4 w-4" /> Change password
+          </Link>
+          <Link href="/account/security" className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-navy-50">
+            <ShieldCheck className="h-4 w-4" /> Secret key
           </Link>
           <button
             type="button"

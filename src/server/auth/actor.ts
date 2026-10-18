@@ -20,6 +20,8 @@ export interface Actor {
   /** Max discount % this user may approve for others. */
   approvalLimitPercent: string;
   mustChangePassword: boolean;
+  /** A sign-in secret key is set (asked after the password). */
+  hasSecretKey: boolean;
   ip?: string | null;
   userAgent?: string | null;
 }
@@ -63,6 +65,7 @@ export async function loadActor(userId: string, tx?: Tx): Promise<Actor | null> 
     discountLimitPercent: user.discountLimitPercent ?? role.defaultDiscountLimitPercent,
     approvalLimitPercent: isSuperAdmin ? "100" : (user.approvalLimitPercent ?? role.defaultApprovalLimitPercent),
     mustChangePassword: user.mustChangePassword,
+    hasSecretKey: user.loginSecretHash !== null,
   };
 }
 
@@ -112,6 +115,7 @@ export function publicActor(actor: Actor) {
     discountLimitPercent: actor.discountLimitPercent,
     approvalLimitPercent: actor.approvalLimitPercent,
     mustChangePassword: actor.mustChangePassword,
+    hasSecretKey: actor.hasSecretKey,
   };
 }
 export type PublicActor = ReturnType<typeof publicActor>;

@@ -26,7 +26,9 @@ export function PasswordForm() {
       await apiFetch("/api/auth/password", { method: "POST", body: { currentPassword: current, newPassword: next } });
       setDone(true);
       const me = await apiFetch<PublicActor>("/api/auth/me");
-      setTimeout(() => (window.location.href = landingPath(me.permissions, me.isSuperAdmin)), 900);
+      // First sign-in of the owner or an admin: offer to add a secret key next.
+      const offerKey = required && !me.hasSecretKey && (me.isSuperAdmin || me.roleKey === "admin");
+      setTimeout(() => (window.location.href = offerKey ? "/account/security?setup=1" : landingPath(me.permissions, me.isSuperAdmin)), 900);
     } catch (err) {
       setError(errorMessage(err));
     } finally {

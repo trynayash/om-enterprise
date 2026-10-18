@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { LogOut, Menu, X, KeyRound } from "lucide-react";
+import { LogOut, Menu, X, KeyRound, ShieldCheck } from "lucide-react";
 import type { NavGroup } from "@/lib/nav";
 import { Logo, LogoMark } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
@@ -57,6 +57,9 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
         </div>
         <Link href="/account/password" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
           <KeyRound className="h-4 w-4" /> Change password
+        </Link>
+        <Link href="/account/security" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
+          <ShieldCheck className="h-4 w-4" /> Secret key
         </Link>
         <button type="button" onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
           <LogOut className="h-4 w-4" /> Sign out

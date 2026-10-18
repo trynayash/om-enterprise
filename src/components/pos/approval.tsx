@@ -104,6 +104,7 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
 function InPersonDialog({ saleId, onClose, run }: { saleId: string; onClose: () => void; run: Run }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [secretKey, setSecretKey] = useState("");
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,14 +114,16 @@ function InPersonDialog({ saleId, onClose, run }: { saleId: string; onClose: () 
     try {
       const res = await apiFetch<{ approvedBy: string }>(`/api/sales/${saleId}/approve-in-person`, {
         method: "POST",
-        body: { username, password, note: note.trim() || null },
+        body: { username, password, secretKey: secretKey || null, note: note.trim() || null },
       });
       setPassword("");
+      setSecretKey("");
       await run(async () => {}, `Approved by ${res.approvedBy}`);
       onClose();
     } catch (e) {
       setError(errorMessage(e));
       setPassword("");
+      setSecretKey("");
     } finally {
       setBusy(false);
     }
@@ -130,7 +133,7 @@ function InPersonDialog({ saleId, onClose, run }: { saleId: string; onClose: () 
       open
       onClose={onClose}
       title="Manager approval at the counter"
-      description="The approving manager enters their own username and password. Their name is recorded on this sale."
+      description="The approving manager enters their own username and password (and secret key, if they have one). Their name is recorded on this sale."
       footer={
         <>
           <Button variant="ghost" onClick={onClose}>
@@ -156,6 +159,9 @@ function InPersonDialog({ saleId, onClose, run }: { saleId: string; onClose: () 
         </Field>
         <Field label="Manager password" htmlFor="appr-pass">
           <Input id="appr-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
+        </Field>
+        <Field label="Manager secret key" htmlFor="appr-secret" hint="Only if the manager has set one">
+          <Input id="appr-secret" type="password" value={secretKey} onChange={(e) => setSecretKey(e.target.value)} autoComplete="off" />
         </Field>
         <Field label="Note (optional)" htmlFor="appr-note">
           <Textarea id="appr-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} className="min-h-14" />

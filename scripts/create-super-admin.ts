@@ -3,8 +3,10 @@
  *
  *   npm run create-super-admin
  *
- * Non-interactive (e.g. CI / first deploy) — values are read from the environment and never logged:
- *   SA_USERNAME=kishan SA_NAME="Kishan Suthar" SA_PASSWORD='…' npm run create-super-admin
+ * Non-interactive (e.g. first deploy) — values are read from the environment and never logged:
+ *   SA_USERNAME=Kishan SA_NAME="Kishan Suthar" SA_PASSWORD='…' npm run create-super-admin
+ * A password given this way is TEMPORARY: it must be changed at the first sign-in (at /admin).
+ * Set SA_TEMPORARY=false only for automated test fixtures.
  *
  * Refuses to run if a Super Admin already exists (pass --additional to add another one deliberately).
  */
@@ -39,6 +41,8 @@ async function main() {
   const username = process.env.SA_USERNAME || (await ask("Username (e.g. kishan): "));
   const displayName = process.env.SA_NAME || (await ask("Full name (e.g. Kishan Suthar): "));
   let password = process.env.SA_PASSWORD ?? "";
+  // A password that travelled through the environment (or a handover note) is temporary.
+  const temporary = password ? process.env.SA_TEMPORARY !== "false" : false;
   if (!password) {
     password = await ask("Password (min 12 chars, hidden): ", true);
     const confirm = await ask("Confirm password: ", true);
@@ -47,8 +51,10 @@ async function main() {
   const mobile = process.env.SA_MOBILE || undefined;
   const email = process.env.SA_EMAIL || undefined;
 
-  const u = await createInitialSuperAdmin({ username, displayName, password, mobile, email, allowAdditional: additional });
-  console.log(`Super Admin "${username}" created (id ${u.id}). Sign in at /login.`);
+  const u = await createInitialSuperAdmin({ username, displayName, password, mobile, email, allowAdditional: additional, temporary });
+  console.log(
+    `Super Admin "${username}" created (id ${u.id}). Sign in at /admin${temporary ? " — the password must be changed at the first sign-in" : ""}.`,
+  );
   await getPool().end();
 }
 
