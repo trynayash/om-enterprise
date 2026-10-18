@@ -31,6 +31,8 @@ export default defineConfig({
       APP_BASE_URL: `http://localhost:${port}`,
       APP_SECRET: process.env.APP_SECRET ?? "e2e-secret-e2e-secret-e2e-secret-e2e",
       UPLOAD_DIR: "./storage/e2e-uploads",
+      // Every test signs in from 127.0.0.1; keep the per-IP limit out of the way (account lockout still applies).
+      LOGIN_RATE_LIMIT_PER_15MIN: "10000",
     },
   },
 });

@@ -1,5 +1,6 @@
 import "server-only";
-import { NextResponse, type NextRequest } from "next/server";
+import { connection, NextResponse, type NextRequest } from "next/server";
+import { unstable_rethrow } from "next/navigation";
 import type { z } from "zod";
 import { actorFromRequest, clientInfoFromHeaders } from "@/server/auth/session";
 import { requirePermission, type Actor } from "@/server/auth/actor";
@@ -67,6 +68,8 @@ export function api<O extends Options>(
   handler: (ctx: O["public"] extends true ? ApiContext : AuthedContext) => Promise<unknown>,
 ) {
   return async (req: NextRequest, routeCtx: RouteCtx): Promise<Response> => {
+    // Every API response depends on the request (session, input): never prerender or cache.
+    await connection();
     try {
       const method = req.method.toUpperCase();
       const mutating = !["GET", "HEAD", "OPTIONS"].includes(method);
@@ -121,6 +124,8 @@ export function api<O extends Options>(
       if (result instanceof Response) return result;
       return NextResponse.json({ ok: true, data: result ?? null }, { headers: { "Cache-Control": "no-store" } });
     } catch (err) {
+      // Let Next.js control-flow signals (redirect, notFound, dynamic bail-outs) propagate.
+      unstable_rethrow(err);
       const appErr = toAppError(err);
       if (appErr.code === "INTERNAL") console.error("[api]", req.method, req.nextUrl.pathname, err);
       return jsonError(appErr);

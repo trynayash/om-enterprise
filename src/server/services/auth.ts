@@ -28,7 +28,8 @@ export async function login(
 ): Promise<{ token: string; expiresAt: Date; actor: Actor }> {
   const db = getDb();
   const uname = username.trim();
-  await enforceRateLimit(`login:ip:${client.ip}`, 30, 15 * 60, "Too many sign-in attempts from this device. Wait 15 minutes.");
+  const ipLimit = Number(process.env.LOGIN_RATE_LIMIT_PER_15MIN ?? 30);
+  await enforceRateLimit(`login:ip:${client.ip}`, ipLimit, 15 * 60, "Too many sign-in attempts from this device. Wait 15 minutes.");
 
   const security = await getSettings("security");
   const rows = await db.select().from(users).where(sql`lower(${users.username}) = lower(${uname})`);
