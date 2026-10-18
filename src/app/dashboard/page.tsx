@@ -52,7 +52,7 @@ async function Overview() {
   const best = canReports ? await bestSellers(actor, { from: monthStart, to: tomorrow }, 5) : [];
 
   const pendingDiscounts = can(actor, "discounts.approve") ? (await listPendingApprovals(actor)).length : 0;
-  const pendingPrices = can(actor, "prices.approve") ? (await listPendingPriceChanges()).length : 0;
+  const pendingPrices = can(actor, "prices.approve") ? (await listPendingPriceChanges(actor)).length : 0;
   const newOrders = can(actor, "orders.view") ? await newOrderCount() : 0;
   const canSales = can(actor, "sales.view_all") || can(actor, "sales.create");
   const recent = canSales ? await listSales(actor, { pageSize: 6 }) : null;

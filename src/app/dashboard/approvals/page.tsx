@@ -55,7 +55,7 @@ async function Approvals() {
   const canDiscounts = can(actor, "discounts.approve");
   const canPrices = can(actor, "prices.approve");
   const discounts = canDiscounts ? await listPendingApprovals(actor) : [];
-  const prices = canPrices ? await listPendingPriceChanges() : [];
+  const prices = canPrices ? await listPendingPriceChanges(actor) : [];
   const showCost = can(actor, "costs.view");
   const mayBelowCost = can(actor, "pricing.sell_below_cost");
 
