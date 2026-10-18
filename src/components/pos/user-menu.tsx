@@ -30,6 +30,8 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
             type="button"
             onClick={async () => {
               await apiFetch("/api/auth/logout", { method: "POST", body: {} }).catch(() => {});
+              // Full reload on sign-out so no client-side state from the session survives.
+              // eslint-disable-next-line @next/next/no-location-assign-relative-destination
               window.location.href = "/login";
             }}
             className="flex w-full items-center gap-2 border-t border-navy-100 px-4 py-2.5 text-left text-sm hover:bg-navy-50"
