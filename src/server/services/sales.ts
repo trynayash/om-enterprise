@@ -490,9 +490,8 @@ export function approvalReasonsFor(
   const reasons: string[] = [];
   const limit = D(operator.discountLimitPercent);
   if (D(totals.maxLineDiscountPercent).greaterThan(limit) || D(totals.effectiveDiscountPercent).greaterThan(limit)) {
-    reasons.push(
-      `Discount ${D(totals.maxLineDiscountPercent).greaterThan(D(totals.effectiveDiscountPercent)) ? totals.maxLineDiscountPercent : totals.effectiveDiscountPercent}% exceeds your limit of ${limit.toFixed(2)}%`,
-    );
+    const pct = D(totals.maxLineDiscountPercent).greaterThan(D(totals.effectiveDiscountPercent)) ? totals.maxLineDiscountPercent : totals.effectiveDiscountPercent;
+    reasons.push(`Discount ${pct}% exceeds ${operator.displayName}'s limit of ${limit.toFixed(2)}%`);
   }
   if (!can(operator, "pricing.sell_below_cost")) {
     if (totals.anyBelowCost) reasons.push("One or more items would be sold below cost");
