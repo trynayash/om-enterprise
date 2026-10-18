@@ -81,7 +81,9 @@ export async function getPublicCategories() {
       slug: categories.slug,
       description: categories.description,
       icon: categories.icon,
-      productCount: sql<number>`(select count(*)::int from products p where p.category_id = ${categories.id} and p.is_published and p.is_active)`,
+      // Explicitly qualified: drizzle renders `${categories.id}` as a bare "id" in single-table selects,
+      // which inside this subquery would bind to products.id.
+      productCount: sql<number>`(select count(*)::int from products p where p.category_id = "categories"."id" and p.is_published and p.is_active)`,
     })
     .from(categories)
     .where(publishedCategory)
