@@ -483,7 +483,7 @@ npm run typecheck && npm run lint
 | `dashboard-ops.spec.ts` | Overview totals unchanged by training sales; sale → payment → document → PDF traceability |
 | `pos.spec.ts` | **The acceptance scenario:** sales staff over-discounts → server blocks finalising → admin approves remotely → customer agrees → UPI QR (not treated as paid) → 12-digit UTR + explicit confirmation → GST tax invoice `OE/yy-yy/n` → PDF; 403 on price/cost edits; UTR reuse rejected; scanner-style SKU + Enter |
 
-Last full run (18 Oct 2026, this repository): **51 unit, 55 integration and 33 browser tests passed.** Three browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
+Last full run (18 Oct 2026, this repository): **51 unit, 66 integration and 33 browser tests passed.** Three browser tests that create accounts run on the desktop profile only, so they show as skipped on the mobile profile.
 
 **Coverage of the required checks:**
 
@@ -504,7 +504,7 @@ Last full run (18 Oct 2026, this repository): **51 unit, 55 integration and 33 b
 | 17 | Historical retrieval & printing | `payments-billing.test.ts` snapshot tests; PDF route; `dashboard-ops.spec.ts`, `pos.spec.ts` |
 | 18 | Refunds/cancellations keep audit history | `payments-billing.test.ts` (cancel with refund, credit notes, audit entries; DB rejects deletes) |
 | 19 | Reports reconcile with source records | `payments-billing.test.ts` "reports reconcile…" |
-| 20 | Server-side protection of sensitive data | RBAC tests; cost stripping; `tests/e2e` forbidden pages |
+| 20 | Server-side protection of sensitive data | RBAC tests; cost stripping; `security-review.test.ts` (approval lockout, mixed training carts, UTR evidence, ownership checks, cost signals); `tests/e2e` forbidden pages |
 | 21 | Mobile & desktop | `tests/e2e` runs on desktop and Pixel 7 profiles |
 | 22 | Sample data separated | `payments-billing.test.ts` (training numbering, watermark, excluded from reports) |
 
