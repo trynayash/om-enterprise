@@ -120,7 +120,7 @@ async function main() {
 
   const { getDb, getPool } = await import("../src/server/db/client");
   const schema = await import("../src/server/db/schema");
-  const { and, eq, inArray, sql } = await import("drizzle-orm");
+  const { and, eq, sql } = await import("drizzle-orm");
   const { productInput, variantInput } = await import("../src/lib/validation");
   const db = getDb();
 
@@ -173,34 +173,46 @@ async function main() {
   const actor = (await loadActor(sa.id))!;
   const brandIds = new Map((await db.select().from(schema.brands)).map((b) => [b.name.toLowerCase(), b.id]));
 
+  // Everything a re-run needs to know, in three queries, so unchanged products cost no round trips.
+  const known = new Map(
+    (
+      await db.execute<{ sku: string; variant_id: string; product_id: string; priced: boolean }>(
+        sql`select upper(v.sku) as sku, v.id as variant_id, v.product_id,
+                   exists(select 1 from variant_prices p where p.variant_id = v.id) as priced
+            from product_variants v`,
+      )
+    ).rows.map((r) => [r.sku, r]),
+  );
+  const withImages = new Set(
+    (await db.execute<{ product_id: string }>(sql`select distinct product_id from product_images`)).rows.map((r) => r.product_id),
+  );
+  const isNew = ({ product: p }: Loaded) => !p.variants.some((v) => known.has(v.sku));
+
+  // Brands first, one at a time, so parallel product imports never race to create the same brand.
+  for (const item of items.filter(isNew)) {
+    const brand = item.product.brand;
+    if (brand && !brandIds.has(brand.toLowerCase())) {
+      brandIds.set(brand.toLowerCase(), (await catalog.createBrand(actor, { name: brand, manufacturer: item.product.manufacturer ?? null })).id);
+    }
+  }
+
   const stats = { products: 0, variants: 0, prices: 0, images: 0, imageFailures: 0, published: 0 };
   const failures: string[] = [];
-  for (const { file, researchedOn, product: p } of items) {
+
+  async function importOne({ file, researchedOn, product: p }: Loaded) {
     try {
-      const skus = p.variants.map((v) => v.sku);
-      const existing = await db
-        .select({ sku: schema.productVariants.sku, variantId: schema.productVariants.id, productId: schema.productVariants.productId })
-        .from(schema.productVariants)
-        .where(inArray(sql`upper(${schema.productVariants.sku})`, skus));
-      let productId = existing[0]?.productId;
+      const existing = p.variants.flatMap((v) => known.get(v.sku) ?? []);
+      let productId = existing[0]?.product_id;
       const created = !productId;
 
       if (!productId) {
-        let brandId: string | null = null;
-        if (p.brand) {
-          brandId = brandIds.get(p.brand.toLowerCase()) ?? null;
-          if (!brandId) {
-            brandId = (await catalog.createBrand(actor, { name: p.brand, manufacturer: p.manufacturer ?? null })).id;
-            brandIds.set(p.brand.toLowerCase(), brandId);
-          }
-        }
         const source = `Public sources (researched ${researchedOn}): ${p.sourceUrls.join(" ")}`;
         const product = await catalog.createProduct(
           actor,
           productInput.parse({
             name: p.name,
             categoryId: cats.find((c) => c.slug === p.category)!.id,
-            brandId,
+            brandId: p.brand ? brandIds.get(p.brand.toLowerCase())! : null,
             manufacturer: p.manufacturer ?? null,
             model: p.model ?? null,
             description: p.description ?? null,
@@ -219,11 +231,11 @@ async function main() {
       }
 
       for (const [i, v] of p.variants.entries()) {
-        let variantId = existing.find((e) => e.sku.toUpperCase() === v.sku)?.variantId;
-        if (variantId) {
+        const prior = known.get(v.sku);
+        let variantId = prior?.variant_id;
+        if (prior) {
           // A price found after the first import fills a variant that has never had one.
-          const [{ n }] = (await db.execute<{ n: number }>(sql`select count(*)::int as n from variant_prices where variant_id = ${variantId}`)).rows;
-          if (Number(n) > 0) continue;
+          if (prior.priced || !v.listPrice) continue;
         } else {
           const variant = await catalog.createVariant(
             actor,
@@ -237,7 +249,7 @@ async function main() {
         if (v.listPrice) {
           const reason = `Manufacturer list price: ${v.priceSource ?? "see product sources"}`;
           await pricing.proposePrice(actor, {
-            variantId,
+            variantId: variantId!,
             price: v.listPrice,
             priceIncludesTax: v.listPriceIncludesTax,
             mrp: v.mrp ?? null,
@@ -248,10 +260,7 @@ async function main() {
         }
       }
 
-      const [{ count }] = (
-        await db.execute<{ count: number }>(sql`select count(*)::int as count from product_images where product_id = ${productId}`)
-      ).rows;
-      if (Number(count) === 0 && p.images.length) {
+      if (!withImages.has(productId) && p.images.length) {
         const results = await Promise.all(p.images.slice(0, 4).map(async (url) => ({ url, got: await download(url) })));
         for (const { url, got } of results) {
           if (typeof got === "string") {
@@ -278,6 +287,26 @@ async function main() {
       failures.push(`${file} · ${p.name}: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
+
+  // A few products at a time (the database may be far from the build machine). Products whose names
+  // give the same URL slug share a lane, so they never race for the same slug.
+  const laneCount = Math.max(1, Math.min(4, Number(process.env.DB_POOL_MAX ?? 10) - 1));
+  const lanes: Loaded[][] = Array.from({ length: laneCount }, () => []);
+  for (const item of items) {
+    const key = item.product.name.toLowerCase().replace(/[^a-z0-9]+/g, "");
+    let h = 0;
+    for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    lanes[h % laneCount].push(item);
+  }
+  let done = 0;
+  await Promise.all(
+    lanes.map(async (lane) => {
+      for (const item of lane) {
+        await importOne(item);
+        if (++done % 10 === 0 || done === items.length) console.log(`  … ${done}/${items.length} products processed`);
+      }
+    }),
+  );
 
   console.log(
     `Imported ${stats.products} new products and ${stats.variants} variants; ${stats.prices} prices await approval; ` +
