@@ -4,7 +4,8 @@ import { Clock, Pencil, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EmptyState, td, th } from "@/components/ui/page";
+import { EmptyState } from "@/components/ui/page";
+import { tdCode, tdMuted, tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import { formatINR } from "@/lib/money";
 import { VariantDialog } from "./variant-dialog";
@@ -74,7 +75,7 @@ export function VariantsManager(props: VariantsManagerProps) {
 
   return (
     <>
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px] xl:items-start">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-start">
         <Card className="min-w-0">
           <CardHeader
             title="Variants"
@@ -93,16 +94,15 @@ export function VariantsManager(props: VariantsManagerProps) {
             </CardBody>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[760px]">
+              <table className="w-full min-w-[640px]">
                 <thead>
                   <tr>
                     <th className={th}>Variant</th>
                     <th className={th}>SKU</th>
                     <th className={th}>Unit</th>
-                    <th className={`${th} text-right`}>{defaultList?.name ?? "Retail"} price</th>
-                    {perms.canSeeCosts && <th className={`${th} text-right`}>Cost · margin</th>}
-                    <th className={th}>Status</th>
-                    <th className={`${th} text-right`}>
+                    <th className={thNum}>{defaultList?.name ?? "Retail"} price</th>
+                    {perms.canSeeCosts && <th className={thNum}>Cost · margin</th>}
+                    <th className={thNum}>
                       <span className="sr-only">Actions</span>
                     </th>
                   </tr>
@@ -115,65 +115,65 @@ export function VariantsManager(props: VariantsManagerProps) {
                     const info = price && ctx ? marginInfo(price.price, price.priceIncludesTax, ctx, cost?.landedCost ?? null, props.regType) : null;
                     const hasPending = props.pending.some((p) => p.variantId === v.id);
                     const isSel = selected?.id === v.id;
+                    // Attributes usually repeat the variant name ("Size: 20 mm" for "20 mm"); show them only when they add something.
+                    const extraAttrs = Object.entries(v.attributes).filter(([, val]) => val && !v.name.toLowerCase().includes(String(val).toLowerCase()));
                     return (
                       <tr
                         key={v.id}
                         onClick={() => setSelectedId(v.id)}
-                        className={cn("cursor-pointer transition-colors", isSel ? "bg-gold-50" : "hover:bg-navy-50/60")}
+                        className={cn("cursor-pointer transition-colors duration-150", isSel ? "bg-gold-50/70" : "hover:bg-paper/60")}
                         aria-selected={isSel}
                       >
-                        <td className={cn(td, isSel && "border-l-4 border-l-gold-500")}>
-                          <div className="font-semibold">{v.name}</div>
-                          {Object.keys(v.attributes).length > 0 && (
-                            <div className="mt-0.5 flex flex-wrap gap-1">
-                              {Object.entries(v.attributes).map(([k, val]) => (
-                                <span key={k} className="rounded bg-navy-50 px-1.5 py-0.5 text-[11px] text-navy-600">
-                                  {k}: {val}
-                                </span>
-                              ))}
+                        <td className={cn(tdText, isSel && "shadow-[inset_3px_0_0_var(--color-gold-500)]")}>
+                          <div className="font-semibold leading-snug">{v.name}</div>
+                          {extraAttrs.length > 0 && (
+                            <div className="mt-0.5 text-xs text-navy-500">
+                              {extraAttrs.map(([k, val]) => `${k}: ${val}`).join(" · ")}
+                            </div>
+                          )}
+                          {(!v.isActive || hasPending) && (
+                            <div className="mt-1.5 flex flex-wrap gap-1">
+                              {!v.isActive && <Badge tone="red">Inactive</Badge>}
+                              {hasPending && (
+                                <Badge tone="amber">
+                                  <Clock className="h-3 w-3" /> Price pending
+                                </Badge>
+                              )}
                             </div>
                           )}
                         </td>
-                        <td className={`${td} whitespace-nowrap font-mono text-xs`}>
+                        <td className={tdCode}>
                           {v.sku}
                           {v.barcode && <div className="text-navy-400">{v.barcode}</div>}
                         </td>
-                        <td className={td}>{unitName(v.unitCode)}</td>
-                        <td className={`${td} text-right tabular`}>
+                        <td className={tdMuted}>{unitName(v.unitCode)}</td>
+                        <td className={tdNum}>
                           {price ? (
                             <>
                               <div className="font-semibold">{formatINR(price.price)}</div>
-                              <div className="text-[11px] text-navy-400">{price.priceIncludesTax ? "incl." : "excl."} GST{price.tiers.length ? ` · ${price.tiers.length} break${price.tiers.length > 1 ? "s" : ""}` : ""}</div>
+                              <div className="mt-0.5 font-sans text-[11px] text-navy-500">
+                                {price.priceIncludesTax ? "incl." : "excl."} GST{price.tiers.length ? ` · ${price.tiers.length} break${price.tiers.length > 1 ? "s" : ""}` : ""}
+                              </div>
                             </>
                           ) : (
-                            <span className="text-xs font-semibold text-red-700">No price</span>
+                            <span className="font-sans text-xs font-medium text-red-700">No price</span>
                           )}
                         </td>
                         {perms.canSeeCosts && (
-                          <td className={`${td} text-right tabular`}>
+                          <td className={tdNum}>
                             {cost ? (
                               <>
                                 <div>{formatINR(cost.landedCost)}</div>
-                                <div className={cn("text-[11px] font-semibold", info?.belowCost ? "text-red-700" : info?.belowFloor ? "text-amber-700" : "text-emerald-700")}>
+                                <div className={cn("mt-0.5 text-[11px] font-medium", info?.belowCost ? "text-red-700" : info?.belowFloor ? "text-amber-700" : "text-emerald-700")}>
                                   {info?.margin ? `${info.margin.toFixed(1)}% margin` : "—"}
                                 </div>
                               </>
                             ) : (
-                              <span className="text-xs text-amber-700">Cost unknown</span>
+                              <span className="font-sans text-xs text-navy-400">Cost unknown</span>
                             )}
                           </td>
                         )}
-                        <td className={td}>
-                          <div className="flex flex-wrap gap-1">
-                            {v.isActive ? <Badge tone="green">Active</Badge> : <Badge tone="red">Inactive</Badge>}
-                            {hasPending && (
-                              <Badge tone="amber">
-                                <Clock className="h-3 w-3" /> Price pending
-                              </Badge>
-                            )}
-                          </div>
-                        </td>
-                        <td className={`${td} text-right`}>
+                        <td className={`${withPy(tdText, "py-1.5")} text-right`}>
                           {perms.canEdit && (
                             <Button
                               size="sm"
@@ -203,14 +203,15 @@ export function VariantsManager(props: VariantsManagerProps) {
         <Card className="mt-6">
           <CardHeader
             title={
-              <span>
-                {selected.name} <span className="font-mono text-sm font-normal text-navy-500">· {selected.sku}</span>
+              <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                {selected.name}
+                <span className="font-mono text-[12.5px] font-normal text-navy-500">{selected.sku}</span>
               </span>
             }
             description="Pricing, cost and history for the selected variant. Click another row above to switch."
           />
           <div className="border-b border-navy-100 px-3 sm:px-5">
-            <div className="-mb-px flex gap-1 overflow-x-auto" role="tablist">
+            <div className="-mb-px flex gap-5 overflow-x-auto" role="tablist">
               {tabs
                 .filter((t) => t.show)
                 .map((t) => (
@@ -221,8 +222,8 @@ export function VariantsManager(props: VariantsManagerProps) {
                     aria-selected={tab === t.key}
                     onClick={() => setTab(t.key)}
                     className={cn(
-                      "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-semibold transition-colors",
-                      tab === t.key ? "border-gold-500 text-navy-900" : "border-transparent text-navy-500 hover:text-navy-800",
+                      "whitespace-nowrap border-b-2 px-0.5 py-3 text-sm font-semibold transition-colors duration-150",
+                      tab === t.key ? "border-gold-500 text-navy-950" : "border-transparent text-navy-500 hover:border-navy-200 hover:text-navy-900",
                     )}
                   >
                     {t.label}

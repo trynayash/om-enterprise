@@ -3,12 +3,13 @@ import Link from "next/link";
 import { MessageCircle, Phone } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { listWebsiteOrders } from "@/server/services/website-orders";
-import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
-import { Badge, StatusBadge } from "@/components/ui/badge";
+import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
+import { StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money } from "@/components/ui/money";
 import { FilterBar } from "@/components/dashboard/ops/filter-bar";
 import { str, type SearchParams } from "@/components/dashboard/ops/params";
 import { whatsappLink } from "@/lib/india";
+import { codeLink, rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Website orders" };
 
@@ -30,6 +31,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
   return (
     <div>
       <PageHeader
+        eyebrow="Sales"
         title="Website orders"
         description="Enquiries and order requests from the public website. Prices customers saw were indicative — confirm the final amount at billing."
       />
@@ -52,7 +54,12 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
         ]}
         values={{ status }}
       />
-      {!status && newCount > 0 && <p className="mb-3 text-sm font-semibold text-gold-700">{newCount} new request{newCount === 1 ? "" : "s"} waiting for a reply.</p>}
+      {!status && newCount > 0 && (
+        <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-gold-700">
+          <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-gold-500" />
+          {newCount} new request{newCount === 1 ? "" : "s"} waiting for a reply.
+        </p>
+      )}
       {rows.length === 0 ? (
         <EmptyState title="No website orders" description="Enquiries submitted on the website will appear here." />
       ) : (
@@ -64,46 +71,44 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
                 <th className={th}>Received</th>
                 <th className={th}>Customer</th>
                 <th className={th}>Contact</th>
-                <th className={`${th} text-right`}>Items</th>
-                <th className={`${th} text-right`}>Indicative total</th>
+                <th className={thNum}>Items</th>
+                <th className={thNum}>Indicative total</th>
                 <th className={th}>Status</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((o) => (
-                <tr key={o.id} className={o.status === "new" ? "bg-gold-50/60 hover:bg-gold-50" : "hover:bg-navy-50/50"}>
-                  <td className={td}>
-                    <Link href={`/dashboard/orders/${o.id}`} className="font-semibold hover:underline">
+                <tr key={o.id} className={o.status === "new" ? "bg-gold-50/50 transition-colors duration-150 hover:bg-gold-50" : rowHover}>
+                  <td className={tdText}>
+                    <Link href={`/dashboard/orders/${o.id}`} className={codeLink}>
                       {o.orderNumber}
                     </Link>
-                    <div className="mt-0.5">
-                      <Badge tone={o.kind === "order_request" ? "navy" : "blue"}>{o.kind === "order_request" ? "Order request" : "Enquiry"}</Badge>
-                    </div>
+                    <div className="mt-0.5 text-xs text-navy-500">{o.kind === "order_request" ? "Order request" : "Enquiry"}</div>
                   </td>
-                  <td className={`${td} text-navy-600`}>
+                  <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={o.createdAt} />
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
                     <div className="font-medium">{o.customerName}</div>
                     {o.city && <div className="text-xs text-navy-500">{o.city}</div>}
                   </td>
-                  <td className={td}>
-                    <div className="flex items-center gap-2">
-                      <a href={`tel:+91${o.mobile}`} className="inline-flex items-center gap-1 tabular hover:underline" aria-label={`Call ${o.customerName}`}>
-                        <Phone className="h-3.5 w-3.5 text-navy-400" />
+                  <td className={tdText}>
+                    <div className="flex items-center gap-1.5">
+                      <a href={`tel:+91${o.mobile}`} className="inline-flex items-center gap-1.5 font-mono text-[13px] tabular underline-offset-[3px] hover:underline" aria-label={`Call ${o.customerName}`}>
+                        <Phone className="h-3.5 w-3.5 text-navy-400" aria-hidden />
                         {o.mobile}
                       </a>
-                      <a href={whatsappLink(o.mobile)} target="_blank" rel="noopener noreferrer" className="rounded-md p-1 text-emerald-700 hover:bg-emerald-50" aria-label={`WhatsApp ${o.customerName}`}>
+                      <a href={whatsappLink(o.mobile)} target="_blank" rel="noopener noreferrer" className="rounded-md p-1 text-emerald-700 transition-colors hover:bg-emerald-50" aria-label={`WhatsApp ${o.customerName}`}>
                         <MessageCircle className="h-4 w-4" />
                       </a>
                     </div>
                     {o.preferredContact && <div className="text-xs text-navy-500">Prefers {o.preferredContact}</div>}
                   </td>
-                  <td className={`${td} text-right tabular`}>{o.itemCount}</td>
-                  <td className={`${td} text-right`}>{o.indicativeTotal ? <Money value={o.indicativeTotal} /> : <span className="text-navy-300">—</span>}</td>
-                  <td className={td}>
+                  <td className={tdNum}>{o.itemCount}</td>
+                  <td className={tdNum}>{o.indicativeTotal ? <Money value={o.indicativeTotal} /> : <span className="text-navy-300">—</span>}</td>
+                  <td className={tdText}>
                     <StatusBadge status={o.status} />
-                    {o.handledByName && <div className="mt-0.5 text-xs text-navy-500">{o.handledByName}</div>}
+                    {o.handledByName && <div className="mt-1 text-xs text-navy-500">{o.handledByName}</div>}
                   </td>
                 </tr>
               ))}

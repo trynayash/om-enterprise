@@ -21,21 +21,27 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={push}>
       {children}
-      <div className="no-print pointer-events-none fixed inset-x-0 bottom-4 z-[60] flex flex-col items-center gap-2 px-4" aria-live="polite">
+      <div className="no-print pointer-events-none fixed inset-x-0 bottom-[calc(1rem+var(--toast-lift,0px))] z-[60] flex flex-col items-center gap-2 px-4" aria-live="polite">
         {items.map((t) => (
           <div
             key={t.id}
             className={cn(
-              "pointer-events-auto flex w-full max-w-md animate-fade-in items-start gap-2 rounded-xl px-4 py-3 text-sm font-medium shadow-lift",
-              t.tone === "success" && "bg-emerald-700 text-white",
-              t.tone === "error" && "bg-red-700 text-white",
-              t.tone === "info" && "bg-navy-900 text-white",
+              "pointer-events-auto flex w-full max-w-md animate-sheet-in items-start gap-2.5 rounded-lg border-l-[3px] bg-navy-950 px-4 py-3 text-sm text-white shadow-lift",
+              t.tone === "success" && "border-l-emerald-400",
+              t.tone === "error" && "border-l-red-400",
+              t.tone === "info" && "border-l-gold-400",
             )}
           >
-            {t.tone === "success" ? <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" /> : t.tone === "error" ? <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" /> : <Info className="mt-0.5 h-4 w-4 shrink-0" />}
-            <div className="flex-1">{t.message}</div>
-            <button type="button" aria-label="Dismiss" onClick={() => setItems((xs) => xs.filter((x) => x.id !== t.id))}>
-              <X className="h-4 w-4 opacity-80" />
+            {t.tone === "success" ? (
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
+            ) : t.tone === "error" ? (
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+            ) : (
+              <Info className="mt-0.5 h-4 w-4 shrink-0 text-gold-400" />
+            )}
+            <div className="flex-1 leading-snug">{t.message}</div>
+            <button type="button" aria-label="Dismiss" className="text-navy-300 transition-colors hover:text-white" onClick={() => setItems((xs) => xs.filter((x) => x.id !== t.id))}>
+              <X className="h-4 w-4" />
             </button>
           </div>
         ))}

@@ -52,17 +52,25 @@ export function CategoriesManager({ categories, canCreate, canEdit, canConfigure
           <EmptyState title="No categories" description="Create your first category." />
         </div>
       ) : (
-        <ul className="divide-y divide-navy-50">
+        <ul className="divide-y divide-navy-100">
           {tree.map((c) => (
-            <li key={c.id} className="flex flex-wrap items-center gap-3 px-5 py-3" style={{ paddingLeft: `${1.25 + c.depth * 1.75}rem` }}>
-              <span className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-xl", c.depth ? "bg-navy-50 text-navy-500" : "bg-navy-900 text-gold-400")}>
-                <CategoryIcon name={c.icon} className="h-4.5 w-4.5" />
+            <li
+              key={c.id}
+              className={cn("group flex flex-wrap items-center gap-x-3 gap-y-2 py-3 pr-4 transition-colors duration-150 hover:bg-paper/60", c.depth ? "bg-paper/30" : "")}
+              style={{ paddingLeft: `${1.25 + c.depth * 1.75}rem` }}
+            >
+              {c.depth > 0 && <span aria-hidden className="-ml-3 h-px w-2.5 bg-navy-300" />}
+              <span className={cn("flex h-8 w-8 shrink-0 items-center justify-center rounded-md border", c.depth ? "border-navy-100 bg-white text-navy-400" : "border-navy-200 bg-white text-navy-700")}>
+                <CategoryIcon name={c.icon} className="h-4 w-4" />
               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link href={`/dashboard/products?categoryId=${c.id}`} className="font-semibold text-navy-900 hover:underline">
+                  <Link href={`/dashboard/products?categoryId=${c.id}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
                     {c.name}
                   </Link>
+                  <span className="font-mono text-[11.5px] tabular text-navy-500">
+                    {c.productCount} product{c.productCount === 1 ? "" : "s"}
+                  </span>
                   {!c.isActive && <Badge tone="red">Inactive</Badge>}
                   {!c.isPublished && (
                     <Badge>
@@ -77,19 +85,19 @@ export function CategoriesManager({ categories, canCreate, canEdit, canConfigure
                     </Badge>
                   )}
                 </div>
-                <div className="text-xs text-navy-500">
-                  /{c.slug} · {c.productCount} product{c.productCount === 1 ? "" : "s"}
-                  {c.description ? ` · ${c.description}` : ""}
+                <div className="mt-0.5 text-xs leading-relaxed text-navy-500">
+                  <span className="font-mono text-[11.5px] text-navy-400">/{c.slug}</span>
+                  {c.description ? <> · {c.description}</> : null}
                 </div>
               </div>
-              <div className="flex gap-1">
+              <div className="flex gap-0.5">
                 {canCreate && c.depth < 2 && (
-                  <Button size="sm" variant="ghost" icon={<FolderPlus className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, category: null, parentId: c.id })}>
+                  <Button size="sm" variant="ghost" icon={<FolderPlus className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, category: null, parentId: c.id })} aria-label={`Add a sub-category to ${c.name}`}>
                     <span className="hidden sm:inline">Sub-category</span>
                   </Button>
                 )}
                 {canEdit && (
-                  <Button size="sm" variant="ghost" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, category: c, parentId: c.parentId })}>
+                  <Button size="sm" variant="ghost" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, category: c, parentId: c.parentId })} aria-label={`Edit ${c.name}`}>
                     <span className="hidden sm:inline">Edit</span>
                   </Button>
                 )}

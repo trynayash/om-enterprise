@@ -1,7 +1,5 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { AppError } from "@/server/errors";
@@ -16,6 +14,8 @@ import { ImagesManager } from "@/components/dashboard/catalog/images-manager";
 import { VariantsManager } from "@/components/dashboard/catalog/variants-manager";
 import type { CostDTO, PriceVersionDTO, PricingContextDTO, VariantRow } from "@/components/dashboard/catalog/types";
 import type { CostVersion, PriceVersion } from "@/server/services/pricing";
+import { BackLink } from "@/components/dashboard/back-link";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
 
 export const metadata = { title: "Edit product" };
 
@@ -119,15 +119,17 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
 
   return (
     <div>
-      <Link href="/dashboard/products" className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-navy-600 hover:text-navy-900">
-        <ArrowLeft className="h-4 w-4" /> Products
-      </Link>
+      <BackLink href="/dashboard/products">Products</BackLink>
       <PageHeader
         eyebrow={brand ? `${brand.name} · Catalogue` : "Catalogue"}
         title={
           <span className="flex flex-wrap items-center gap-2">
             {p.name}
-            {p.isSample && <SampleBadge />}
+            {p.isSample && (
+              <TitleStamps>
+                <SampleBadge />
+              </TitleStamps>
+            )}
           </span>
         }
         description={
@@ -135,7 +137,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
             <StatusBadge status={p.reviewStatus} />
             {p.isPublished ? <Badge tone="green">On website</Badge> : <Badge>Not on website</Badge>}
             {!p.isActive && <Badge tone="red">Inactive — can&apos;t be sold</Badge>}
-            <span>
+            <span className="font-mono text-xs tabular text-navy-500">
               {variants.length} variant{variants.length === 1 ? "" : "s"}
             </span>
           </span>
@@ -143,7 +145,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
       />
 
       {p.isSample && (
-        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+        <div className="mb-6 rounded-lg border border-l-[3px] border-red-200 border-l-red-600 bg-red-50/80 px-4 py-3 text-sm leading-relaxed text-red-950">
           <b>Sample / demonstration product.</b> Its details and prices are placeholders, not real catalogue data. Sales that include it are training sales with separate numbering and are excluded from reports.
         </div>
       )}
@@ -184,7 +186,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
             />
           }
         />
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_300px]">
           <ProductForm
             mode="edit"
             canEdit={perms.canEdit}

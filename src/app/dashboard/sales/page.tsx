@@ -5,7 +5,7 @@ import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listSales } from "@/server/services/sales";
 import { listStaffOptions } from "@/components/dashboard/ops/staff-options";
-import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
+import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Money, DateTime } from "@/components/ui/money";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
@@ -13,8 +13,16 @@ import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-b
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
 import { dayRange, num, str, type SearchParams } from "@/components/dashboard/ops/params";
+import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Sales & bills" };
+
+const PAYMENT_LABEL: Record<string, string> = {
+  partially_paid: "Part paid",
+  paid: "Paid",
+  partially_refunded: "Part refunded",
+  refunded: "Refunded",
+};
 
 export default function SalesPage({ searchParams }: PageProps<"/dashboard/sales">) {
   return (
@@ -97,6 +105,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
   return (
     <div>
       <PageHeader
+        eyebrow="Sales"
         title="Sales & bills"
         description={viewAll ? "Every sale across the shop, with its payment and billing status." : "Your sales, with their payment and billing status."}
         actions={
@@ -121,9 +130,9 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                 <th className={th}>Sale</th>
                 <th className={th}>Date</th>
                 <th className={th}>Customer</th>
-                <th className={`${th} text-right`}>Items</th>
-                <th className={`${th} text-right`}>Total</th>
-                <th className={`${th} text-right`}>Paid</th>
+                <th className={thNum}>Items</th>
+                <th className={thNum}>Total</th>
+                <th className={thNum}>Paid</th>
                 <th className={th}>Status</th>
                 <th className={th}>Bill</th>
                 {viewAll && <th className={th}>Staff</th>}
@@ -131,46 +140,53 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
             </thead>
             <tbody>
               {data.items.map((s) => (
-                <tr key={s.id} className="hover:bg-navy-50/50">
-                  <td className={td}>
-                    <Link href={`/dashboard/sales/${s.id}`} className="font-semibold text-navy-900 underline-offset-2 hover:underline">
-                      {s.saleNumber}
-                    </Link>
-                    {s.isTraining && <SampleBadge label="Training" className="ml-1.5" />}
+                <tr key={s.id} className={rowHover}>
+                  <td className={tdText}>
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <Link href={`/dashboard/sales/${s.id}`} className={codeLink}>
+                        {s.saleNumber}
+                      </Link>
+                      {s.isTraining && <SampleBadge label="Training" />}
+                    </span>
                   </td>
-                  <td className={`${td} text-navy-600`}>
+                  <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={s.createdAt} />
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
                     <div className="max-w-[200px] truncate">{s.customerName ?? <span className="text-navy-400">Walk-in</span>}</div>
-                    {s.customerMobile && <div className="text-xs text-navy-500">{s.customerMobile}</div>}
+                    {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
                   </td>
-                  <td className={`${td} text-right tabular`}>{s.itemCount}</td>
-                  <td className={`${td} text-right font-semibold`}>
+                  <td className={tdNum}>{s.itemCount}</td>
+                  <td className={`${tdNum} font-semibold`}>
                     <Money value={s.grandTotal} />
                   </td>
-                  <td className={`${td} text-right`}>
+                  <td className={tdNum}>
                     <Money value={s.amountPaid} muted={s.amountPaid === "0.00"} />
-                    {s.amountRefunded !== "0.00" && <div className="text-xs text-violet-700">− <Money value={s.amountRefunded} /> refunded</div>}
+                    {s.amountRefunded !== "0.00" && (
+                      <div className="mt-0.5 text-xs text-violet-700">
+                        − <Money value={s.amountRefunded} /> refunded
+                      </div>
+                    )}
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
                     <div className="flex flex-col items-start gap-1">
-                      <StatusBadge status={s.status} />
-                      {s.status !== "draft" && s.status !== "cancelled" && <StatusBadge status={s.paymentStatus} />}
+                      {/* A completed sale is described by its payment state; otherwise by the sale state. */}
+                      <StatusBadge status={s.status === "completed" ? s.paymentStatus : s.status} />
+                      {s.status === "finalized" && s.paymentStatus !== "unpaid" && <span className="text-xs text-navy-500">{PAYMENT_LABEL[s.paymentStatus] ?? s.paymentStatus}</span>}
                       {s.approvalStatus === "pending" && <Badge tone="amber">Approval pending</Badge>}
                     </div>
                   </td>
-                  <td className={td}>
+                  <td className={s.docNumber ? tdCode : tdText}>
                     {s.docNumber ? (
                       <div>
-                        <div className="whitespace-nowrap font-medium tabular">{s.docNumber}</div>
-                        {s.docStatus === "cancelled" && <StatusBadge status="cancelled" />}
+                        <div>{s.docNumber}</div>
+                        {s.docStatus === "cancelled" && <StatusBadge status="cancelled" className="mt-1" />}
                       </div>
                     ) : (
-                      <span className="text-navy-400">—</span>
+                      <span className="text-navy-300">—</span>
                     )}
                   </td>
-                  {viewAll && <td className={`${td} text-navy-600`}>{s.createdByName}</td>}
+                  {viewAll && <td className={tdMuted}>{s.createdByName}</td>}
                 </tr>
               ))}
             </tbody>

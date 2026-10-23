@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { FileCheck2, Search, UserRound, X } from "lucide-react";
+import { FileCheck2, Search, X } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR } from "@/lib/money";
 import { STATES, stateName } from "@/lib/india";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { Field, Input, Label, Select, Textarea } from "@/components/ui/field";
 import { Alert } from "@/components/ui/page";
 import { outstandingOf } from "./payment-panel";
 import { hasPerm, type Me, type PosConfig, type SaleData } from "./types";
@@ -120,24 +120,27 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
   };
 
   return (
-    <section aria-label="Customer and bill" className="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card">
-      <div className="border-b border-navy-100 px-5 py-4">
-        <div className="text-xs font-bold uppercase tracking-[0.16em] text-gold-600">Step 3 · Customer & bill</div>
-        <div className="mt-0.5 text-sm text-navy-600">
-          {paid ? (
-            <span className="font-semibold text-emerald-700">Payment verified: {formatINR(s.amountPaid)}</span>
-          ) : (
-            <span className="font-semibold text-amber-800">Balance due: {formatINR(outstanding)}</span>
-          )}
+    <section aria-label="Customer and bill" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-navy-200 px-5 py-4">
+        <div>
+          <div className="label-mono flex items-center gap-2 text-gold-700">
+            <span aria-hidden className="h-px w-4 bg-gold-500" />
+            Step 4 · Customer & bill
+          </div>
+          <div className="mt-1.5 text-sm">
+            {paid ? (
+              <span className="font-semibold text-emerald-700">Payment verified: {formatINR(s.amountPaid)}</span>
+            ) : (
+              <span className="font-semibold text-amber-800">Balance due: {formatINR(outstanding)}</span>
+            )}
+          </div>
         </div>
       </div>
-      <div className="space-y-4 p-5">
+      <div className="space-y-4 p-4 sm:p-5">
         {error && <Alert tone="danger">{error}</Alert>}
 
         <div>
-          <label htmlFor="cust-search" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">
-            Find existing customer
-          </label>
+          <Label htmlFor="cust-search">Find existing customer</Label>
           <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
             <Input
@@ -148,12 +151,12 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
                 if (e.target.value.trim().length < 2) setResults([]);
               }}
               placeholder="Name, mobile or GSTIN"
-              className="pl-9"
+              className="h-11 pl-9"
               autoComplete="off"
             />
           </div>
           {results.length > 0 && q.trim().length >= 2 && (
-            <ul className="mt-1 max-h-48 divide-y divide-navy-50 overflow-y-auto rounded-xl border border-navy-100">
+            <ul className="mt-1 max-h-48 animate-fade-in divide-y divide-navy-100 overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-card">
               {results.map((c) => (
                 <li key={c.id}>
                   <button
@@ -163,12 +166,13 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
                       setQ("");
                       setResults([]);
                     }}
-                    className="flex w-full items-center gap-3 px-3 py-2 text-left text-sm hover:bg-navy-50"
+                    className="block w-full px-3 py-2.5 text-left text-sm transition-colors hover:bg-paper/70"
                   >
-                    <UserRound className="h-4 w-4 text-navy-400" />
-                    <span className="min-w-0 flex-1">
-                      <span className="font-semibold">{c.businessName ? `${c.businessName} (${c.name})` : c.name}</span>
-                      <span className="block text-xs text-navy-500">{[c.mobile, c.city, c.gstin].filter(Boolean).join(" · ")}</span>
+                    <span className="font-semibold text-navy-950">{c.businessName ? `${c.businessName} (${c.name})` : c.name}</span>
+                    <span className="mt-0.5 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
+                      {[c.mobile, c.city, c.gstin].filter(Boolean).map((t) => (
+                        <span key={t}>{t}</span>
+                      ))}
                     </span>
                   </button>
                 </li>
@@ -178,11 +182,11 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
         </div>
 
         {form.id && (
-          <div className="flex items-center justify-between rounded-xl bg-navy-50 px-3 py-2 text-sm">
+          <div className="flex items-center justify-between gap-3 rounded-md border border-navy-200 bg-paper/70 px-3 py-2 text-sm text-navy-800">
             <span>
-              Using saved customer <b>{form.name}</b> — changes below update their record.
+              Using saved customer <b className="font-semibold text-navy-950">{form.name}</b> — changes below update their record.
             </span>
-            <button type="button" onClick={() => setForm(formFrom(null, s.placeOfSupplyStateCode))} className="rounded p-1 text-navy-500 hover:bg-white" aria-label="Clear customer">
+            <button type="button" onClick={() => setForm(formFrom(null, s.placeOfSupplyStateCode))} className="rounded p-1 text-navy-500 transition-colors hover:bg-white hover:text-navy-900" aria-label="Clear customer">
               <X className="h-4 w-4" />
             </button>
           </div>
@@ -193,7 +197,7 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
             <Input id="c-name" value={form.name} onChange={set("name")} maxLength={120} autoComplete="off" />
           </Field>
           <Field label="Mobile" htmlFor="c-mobile" hint="10-digit mobile — used to share the bill on WhatsApp">
-            <Input id="c-mobile" inputMode="tel" value={form.mobile} onChange={set("mobile")} maxLength={16} autoComplete="off" />
+            <Input id="c-mobile" className="font-mono" inputMode="tel" value={form.mobile} onChange={set("mobile")} maxLength={16} autoComplete="off" />
           </Field>
           <Field label="Email" htmlFor="c-email">
             <Input id="c-email" type="email" value={form.email} onChange={set("email")} maxLength={120} autoComplete="off" />
@@ -202,7 +206,7 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
             <Input id="c-biz" value={form.businessName} onChange={set("businessName")} maxLength={160} autoComplete="off" />
           </Field>
           <Field label="GSTIN (if registered)" htmlFor="c-gstin" hint={regular ? "Checked automatically (format & check digit)" : undefined}>
-            <Input id="c-gstin" value={form.gstin} onChange={(e) => setForm((f) => ({ ...f, gstin: e.target.value.toUpperCase().replace(/\s/g, "") }))} maxLength={15} className="font-mono uppercase" autoComplete="off" />
+            <Input id="c-gstin" value={form.gstin} onChange={(e) => setForm((f) => ({ ...f, gstin: e.target.value.toUpperCase().replace(/\s/g, "") }))} maxLength={15} className="font-mono uppercase tracking-wider" autoComplete="off" />
           </Field>
           <Field label="Billing / delivery address" htmlFor="c-addr" required={detailsRequired} className="sm:col-span-2">
             <Textarea id="c-addr" value={form.billingAddress} onChange={set("billingAddress")} maxLength={400} className="min-h-16" />
@@ -211,7 +215,7 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
             <Input id="c-city" value={form.city} onChange={set("city")} maxLength={80} autoComplete="off" />
           </Field>
           <Field label="PIN code" htmlFor="c-pin">
-            <Input id="c-pin" inputMode="numeric" value={form.pincode} onChange={set("pincode")} maxLength={6} autoComplete="off" />
+            <Input id="c-pin" className="font-mono" inputMode="numeric" value={form.pincode} onChange={set("pincode")} maxLength={6} autoComplete="off" />
           </Field>
           <Field
             label="State"
@@ -235,30 +239,30 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
         </div>
 
         {regular && (
-          <p className="text-xs text-navy-500">
+          <p className="text-xs leading-relaxed text-navy-500">
             {overThreshold
               ? `Bills with a taxable value of ${formatINR(config.b2cDetailsThreshold)} or more must show the customer's name, address and state.`
               : "For GST-registered buyers, name, address, state and GSTIN are required. For other small bills, details are optional."}
           </p>
         )}
+      </div>
 
-        <div className="flex flex-wrap gap-2 pt-1">
-          {paid && (
-            <Button variant="gold" size="lg" loading={busy === "bill"} disabled={!!busy || !form.name.trim()} onClick={() => issue("bill")} icon={<FileCheck2 className="h-5 w-5" />}>
-              Generate bill
-            </Button>
-          )}
-          {canSkip && (
-            <Button variant="outline" size="lg" loading={busy === "skip"} disabled={!!busy} onClick={() => issue("skip")}>
-              Cash sale — skip details
-            </Button>
-          )}
-          {canCredit && (
-            <Button variant="primary" size="lg" loading={busy === "credit"} disabled={!!busy || !form.name.trim() || !form.mobile.trim()} onClick={() => issue("credit")}>
-              Issue bill with {formatINR(outstanding)} due (credit)
-            </Button>
-          )}
-        </div>
+      <div className="flex flex-wrap gap-2 border-t border-navy-200 bg-paper/60 px-4 py-4 sm:px-5">
+        {paid && (
+          <Button variant="gold" size="lg" loading={busy === "bill"} disabled={!!busy || !form.name.trim()} onClick={() => issue("bill")} icon={<FileCheck2 className="h-5 w-5" />}>
+            Generate bill
+          </Button>
+        )}
+        {canSkip && (
+          <Button variant="outline" size="lg" loading={busy === "skip"} disabled={!!busy} onClick={() => issue("skip")}>
+            Cash sale — skip details
+          </Button>
+        )}
+        {canCredit && (
+          <Button variant="primary" size="lg" loading={busy === "credit"} disabled={!!busy || !form.name.trim() || !form.mobile.trim()} onClick={() => issue("credit")}>
+            Issue bill with {formatINR(outstanding)} due (credit)
+          </Button>
+        )}
       </div>
     </section>
   );

@@ -1,6 +1,5 @@
 import { Suspense } from "react";
-import Link from "next/link";
-import { ArrowLeft, Mail, MessageCircle, Phone } from "lucide-react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getWebsiteOrder } from "@/server/services/website-orders";
@@ -8,12 +7,15 @@ import { getSettings } from "@/server/settings";
 import { whatsappLink } from "@/lib/india";
 import { D, formatINR, formatQty, m } from "@/lib/money";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Alert, PageHeader, PageSkeleton, td, th } from "@/components/ui/page";
-import { Badge, StatusBadge } from "@/components/ui/badge";
+import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
+import { StatusBadge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
 import { DateTime, Money } from "@/components/ui/money";
 import { ConvertOrderButton, OrderUpdateForm } from "@/components/dashboard/ops/order-actions";
 import { loadOr404 } from "@/components/dashboard/ops/guard";
+import { BackLink } from "@/components/dashboard/back-link";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
+import { tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Website order" };
 
@@ -38,14 +40,15 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/dashboard/orders" className="inline-flex items-center gap-1 text-sm font-semibold text-navy-600 hover:text-navy-900">
-        <ArrowLeft className="h-4 w-4" /> All website orders
-      </Link>
+      <BackLink href="/dashboard/orders">All website orders</BackLink>
       <PageHeader
         eyebrow={o.kind === "order_request" ? "Order request" : "Enquiry"}
         title={
           <span className="flex flex-wrap items-center gap-2">
-            {o.orderNumber} <StatusBadge status={o.status} />
+            <span className="font-mono text-[0.72em] font-semibold tracking-tight">{o.orderNumber}</span>
+            <TitleStamps>
+              <StatusBadge status={o.status} />
+            </TitleStamps>
           </span>
         }
         description={
@@ -61,7 +64,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             <CardBody className="space-y-4">
               <div className="flex flex-wrap gap-2">
                 <a href={`tel:+91${o.mobile}`} className={buttonClass("outline")}>
-                  <Phone className="h-4 w-4" /> Call {o.mobile}
+                  <Phone className="h-4 w-4" /> Call <span className="font-mono tabular">{o.mobile}</span>
                 </a>
                 <a href={whatsappLink(o.mobile, reply)} target="_blank" rel="noopener noreferrer" className={buttonClass("success")}>
                   <MessageCircle className="h-4 w-4" /> Reply on WhatsApp
@@ -74,14 +77,14 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
               </div>
               {o.address && (
                 <div className="text-sm">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-navy-500">Address</div>
+                  <div className="label-mono mb-1 text-navy-500">Address</div>
                   <div className="whitespace-pre-line">{o.address}</div>
                 </div>
               )}
               {o.message && (
-                <div className="rounded-xl bg-navy-50 px-4 py-3 text-sm">
-                  <div className="text-xs font-semibold uppercase tracking-wide text-navy-500">Message</div>
-                  <div className="mt-1 whitespace-pre-line">{o.message}</div>
+                <div className="rounded-lg border border-rule bg-paper/70 px-4 py-3 text-sm">
+                  <div className="label-mono text-navy-500">Message</div>
+                  <div className="mt-1.5 whitespace-pre-line leading-relaxed">{o.message}</div>
                 </div>
               )}
             </CardBody>
@@ -94,23 +97,23 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
                   <thead>
                     <tr>
                       <th className={th}>Item</th>
-                      <th className={`${th} text-right`}>Qty</th>
-                      <th className={`${th} text-right`}>Unit price</th>
-                      <th className={`${th} text-right`}>Line total</th>
+                      <th className={thNum}>Qty</th>
+                      <th className={thNum}>Unit price</th>
+                      <th className={thNum}>Line total</th>
                     </tr>
                   </thead>
                   <tbody>
                     {lines.map((l) => (
                       <tr key={l.id}>
-                        <td className={td}>
+                        <td className={tdText}>
                           <div className="font-medium">{l.productName}</div>
-                          <div className="text-xs text-navy-500">
-                            {l.variantName} · {l.sku}
+                          <div className="mt-0.5 text-xs text-navy-500">
+                            {l.variantName} · <span className="font-mono">{l.sku}</span>
                           </div>
                         </td>
-                        <td className={`${td} text-right tabular`}>{formatQty(l.quantity)}</td>
-                        <td className={`${td} text-right`}>{l.indicativeUnitPrice ? <Money value={l.indicativeUnitPrice} /> : <span className="text-navy-400">Price on request</span>}</td>
-                        <td className={`${td} text-right font-semibold`}>{l.indicativeUnitPrice ? formatINR(m(D(l.indicativeUnitPrice).times(D(l.quantity)))) : "—"}</td>
+                        <td className={tdNum}>{formatQty(l.quantity)}</td>
+                        <td className={tdNum}>{l.indicativeUnitPrice ? <Money value={l.indicativeUnitPrice} /> : <span className="font-sans text-xs text-navy-400">Price on request</span>}</td>
+                        <td className={`${tdNum} font-semibold`}>{l.indicativeUnitPrice ? formatINR(m(D(l.indicativeUnitPrice).times(D(l.quantity)))) : "—"}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -122,8 +125,9 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
               </CardBody>
             )}
             {o.indicativeTotal && (
-              <CardBody className="flex justify-end border-t border-navy-100 text-sm">
-                Indicative total <Money value={o.indicativeTotal} className="ml-3 font-extrabold" />
+              <CardBody className="flex items-baseline justify-end gap-3 bg-paper/50 text-sm">
+                <span className="label-mono text-navy-500">Indicative total</span>
+                <Money value={o.indicativeTotal} className="font-mono text-base font-semibold" />
               </CardBody>
             )}
           </Card>
@@ -144,8 +148,9 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
               </CardBody>
             </Card>
           )}
-          <p className="px-1 text-xs text-navy-500">
-            <Badge tone="neutral">Privacy</Badge> Contact details are used only to respond to this request.
+          <p className="px-1 text-xs leading-relaxed text-navy-500">
+            <span className="label-mono mr-1.5 text-navy-600">Privacy</span>
+            Contact details are used only to respond to this request.
           </p>
         </div>
       </div>

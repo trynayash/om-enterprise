@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
-import { ShieldCheck } from "lucide-react";
 import { getCurrentActor } from "@/server/auth/session";
 import { landingPath } from "@/lib/nav";
 import { SignInCard } from "../login/sign-in-card";
+import { SheetStamp } from "../login/auth-sheet";
 
 export const metadata = { title: "Admin sign in", robots: { index: false, follow: false } };
 
@@ -11,11 +11,7 @@ const card = (
   <SignInCard
     title="Admin sign in"
     description="For the owner and administrators. If you've set a secret key, you'll be asked for it after your password."
-    badge={
-      <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-navy-900 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-gold-400">
-        <ShieldCheck className="h-3.5 w-3.5" /> Admin
-      </span>
-    }
+    badge={<SheetStamp strong>Admin</SheetStamp>}
   />
 );
 

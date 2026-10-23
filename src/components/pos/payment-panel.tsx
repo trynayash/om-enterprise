@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Banknote, CheckCircle2, CreditCard, Landmark, QrCode, Receipt, RotateCcw, Smartphone, XCircle } from "lucide-react";
+import { Banknote, CheckCircle2, ChevronDown, CreditCard, Landmark, QrCode, Receipt, RotateCcw, Smartphone, XCircle } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR } from "@/lib/money";
 import { isValidUpiUtr } from "@/lib/india";
@@ -56,23 +56,34 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
   const canVerify = hasPerm(me, "payments.verify");
 
   return (
-    <section aria-label="Payment" className="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card">
-      <div className="flex items-end justify-between gap-3 border-b border-navy-100 px-5 py-4">
+    <section aria-label="Payment" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-navy-200 px-5 py-4">
         <div>
-          <div className="text-xs font-bold uppercase tracking-[0.16em] text-gold-600">Step 2 · Take payment</div>
-          <div className="mt-0.5 text-sm text-navy-500">
-            {D(s.amountPaid).greaterThan(0) ? `Received ${formatINR(s.amountPaid)} of ${formatINR(s.grandTotal)}` : `Agreed total ${formatINR(s.grandTotal)}`}
+          <div className="label-mono flex items-center gap-2 text-gold-700">
+            <span aria-hidden className="h-px w-4 bg-gold-500" />
+            Step 3 · Take payment
+          </div>
+          <div className="mt-1.5 text-sm text-navy-500">
+            {D(s.amountPaid).greaterThan(0) ? (
+              <>
+                Received <span className="font-mono text-navy-800">{formatINR(s.amountPaid)}</span> of <span className="font-mono text-navy-800">{formatINR(s.grandTotal)}</span>
+              </>
+            ) : (
+              <>
+                Agreed total <span className="font-mono text-navy-800">{formatINR(s.grandTotal)}</span>
+              </>
+            )}
           </div>
         </div>
-        <div className="text-right">
-          <div className="text-[11px] font-bold uppercase tracking-wide text-navy-500">Amount due</div>
-          <div className="text-3xl font-extrabold text-navy-900 tabular" data-testid="amount-due">
+        <div className="sm:text-right">
+          <div className="label-mono text-navy-500">Amount due</div>
+          <div className="headline mt-1 text-[2.5rem] font-bold text-navy-950 tabular sm:text-[2.75rem]" data-testid="amount-due">
             {formatINR(outstanding)}
           </div>
         </div>
       </div>
 
-      <div className="space-y-4 p-5">
+      <div className="space-y-4 p-4 sm:p-5">
         {activeQr ? (
           <QrCard payment={activeQr} config={config} saleNumber={s.saleNumber} canVerify={canVerify} run={run} onVerify={() => setVerifyFor(activeQr)} />
         ) : upiAvailable && canRecord ? (
@@ -96,18 +107,21 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
         )}
 
         {canVerify && !verifyFor && (
-          <div className="rounded-xl border border-navy-100">
+          <div className="overflow-hidden rounded-lg border border-navy-200">
             <button
               type="button"
               onClick={() => setManualOpen((o) => !o)}
-              className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-bold text-navy-800 hover:bg-navy-50/60"
+              className={cn(
+                "flex min-h-12 w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm font-semibold text-navy-900 transition-colors hover:bg-paper/60",
+                manualOpen && "bg-paper/60",
+              )}
               aria-expanded={manualOpen}
             >
               <span>Record cash, card, bank transfer or UPI received without the QR</span>
-              <span className="text-navy-400">{manualOpen ? "−" : "+"}</span>
+              <ChevronDown className={cn("h-4 w-4 shrink-0 text-navy-400 transition-transform duration-200", manualOpen && "rotate-180")} />
             </button>
             {manualOpen && (
-              <div className="border-t border-navy-100 p-4">
+              <div className="animate-fade-in border-t border-navy-200 p-4">
                 <VerifyForm saleId={s.id} config={config} outstanding={outstanding.toFixed(2)} intent={null} onDone={() => setManualOpen(false)} run={run} />
               </div>
             )}
@@ -126,26 +140,36 @@ function StartQr({ saleId, outstanding, max, run }: { saleId: string; outstandin
   const [busy, setBusy] = useState(false);
   const valid = /^\d{1,10}(\.\d{1,2})?$/.test(amount) && D(amount).greaterThan(0) && D(amount).lessThanOrEqualTo(D(outstanding));
   return (
-    <div className="rounded-2xl border border-gold-200 bg-gold-50/60 p-4">
+    <div className="rounded-lg border border-navy-200 bg-paper/60 p-4">
       <div className="flex flex-wrap items-end gap-3">
-        <Field label="UPI amount (₹)" htmlFor="qr-amount" className="w-40" hint={D(amount).lessThan(D(outstanding)) ? "Part payment" : "Full amount due"}>
-          <Input id="qr-amount" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 text-lg font-bold tabular" />
+        <Field label="UPI amount (₹)" htmlFor="qr-amount" className="w-44" hint={D(amount).lessThan(D(outstanding)) ? "Part payment" : "Full amount due"}>
+          <Input
+            id="qr-amount"
+            inputMode="decimal"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))}
+            className="h-12 font-mono text-lg font-semibold tabular"
+          />
         </Field>
-        <Button
-          variant="primary"
-          size="lg"
-          className="flex-1"
-          loading={busy}
-          disabled={!valid}
-          icon={<QrCode className="h-5 w-5" />}
-          onClick={async () => {
-            setBusy(true);
-            await run(() => apiFetch(`/api/sales/${saleId}/payments/upi`, { method: "POST", body: { amount } }), "QR ready — ask the customer to scan");
-            setBusy(false);
-          }}
-        >
-          Show UPI QR for {valid ? formatINR(amount) : "…"}
-        </Button>
+        <div className="flex min-w-56 flex-1 flex-col">
+          <Button
+            variant="primary"
+            size="lg"
+            className="w-full tabular"
+            loading={busy}
+            disabled={!valid}
+            icon={<QrCode className="h-5 w-5" />}
+            onClick={async () => {
+              setBusy(true);
+              await run(() => apiFetch(`/api/sales/${saleId}/payments/upi`, { method: "POST", body: { amount } }), "QR ready — ask the customer to scan");
+              setBusy(false);
+            }}
+          >
+            Show UPI QR for {valid ? formatINR(amount) : "…"}
+          </Button>
+          {/* keeps the button level with the input when the field shows its hint */}
+          <span aria-hidden className="mt-1.5 block h-4" />
+        </div>
       </div>
       {capped && <p className="mt-2 text-xs text-amber-800">UPI payments are limited to {formatINR(max)} each. Collect the rest with another QR or method.</p>}
     </div>
@@ -202,57 +226,64 @@ function QrCard({
   }, [auto, payment.id, run]);
 
   return (
-    <div className="rounded-2xl border-2 border-navy-900 p-4">
-      <div className="flex flex-col items-center gap-4 text-center md:flex-row md:items-start md:text-left">
-        <div className={cn("relative w-60 shrink-0 rounded-2xl bg-white p-2 shadow-card ring-1 ring-navy-100", expired && "opacity-40")}>
+    <div className="animate-fade-in rounded-lg border border-navy-300 p-4 sm:p-5">
+      <div className="flex flex-col items-center gap-5 md:flex-row md:items-start">
+        <div className={cn("relative w-56 shrink-0 rounded-lg border border-navy-200 bg-white p-2.5 transition-opacity duration-300", expired && "opacity-40")}>
           {qrUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={qrUrl} alt={`UPI QR code for ${formatINR(payment.amount)}`} className="aspect-square w-full bg-navy-50" data-testid="upi-qr" />
           ) : (
             <div className="flex aspect-square items-center justify-center text-sm text-navy-500">QR unavailable</div>
           )}
-          {expired && <div className="absolute inset-0 flex items-center justify-center text-lg font-extrabold text-red-700">QR EXPIRED</div>}
+          {expired && <div className="absolute inset-0 flex items-center justify-center font-mono text-base font-semibold tracking-[0.08em] text-red-700">QR EXPIRED</div>}
         </div>
-        <div className="min-w-0 flex-1">
-          <div className="text-xs font-bold uppercase tracking-[0.16em] text-gold-600">Scan to pay</div>
-          <div className="text-4xl font-extrabold text-navy-900 tabular sm:text-5xl" data-testid="qr-amount">
+        <div className="w-full min-w-0 flex-1 text-center md:text-left">
+          <div className="label-mono text-gold-700">Scan to pay</div>
+          <div className="headline mt-1.5 text-[3rem] font-bold text-navy-950 tabular sm:text-[3.75rem]" data-testid="qr-amount">
             {formatINR(payment.amount)}
           </div>
-          <div className="mt-1 text-sm text-navy-600">
-            {payment.provider === "upi_static" ? (
+          <dl className="mx-auto mt-3 grid max-w-sm grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 text-left text-sm md:mx-0">
+            <dt className="label-mono pt-[3px] text-navy-500">Pay to</dt>
+            <dd className="min-w-0 text-navy-800">
+              {payment.provider === "upi_static" ? (
+                <>
+                  <b className="font-semibold">{config.businessName}</b> · <span className="break-all font-mono text-[13px]">{config.payments.upiVpa}</span>
+                </>
+              ) : (
+                <>Razorpay dynamic QR · single use</>
+              )}
+            </dd>
+            <dt className="label-mono pt-[3px] text-navy-500">Note</dt>
+            <dd className="font-mono text-[13px] text-navy-800">{saleNumber}</dd>
+            {left !== null && !expired && (
               <>
-                To <b>{config.businessName}</b> · <span className="font-mono">{config.payments.upiVpa}</span>
+                <dt className="label-mono pt-[3px] text-navy-500">Valid for</dt>
+                <dd className="font-mono text-[13px] font-medium text-navy-900 tabular">
+                  {Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")}
+                </dd>
               </>
-            ) : (
-              <>Razorpay dynamic QR · single use</>
             )}
-          </div>
-          <div className="text-xs text-navy-500">Payment note: {saleNumber}</div>
-          {left !== null && !expired && (
-            <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-navy-50 px-2.5 py-1 text-xs font-semibold text-navy-700 tabular">
-              Valid for {Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")}
-            </div>
-          )}
-          <div className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-left text-xs text-amber-900">
+          </dl>
+          <div className="mt-4 rounded-md border-l-[3px] border-amber-500 bg-amber-50 px-3 py-2 text-left text-[13px] leading-relaxed text-amber-950">
             <b>Not paid yet.</b> {pd.instructions ?? "Check the shop's UPI app for the exact amount before confirming."}
           </div>
           {auto && (
-            <div className="mt-2 flex items-center gap-2 text-sm font-semibold text-navy-700">
+            <div className="mt-2.5 flex items-center gap-2 text-sm font-medium text-navy-700">
               <Spinner /> Waiting for the gateway to confirm…
             </div>
           )}
         </div>
       </div>
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="mt-5 flex flex-wrap gap-2 border-t border-navy-100 pt-4">
         {canVerify && (
           <Button variant="success" size="lg" icon={<CheckCircle2 className="h-5 w-5" />} onClick={onVerify}>
             {auto ? "Confirm manually" : "Payment received — verify"}
           </Button>
         )}
-        <Button variant="outline" icon={<XCircle className="h-4 w-4" />} onClick={() => setClosing("failed")}>
+        <Button variant="outline" size="lg" icon={<XCircle className="h-4 w-4" />} onClick={() => setClosing("failed")}>
           Customer couldn&apos;t pay
         </Button>
-        <Button variant="ghost" icon={<RotateCcw className="h-4 w-4" />} onClick={() => setClosing(expired ? "expired" : "cancelled")}>
+        <Button variant="ghost" size="lg" icon={<RotateCcw className="h-4 w-4" />} onClick={() => setClosing(expired ? "expired" : "cancelled")}>
           {expired ? "Mark expired / new QR" : "Cancel QR"}
         </Button>
       </div>
@@ -353,11 +384,15 @@ function VerifyForm({
   };
 
   return (
-    <div className={cn("space-y-3", intent && "rounded-2xl border-2 border-emerald-300 bg-emerald-50/40 p-4")}>
-      {intent && <div className="text-sm font-extrabold text-emerald-900">Verify the UPI payment for {formatINR(intent.amount)}</div>}
+    <div className={cn("space-y-4", intent && "animate-fade-in rounded-lg border border-emerald-300 border-l-[3px] border-l-emerald-600 bg-emerald-50/40 p-4")}>
+      {intent && (
+        <div className="text-[15px] font-semibold text-emerald-950">
+          Verify the UPI payment for <span className="font-mono">{formatINR(intent.amount)}</span>
+        </div>
+      )}
       {error && <Alert tone="danger">{error}</Alert>}
       {!intent && (
-        <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Payment method">
+        <div className="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Payment method">
           {methods.map((m) => (
             <button
               key={m}
@@ -370,11 +405,13 @@ function VerifyForm({
                 setConfirmed(false);
               }}
               className={cn(
-                "inline-flex h-11 items-center gap-2 rounded-xl border px-4 text-sm font-bold transition-colors",
-                method === m ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:bg-navy-50",
+                "inline-flex h-11 items-center gap-2 rounded-lg border px-4 text-sm font-semibold transition-colors duration-150",
+                method === m
+                  ? "border-navy-900 bg-navy-900 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)]"
+                  : "border-navy-200 bg-white text-navy-700 hover:border-navy-400 hover:text-navy-950",
               )}
             >
-              {METHOD_ICON[m]} {METHOD_LABEL[m]}
+              <span className={method === m ? "text-gold-400" : "text-navy-400"}>{METHOD_ICON[m]}</span> {METHOD_LABEL[m]}
             </button>
           ))}
         </div>
@@ -390,12 +427,24 @@ function VerifyForm({
               setAmount(e.target.value.replace(/[^\d.]/g, ""));
               setConfirmed(false);
             }}
-            className="h-12 text-lg font-bold tabular"
+            className="h-12 font-mono text-lg font-semibold tabular"
           />
         </Field>
         {method === "cash" ? (
-          <Field label="Cash tendered (optional)" htmlFor="pay-tendered" hint={change && change.greaterThanOrEqualTo(0) ? `Return change: ${formatINR(change)}` : "To calculate change"}>
-            <Input id="pay-tendered" inputMode="decimal" value={tendered} onChange={(e) => setTendered(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 text-lg tabular" />
+          <Field
+            label="Cash tendered (optional)"
+            htmlFor="pay-tendered"
+            hint={
+              change && change.greaterThanOrEqualTo(0) ? (
+                <span className="inline-block rounded-[3px] bg-emerald-50 px-1.5 text-[13px] font-semibold leading-5 text-emerald-800 ring-1 ring-inset ring-emerald-200">
+                  Return change: <span className="font-mono">{formatINR(change)}</span>
+                </span>
+              ) : (
+                <span className="inline-block px-1.5 text-[13px] leading-5 ring-1 ring-inset ring-transparent">To calculate change</span>
+              )
+            }
+          >
+            <Input id="pay-tendered" inputMode="decimal" value={tendered} onChange={(e) => setTendered(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 font-mono text-lg tabular" />
           </Field>
         ) : (
           <Field
@@ -418,13 +467,13 @@ function VerifyForm({
         )}
       </div>
       {method === "upi" && (
-        <div className="flex flex-wrap gap-4 text-sm">
-          <label className="inline-flex items-center gap-2">
-            <input type="radio" name="via" checked={via === "manual_merchant_app"} onChange={() => setVia("manual_merchant_app")} className="accent-navy-900" />
+        <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-navy-800">
+          <label className="inline-flex cursor-pointer items-center gap-2">
+            <input type="radio" name="via" checked={via === "manual_merchant_app"} onChange={() => setVia("manual_merchant_app")} className="h-4 w-4 accent-navy-900" />
             Checked in UPI / merchant app
           </label>
-          <label className="inline-flex items-center gap-2">
-            <input type="radio" name="via" checked={via === "manual_bank_statement"} onChange={() => setVia("manual_bank_statement")} className="accent-navy-900" />
+          <label className="inline-flex cursor-pointer items-center gap-2">
+            <input type="radio" name="via" checked={via === "manual_bank_statement"} onChange={() => setVia("manual_bank_statement")} className="h-4 w-4 accent-navy-900" />
             Checked in bank statement
           </label>
         </div>
@@ -433,16 +482,16 @@ function VerifyForm({
       <Field label="Note (optional)" htmlFor="pay-note">
         <Textarea id="pay-note" value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} className="min-h-12" />
       </Field>
-      <div className="rounded-xl border border-navy-200 bg-white px-3 py-3">
-        <Checkbox label={<span className="font-semibold">{confirmText[method]}</span>} checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} data-testid="confirm-received" />
-        <p className="ml-6 mt-1 text-xs text-navy-500">A button click is not proof of payment — confirm only after you have seen the money. Your name is recorded.</p>
+      <div className={cn("rounded-lg border px-3.5 py-3 transition-colors duration-150", confirmed ? "border-emerald-300 bg-emerald-50/60" : "border-navy-200 bg-white")}>
+        <Checkbox label={<span className="font-semibold text-navy-950">{confirmText[method]}</span>} checked={confirmed} onChange={(e) => setConfirmed(e.target.checked)} data-testid="confirm-received" />
+        <p className="ml-6 mt-1 text-xs leading-relaxed text-navy-500">A button click is not proof of payment — confirm only after you have seen the money. Your name is recorded.</p>
       </div>
       <div className="flex flex-wrap gap-2">
-        <Button variant="success" size="lg" loading={busy} disabled={!amountValid || !refValid || !confirmed} onClick={submit} icon={<CheckCircle2 className="h-5 w-5" />}>
+        <Button variant="success" size="lg" className="tabular" loading={busy} disabled={!amountValid || !refValid || !confirmed} onClick={submit} icon={<CheckCircle2 className="h-5 w-5" />}>
           Confirm {amountValid ? formatINR(amount) : ""} received
         </Button>
         {intent && (
-          <Button variant="ghost" onClick={onDone}>
+          <Button variant="ghost" size="lg" onClick={onDone}>
             Back
           </Button>
         )}
@@ -455,15 +504,15 @@ function PaymentList({ payments }: { payments: PaymentJson[] }) {
   if (!payments.length) return null;
   return (
     <div>
-      <div className="mb-1 text-xs font-bold uppercase tracking-wide text-navy-500">Payment records</div>
-      <ul className="divide-y divide-navy-50 rounded-xl border border-navy-100">
+      <div className="label-mono mb-1.5 text-navy-500">Payment records</div>
+      <ul className="divide-y divide-navy-100 rounded-lg border border-navy-200">
         {payments
           .slice()
           .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
           .map((p) => (
-            <li key={p.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 text-sm">
-              <span className="text-navy-500">{METHOD_ICON[p.method]}</span>
-              <span className="font-semibold">
+            <li key={p.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2.5 text-sm">
+              <span className="text-navy-400">{METHOD_ICON[p.method]}</span>
+              <span className="font-semibold text-navy-950">
                 {p.direction === "refund" ? "Refund · " : ""}
                 {METHOD_LABEL[p.method]}
               </span>
@@ -474,7 +523,7 @@ function PaymentList({ payments }: { payments: PaymentJson[] }) {
                 <span className="text-xs text-navy-400">
                   <DateTime value={p.verifiedAt ?? p.createdAt} />
                 </span>
-                <span className="font-bold tabular">{formatINR(p.amount)}</span>
+                <span className="font-mono font-semibold text-navy-950 tabular">{formatINR(p.amount)}</span>
               </span>
             </li>
           ))}

@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AlertTriangle, CalendarClock, Check, Clock, Plus, Sparkles, Trash2, X } from "lucide-react";
+import { AlertTriangle, CalendarClock, Check, Clock, Plus, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Field, Input, Select, Textarea } from "@/components/ui/field";
@@ -160,7 +160,7 @@ export function PricePanel({
   return (
     <div className="space-y-5">
       {lists.length > 1 && (
-        <div className="flex flex-wrap gap-1 rounded-xl bg-navy-50 p-1" role="tablist" aria-label="Price list">
+        <div className="inline-flex flex-wrap gap-0.5 rounded-lg border border-navy-200 bg-navy-50/60 p-0.5" role="tablist" aria-label="Price list">
           {lists.map((l) => (
             <button
               key={l.id}
@@ -168,11 +168,14 @@ export function PricePanel({
               role="tab"
               aria-selected={l.id === listId}
               onClick={() => switchList(l.id)}
-              className={cn("rounded-lg px-3 py-1.5 text-sm font-semibold", l.id === listId ? "bg-white text-navy-900 shadow-sm" : "text-navy-500 hover:text-navy-800")}
+              className={cn(
+                "rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors duration-150",
+                l.id === listId ? "bg-white text-navy-950 shadow-card" : "text-navy-500 hover:text-navy-900",
+              )}
             >
               {l.name}
-              {l.isDefault && <span className="ml-1 text-[10px] font-bold uppercase text-gold-600">default</span>}
-              {!l.isActive && <span className="ml-1 text-[10px] font-normal text-navy-400">(not in use)</span>}
+              {l.isDefault && <span className="label-mono ml-1.5 text-[9.5px] text-gold-700">default</span>}
+              {!l.isActive && <span className="ml-1.5 text-[11px] font-normal text-navy-400">(not in use)</span>}
             </button>
           ))}
         </div>
@@ -184,12 +187,12 @@ export function PricePanel({
         <InfoTile label={`Current ${list?.name ?? ""} price`}>
           {cur ? (
             <>
-              <div className="text-2xl font-extrabold tabular">{formatINR(cur.price)}</div>
+              <div className="headline text-[1.75rem] font-bold tabular">{formatINR(cur.price)}</div>
               <div className="text-xs text-navy-500">
                 per {unitName} · {cur.priceIncludesTax ? `incl. ${taxLabel}` : `excl. ${taxLabel}`}
                 {cur.mrp ? ` · MRP ${formatINR(cur.mrp)}` : ""}
               </div>
-              <div className="mt-1 text-[11px] text-navy-400">
+              <div className="mt-1 text-[11px] text-navy-500">
                 since <DateTime value={cur.effectiveFrom} />
               </div>
             </>
@@ -200,7 +203,7 @@ export function PricePanel({
         <InfoTile label={regType === "regular" ? "Excl. GST (revenue)" : "Revenue per unit"}>
           {curInfo ? (
             <>
-              <div className="text-xl font-bold tabular">{formatINR(curInfo.exclusive)}</div>
+              <div className="headline text-2xl font-bold tabular">{formatINR(curInfo.exclusive)}</div>
               <div className="text-xs text-navy-500">
                 {regType === "regular"
                   ? `GST ${Number(ctx.gstRate)}%${Number(ctx.cessRate) ? ` + cess ${Number(ctx.cessRate)}%` : ""}`
@@ -216,12 +219,12 @@ export function PricePanel({
         {showCost && (
           <>
             <InfoTile label="Landed cost">
-              {landedCost ? <div className="text-xl font-bold tabular">{formatINR(landedCost)}</div> : <div className="text-sm font-semibold text-amber-700">Unknown — record a cost</div>}
+              {landedCost ? <div className="headline text-2xl font-bold tabular">{formatINR(landedCost)}</div> : <div className="text-sm font-medium text-amber-700">Unknown — record a cost</div>}
             </InfoTile>
             <InfoTile label="Gross margin · markup">
               {curInfo?.margin ? (
                 <>
-                  <div className={cn("text-xl font-bold tabular", curInfo.belowCost ? "text-red-700" : curInfo.belowFloor ? "text-amber-700" : "text-emerald-700")}>{curInfo.margin.toFixed(1)}%</div>
+                  <div className={cn("headline text-2xl font-bold tabular", curInfo.belowCost ? "text-red-700" : curInfo.belowFloor ? "text-amber-700" : "text-emerald-700")}>{curInfo.margin.toFixed(1)}%</div>
                   <div className="text-xs text-navy-500">markup {curInfo.markup?.toFixed(1) ?? "—"}% on cost</div>
                 </>
               ) : (
@@ -233,7 +236,7 @@ export function PricePanel({
       </div>
       {cur && cur.tiers.length > 0 && (
         <div className="text-sm text-navy-700">
-          <span className="font-semibold">Quantity breaks: </span>
+          <span className="label-mono mr-2 text-navy-500">Quantity breaks</span>
           {cur.tiers.map((t) => `${t.minQty}+ ${unitName} @ ${formatINR(t.price)}`).join(" · ")}
         </div>
       )}
@@ -244,7 +247,7 @@ export function PricePanel({
       {(listPending.length > 0 || listScheduled.length > 0) && (
         <div className="space-y-2">
           {listPending.map((v) => (
-            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-l-[3px] border-amber-200 border-l-amber-500 bg-amber-50/70 px-4 py-3">
               <div className="text-sm">
                 <div className="flex items-center gap-2 font-semibold text-amber-900">
                   <Clock className="h-4 w-4" /> Awaiting approval: {v.previousPrice ? `${formatINR(v.previousPrice)} → ` : ""}
@@ -268,7 +271,7 @@ export function PricePanel({
             </div>
           ))}
           {listScheduled.map((v) => (
-            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3">
+            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-l-[3px] border-sky-200 border-l-sky-600 bg-sky-50/70 px-4 py-3">
               <div className="text-sm">
                 <div className="flex items-center gap-2 font-semibold text-sky-900">
                   <CalendarClock className="h-4 w-4" /> Scheduled: {formatINR(v.price)} from <DateTime value={v.effectiveFrom} />
@@ -287,17 +290,17 @@ export function PricePanel({
 
       {/* New price form */}
       {perms.canEditPrices ? (
-        <form onSubmit={submit} className="space-y-4 rounded-2xl border border-navy-100 bg-navy-50/40 p-4">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h3 className="text-sm font-bold text-navy-900">Set a new {list?.name.toLowerCase()} price</h3>
+        <form onSubmit={submit} className="space-y-4 rounded-xl border border-rule bg-paper/50 p-4 sm:p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rule pb-3">
+            <h3 className="text-[15px] font-semibold text-navy-900">Set a new {list?.name.toLowerCase()} price</h3>
             {!perms.canApprovePrices && <Badge tone="amber">Your changes need the Super Admin&apos;s approval</Badge>}
           </div>
           {error && <Alert tone="danger">{error}</Alert>}
           <div className="grid gap-3 sm:grid-cols-3">
             <Field label={`Selling price per ${unitName}`} htmlFor="np-price" required>
               <div className="relative">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-navy-400">₹</span>
-                <Input id="np-price" inputMode="decimal" className="pl-7 tabular" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={cur?.price ?? "0.00"} required />
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-mono text-sm text-navy-400">₹</span>
+                <Input id="np-price" inputMode="decimal" className="pl-7 font-mono tabular" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={cur?.price ?? "0.00"} required />
               </div>
             </Field>
             <Field label="Price basis" htmlFor="np-incl">
@@ -307,12 +310,17 @@ export function PricePanel({
               </Select>
             </Field>
             <Field label="MRP (optional)" htmlFor="np-mrp" hint="Selling price can't exceed MRP.">
-              <Input id="np-mrp" inputMode="decimal" className="tabular" value={mrp} onChange={(e) => setMrp(e.target.value)} placeholder="As printed on pack" />
+              <Input id="np-mrp" inputMode="decimal" className="font-mono tabular" value={mrp} onChange={(e) => setMrp(e.target.value)} placeholder="As printed on pack" />
             </Field>
           </div>
 
           {draftInfo && (
-            <div className={cn("grid gap-2 rounded-xl px-3 py-2.5 text-sm sm:grid-cols-3", draftInfo.belowCost ? "bg-red-50 text-red-900" : draftInfo.belowFloor ? "bg-amber-50 text-amber-900" : "bg-white text-navy-800")}>
+            <div
+              className={cn(
+                "grid gap-2 rounded-lg border px-3 py-2.5 text-sm sm:grid-cols-3",
+                draftInfo.belowCost ? "border-red-200 bg-red-50 text-red-900" : draftInfo.belowFloor ? "border-amber-200 bg-amber-50 text-amber-900" : "border-navy-100 bg-white text-navy-800",
+              )}
+            >
               <div>
                 {regType === "regular" ? "Excl. GST" : "Revenue"}: <b className="tabular">{formatINR(draftInfo.exclusive)}</b>
                 {regType === "regular" && !incl && (
@@ -343,12 +351,11 @@ export function PricePanel({
           {mrpWarning && <Alert tone="danger">This price is above the MRP — it will be rejected.</Alert>}
 
           {showCost && landedCost && (
-            <div className="flex flex-wrap items-end gap-2 rounded-xl border border-gold-200 bg-gold-50 px-3 py-2.5">
-              <Sparkles className="mb-2.5 h-4 w-4 text-gold-600" />
-              <Field label="Target gross margin %" htmlFor="np-target" className="w-36">
-                <Input id="np-target" inputMode="decimal" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 20" className="h-9" />
+            <div className="flex flex-wrap items-end gap-3 rounded-lg border border-navy-100 bg-white px-3 py-3">
+              <Field label="Target gross margin %" htmlFor="np-target" className="w-48">
+                <Input id="np-target" inputMode="decimal" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 20" className="font-mono" />
               </Field>
-              <div className="pb-2 text-sm text-navy-700">
+              <div className="min-w-0 flex-1 pb-2.5 text-sm text-navy-700">
                 {suggestion ? (
                   <>
                     Suggested: <b className="tabular">{formatINR(suggestion.charge)}</b> {incl ? `incl. ${taxLabel}` : `excl. ${taxLabel}`}
@@ -368,7 +375,7 @@ export function PricePanel({
 
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wide text-navy-700">Quantity breaks (optional)</span>
+              <span className="label-mono text-navy-600">Quantity breaks (optional)</span>
               <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setTiers([...tiers, { minQty: "", price: "" }])} disabled={tiers.length >= 10}>
                 Add break
               </Button>
@@ -379,9 +386,13 @@ export function PricePanel({
               <div className="space-y-2">
                 {tiers.map((t, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
-                    <Input aria-label="Minimum quantity" inputMode="decimal" className="h-9 w-24" value={t.minQty} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, minQty: e.target.value } : x)))} placeholder="10" />
+                    <div className="w-24 shrink-0">
+                      <Input aria-label="Minimum quantity" inputMode="decimal" className="font-mono" value={t.minQty} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, minQty: e.target.value } : x)))} placeholder="10" />
+                    </div>
                     <span className="text-navy-500">{unitName} or more at ₹</span>
-                    <Input aria-label="Tier price" inputMode="decimal" className="h-9 w-32 tabular" value={t.price} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))} placeholder="0.00" />
+                    <div className="w-32 shrink-0">
+                      <Input aria-label="Tier price" inputMode="decimal" className="font-mono tabular" value={t.price} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))} placeholder="0.00" />
+                    </div>
                     <Button variant="ghost" size="sm" aria-label="Remove break" onClick={() => setTiers(tiers.filter((_, j) => j !== i))}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -422,8 +433,8 @@ export function PricePanel({
 
 function InfoTile({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-navy-100 bg-white px-4 py-3">
-      <div className="mb-1 text-[11px] font-bold uppercase tracking-wide text-navy-500">{label}</div>
+    <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
+      <div className="label-mono mb-1.5 text-navy-500">{label}</div>
       {children}
     </div>
   );

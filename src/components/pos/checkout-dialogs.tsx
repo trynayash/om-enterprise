@@ -52,26 +52,30 @@ export function FinalizeDialog({ data, onClose, run }: { data: SaleData; onClose
     >
       <div className="space-y-4">
         {error && <Alert tone="danger">{error}</Alert>}
-        <div className="rounded-2xl bg-navy-900 px-5 py-6 text-center text-white">
-          <div className="text-xs font-bold uppercase tracking-[0.18em] text-gold-400">Amount payable</div>
-          <div className="mt-1 text-5xl font-extrabold tracking-tight tabular">{formatINR(s.grandTotal)}</div>
-          {discount.greaterThan(0) && <div className="mt-2 text-sm text-navy-200">Includes {formatINR(discount)} discount</div>}
+        <div className="rounded-lg bg-navy-950 px-5 py-6 text-center text-white">
+          <div className="label-mono text-gold-400">Amount payable</div>
+          <div className="headline mt-2 text-[3.5rem] font-bold tabular sm:text-[4rem]">{formatINR(s.grandTotal)}</div>
+          {discount.greaterThan(0) && (
+            <div className="mt-2 text-sm text-navy-300">
+              Includes <span className="font-mono">{formatINR(discount)}</span> discount
+            </div>
+          )}
         </div>
-        <ul className="max-h-56 divide-y divide-navy-50 overflow-y-auto rounded-xl border border-navy-100 text-sm">
+        <ul className="max-h-56 divide-y divide-navy-100 overflow-y-auto rounded-lg border border-navy-200 text-sm">
           {items.map((l) => (
-            <li key={l.id} className="flex justify-between gap-3 px-3 py-2">
+            <li key={l.id} className="flex justify-between gap-3 px-3 py-2.5">
               <span className="min-w-0">
-                <span className="font-medium">{l.productName}</span>
+                <span className="font-medium text-navy-950">{l.productName}</span>
                 {l.variantName && <span className="text-navy-500"> · {l.variantName}</span>}
-                <span className="block text-xs text-navy-500">
+                <span className="mt-0.5 block font-mono text-xs text-navy-500">
                   {formatQty(l.quantity)} × {formatINR(l.unitPrice)}
                 </span>
               </span>
-              <span className="shrink-0 font-semibold tabular">{formatINR(l.lineTotal)}</span>
+              <span className="shrink-0 font-mono font-semibold text-navy-950 tabular">{formatINR(l.lineTotal)}</span>
             </li>
           ))}
         </ul>
-        <p className="text-center text-base font-bold text-navy-900">Does the customer agree to pay {formatINR(s.grandTotal)}?</p>
+        <p className="text-center text-base font-semibold text-navy-950">Does the customer agree to pay {formatINR(s.grandTotal)}?</p>
       </div>
     </Dialog>
   );
@@ -122,7 +126,7 @@ export function QuotationDialog({ data, onClose }: { data: SaleData; onClose: ()
           <Input id="q-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} autoFocus />
         </Field>
         <Field label="Mobile (optional)" htmlFor="q-mobile" hint="10-digit Indian mobile number">
-          <Input id="q-mobile" inputMode="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={16} />
+          <Input id="q-mobile" className="font-mono" inputMode="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={16} />
         </Field>
       </div>
     </Dialog>

@@ -181,15 +181,21 @@ export function SettingsEditor({
   const [active, setActive] = useState<SectionKey>(initial && sections.includes(initial) ? initial : sections[0]);
   if (!sections.length) return <Alert>You cannot edit any settings.</Alert>;
   return (
-    <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
-      <nav className="flex gap-1 overflow-x-auto lg:flex-col" aria-label="Settings sections">
+    <div className="grid gap-6 lg:grid-cols-[208px_minmax(0,1fr)] lg:items-start">
+      <nav
+        className="-mx-4 flex gap-5 overflow-x-auto border-b border-navy-200 px-4 sm:mx-0 sm:px-0 lg:sticky lg:top-8 lg:flex-col lg:gap-0 lg:border-b-0 lg:border-l lg:px-0"
+        aria-label="Settings sections"
+      >
         {sections.map((k) => (
           <button
             key={k}
             type="button"
             onClick={() => setActive(k)}
             aria-current={k === active ? "page" : undefined}
-            className={cn("whitespace-nowrap rounded-xl px-3 py-2 text-left text-sm font-semibold", k === active ? "bg-navy-900 text-white" : "text-navy-700 hover:bg-white")}
+            className={cn(
+              "-mb-px whitespace-nowrap border-b-2 pb-2.5 pt-1 text-left text-sm font-semibold transition-colors duration-150 lg:-ml-px lg:mb-0 lg:border-b-0 lg:border-l-2 lg:py-2 lg:pl-4",
+              k === active ? "border-gold-500 text-navy-950" : "border-transparent text-navy-500 hover:border-navy-300 hover:text-navy-900",
+            )}
           >
             {SECTIONS[k].title}
           </button>
@@ -265,7 +271,7 @@ function SectionForm({ section, value, razorpayConfigured }: { section: SectionK
               return (
                 <div key={f.key} className="sm:col-span-2">
                   <Checkbox id={id} checked={Boolean(v)} onChange={(e) => set(f.key, e.target.checked)} label={f.label} />
-                  {f.hint && <p className="ml-6 mt-0.5 text-xs text-navy-500">{f.hint}</p>}
+                  {f.hint && <p className="ml-6 mt-1 text-xs leading-relaxed text-navy-500">{f.hint}</p>}
                 </div>
               );
             }
@@ -299,7 +305,7 @@ function SectionForm({ section, value, razorpayConfigured }: { section: SectionK
               </Field>
             );
           })}
-          <div className="flex justify-end gap-2 sm:col-span-2">
+          <div className="flex justify-end gap-2 border-t border-navy-100 pt-4 sm:col-span-2">
             <Button variant="outline" onClick={() => setForm(value)}>
               Reset
             </Button>
@@ -330,10 +336,21 @@ function RegistrationCard({ current, gstin, all }: { current: Settings["tax"]["r
         {choice === "regular" && !gstin && <Alert tone="warning">Enter the shop GSTIN under Business details before issuing tax invoices.</Alert>}
         <div className="grid gap-3 md:grid-cols-2">
           {options.map((o) => (
-            <label key={o.value || "none"} className={cn("cursor-pointer rounded-xl border p-4 transition-colors", choice === o.value ? "border-gold-500 bg-gold-50 ring-2 ring-gold-200" : "border-navy-100 hover:bg-navy-50")}>
+            <label
+              key={o.value || "none"}
+              className={cn(
+                "flex cursor-pointer gap-3 rounded-lg border p-4 transition-colors duration-150 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold-600",
+                choice === o.value ? "border-navy-900 bg-paper/60 shadow-[inset_3px_0_0_var(--color-gold-500)]" : "border-navy-200 bg-white hover:border-navy-400",
+              )}
+            >
               <input type="radio" name="regType" className="sr-only" checked={choice === o.value} onChange={() => setChoice(o.value)} />
-              <div className="font-bold">{o.title}</div>
-              <p className="mt-1 text-xs text-navy-600">{o.body}</p>
+              <span aria-hidden className={cn("mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border", choice === o.value ? "border-navy-900" : "border-navy-300")}>
+                {choice === o.value && <span className="h-2 w-2 rounded-full bg-navy-900" />}
+              </span>
+              <span>
+                <span className="block font-semibold text-navy-950">{o.title}</span>
+                <span className="mt-1 block text-xs leading-relaxed text-navy-600">{o.body}</span>
+              </span>
             </label>
           ))}
         </div>
@@ -413,14 +430,14 @@ function TaxClasses({ classes, canEdit }: { classes: TaxClass[]; canEdit: boolea
     <Card>
       <CardHeader title="GST rate classes" description="Assigned to products. Confirm each product's HSN and rate against current CBIC notifications with your accountant." />
       <CardBody className="space-y-4">
-        <ul className="divide-y divide-navy-50 rounded-xl border border-navy-100">
+        <ul className="divide-y divide-navy-100 rounded-lg border border-navy-100">
           {classes.map((t) => (
             <li key={t.id} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">
               <div>
                 <div className="font-semibold">{t.name}</div>
-                {t.description && <div className="text-xs text-navy-500">{t.description}</div>}
+                {t.description && <div className="mt-0.5 text-xs text-navy-500">{t.description}</div>}
               </div>
-              <div className="tabular font-bold">
+              <div className="whitespace-nowrap font-mono text-[13px] font-semibold tabular">
                 {Number(t.gstRate)}%{Number(t.cessRate) ? ` + ${Number(t.cessRate)}% cess` : ""}
               </div>
             </li>
@@ -432,10 +449,10 @@ function TaxClasses({ classes, canEdit }: { classes: TaxClass[]; canEdit: boolea
               <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="e.g. GST 40%" />
             </Field>
             <Field label="GST %">
-              <Input value={f.gstRate} onChange={(e) => setF({ ...f, gstRate: e.target.value })} inputMode="decimal" />
+              <Input value={f.gstRate} onChange={(e) => setF({ ...f, gstRate: e.target.value })} inputMode="decimal" className="font-mono" />
             </Field>
             <Field label="Cess %">
-              <Input value={f.cessRate} onChange={(e) => setF({ ...f, cessRate: e.target.value })} inputMode="decimal" />
+              <Input value={f.cessRate} onChange={(e) => setF({ ...f, cessRate: e.target.value })} inputMode="decimal" className="font-mono" />
             </Field>
             <Button onClick={add} loading={busy} disabled={!f.name || !f.gstRate}>
               Add

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeft, FileText } from "lucide-react";
+import { FileText } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getSale } from "@/server/services/sales";
@@ -8,12 +8,15 @@ import { entityHistory } from "@/server/services/audit-log";
 import { D, formatINR, m } from "@/lib/money";
 import { stateName } from "@/lib/india";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { Alert, PageHeader, PageSkeleton, td, th } from "@/components/ui/page";
+import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money, Qty } from "@/components/ui/money";
 import { SaleActions, ReversePaymentButton, type ReturnableLine } from "@/components/dashboard/ops/sale-actions";
 import { displayNames, returnSummary, unitMap } from "@/components/dashboard/ops/sale-extras";
 import { DOC_LABEL, METHOD_LABEL, VERIFICATION_LABEL, loadOr404 } from "@/components/dashboard/ops/guard";
+import { BackLink } from "@/components/dashboard/back-link";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
+import { rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Sale" };
 
@@ -58,17 +61,17 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/dashboard/sales" className="no-print inline-flex items-center gap-1 text-sm font-semibold text-navy-600 hover:text-navy-900">
-        <ArrowLeft className="h-4 w-4" /> All sales
-      </Link>
+      <BackLink href="/dashboard/sales">All sales</BackLink>
       <PageHeader
         eyebrow="Sale"
         title={
           <span className="flex flex-wrap items-center gap-2">
             {sale.saleNumber}
-            <StatusBadge status={sale.status} />
-            {sale.status !== "draft" && sale.status !== "cancelled" && <StatusBadge status={sale.paymentStatus} />}
-            {sale.isTraining && <SampleBadge label="Training sale" />}
+            <TitleStamps>
+              <StatusBadge status={sale.status} />
+              {sale.status !== "draft" && sale.status !== "cancelled" && <StatusBadge status={sale.paymentStatus} />}
+              {sale.isTraining && <SampleBadge label="Training sale" />}
+            </TitleStamps>
           </span>
         }
         description={
@@ -108,13 +111,13 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
             <thead>
               <tr>
                 <th className={th}>Item</th>
-                <th className={`${th} text-right`}>Qty</th>
-                <th className={`${th} text-right`}>Price</th>
-                <th className={`${th} text-right`}>Discount</th>
-                <th className={`${th} text-right`}>Taxable</th>
-                <th className={`${th} text-right`}>GST</th>
-                <th className={`${th} text-right`}>Total</th>
-                {canSeeCosts && <th className={`${th} text-right`}>Cost / profit</th>}
+                <th className={thNum}>Qty</th>
+                <th className={thNum}>Price</th>
+                <th className={thNum}>Discount</th>
+                <th className={thNum}>Taxable</th>
+                <th className={thNum}>GST</th>
+                <th className={thNum}>Total</th>
+                {canSeeCosts && <th className={thNum}>Cost / profit</th>}
               </tr>
             </thead>
             <tbody>
@@ -123,14 +126,14 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                 const tax = D(l.cgstAmount).plus(D(l.sgstAmount)).plus(D(l.igstAmount)).plus(D(l.cessAmount));
                 const ret = returned.get(l.id);
                 return (
-                  <tr key={l.id} className="align-top">
-                    <td className={td}>
+                  <tr key={l.id} className={rowHover}>
+                    <td className={tdText}>
                       <div className="font-medium">
                         {l.lineType === "charge" ? l.productName : `${l.brandName ? `${l.brandName} ` : ""}${l.productName}`}
                         {l.isSample && <SampleBadge label="Sample" className="ml-1.5" />}
                       </div>
                       {l.variantName && <div className="text-xs text-navy-600">{l.variantName}</div>}
-                      <div className="text-xs text-navy-400">
+                      <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">
                         {[l.sku, l.hsnCode ? `HSN ${l.hsnCode}` : null].filter(Boolean).join(" · ")}
                       </div>
                       <div className="mt-1 flex flex-wrap gap-1">
@@ -143,23 +146,23 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                         {ret && <Badge tone="purple">Returned {ret}</Badge>}
                       </div>
                     </td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdNum}>
                       <Qty value={l.quantity} unit={units.get(l.unitCode)?.name ?? l.unitCode} />
                     </td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdNum}>
                       <Money value={l.unitPrice} />
                       {l.priceListUnitPrice !== l.unitPrice && (
                         <div className="text-xs text-navy-400 line-through">
                           <Money value={l.priceListUnitPrice} />
                         </div>
                       )}
-                      <div className="text-[11px] text-navy-400">{sale.taxMode === "none" ? "" : l.priceIncludesTax ? "incl. GST" : "excl. GST"}</div>
+                      <div className="font-sans text-[11px] text-navy-400">{sale.taxMode === "none" ? "" : l.priceIncludesTax ? "incl. GST" : "excl. GST"}</div>
                     </td>
-                    <td className={`${td} text-right`}>{disc.isZero() ? <span className="text-navy-300">—</span> : <Money value={m(disc)} />}</td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdNum}>{disc.isZero() ? <span className="text-navy-300">—</span> : <Money value={m(disc)} />}</td>
+                    <td className={tdNum}>
                       <Money value={l.taxableValue} />
                     </td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdNum}>
                       {tax.isZero() ? (
                         <span className="text-navy-300">—</span>
                       ) : (
@@ -169,11 +172,11 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                         </>
                       )}
                     </td>
-                    <td className={`${td} text-right font-semibold`}>
+                    <td className={`${tdNum} font-semibold`}>
                       <Money value={l.lineTotal} />
                     </td>
                     {canSeeCosts && (
-                      <td className={`${td} text-right text-xs`}>
+                      <td className={tdNum}>
                         {l.costTotal ? (
                           <>
                             <div>
@@ -184,7 +187,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                             </div>
                           </>
                         ) : l.lineType === "item" ? (
-                          <span className="text-navy-400">Cost unknown</span>
+                          <span className="font-sans text-navy-400">Cost unknown</span>
                         ) : null}
                       </td>
                     )}
@@ -202,7 +205,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
             <CardHeader title="Payments" description="Payment status is separate from the bill. A QR shown to the customer is NOT proof of payment until verified." />
             {payments.length ? (
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[720px]">
+                <table className="w-full min-w-[640px]">
                   <thead>
                     <tr>
                       <th className={th}>When</th>
@@ -210,22 +213,26 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                       <th className={th}>Reference</th>
                       <th className={th}>Verification</th>
                       <th className={th}>Status</th>
-                      <th className={`${th} text-right`}>Amount</th>
-                      <th className={th} />
+                      <th className={thNum}>Amount</th>
+                      <th className={th}>
+                        <span className="sr-only">Actions</span>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {payments.map((p) => (
-                      <tr key={p.id} className="align-top">
-                        <td className={`${td} text-navy-600`}>
+                      <tr key={p.id} className={rowHover}>
+                        <td className={`${tdMuted} whitespace-nowrap`}>
                           <DateTime value={p.verifiedAt ?? p.createdAt} />
                         </td>
-                        <td className={td}>
-                          {p.direction === "refund" ? <Badge tone="purple">Refund</Badge> : null} {METHOD_LABEL[p.method] ?? p.method}
-                          {p.provider === "razorpay" && <div className="text-xs text-navy-400">Razorpay QR</div>}
+                        <td className={tdText}>
+                          <span className="flex flex-wrap items-center gap-1.5">
+                            {p.direction === "refund" ? <Badge tone="purple">Refund</Badge> : null} {METHOD_LABEL[p.method] ?? p.method}
+                          </span>
+                          {p.provider === "razorpay" && <div className="text-xs text-navy-500">Razorpay QR</div>}
                         </td>
-                        <td className={`${td} tabular`}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
-                        <td className={`${td} text-xs text-navy-600`}>
+                        <td className={tdCode}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
+                        <td className={`${tdMuted} text-xs`}>
                           {p.verificationMethod ? VERIFICATION_LABEL[p.verificationMethod] ?? p.verificationMethod : "Not verified"}
                           {p.verifiedBy && <div>by {names.get(p.verifiedBy) ?? "staff"}</div>}
                           {p.status === "reversed" && (
@@ -235,18 +242,18 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                           )}
                           {p.failureReason && <div className="text-navy-500">{p.failureReason}</div>}
                         </td>
-                        <td className={td}>
+                        <td className={tdText}>
                           <StatusBadge status={p.status} />
                         </td>
-                        <td className={`${td} text-right font-semibold`}>
+                        <td className={`${tdNum} font-semibold`}>
                           <Money value={p.amount} />
                           {p.tenderedAmount && p.tenderedAmount !== p.amount && (
-                            <div className="text-xs font-normal text-navy-500">
+                            <div className="mt-0.5 text-xs font-normal text-navy-500">
                               Tendered <Money value={p.tenderedAmount} />
                             </div>
                           )}
                         </td>
-                        <td className={`${td} text-right`}>{p.status === "successful" && sale.status !== "cancelled" && can(actor, "payments.reverse") && <ReversePaymentButton paymentId={p.id} amount={p.amount} />}</td>
+                        <td className={`${tdText} text-right`}>{p.status === "successful" && sale.status !== "cancelled" && can(actor, "payments.reverse") && <ReversePaymentButton paymentId={p.id} amount={p.amount} />}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -262,7 +269,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
           {approvals.length > 0 && (
             <Card>
               <CardHeader title="Discount approvals" />
-              <ul className="divide-y divide-navy-50">
+              <ul className="divide-y divide-navy-100">
                 {approvals.map((a) => {
                   const details = a.details as { maxDiscountPercent?: string; reasons?: string[] };
                   return (
@@ -295,11 +302,11 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
             <Card>
               <CardHeader title="Activity" description="From the audit log — every change to this sale and who made it." />
               <ol className="relative space-y-0 px-5 py-4">
-                {history.map((h) => (
-                  <li key={h.id} className="relative border-l border-navy-100 pb-4 pl-5 last:pb-0">
-                    <span className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full bg-gold-500" />
+                {history.map((h, i) => (
+                  <li key={h.id} className="relative border-l border-navy-200 pb-4 pl-5 last:border-transparent last:pb-0">
+                    <span aria-hidden className={`absolute -left-[4.5px] top-1.5 h-2 w-2 rounded-full ring-[3px] ring-white ${i === 0 ? "bg-gold-500" : "bg-navy-300"}`} />
                     <div className="text-sm font-medium">{h.summary}</div>
-                    <div className="text-xs text-navy-500">
+                    <div className="mt-0.5 text-xs text-navy-500">
                       {h.actorLabel} · <DateTime value={h.at} />
                     </div>
                   </li>
@@ -324,9 +331,9 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                 {D(sale.igstTotal).greaterThan(0) && <Row label="IGST" value={sale.igstTotal} />}
                 {D(sale.cessTotal).greaterThan(0) && <Row label="Cess" value={sale.cessTotal} />}
                 {D(sale.roundOff).isZero() ? null : <Row label="Round off" value={sale.roundOff} />}
-                <div className="flex justify-between rounded-lg bg-navy-900 px-3 py-2 font-extrabold text-white">
-                  <dt>Grand total</dt>
-                  <dd className="tabular">{formatINR(sale.grandTotal)}</dd>
+                <div className="my-2.5 flex items-baseline justify-between rounded-md bg-navy-900 px-3 py-2.5 text-white">
+                  <dt className="label-mono text-navy-200">Grand total</dt>
+                  <dd className="font-mono text-base font-semibold tabular">{formatINR(sale.grandTotal)}</dd>
                 </div>
                 {D(sale.effectiveDiscountPercent).greaterThan(0) && <p className="text-right text-xs text-navy-500">Overall discount {sale.effectiveDiscountPercent}% vs list price</p>}
                 <div className="my-2 border-t border-navy-100" />
@@ -334,9 +341,9 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                 {D(sale.amountRefunded).greaterThan(0) && <Row label="Refunded" value={`− ${formatINR(sale.amountRefunded)}`} raw />}
                 {D(creditedTotal).greaterThan(0) && <Row label="Credit notes" value={`− ${formatINR(creditedTotal)}`} raw />}
                 {sale.status !== "cancelled" && sale.status !== "draft" && (
-                  <div className={`flex justify-between font-bold ${balance.greaterThan(0) ? "text-amber-700" : "text-emerald-700"}`}>
+                  <div className={`flex justify-between font-semibold ${balance.greaterThan(0) ? "text-amber-700" : "text-emerald-700"}`}>
                     <dt>{balance.greaterThan(0) ? "Balance due" : "Balance"}</dt>
-                    <dd className="tabular">{formatINR(m(balance.greaterThan(0) ? balance : 0))}</dd>
+                    <dd className="font-mono text-[13px] tabular">{formatINR(m(balance.greaterThan(0) ? balance : 0))}</dd>
                   </div>
                 )}
                 {canSeeCosts && sale.costKnown && sale.grossProfit && (
@@ -359,8 +366,12 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                   <Link href={`/dashboard/customers/${customer.id}`} className="font-semibold text-navy-900 hover:underline">
                     {customer.businessName ? `${customer.businessName} (${customer.name})` : customer.name}
                   </Link>
-                  {customer.mobile && <div className="text-navy-600">{customer.mobile}</div>}
-                  {customer.gstin && <div className="text-navy-600">GSTIN {customer.gstin}</div>}
+                  {customer.mobile && <div className="font-mono text-[13px] text-navy-600">{customer.mobile}</div>}
+                  {customer.gstin && (
+                    <div className="text-navy-600">
+                      GSTIN <span className="font-mono text-[13px]">{customer.gstin}</span>
+                    </div>
+                  )}
                   {(customer.billingAddress || customer.city) && <div className="text-navy-500">{[customer.billingAddress, customer.city, stateName(customer.stateCode)].filter(Boolean).join(", ")}</div>}
                 </div>
               ) : (
@@ -372,19 +383,19 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
           <Card>
             <CardHeader title="Documents" />
             {documents.length ? (
-              <ul className="divide-y divide-navy-50">
+              <ul className="divide-y divide-navy-100">
                 {documents.map((d) => (
                   <li key={d.id}>
-                    <Link href={`/dashboard/documents/${d.id}`} className="flex items-center gap-3 px-5 py-3 hover:bg-navy-50/60">
-                      <FileText className="h-4 w-4 shrink-0 text-navy-400" />
+                    <Link href={`/dashboard/documents/${d.id}`} className={`flex items-center gap-3 px-5 py-3 ${rowHover}`}>
+                      <FileText className="h-4 w-4 shrink-0 text-navy-400" aria-hidden />
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-semibold tabular">{d.docNumber}</div>
+                        <div className="font-mono text-[13px] font-medium tabular">{d.docNumber}</div>
                         <div className="text-xs text-navy-500">
                           {DOC_LABEL[d.docType] ?? d.docType} · <DateTime value={d.issuedAt} />
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
-                        <Money value={d.grandTotal} className="text-sm" />
+                        <Money value={d.grandTotal} className="font-mono text-[13px]" />
                         {d.status === "cancelled" && <StatusBadge status="cancelled" />}
                       </div>
                     </Link>
@@ -414,7 +425,7 @@ function Row({ label, value, raw }: { label: string; value: string | null; raw?:
   return (
     <div className="flex justify-between gap-4">
       <dt className="text-navy-500">{label}</dt>
-      <dd className="whitespace-nowrap tabular font-medium">{raw ? value : <Money value={value} />}</dd>
+      <dd className="whitespace-nowrap font-mono text-[13px] tabular">{raw ? value : <Money value={value} />}</dd>
     </div>
   );
 }

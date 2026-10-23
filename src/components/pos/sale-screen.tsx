@@ -2,11 +2,11 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Ban, CheckCircle2, FileText, LockOpen, Printer, Save } from "lucide-react";
+import { ArrowDown, ArrowLeft, Ban, Check, CheckCircle2, LockOpen, Printer, Save } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR } from "@/lib/money";
 import { Badge, StatusBadge } from "@/components/ui/badge";
-import { Button, LinkButton } from "@/components/ui/button";
+import { Button, LinkButton, buttonClass } from "@/components/ui/button";
 import { Alert } from "@/components/ui/page";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
@@ -116,16 +116,23 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
   return (
     <div className="pb-24 lg:pb-0">
       {/* Header */}
-      <div className="mb-4 flex flex-wrap items-center gap-3">
-        <Link href="/pos" className="inline-flex h-10 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-navy-600 hover:bg-white" aria-label="Back to POS home">
+      <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <Link
+          href="/pos"
+          className="inline-flex h-9 items-center gap-1.5 rounded-md pr-1 text-sm font-medium text-navy-500 transition-colors hover:text-navy-950"
+          aria-label="Back to POS home"
+        >
           <ArrowLeft className="h-4 w-4" /> POS
         </Link>
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="font-mono text-xl font-extrabold text-navy-900 sm:text-2xl">{s.saleNumber}</h1>
-          <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
-          {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
-          {s.isTraining && <Badge tone="red">Training</Badge>}
-          {s.source === "website_order" && <Badge tone="blue">From website order</Badge>}
+        <span aria-hidden className="h-6 w-px bg-navy-200" />
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <h1 className="font-mono text-[1.5rem] font-semibold leading-none tracking-[-0.01em] text-navy-950 sm:text-[1.75rem]">{s.saleNumber}</h1>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
+            {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
+            {s.isTraining && <Badge tone="red">Training</Badge>}
+            {s.source === "website_order" && <Badge tone="blue">From website order</Badge>}
+          </div>
         </div>
         <div className="ml-auto flex flex-wrap gap-2">
           {finalized && !hasVerified && bills.length === 0 && (
@@ -141,22 +148,36 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         </div>
       </div>
 
-      {/* Steps */}
+      {/* Steps: a ruled progress line — ink for done, brass for the current step. */}
       {s.status !== "cancelled" && (
-        <ol className="mb-4 grid grid-cols-4 gap-1.5 sm:gap-2" aria-label="Progress">
-          {STEPS.map((label, i) => (
-            <li
-              key={label}
-              aria-current={i === Math.min(step, 3) && step < 4 ? "step" : undefined}
-              className={cn(
-                "rounded-xl px-2 py-2 text-center text-[11px] font-bold uppercase tracking-wide sm:text-xs",
-                i < step ? "bg-emerald-100 text-emerald-800" : i === step ? "bg-navy-900 text-white" : "bg-white text-navy-400 ring-1 ring-navy-100",
-              )}
-            >
-              <span className="hidden sm:inline">{i + 1}. </span>
-              {label}
-            </li>
-          ))}
+        <ol className="mb-5 grid grid-cols-4 gap-2 sm:gap-3" aria-label="Progress">
+          {STEPS.map((label, i) => {
+            const done = i < step;
+            const current = i === step;
+            return (
+              <li key={label} aria-current={i === Math.min(step, 3) && step < 4 ? "step" : undefined} className="min-w-0">
+                <span
+                  aria-hidden
+                  className={cn(
+                    "block h-[3px] origin-left transition-colors duration-300",
+                    done ? "bg-navy-900" : current ? "bg-gold-500" : "bg-navy-200",
+                  )}
+                />
+                <span
+                  className={cn(
+                    "mt-2 flex items-start gap-1.5 text-[12px] leading-tight sm:items-center sm:text-[13px]",
+                    done ? "text-navy-700" : current ? "font-semibold text-navy-950" : "text-navy-400",
+                  )}
+                >
+                  <span aria-hidden className={cn("hidden font-mono text-[11px] tabular sm:inline", current ? "text-gold-700" : "text-navy-400")}>
+                    {done ? <Check className="h-3.5 w-3.5 text-navy-900" strokeWidth={2.5} /> : String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="sr-only sm:hidden">{i + 1}. </span>
+                  {label}
+                </span>
+              </li>
+            );
+          })}
         </ol>
       )}
 
@@ -168,7 +189,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         </Alert>
       )}
 
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_420px] xl:grid-cols-[minmax(0,1fr)_460px]">
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-5 xl:grid-cols-[minmax(0,1fr)_440px]">
         {/* Left: active step + search + cart */}
         <div className="space-y-4">
           {finalized && (
@@ -180,20 +201,22 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
           {draft && <ProductSearch saleId={s.id} priceListId={s.priceListId} units={units} taxCharged={s.taxMode !== "none"} onAdded={onAdded} onError={onError} />}
           <Cart data={data} me={me} config={config} units={units} editable={draft} run={run} />
           {quotations.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
-              <FileText className="h-4 w-4" /> Quotations:
+            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-navy-200 bg-white px-4 py-3 text-sm">
+              <span className="label-mono text-navy-500">Quotations</span>
               {quotations.map((q) => (
-                <Link key={q.id} href={`/pos/documents/${q.id}`} className="font-mono font-bold underline-offset-2 hover:underline">
+                <Link key={q.id} href={`/pos/documents/${q.id}`} className="link-draw font-mono font-medium text-navy-950">
                   {q.docNumber}
                 </Link>
               ))}
-              {s.quotationValidUntil && <span className="text-sky-700">· prices held until {new Date(s.quotationValidUntil).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}</span>}
+              {s.quotationValidUntil && (
+                <span className="text-navy-500">· prices held until {new Date(s.quotationValidUntil).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata" })}</span>
+              )}
             </div>
           )}
         </div>
 
         {/* Right: totals + step panel */}
-        <div id="checkout" className="space-y-4 lg:sticky lg:top-20">
+        <div id="checkout" className="scroll-mt-20 space-y-4 lg:sticky lg:top-20">
           <TotalsCard data={data} />
 
           {draft && (
@@ -202,12 +225,20 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
               <ApprovalCard data={data} config={config} run={run} />
               {missing.length > 0 && <Alert tone="danger" title="Price missing">No current price for: {missing.join(", ")}. Remove the item or ask an admin to set a price.</Alert>}
               <div className="grid gap-2 sm:grid-cols-[auto_1fr]">
-                <Button variant="outline" size="lg" disabled={!items.length || approvalBlocks || missing.length > 0} onClick={() => setDialog("quotation")} icon={<Save className="h-5 w-5" />}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="sm:h-16"
+                  disabled={!items.length || approvalBlocks || missing.length > 0}
+                  onClick={() => setDialog("quotation")}
+                  icon={<Save className="h-[18px] w-[18px]" />}
+                >
                   Save quotation
                 </Button>
                 <Button
                   variant="gold"
                   size="xl"
+                  className="tabular"
                   disabled={!items.length || approvalBlocks || missing.length > 0}
                   onClick={() => setDialog("finalize")}
                   icon={<CheckCircle2 className="h-6 w-6" />}
@@ -217,34 +248,40 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                 </Button>
               </div>
               {blockedByTax && items.length > 0 && (
-                <p className="text-xs text-amber-800">This is a real (non-sample) sale: it can only be finalised once the Super Admin confirms the GST registration in Settings → Tax.</p>
+                <p className="text-xs leading-relaxed text-amber-800">This is a real (non-sample) sale: it can only be finalised once the Super Admin confirms the GST registration in Settings → Tax.</p>
               )}
             </>
           )}
 
-
           {s.status === "completed" && (
-            <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 shadow-card">
-              <div className="flex items-center gap-2 text-lg font-extrabold text-emerald-900">
-                <CheckCircle2 className="h-6 w-6 text-emerald-600" /> Sale complete
+            <section className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+              <div className="flex items-center gap-2.5 border-b border-emerald-200 bg-emerald-50 px-5 py-3.5 text-emerald-900">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                <span className="text-[15px] font-semibold">Sale complete</span>
               </div>
-              <ul className="mt-2 space-y-1 text-sm">
-                {bills.map((b) => (
-                  <li key={b.id} className="flex flex-wrap items-center gap-2">
-                    <span className="text-emerald-800">{DOC_TYPE_LABEL[b.docType]}</span>
-                    <span className="font-mono font-bold text-navy-900">{b.docNumber}</span>
-                    <StatusBadge status={b.status} />
-                  </li>
-                ))}
-              </ul>
-              {D(s.amountPaid).lessThan(D(s.grandTotal)) && <p className="mt-2 text-sm font-semibold text-amber-800">Balance due: {formatINR(outstanding)}</p>}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {bills[0] && (
-                  <LinkButton href={`/pos/documents/${bills[0].id}`} icon={<Printer className="h-4 w-4" />}>
-                    View / print bill
-                  </LinkButton>
+              <div className="px-5 py-4">
+                <ul className="divide-y divide-navy-100 text-sm">
+                  {bills.map((b) => (
+                    <li key={b.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 first:pt-0">
+                      <span className="label-mono text-navy-500">{DOC_TYPE_LABEL[b.docType]}</span>
+                      <span className="font-mono font-semibold text-navy-950">{b.docNumber}</span>
+                      <StatusBadge status={b.status} className="ml-auto" />
+                    </li>
+                  ))}
+                </ul>
+                {D(s.amountPaid).lessThan(D(s.grandTotal)) && (
+                  <p className="mt-3 text-sm font-semibold text-amber-800">
+                    Balance due: <span className="font-mono tabular">{formatINR(outstanding)}</span>
+                  </p>
                 )}
-                <NewSaleButton variant="button" />
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {bills[0] && (
+                    <LinkButton href={`/pos/documents/${bills[0].id}`} icon={<Printer className="h-4 w-4" />}>
+                      View / print bill
+                    </LinkButton>
+                  )}
+                  <NewSaleButton variant="button" />
+                </div>
               </div>
             </section>
           )}
@@ -253,13 +290,13 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
 
       {/* Mobile sticky total */}
       {s.status !== "cancelled" && s.status !== "completed" && (
-        <div className="no-print fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-navy-800 bg-navy-900 px-4 py-3 text-white lg:hidden">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-gold-400">{finalized ? "Amount due" : "Total"}</div>
-            <div className="text-2xl font-extrabold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
+        <div data-bottom-bar className="no-print fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-navy-950 px-4 py-2.5 text-white lg:hidden">
+          <div className="min-w-0">
+            <div className="label-mono text-gold-400">{finalized ? "Amount due" : "Total"}</div>
+            <div className="headline mt-1 text-[1.85rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
           </div>
-          <a href={draft ? "#checkout" : "#step-panel"} className="rounded-xl bg-gold-500 px-4 py-2.5 text-sm font-bold text-navy-950">
-            {draft ? "Checkout" : finalized && outstanding.greaterThan(0) ? "Take payment" : "Bill"} ↓
+          <a href={draft ? "#checkout" : "#step-panel"} className={buttonClass("gold", "lg", "shrink-0")}>
+            {draft ? "Checkout" : finalized && outstanding.greaterThan(0) ? "Take payment" : "Bill"} <ArrowDown className="h-4 w-4" />
           </a>
         </div>
       )}

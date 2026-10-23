@@ -94,7 +94,12 @@ export async function getPublicCategories() {
 export async function getPublicBrands() {
   const db = getDb();
   return db
-    .select({ name: brands.name, slug: brands.slug })
+    .select({
+      name: brands.name,
+      slug: brands.slug,
+      productCount: sql<number>`(select count(*)::int from products p join categories c on c.id = p.category_id
+        where p.brand_id = "brands"."id" and p.is_published and p.is_active and c.is_published and c.is_active)`,
+    })
     .from(brands)
     .where(and(eq(brands.isActive, true), sql`exists (select 1 from products p where p.brand_id = ${brands.id} and p.is_published and p.is_active)`))
     .orderBy(asc(brands.name));

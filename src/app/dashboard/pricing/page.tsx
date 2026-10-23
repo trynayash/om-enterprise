@@ -6,13 +6,14 @@ import { listPendingPriceChanges } from "@/server/services/pricing";
 import { priceChangeReport, productsNeedingReview } from "@/server/services/reports";
 import { getSettings } from "@/server/settings";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
-import { PageHeader, PageSkeleton, td, th } from "@/components/ui/page";
+import { PageHeader, PageSkeleton } from "@/components/ui/page";
 import { StatusBadge } from "@/components/ui/badge";
 import { DateTime } from "@/components/ui/money";
 import { cn } from "@/components/ui/cn";
 import { formatINR } from "@/lib/money";
 import { istStartOfDay } from "@/lib/india";
 import { NeedsReviewList, PendingPriceChanges } from "@/components/dashboard/catalog/pricing-review";
+import { rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Price review" };
 
@@ -39,14 +40,14 @@ async function PricingContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        eyebrow="Pricing"
+        eyebrow="Catalogue"
         title="Price review"
         description={`Variants that need a price, a cost, or a look at their margin — plus price changes waiting for approval. Prices older than ${pricing.reviewAfterDays} days are flagged for a fresh review.`}
       />
 
       <Card>
         <CardHeader title={`Waiting for approval (${pending.length})`} description="Price changes proposed by admins. They take effect only after approval." />
-        <CardBody>
+        <CardBody className={pending.length ? "p-0" : undefined}>
           <PendingPriceChanges
             canApprove={can(actor, "prices.approve")}
             showCost={showCost}
@@ -92,9 +93,9 @@ async function PricingContent() {
                   <th className={th}>When</th>
                   <th className={th}>Variant</th>
                   <th className={th}>List</th>
-                  <th className={`${th} text-right`}>Old → new</th>
-                  <th className={`${th} text-right`}>Change</th>
-                  {showCost && <th className={`${th} text-right`}>Margin</th>}
+                  <th className={thNum}>Old → new</th>
+                  <th className={thNum}>Change</th>
+                  {showCost && <th className={thNum}>Margin</th>}
                   <th className={th}>Status</th>
                   <th className={th}>By</th>
                   <th className={th}>Reason</th>
@@ -102,36 +103,38 @@ async function PricingContent() {
               </thead>
               <tbody>
                 {recent.map((r) => (
-                  <tr key={r.id}>
-                    <td className={td}>
+                  <tr key={r.id} className={rowHover}>
+                    <td className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={r.created_at} />
                     </td>
-                    <td className={`${td} min-w-56`}>
+                    <td className={`${tdText} min-w-56`}>
                       <div className="font-medium">{r.product}</div>
-                      <div className="font-mono text-xs text-navy-500">{r.sku}</div>
+                      <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{r.sku}</div>
                     </td>
-                    <td className={td}>{r.list_name}</td>
-                    <td className={`${td} whitespace-nowrap text-right tabular`}>
-                      <span className="text-navy-500">{r.previous_price ? formatINR(r.previous_price) : "—"}</span> → <b>{formatINR(r.price)}</b>
+                    <td className={tdMuted}>{r.list_name}</td>
+                    <td className={tdNum}>
+                      <span className="text-navy-400">{r.previous_price ? formatINR(r.previous_price) : "—"}</span> → <span className="font-semibold">{formatINR(r.price)}</span>
                     </td>
-                    <td className={cn(td, "text-right tabular font-semibold", r.changePercent && Number(r.changePercent) < 0 ? "text-red-700" : "text-emerald-700")}>
-                      {r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${Number(r.changePercent).toFixed(1)}%` : "new"}
+                    <td className={`${tdNum} font-semibold`}>
+                      <span className={cn(r.changePercent ? (Number(r.changePercent) < 0 ? "text-red-700" : "text-emerald-700") : "font-normal text-navy-400")}>
+                        {r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${Number(r.changePercent).toFixed(1)}%` : "new"}
+                      </span>
                     </td>
                     {showCost && (
-                      <td className={`${td} whitespace-nowrap text-right tabular`}>
+                      <td className={tdNum}>
                         {r.previous_margin || r.new_margin
                           ? `${r.previous_margin ? `${Number(r.previous_margin).toFixed(1)}%` : "—"} → ${r.new_margin ? `${Number(r.new_margin).toFixed(1)}%` : "—"}`
                           : "—"}
                       </td>
                     )}
-                    <td className={td}>
+                    <td className={tdText}>
                       <StatusBadge status={r.status} />
                     </td>
-                    <td className={`${td} whitespace-nowrap`}>
+                    <td className={`${tdText} whitespace-nowrap`}>
                       {r.created_by}
                       {r.decided_by && r.decided_by !== r.created_by && <div className="text-xs text-navy-500">→ {r.decided_by}</div>}
                     </td>
-                    <td className={`${td} max-w-xs text-navy-700`}>{r.reason}</td>
+                    <td className={`${tdMuted} max-w-xs`}>{r.reason}</td>
                   </tr>
                 ))}
               </tbody>
@@ -139,7 +142,7 @@ async function PricingContent() {
           </div>
         )}
       </Card>
-      <p className="text-xs text-navy-500">
+      <p className="text-xs leading-relaxed text-navy-500">
         Margins are gross margins on the tax-exclusive selling price (profit ÷ price). Markup (profit ÷ cost) is shown inside each product. Manage prices from the{" "}
         <Link href="/dashboard/products" className="font-semibold text-gold-700 hover:underline">
           product pages

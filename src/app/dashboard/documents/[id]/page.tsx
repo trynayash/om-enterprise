@@ -1,17 +1,18 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getDocument } from "@/server/services/documents";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
-import { Alert, PageSkeleton } from "@/components/ui/page";
-import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
+import { SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime } from "@/components/ui/money";
 import { PdfCopySelector } from "@/components/dashboard/ops/pdf-copy";
 import { ClientOnly } from "@/components/dashboard/ops/client-only";
 import { DOC_LABEL, loadOr404 } from "@/components/dashboard/ops/guard";
+import { BackLink } from "@/components/dashboard/back-link";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
 
 export const metadata = { title: "Document" };
 
@@ -36,58 +37,53 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
   const s = doc.snapshot;
 
   return (
-    <div className="space-y-5">
+    // Same A4-width sheet as the POS bill page, so a bill looks identical in both places.
+    <div className="mx-auto w-full max-w-[210mm] space-y-4 print:max-w-none">
       <div className="no-print space-y-4">
-        <Link
-          href="/dashboard/documents"
-          className="inline-flex items-center gap-1 text-sm font-semibold text-navy-600 hover:text-navy-900"
-        >
-          <ArrowLeft className="h-4 w-4" /> All documents
-        </Link>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <div className="mb-1 text-xs font-bold uppercase tracking-[0.16em] text-gold-600">
-              {DOC_LABEL[doc.docType] ?? doc.docType}
-            </div>
-            <h1 className="flex flex-wrap items-center gap-2 text-2xl font-extrabold tracking-tight sm:text-3xl">
-              <span className="tabular">{doc.docNumber}</span>
-              <StatusBadge status={doc.status} />
-              {doc.isTraining && <SampleBadge label="Training" />}
-            </h1>
-            <p className="mt-1 text-sm text-navy-500">
-              Issued by {doc.issuedByName} on <DateTime value={doc.issuedAt} />{" "}
-              · sale{" "}
-              <Link
-                href={`/dashboard/sales/${doc.saleId}`}
-                className="font-semibold text-navy-700 hover:underline"
-              >
-                {s.saleNumber}
-              </Link>
-              {doc.printCount > 0 && (
-                <>
-                  {" "}
-                  · printed/downloaded {doc.printCount}× (last{" "}
-                  <DateTime value={doc.lastPrintedAt} />)
-                </>
-              )}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <PdfCopySelector documentId={doc.id} />
-          </div>
-        </div>
-        <ClientOnly fallback={<div className="h-10" />}>
-          <DocumentActions
-            documentId={doc.id}
-            docNumber={doc.docNumber}
-            title={s.title}
-            grandTotal={s.totals.grandTotal}
-            shareToken={doc.status === "issued" ? doc.shareToken : null}
-            customerMobile={s.buyer?.mobile}
-            businessName={s.seller.name}
-            canShare={can(actor, "documents.share")}
+        <div>
+          <BackLink href="/dashboard/documents">All documents</BackLink>
+          <PageHeader
+            eyebrow={DOC_LABEL[doc.docType] ?? doc.docType}
+            title={
+              <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span className="font-mono text-[0.72em] font-semibold tracking-tight">{doc.docNumber}</span>
+                <TitleStamps>
+                  <StatusBadge status={doc.status} />
+                  {doc.isTraining && <SampleBadge label="Training" />}
+                </TitleStamps>
+              </span>
+            }
+            description={
+              <>
+                Issued by {doc.issuedByName} on <DateTime value={doc.issuedAt} /> · sale{" "}
+                <Link href={`/dashboard/sales/${doc.saleId}`} className="font-mono font-medium text-navy-700 underline-offset-[3px] hover:underline">
+                  {s.saleNumber}
+                </Link>
+                {doc.printCount > 0 && (
+                  <>
+                    {" "}
+                    · printed/downloaded {doc.printCount}× (last <DateTime value={doc.lastPrintedAt} />)
+                  </>
+                )}
+              </>
+            }
+            actions={<PdfCopySelector documentId={doc.id} />}
           />
-        </ClientOnly>
+        </div>
+        <div className="-mt-3 border-b border-navy-200 pb-3">
+          <ClientOnly fallback={<div className="h-10" />}>
+            <DocumentActions
+              documentId={doc.id}
+              docNumber={doc.docNumber}
+              title={s.title}
+              grandTotal={s.totals.grandTotal}
+              shareToken={doc.status === "issued" ? doc.shareToken : null}
+              customerMobile={s.buyer?.mobile}
+              businessName={s.seller.name}
+              canShare={can(actor, "documents.share")}
+            />
+          </ClientOnly>
+        </div>
         {doc.status === "cancelled" && (
           <Alert tone="danger" title="This document has been cancelled">
             {doc.cancelReason}{" "}
@@ -110,12 +106,12 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
         )}
         {s.original && (
           <p className="text-sm text-navy-600">
-            Credit note against <Badge tone="navy">{s.original.number}</Badge>
+            Credit note against <span className="font-mono font-medium text-navy-900">{s.original.number}</span>
             {s.reason ? ` — ${s.reason}` : ""}
           </p>
         )}
       </div>
-      <div className="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card print:border-0 print:shadow-none">
+      <div className="animate-rise overflow-hidden rounded-md border border-navy-200 bg-white shadow-[0_1px_0_rgb(13_27_48/0.04),0_18px_40px_-24px_rgb(13_27_48/0.35)] print:animate-none print:rounded-none print:border-0 print:shadow-none">
         <DocumentView
           snapshot={s}
           status={doc.status}

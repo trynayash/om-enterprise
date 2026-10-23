@@ -8,8 +8,8 @@ import PDFDocument from "pdfkit";
 import type { DocSnapshot } from "@/lib/document-types";
 import { formatINR, formatQty } from "@/lib/money";
 
-const NAVY = "#0B1F3A";
-const GOLD = "#B8892A";
+const NAVY = "#0D1B30";
+const GOLD = "#9E7518";
 const GREY = "#5B6474";
 const LINE = "#D7DCE3";
 
@@ -27,8 +27,8 @@ function drawLogo(doc: PDFKit.PDFDocument, x: number, y: number, size: number) {
   const s = size / 64;
   doc.save();
   doc.translate(x, y).scale(s);
-  doc.roundedRect(0, 0, 64, 64, 14).fill(NAVY);
-  doc.lineWidth(5).lineCap("round").lineJoin("round").strokeColor("#D4A537").path("M12 29 L32 13 L52 29").stroke();
+  doc.roundedRect(0, 0, 64, 64, 10).fill(NAVY);
+  doc.lineWidth(5).lineCap("round").lineJoin("round").strokeColor("#C39222").path("M12 29 L32 13 L52 29").stroke();
   doc.lineWidth(4.5).strokeColor("#FFFFFF").circle(23, 42, 8).stroke();
   doc.path("M35.5 50 V35 L42.5 44 L49.5 35 V50").stroke();
   doc.restore();

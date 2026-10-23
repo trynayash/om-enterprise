@@ -52,7 +52,7 @@ export function DocumentActions({
   const message = `${businessName}: your ${title.toLowerCase()} ${docNumber} for ${formatINR(grandTotal)}.${shareUrl ? ` View / download: ${shareUrl}` : ""} Thank you!`;
 
   return (
-    <div className="no-print flex flex-wrap gap-2">
+    <div className="no-print flex flex-wrap items-center gap-2">
       <Button onClick={print} loading={printing} icon={<Printer className="h-4 w-4" />}>
         Print
       </Button>
@@ -61,6 +61,7 @@ export function DocumentActions({
       </a>
       {canShare && shareUrl && (
         <>
+          <span aria-hidden className="mx-1 hidden h-6 w-px bg-navy-200 sm:block" />
           <a className={buttonClass("success")} href={whatsappLink(customerMobile || "", message)} target="_blank" rel="noopener noreferrer">
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </a>

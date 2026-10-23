@@ -155,10 +155,10 @@ function VariantForm({
           <Input id="v-name" value={f.name} onChange={(e) => set("name", e.target.value)} placeholder={suggestedName || "e.g. White · 10 L"} maxLength={120} />
         </Field>
         <Field label="SKU" htmlFor="v-sku" required hint={variant ? "Can't change once used on a bill." : "Unique code, e.g. BER-EC-WH-10L"}>
-          <Input id="v-sku" value={f.sku} onChange={(e) => set("sku", e.target.value.toUpperCase())} required maxLength={40} />
+          <Input id="v-sku" className="font-mono" value={f.sku} onChange={(e) => set("sku", e.target.value.toUpperCase())} required maxLength={40} />
         </Field>
         <Field label="Barcode" htmlFor="v-barcode" hint="Optional — EAN/UPC printed on the pack.">
-          <Input id="v-barcode" value={f.barcode} onChange={(e) => set("barcode", e.target.value)} maxLength={32} inputMode="numeric" />
+          <Input id="v-barcode" className="font-mono" value={f.barcode} onChange={(e) => set("barcode", e.target.value)} maxLength={32} inputMode="numeric" />
         </Field>
         <Field label="Selling unit" htmlFor="v-unit">
           <Select id="v-unit" value={f.unitCode} onChange={(e) => set("unitCode", e.target.value)}>

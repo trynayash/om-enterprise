@@ -1,15 +1,14 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ArrowRight, BadgeIndianRupee, Clock, Handshake, MapPin, MessageCircle, Phone, Search, ShieldCheck, Store } from "lucide-react";
+import { ArrowRight, ArrowUpRight, MessageCircle, Phone, Search } from "lucide-react";
 import { getPublicBrands, searchPublicProducts } from "@/server/services/public-catalog";
 import { whatsappLink } from "@/lib/india";
 import { LinkButton } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/page";
-import { HeroArt } from "@/components/public/hero-art";
-import { CategoryIcon } from "@/components/public/category-icon";
 import { ProductGrid, ProductGridSkeleton } from "@/components/public/product-card";
-import { Container, SectionHeading } from "@/components/public/section";
-import { addressLines, getSiteData, telHref } from "@/components/public/site-data";
+import { Container, Eyebrow, SectionHeading } from "@/components/public/section";
+import { TechnicalDrawing, type DrawingKind } from "@/components/public/technical-drawing";
+import { addressLines, getSiteData, mapsHref, telHref } from "@/components/public/site-data";
 
 export default function HomePage() {
   return (
@@ -17,9 +16,8 @@ export default function HomePage() {
       <Hero />
       <CategoriesSection />
       <FeaturedSection />
-      <WhyUs />
-      <BrandsSection />
-      <AboutContact />
+      <OrderingSection />
+      <ShopSection />
     </>
   );
 }
@@ -30,39 +28,28 @@ export default function HomePage() {
 
 function Hero() {
   return (
-    <section className="relative isolate overflow-hidden bg-navy-950">
-      <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(212,165,55,0.22),transparent_50%),radial-gradient(ellipse_at_bottom_left,rgba(58,103,166,0.45),transparent_55%)]" />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 opacity-40"
-        style={{
-          backgroundImage: "linear-gradient(to right, rgb(157 179 212 / 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgb(157 179 212 / 0.08) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
-      <Container className="grid items-center gap-10 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+    <section className="relative overflow-hidden border-b border-rule bg-paper">
+      <div aria-hidden className="blueprint absolute inset-y-0 right-0 hidden w-[42%] opacity-60 [mask-image:linear-gradient(to_left,black,transparent)] lg:block" />
+      <Container className="relative grid gap-12 py-12 sm:py-16 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-16 lg:py-20">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-gold-300">
-            <Store className="h-3.5 w-3.5" /> Naswadi · Gujarat
-          </div>
           <Suspense fallback={<HeroCopySkeleton />}>
             <HeroCopy />
           </Suspense>
-          <form action="/products" method="get" role="search" className="mt-8 flex max-w-xl gap-2 rounded-2xl bg-white p-2 shadow-lift">
+          <form action="/products" method="get" role="search" className="mt-9 flex max-w-xl gap-2 rounded-xl border border-navy-200 bg-white p-1.5 shadow-card transition-shadow focus-within:shadow-lift">
             <label htmlFor="hero-search" className="sr-only">
               Search products
             </label>
             <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-400" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-navy-400" />
               <input
                 id="hero-search"
                 name="q"
                 type="search"
-                placeholder="Search paints, tanks, CPVC pipes, taps…"
-                className="h-12 w-full rounded-xl bg-transparent pl-10 pr-3 text-base text-navy-900 placeholder:text-navy-400 focus:outline-none"
+                placeholder="Try “20 mm CPVC elbow”"
+                className="h-12 w-full rounded-lg bg-transparent pl-10 pr-3 text-[15px] text-navy-900 placeholder:text-navy-400 focus:outline-none"
               />
             </div>
-            <button type="submit" className="h-12 shrink-0 rounded-xl bg-navy-900 px-5 text-sm font-bold text-white hover:bg-navy-800">
+            <button type="submit" className="h-12 shrink-0 rounded-lg bg-navy-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-navy-800 active:translate-y-px">
               Search
             </button>
           </form>
@@ -70,12 +57,9 @@ function Hero() {
             <HeroActions />
           </Suspense>
         </div>
-        <div className="relative mx-auto hidden w-full max-w-lg lg:block">
-          <div aria-hidden className="absolute -inset-6 rounded-[2.5rem] bg-gradient-to-br from-gold-500/20 via-transparent to-navy-500/20 blur-2xl" />
-          <div className="relative rounded-[2rem] border border-white/10 bg-navy-900/60 p-4 shadow-lift backdrop-blur">
-            <HeroArt className="h-auto w-full" />
-          </div>
-        </div>
+        <Suspense fallback={<Skeleton className="h-[420px] rounded-xl" />}>
+          <CounterCard />
+        </Suspense>
       </Container>
     </section>
   );
@@ -83,69 +67,98 @@ function Hero() {
 
 function HeroCopySkeleton() {
   return (
-    <div className="mt-6 space-y-3">
-      <div className="h-12 w-4/5 animate-pulse rounded-xl bg-white/10" />
-      <div className="h-12 w-3/5 animate-pulse rounded-xl bg-white/10" />
-      <div className="h-5 w-full max-w-lg animate-pulse rounded bg-white/10" />
+    <div className="space-y-3">
+      <div className="h-3 w-48 animate-pulse rounded-sm bg-navy-100" />
+      <div className="h-16 w-4/5 animate-pulse rounded-md bg-navy-100" />
+      <div className="h-16 w-3/5 animate-pulse rounded-md bg-navy-100" />
+      <div className="h-5 w-full max-w-lg animate-pulse rounded-sm bg-navy-100" />
     </div>
   );
 }
 
 async function HeroCopy() {
-  const { website } = await getSiteData();
+  const { business, website } = await getSiteData();
+  const words = website.heroTitle.trim().split(/\s+/);
+  const tail = words.splice(Math.max(1, words.length - 2));
   return (
     <>
-      <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-6xl">
-        {website.heroTitle.split(" ").map((w, i, arr) =>
-          i >= arr.length - 2 ? (
-            <span key={i} className="text-gold-400">
-              {w}{" "}
-            </span>
-          ) : (
-            <span key={i}>{w} </span>
-          ),
-        )}
+      <Eyebrow>
+        {business.city}
+        {business.district ? ` · ${business.district}` : ""} · Gujarat
+      </Eyebrow>
+      <h1 className="headline mt-5 animate-rise text-[3.25rem] font-bold text-navy-950 sm:text-[4.5rem] lg:text-[5.25rem]">
+        {words.join(" ")}{" "}
+        <span className="relative inline-block whitespace-nowrap">
+          {tail.join(" ")}
+          <span aria-hidden className="absolute -bottom-0.5 left-0 h-[0.09em] w-full origin-left animate-[draw-x_800ms_var(--ease-out-quart)_350ms_both] bg-gold-500" />
+        </span>
       </h1>
-      <p className="mt-5 max-w-xl text-base leading-relaxed text-navy-200 sm:text-lg">{website.heroSubtitle}</p>
+      <p className="mt-6 max-w-xl animate-[rise_460ms_var(--ease-out-quart)_120ms_both] text-[17px] leading-relaxed text-navy-600">{website.heroSubtitle}</p>
     </>
   );
 }
 
 async function HeroActions() {
-  const { business, categories } = await getSiteData();
-  const top = categories.filter((c) => !c.parentId).slice(0, 5);
+  const { business } = await getSiteData();
   return (
-    <>
-      <div className="mt-6 flex flex-wrap gap-3">
-        <LinkButton href="/products" variant="gold" size="lg" icon={<ArrowRight className="h-5 w-5" />}>
-          Browse products
-        </LinkButton>
-        {business.whatsapp && (
-          <a
-            href={whatsappLink(business.whatsapp, "Hello OM ENTERPRISE, I need help choosing building materials.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/25 px-5 text-base font-semibold text-white transition-colors hover:bg-white/10"
-          >
-            <MessageCircle className="h-5 w-5" /> WhatsApp us
-          </a>
-        )}
-      </div>
-      {top.length > 0 && (
-        <div className="mt-8 flex flex-wrap gap-2">
-          {top.map((c) => (
-            <Link
-              key={c.slug}
-              href={`/category/${c.slug}`}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-navy-100 transition-colors hover:border-gold-400/60 hover:text-white"
-            >
-              <CategoryIcon name={c.icon} className="h-3.5 w-3.5 text-gold-400" />
-              {c.name}
-            </Link>
-          ))}
-        </div>
+    <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+      <LinkButton href="/products" size="lg" icon={<ArrowRight className="h-4 w-4" />} className="flex-row-reverse">
+        Browse the catalogue
+      </LinkButton>
+      {business.whatsapp && (
+        <a
+          href={whatsappLink(business.whatsapp, "Hello OM ENTERPRISE, I need help choosing building materials.")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-[15px] font-semibold text-navy-900"
+        >
+          <MessageCircle className="h-[18px] w-[18px] text-emerald-600" /> <span className="link-draw">Ask on WhatsApp</span>
+        </a>
       )}
-    </>
+    </div>
+  );
+}
+
+/** A printed card listing the brands at the counter, with their product counts. */
+async function CounterCard() {
+  const { categories } = await getSiteData();
+  let brands: { name: string; slug: string; productCount: number }[] = [];
+  try {
+    brands = await getPublicBrands();
+  } catch {
+    brands = [];
+  }
+  const top = categories.filter((c) => !c.parentId);
+  const total = top.reduce((n, c) => n + c.productCount, 0);
+  if (!brands.length) return null;
+  return (
+    <aside className="relative animate-[rise_520ms_var(--ease-out-quart)_180ms_both] rounded-xl border border-navy-200 bg-white shadow-lift">
+      <div className="flex items-center justify-between border-b border-navy-100 px-5 py-3.5">
+        <span className="label-mono text-navy-500">Brands at the counter</span>
+        <span className="label-mono text-gold-700">No. {String(brands.length).padStart(2, "0")}</span>
+      </div>
+      <ol className="px-5 py-2">
+        {brands.map((b) => (
+          <li key={b.slug}>
+            <Link href={`/products?brand=${encodeURIComponent(b.slug)}`} className="group flex items-baseline py-2.5 text-[15px]">
+              <span className="font-semibold text-navy-950 transition-colors group-hover:text-gold-700">{b.name}</span>
+              <span aria-hidden className="leader" />
+              <span className="font-mono text-[13px] text-navy-500 tabular">
+                {b.productCount} <span className="text-navy-400">items</span>
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ol>
+      <div className="flex items-center justify-between gap-3 rounded-b-xl border-t border-navy-100 bg-paper/70 px-5 py-3 font-mono text-[12px] text-navy-500">
+        <span>
+          <span className="text-navy-900 tabular">{total}</span> products · <span className="text-navy-900 tabular">{top.length}</span> categories
+        </span>
+        <Link href="/products" className="link-draw font-medium text-navy-900">
+          See all
+        </Link>
+      </div>
+    </aside>
   );
 }
 
@@ -153,25 +166,36 @@ async function HeroActions() {
 /* Categories                                                          */
 /* ------------------------------------------------------------------ */
 
+const CATEGORY_DRAWING: Record<string, DrawingKind> = {
+  paint: "can",
+  tank: "tank",
+  bath: "tap",
+  pipe: "pipe",
+  drain: "socket-pipe",
+  wrench: "tin",
+  brick: "box",
+};
+
 function CategoriesSection() {
   return (
-    <section className="bg-white py-16 sm:py-20">
+    <section className="bg-white py-16 sm:py-24">
       <Container>
         <SectionHeading
-          eyebrow="Shop by category"
+          index="01"
+          eyebrow="Catalogue"
           title="Everything for your build, under one roof"
-          description="From the first pipe to the final coat of paint — choose a category to see what we stock."
+          description="From the first length of pipe to the last coat of paint. Choose a category to see every size we list."
           action={
-            <Link href="/products" className="inline-flex items-center gap-1 text-sm font-bold text-navy-900 hover:text-gold-600">
-              All products <ArrowRight className="h-4 w-4" />
+            <Link href="/products" className="group inline-flex items-center gap-1.5 text-sm font-semibold text-navy-950">
+              <span className="link-draw">All products</span> <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           }
         />
         <Suspense
           fallback={
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
               {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-40 rounded-2xl" />
+                <Skeleton key={i} className="h-64 rounded-none" />
               ))}
             </div>
           }
@@ -188,26 +212,26 @@ async function CategoryGrid() {
   const top = categories.filter((c) => !c.parentId);
   if (!top.length) return <p className="text-sm text-navy-500">Categories will appear here soon.</p>;
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="stagger grid grid-cols-2 overflow-hidden rounded-xl border-l border-t border-navy-100 lg:grid-cols-4">
       {top.map((c, i) => (
         <Link
           key={c.slug}
           href={`/category/${c.slug}`}
-          className="group relative flex flex-col overflow-hidden rounded-2xl border border-navy-100 bg-white p-5 shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-gold-300 hover:shadow-lift"
+          style={{ ["--i" as string]: i }}
+          className="group relative flex flex-col bg-white p-3.5 shadow-[inset_-1px_-1px_0_var(--color-navy-100)] transition-colors duration-200 hover:bg-paper/60 sm:p-5"
         >
-          <span aria-hidden className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-navy-50 transition-colors group-hover:bg-gold-100" />
-          <span className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-navy-900 text-gold-400 transition-colors group-hover:bg-gold-500 group-hover:text-navy-950">
-            <CategoryIcon name={c.icon} className="h-6 w-6" />
-          </span>
-          <span className="relative mt-4 text-[11px] font-bold uppercase tracking-[0.16em] text-navy-400">{String(i + 1).padStart(2, "0")}</span>
-          <h3 className="relative mt-1 text-base font-bold leading-snug text-navy-900">{c.name}</h3>
-          {c.description && <p className="relative mt-1 line-clamp-2 text-sm text-navy-500">{c.description}</p>}
-          <span className="relative mt-auto flex items-center justify-between pt-4 text-sm font-semibold text-navy-700">
-            <span>
-              {c.productCount} {c.productCount === 1 ? "product" : "products"}
+          <div className="flex items-baseline justify-between font-mono text-[11px]">
+            <span className="text-navy-400 transition-colors group-hover:text-gold-700">{String(i + 1).padStart(2, "0")}</span>
+            <span className="text-navy-500 tabular">
+              {c.productCount} {c.productCount === 1 ? "item" : "items"}
             </span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </span>
+          </div>
+          <div className="blueprint my-3 flex aspect-[5/3] items-center justify-center rounded-md border border-navy-100 sm:my-4">
+            <TechnicalDrawing kind={CATEGORY_DRAWING[c.icon ?? ""] ?? "box"} className="h-[86%] w-[86%] transition-transform duration-500 ease-out group-hover:scale-[1.05]" />
+          </div>
+          <h3 className="text-[15px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[17px]">{c.name}</h3>
+          {c.description && <p className="mt-1.5 line-clamp-2 text-[12.5px] leading-relaxed text-navy-500 sm:text-[13px]">{c.description}</p>}
+          <ArrowRight aria-hidden className="absolute bottom-5 right-5 h-4 w-4 -translate-x-1 text-navy-300 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:text-navy-900 group-hover:opacity-100" />
         </Link>
       ))}
     </div>
@@ -220,19 +244,20 @@ async function CategoryGrid() {
 
 function FeaturedSection() {
   return (
-    <section className="bg-navy-50/60 py-16 sm:py-20">
+    <section className="border-y border-rule bg-paper py-16 sm:py-24">
       <Container>
         <SectionHeading
-          eyebrow="Featured"
+          index="02"
+          eyebrow="At the counter"
           title="Popular at the counter"
-          description="Current selling prices, straight from our price list."
+          description="The items customers ask for most often. Prices are confirmed at billing."
           action={
-            <Link href="/products" className="inline-flex items-center gap-1 text-sm font-bold text-navy-900 hover:text-gold-600">
-              View catalogue <ArrowRight className="h-4 w-4" />
+            <Link href="/products" className="group inline-flex items-center gap-1.5 text-sm font-semibold text-navy-950">
+              <span className="link-draw">View catalogue</span> <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           }
         />
-        <Suspense fallback={<ProductGridSkeleton count={4} />}>
+        <Suspense fallback={<ProductGridSkeleton count={8} />}>
           <FeaturedGrid />
         </Suspense>
       </Container>
@@ -254,146 +279,125 @@ async function FeaturedGrid() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Why us                                                              */
+/* How ordering works                                                  */
 /* ------------------------------------------------------------------ */
 
-const REASONS = [
-  { icon: ShieldCheck, title: "Trusted brands", text: "Genuine products from established manufacturers — paints, tanks, pipes, fittings and bathware." },
-  { icon: BadgeIndianRupee, title: "Clear, fair prices", text: "Every product is billed at our published price list, with proper bills for every purchase." },
-  { icon: Handshake, title: "Advice you can use", text: "Not sure which pipe class, fitting size or paint finish you need? Ask us — we'll help you choose." },
-  { icon: Store, title: "One-stop shop", text: "Plumbing, sanitary, water storage and painting needs together, so your project keeps moving." },
+const STEPS = [
+  { title: "Make a list", text: "Pick the exact size and quantity of each item and add it to your enquiry list as you browse.", href: "/products", cta: "Start browsing" },
+  { title: "Send it to the shop", text: "Send the list as an order request with your name and mobile number, or ask about any item on WhatsApp.", href: "/enquiry", cta: "Open your list" },
+  { title: "We confirm", text: "We get back to you with availability and the final price. Pay and collect at the counter in Naswadi.", href: "/contact", cta: "How to reach us" },
 ];
 
-function WhyUs() {
+function OrderingSection() {
   return (
-    <section className="relative overflow-hidden bg-navy-900 py-16 sm:py-20">
-      <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(212,165,55,0.16),transparent_55%)]" />
-      <Container className="relative">
-        <SectionHeading inverted eyebrow="Why OM ENTERPRISE" title="Built on fair prices and honest advice" align="center" />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {REASONS.map((r) => (
-            <div key={r.title} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-colors hover:border-gold-500/40 hover:bg-white/[0.07]">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gold-500 text-navy-950">
-                <r.icon className="h-5 w-5" />
-              </span>
-              <h3 className="mt-4 text-base font-bold text-white">{r.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-navy-200">{r.text}</p>
-            </div>
+    <section className="bg-white py-16 sm:py-24">
+      <Container>
+        <SectionHeading index="03" eyebrow="Ordering" title="Order the way that suits you" description="Browse here, then talk to a person. No account, no online payment." />
+        <ol className="grid border-t border-navy-900 md:grid-cols-3">
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="flex flex-col border-b border-navy-100 py-7 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0">
+              <span className="headline text-[3.5rem] font-bold text-gold-500 tabular">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="mt-3 text-lg font-semibold tracking-[-0.01em] text-navy-950">{s.title}</h3>
+              <p className="mt-2 max-w-sm text-sm leading-relaxed text-navy-500">{s.text}</p>
+              <Link href={s.href} className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-950">
+                <span className="link-draw">{s.cta}</span> <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </li>
           ))}
-        </div>
+        </ol>
       </Container>
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Brands                                                              */
+/* The shop                                                            */
 /* ------------------------------------------------------------------ */
 
-function BrandsSection() {
+function ShopSection() {
   return (
-    <Suspense fallback={null}>
-      <BrandsStrip />
-    </Suspense>
-  );
-}
-
-async function BrandsStrip() {
-  await getSiteData();
-  let brands: { name: string; slug: string }[] = [];
-  try {
-    brands = await getPublicBrands();
-  } catch {
-    brands = [];
-  }
-  if (!brands.length) return null;
-  return (
-    <section className="border-b border-navy-100 bg-white py-12">
+    <section className="border-t border-rule bg-paper py-16 sm:py-24">
       <Container>
-        <div className="text-center text-xs font-bold uppercase tracking-[0.2em] text-navy-400">Brands we stock</div>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          {brands.map((b) => (
-            <Link
-              key={b.slug}
-              href={`/products?brand=${encodeURIComponent(b.slug)}`}
-              className="rounded-xl border border-navy-100 bg-navy-50/50 px-6 py-3 text-base font-extrabold tracking-wide text-navy-700 transition-colors hover:border-gold-400 hover:bg-gold-50 hover:text-navy-900"
-            >
-              {b.name}
-            </Link>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* About + contact                                                     */
-/* ------------------------------------------------------------------ */
-
-function AboutContact() {
-  return (
-    <section className="bg-white py-16 sm:py-20">
-      <Container>
-        <Suspense fallback={<Skeleton className="h-72 rounded-3xl" />}>
-          <AboutContactContent />
+        <Suspense fallback={<Skeleton className="h-80 rounded-xl" />}>
+          <ShopContent />
         </Suspense>
       </Container>
     </section>
   );
 }
 
-async function AboutContactContent() {
+async function ShopContent() {
   const { business } = await getSiteData();
   const wa = business.whatsapp ? whatsappLink(business.whatsapp, "Hello OM ENTERPRISE, I have an enquiry.") : null;
   return (
-    <div className="grid gap-8 lg:grid-cols-[1.2fr_1fr]">
+    <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
       <div>
-        <SectionHeading eyebrow="About us" title={`Welcome to ${business.name}`} />
-        <p className="max-w-2xl text-base leading-relaxed text-navy-600">{business.about}</p>
-        <div className="mt-6 flex flex-wrap gap-3">
+        <Eyebrow index="04">The shop</Eyebrow>
+        <h2 className="headline mt-3 text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">Visit {business.name}</h2>
+        <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-navy-600">{business.about}</p>
+        <div className="mt-7 flex flex-wrap gap-2.5">
+          <LinkButton href="/enquiry">Send an enquiry</LinkButton>
           <LinkButton href="/about" variant="outline">
             More about us
           </LinkButton>
-          <LinkButton href="/enquiry" variant="primary">
-            Send an enquiry
-          </LinkButton>
         </div>
       </div>
-      <div className="rounded-3xl border border-navy-100 bg-gradient-to-br from-navy-50 to-white p-6 shadow-card sm:p-8">
-        <h3 className="text-lg font-extrabold text-navy-900">Visit the shop</h3>
-        <ul className="mt-4 space-y-4 text-sm text-navy-700">
-          <li className="flex gap-3">
-            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-gold-600" />
-            <address className="not-italic leading-relaxed">
-              {addressLines(business).map((l) => (
-                <span key={l} className="block">{l}</span>
-              ))}
-              {business.mapUrl && (
-                <a href={business.mapUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block font-semibold text-navy-900 underline decoration-gold-500 underline-offset-4">
-                  Open in Maps
-                </a>
-              )}
-            </address>
-          </li>
-          {business.openingHours && (
-            <li className="flex gap-3">
-              <Clock className="mt-0.5 h-5 w-5 shrink-0 text-gold-600" />
-              <span>{business.openingHours}</span>
-            </li>
-          )}
-          {business.phone && (
-            <li className="flex gap-3">
-              <Phone className="mt-0.5 h-5 w-5 shrink-0 text-gold-600" />
-              <a href={telHref(business.phone)} className="font-semibold text-navy-900 hover:underline">{business.phone}</a>
-            </li>
-          )}
-        </ul>
-        {wa && (
-          <a href={wa} target="_blank" rel="noopener noreferrer" className="mt-6 flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 text-base font-bold text-white hover:bg-emerald-700">
-            <MessageCircle className="h-5 w-5" /> WhatsApp {business.whatsapp}
+      <div className="rounded-xl border border-navy-200 bg-white">
+        <div className="border-b border-navy-100 px-6 py-5">
+          <div className="label-mono text-navy-500">Address</div>
+          <address className="mt-2 text-[17px] not-italic leading-snug text-navy-950">
+            {addressLines(business).map((l) => (
+              <span key={l} className="block">
+                {l}
+              </span>
+            ))}
+          </address>
+          <a href={mapsHref(business)} target="_blank" rel="noopener noreferrer" className="group mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-950">
+            <span className="link-draw">Open in Maps</span> <ArrowUpRight className="h-3.5 w-3.5 text-gold-600 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
-        )}
+        </div>
+        <dl className="divide-y divide-navy-100 px-6">
+          {business.phone && (
+            <div className="flex items-center justify-between gap-4 py-3.5">
+              <dt className="label-mono text-navy-500">Phone</dt>
+              <dd>
+                <a href={telHref(business.phone)} className="link-draw font-mono text-[15px] text-navy-950">
+                  {business.phone}
+                </a>
+              </dd>
+            </div>
+          )}
+          {business.whatsapp && (
+            <div className="flex items-center justify-between gap-4 py-3.5">
+              <dt className="label-mono text-navy-500">WhatsApp</dt>
+              <dd className="font-mono text-[15px] text-navy-950">{business.whatsapp}</dd>
+            </div>
+          )}
+          {business.email && (
+            <div className="flex items-center justify-between gap-4 py-3.5">
+              <dt className="label-mono text-navy-500">Email</dt>
+              <dd className="min-w-0 truncate text-[15px] text-navy-950">{business.email}</dd>
+            </div>
+          )}
+          {business.openingHours && (
+            <div className="flex items-center justify-between gap-4 py-3.5">
+              <dt className="label-mono text-navy-500">Hours</dt>
+              <dd className="text-[15px] text-navy-950">{business.openingHours}</dd>
+            </div>
+          )}
+        </dl>
+        <div className="grid gap-2 border-t border-navy-100 p-4 sm:grid-cols-2">
+          {business.phone && (
+            <a href={telHref(business.phone)} className="flex h-11 items-center justify-center gap-2 rounded-lg border border-navy-200 text-sm font-semibold text-navy-950 transition-colors hover:border-navy-900">
+              <Phone className="h-4 w-4" /> Call the shop
+            </a>
+          )}
+          {wa && (
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="flex h-11 items-center justify-center gap-2 rounded-lg bg-emerald-600 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+              <MessageCircle className="h-4 w-4" /> WhatsApp
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

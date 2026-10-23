@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowRight, Receipt } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listSales } from "@/server/services/sales";
@@ -68,27 +68,29 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
         ]}
       />
       {res.items.length === 0 ? (
-        <EmptyState icon={<Receipt className="h-10 w-10" />} title="No sales found" description="Try a different search or date range." />
+        <EmptyState title="No sales found" description="Try a different search or date range." />
       ) : (
         <>
-          <div className="space-y-2 md:hidden">
+          <ul className="divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card md:hidden">
             {res.items.map((s) => (
-              <Link key={s.id} href={`/pos/sale/${s.id}`} className="block rounded-2xl border border-navy-100 bg-white p-4 shadow-card">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-mono font-bold">{s.docNumber ?? s.saleNumber}</span>
-                  <Money value={s.grandTotal} className="text-lg font-extrabold" />
-                </div>
-                <div className="mt-1 flex flex-wrap items-center gap-1.5">
-                  <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
-                  {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
-                  {s.isTraining && <Badge tone="red">Training</Badge>}
-                </div>
-                <div className="mt-1 text-xs text-navy-500">
-                  <DateTime value={s.createdAt} /> · {s.customerName ?? "Cash sale"} · {s.itemCount} items
-                </div>
-              </Link>
+              <li key={s.id}>
+                <Link href={`/pos/sale/${s.id}`} className="block px-4 py-3.5 transition-colors active:bg-paper">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span className="font-mono text-sm font-semibold text-navy-950">{s.docNumber ?? s.saleNumber}</span>
+                    <Money value={s.grandTotal} className="font-mono text-[15px] font-semibold text-navy-950" />
+                  </div>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
+                    {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
+                    {s.isTraining && <Badge tone="red">Training</Badge>}
+                  </div>
+                  <div className="mt-1.5 text-xs text-navy-500">
+                    <DateTime value={s.createdAt} /> · {s.customerName ?? "Cash sale"} · {s.itemCount} item{s.itemCount === 1 ? "" : "s"}
+                  </div>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
           <TableWrap className="hidden md:block">
             <table className="w-full">
               <thead>
@@ -107,41 +109,39 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
               </thead>
               <tbody>
                 {res.items.map((s) => (
-                  <tr key={s.id} className="hover:bg-navy-50/50">
+                  <tr key={s.id} className="transition-colors hover:bg-paper/60">
                     <td className={td}>
-                      <Link href={`/pos/sale/${s.id}`} className="font-mono font-bold text-navy-900 hover:underline">
-                        {s.saleNumber}
-                      </Link>
-                      {s.isTraining && (
-                        <Badge tone="red" className="ml-1.5">
-                          Training
-                        </Badge>
-                      )}
+                      <span className="flex flex-wrap items-center gap-1.5">
+                        <Link href={`/pos/sale/${s.id}`} className="link-draw font-mono font-semibold text-navy-950">
+                          {s.saleNumber}
+                        </Link>
+                        {s.isTraining && <Badge tone="red">Training</Badge>}
+                      </span>
                     </td>
                     <td className={td}>
                       {s.docNumber ? (
-                        <span className="whitespace-nowrap font-mono text-sm">
+                        <span className="flex flex-wrap items-center gap-1.5 whitespace-nowrap font-mono text-[13px] text-navy-800">
                           {s.docNumber}
-                          {s.docStatus === "cancelled" && <Badge tone="red" className="ml-1">Cancelled</Badge>}
+                          {s.docStatus === "cancelled" && <Badge tone="red">Cancelled</Badge>}
                         </span>
                       ) : (
-                        <span className="text-navy-400">—</span>
+                        <span className="text-navy-300">—</span>
                       )}
                     </td>
-                    <td className={`${td} text-navy-600`}>
+                    <td className={`${td} text-[13px] text-navy-600`}>
                       <DateTime value={s.createdAt} />
                     </td>
                     <td className={td}>
                       {s.customerName ?? <span className="text-navy-400">Cash sale</span>}
-                      {s.customerMobile && <div className="text-xs text-navy-500">{s.customerMobile}</div>}
+                      {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
                     </td>
-                    <td className={`${td} text-right tabular`}>{s.itemCount}</td>
-                    <td className={`${td} text-right font-bold`}>
-                      <Money value={s.grandTotal} />
+                    <td className={`${td} text-right font-mono tabular`}>{s.itemCount}</td>
+                    <td className={`${td} text-right`}>
+                      <Money value={s.grandTotal} className="font-mono font-semibold text-navy-950" />
                     </td>
                     <td className={`${td} text-right`}>
-                      <Money value={s.amountPaid} muted />
-                      {s.paymentMethods && <div className="text-[11px] uppercase text-navy-400">{s.paymentMethods.replace(/_/g, " ")}</div>}
+                      <Money value={s.amountPaid} muted className="font-mono" />
+                      {s.paymentMethods && <div className="label-mono mt-0.5 text-[10px] text-navy-400">{s.paymentMethods.replace(/_/g, " ")}</div>}
                     </td>
                     <td className={td}>
                       <div className="flex flex-wrap gap-1">
@@ -149,10 +149,14 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                         {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
                       </div>
                     </td>
-                    {all && <td className={`${td} text-navy-600`}>{s.createdByName}</td>}
-                    <td className={td}>
-                      <Link href={`/pos/sale/${s.id}`} className="inline-flex items-center gap-1 text-sm font-semibold text-navy-700 hover:text-gold-600" aria-label={`Open ${s.saleNumber}`}>
-                        Open <ArrowRight className="h-3.5 w-3.5" />
+                    {all && <td className={`${td} text-[13px] text-navy-600`}>{s.createdByName}</td>}
+                    <td className={`${td} text-right`}>
+                      <Link
+                        href={`/pos/sale/${s.id}`}
+                        className="group inline-flex items-center gap-1 text-[13px] font-semibold text-navy-700 transition-colors hover:text-navy-950"
+                        aria-label={`Open ${s.saleNumber}`}
+                      >
+                        Open <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
                       </Link>
                     </td>
                   </tr>

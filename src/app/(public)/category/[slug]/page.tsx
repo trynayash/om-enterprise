@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/page";
 import { CatalogueResults, parseCatalogueQuery } from "@/components/public/catalogue-results";
-import { CategoryIcon } from "@/components/public/category-icon";
 import { ProductGridSkeleton } from "@/components/public/product-card";
-import { Breadcrumbs, Container } from "@/components/public/section";
+import { Container, PageIntro } from "@/components/public/section";
 import { getSiteData } from "@/components/public/site-data";
+import { TechnicalDrawing, type DrawingKind } from "@/components/public/technical-drawing";
+
+const CATEGORY_DRAWING: Record<string, DrawingKind> = { paint: "can", tank: "tank", bath: "tap", pipe: "pipe", drain: "socket-pipe", wrench: "tin", brick: "box" };
 
 export async function generateMetadata({ params }: PageProps<"/category/[slug]">): Promise<Metadata> {
   const { slug } = await params;
@@ -22,9 +24,9 @@ export default function CategoryPage({ params, searchParams }: PageProps<"/categ
     <Suspense
       fallback={
         <>
-          <div className="h-56 bg-navy-950" />
-          <Container className="space-y-6 py-10">
-            <Skeleton className="h-[76px] rounded-2xl" />
+          <div className="h-56 border-b border-rule bg-paper" />
+          <Container className="space-y-5 py-10">
+            <Skeleton className="h-11 rounded-lg" />
             <ProductGridSkeleton />
           </Container>
         </>
@@ -42,47 +44,46 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
   if (!category) notFound();
   const parent = category.parentId ? categories.find((c) => c.id === category.parentId) : null;
   const children = categories.filter((c) => c.parentId === category.id);
+  const top = categories.filter((c) => !c.parentId);
+  const position = top.findIndex((c) => c.id === (parent?.id ?? category.id)) + 1;
   const query = parseCatalogueQuery(await searchParams);
 
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-navy-950">
-        <div aria-hidden className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(212,165,55,0.2),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgba(58,103,166,0.4),transparent_60%)]" />
-        <Container className="py-10 sm:py-14">
-          <div className="[&_a]:text-navy-300 [&_a:hover]:text-white [&_span[aria-current]]:text-white">
-            <Breadcrumbs
-              items={[
-                { href: "/", label: "Home" },
-                { href: "/products", label: "Products" },
-                ...(parent ? [{ href: `/category/${parent.slug}`, label: parent.name }] : []),
-                { label: category.name },
-              ]}
-            />
+      <PageIntro
+        crumbs={[
+          { href: "/", label: "Home" },
+          { href: "/products", label: "Products" },
+          ...(parent ? [{ href: `/category/${parent.slug}`, label: parent.name }] : []),
+          { label: category.name },
+        ]}
+        eyebrow={
+          <>
+            Category {position > 0 ? String(position).padStart(2, "0") : ""} · {category.productCount} {category.productCount === 1 ? "item" : "items"}
+          </>
+        }
+        title={category.name}
+        description={category.description}
+        aside={
+          <div className="blueprint hidden h-36 w-56 shrink-0 rounded-lg border border-navy-200 md:flex md:items-center md:justify-center">
+            <TechnicalDrawing kind={CATEGORY_DRAWING[category.icon ?? ""] ?? "box"} animate className="h-[88%] w-[88%]" />
           </div>
-          <div className="mt-6 flex flex-col gap-5 sm:flex-row sm:items-center">
-            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gold-500 text-navy-950 shadow-lift">
-              <CategoryIcon name={category.icon} className="h-8 w-8" />
-            </span>
-            <div>
-              <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">{category.name}</h1>
-              {category.description && <p className="mt-2 max-w-2xl text-base text-navy-200">{category.description}</p>}
-            </div>
+        }
+      >
+        {children.length > 0 && (
+          <div className="mt-6 flex flex-wrap gap-2">
+            {children.map((c) => (
+              <Link
+                key={c.slug}
+                href={`/category/${c.slug}`}
+                className="rounded-md border border-navy-200 bg-white px-3 py-1.5 text-[13px] font-medium text-navy-800 transition-colors hover:border-navy-900"
+              >
+                {c.name} <span className="font-mono text-navy-400">{c.productCount}</span>
+              </Link>
+            ))}
           </div>
-          {children.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-2">
-              {children.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/category/${c.slug}`}
-                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-navy-100 hover:border-gold-400/60 hover:text-white"
-                >
-                  {c.name} ({c.productCount})
-                </Link>
-              ))}
-            </div>
-          )}
-        </Container>
-      </section>
+        )}
+      </PageIntro>
       <Container className="py-8 sm:py-10">
         <CatalogueResults query={query} basePath={`/category/${category.slug}`} lockCategory={category.slug} />
       </Container>

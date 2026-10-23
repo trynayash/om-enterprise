@@ -11,12 +11,13 @@ import { newOrderCount } from "@/server/services/website-orders";
 import { istStartOfDay, istStartOfMonth } from "@/lib/india";
 import { D, formatINR } from "@/lib/money";
 import { Card, CardBody, CardHeader, Stat } from "@/components/ui/card";
-import { Alert, EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
+import { Alert, EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Money, DateTime, Qty } from "@/components/ui/money";
 import { SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { SalesChart, type DayPoint } from "@/components/dashboard/ops/sales-chart";
 import { istDateKey } from "@/components/dashboard/ops/params";
+import { rowHover, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Overview" };
 
@@ -90,30 +91,35 @@ async function Overview() {
         }
       />
 
-      {tax.registrationType === null && (
-        <Alert tone="warning" title="GST registration not confirmed">
-          Real bills are blocked until GST registration is confirmed in Settings → Tax. Only training (sample) sales can be completed.
-          {actor.isSuperAdmin && (
-            <>
-              {" "}
-              <Link href="/dashboard/settings" className="font-semibold underline">
-                Configure now
-              </Link>
-            </>
+      {(tax.registrationType === null || (!payments.upiEnabled && payments.gatewayProvider === "none")) && (
+        <div className="grid gap-3 xl:grid-cols-2">
+          {tax.registrationType === null && (
+            <Alert tone="warning" title="GST registration not confirmed">
+              Real bills are blocked until GST registration is confirmed in Settings → Tax. Only training (sample) sales can be completed.
+              {actor.isSuperAdmin && (
+                <>
+                  {" "}
+                  <Link href="/dashboard/settings" className="font-semibold underline">
+                    Configure now
+                  </Link>
+                </>
+              )}
+            </Alert>
           )}
-        </Alert>
-      )}
-      {!payments.upiEnabled && payments.gatewayProvider === "none" && (
-        <Alert tone="info" title="UPI QR is not set up">
-          Payment QR codes need the shop&apos;s UPI ID in Settings → Payments. Cash and other configured methods still work.
-        </Alert>
+          {!payments.upiEnabled && payments.gatewayProvider === "none" && (
+            <Alert tone="info" title="UPI QR is not set up">
+              Payment QR codes need the shop&apos;s UPI ID in Settings → Payments. Cash and other configured methods still work.
+            </Alert>
+          )}
+        </div>
       )}
 
       {canReports && today && month ? (
         <>
           <section aria-labelledby="today-h">
-            <h2 id="today-h" className="mb-3 text-sm font-bold uppercase tracking-[0.14em] text-navy-500">
+            <h2 id="today-h" className="label-mono mb-3 flex items-center gap-3 text-navy-500">
               Today
+              <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(today.netRevenue)} hint={`${today.bills.count} bill${today.bills.count === 1 ? "" : "s"} · GST ${formatINR(today.netTax)}`} />
@@ -134,8 +140,9 @@ async function Overview() {
           </section>
 
           <section aria-labelledby="month-h">
-            <h2 id="month-h" className="mb-3 text-sm font-bold uppercase tracking-[0.14em] text-navy-500">
+            <h2 id="month-h" className="label-mono mb-3 flex items-center gap-3 text-navy-500">
               This month
+              <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(month.netRevenue)} hint={`Invoiced ${formatINR(month.netInvoiced)} incl. GST`} />
@@ -188,23 +195,23 @@ async function Overview() {
                   <thead>
                     <tr>
                       <th className={th}>Product</th>
-                      <th className={`${th} text-right`}>Qty</th>
-                      <th className={`${th} text-right`}>Net sales</th>
+                      <th className={thNum}>Qty</th>
+                      <th className={thNum}>Net sales</th>
                     </tr>
                   </thead>
                   <tbody>
                     {best.map((b) => (
-                      <tr key={b.variantId}>
-                        <td className={td}>
+                      <tr key={b.variantId} className={rowHover}>
+                        <td className={tdText}>
                           <div className="font-medium">{b.product}</div>
-                          <div className="text-xs text-navy-500">
-                            {b.sku} · {b.category}
+                          <div className="mt-0.5 text-xs text-navy-500">
+                            <span className="font-mono">{b.sku}</span> · {b.category}
                           </div>
                         </td>
-                        <td className={`${td} text-right`}>
+                        <td className={tdNum}>
                           <Qty value={b.quantity} unit={b.unit} />
                         </td>
-                        <td className={`${td} text-right font-semibold`}>
+                        <td className={`${tdNum} font-semibold`}>
                           <Money value={b.revenue} />
                         </td>
                       </tr>
@@ -224,18 +231,18 @@ async function Overview() {
             <CardHeader
               title="Recent sales"
               actions={
-                <Link href="/dashboard/sales" className="inline-flex items-center gap-1 text-sm font-semibold text-navy-700 hover:text-navy-900">
-                  All sales <ArrowRight className="h-4 w-4" />
+                <Link href="/dashboard/sales" className="group inline-flex items-center gap-1 text-[13px] font-semibold text-navy-700 hover:text-navy-950">
+                  All sales <ArrowRight className="h-3.5 w-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
                 </Link>
               }
             />
             {recent.items.length ? (
-              <ul className="divide-y divide-navy-50">
+              <ul className="divide-y divide-navy-100">
                 {recent.items.map((s) => (
                   <li key={s.id}>
-                    <Link href={`/dashboard/sales/${s.id}`} className="flex items-center justify-between gap-3 px-5 py-3 hover:bg-navy-50/60">
+                    <Link href={`/dashboard/sales/${s.id}`} className={`flex items-center justify-between gap-3 px-5 py-3 ${rowHover}`}>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2 font-semibold">
+                        <div className="flex items-center gap-2 font-mono text-[13px] font-medium">
                           {s.saleNumber}
                           {s.isTraining && <SampleBadge label="Training" />}
                         </div>
@@ -244,7 +251,7 @@ async function Overview() {
                         </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">
-                        <Money value={s.grandTotal} className="font-semibold" />
+                        <Money value={s.grandTotal} className="font-mono text-[13px] font-semibold" />
                         <StatusBadge status={s.status === "completed" ? s.paymentStatus : s.status} />
                       </div>
                     </Link>
@@ -299,21 +306,23 @@ function ActionItems({
   return (
     <Card>
       <CardHeader title="Needs attention" />
-      <ul className="divide-y divide-navy-50">
+      <ul className="divide-y divide-navy-100">
         {items.map((i) => (
           <li key={i.href}>
-            <Link href={i.href} className="flex items-center gap-3 px-5 py-3.5 hover:bg-navy-50/60">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700">
-                <i.icon className="h-4.5 w-4.5" />
-              </span>
+            <Link href={i.href} className={`group flex items-center gap-3.5 px-5 py-3.5 ${rowHover}`}>
+              <i.icon className="h-4 w-4 shrink-0 text-navy-400 transition-colors duration-150 group-hover:text-navy-700" aria-hidden />
               <span className="min-w-0 flex-1">
-                <span className="block text-sm font-semibold">{i.label}</span>
-                <span className="block truncate text-xs text-navy-500">{i.hint}</span>
+                <span className="block text-sm font-semibold text-navy-900">{i.label}</span>
+                <span className="mt-0.5 block truncate text-xs text-navy-500">{i.hint}</span>
               </span>
               {i.value !== null && (
-                <span className={`min-w-8 rounded-full px-2 py-0.5 text-center text-sm font-bold tabular ${i.value ? "bg-gold-100 text-gold-700" : "bg-navy-50 text-navy-400"}`}>{i.value}</span>
+                <span
+                  className={`min-w-7 rounded-[3px] px-1.5 py-0.5 text-center font-mono text-[13px] font-semibold tabular ${i.value ? "bg-gold-100 text-gold-700" : "text-navy-400"}`}
+                >
+                  {i.value}
+                </span>
               )}
-              <ArrowRight className="h-4 w-4 text-navy-300" />
+              <ArrowRight className="h-4 w-4 shrink-0 text-navy-300 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-navy-600" aria-hidden />
             </Link>
           </li>
         ))}

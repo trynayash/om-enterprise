@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { AlertTriangle, BadgeCheck, Tag } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listPendingApprovals } from "@/server/services/sales";
@@ -11,6 +11,28 @@ import { Alert, EmptyState, PageHeader, PageSkeleton } from "@/components/ui/pag
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money, Qty } from "@/components/ui/money";
 import { DecisionButtons } from "@/components/dashboard/ops/decision-buttons";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
+import { tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
+
+function SectionHeading({ id, title, count }: { id: string; title: string; count: number }) {
+  return (
+    <div className="flex items-baseline gap-3 border-b border-navy-200 pb-2.5">
+      <h2 id={id} className="text-lg font-semibold tracking-[-0.01em] text-navy-950">
+        {title}
+      </h2>
+      <span className={`font-mono text-[13px] tabular ${count ? "font-semibold text-gold-700" : "text-navy-400"}`}>{count}</span>
+    </div>
+  );
+}
+
+function Fact({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="min-w-0">
+      <dt className="label-mono text-[10px] text-navy-500">{label}</dt>
+      <dd className="mt-1 text-sm text-navy-900">{children}</dd>
+    </div>
+  );
+}
 
 export const metadata = { title: "Approvals" };
 
@@ -62,6 +84,7 @@ async function Approvals() {
   return (
     <div className="space-y-8">
       <PageHeader
+        eyebrow="Sales"
         title="Approvals"
         description={
           canDiscounts
@@ -72,10 +95,7 @@ async function Approvals() {
 
       {canDiscounts && (
         <section aria-labelledby="disc-h" className="space-y-4">
-          <h2 id="disc-h" className="flex items-center gap-2 text-lg font-bold">
-            <BadgeCheck className="h-5 w-5 text-gold-600" /> Discount approvals
-            <Badge tone={discounts.length ? "gold" : "neutral"}>{discounts.length}</Badge>
-          </h2>
+          <SectionHeading id="disc-h" title="Discount approvals" count={discounts.length} />
           {discounts.length === 0 ? (
             <EmptyState title="No discount approvals waiting" description="When a cashier asks for a discount above their limit, it appears here. Approvals can also be given in person at the counter." />
           ) : (
@@ -88,11 +108,13 @@ async function Approvals() {
                   <CardHeader
                     title={
                       <span className="flex flex-wrap items-center gap-2">
-                        {d.maxDiscountPercent}% discount on{" "}
-                        <Link href={`/dashboard/sales/${a.saleId}`} className="underline-offset-2 hover:underline">
+                        <span className="font-mono">{d.maxDiscountPercent}%</span> discount on{" "}
+                        <Link href={`/dashboard/sales/${a.saleId}`} className="font-mono underline-offset-[3px] hover:underline">
                           {saleNumber}
                         </Link>
-                        <StatusBadge status={saleStatus} />
+                        <TitleStamps>
+                          <StatusBadge status={saleStatus} />
+                        </TitleStamps>
                       </span>
                     }
                     description={
@@ -101,11 +123,16 @@ async function Approvals() {
                         {d.requesterLimitPercent ? ` (limit ${d.requesterLimitPercent}%)` : ""} · <DateTime value={a.requestedAt} />
                       </>
                     }
-                    actions={<div className="text-right text-sm"><div className="text-navy-500">Bill total</div><div className="text-lg font-extrabold tabular">{formatINR(d.grandTotal)}</div></div>}
+                    actions={
+                      <div className="text-right">
+                        <div className="label-mono text-[10px] text-navy-500">Bill total</div>
+                        <div className="mt-1 font-mono text-lg font-semibold tabular">{formatINR(d.grandTotal)}</div>
+                      </div>
+                    }
                   />
                   <CardBody className="space-y-4">
-                    <p className="rounded-xl bg-navy-50 px-3 py-2 text-sm">
-                      <span className="font-semibold">Reason:</span> “{a.reason}”
+                    <p className="border-l-2 border-gold-500 pl-3 text-sm leading-relaxed text-navy-800">
+                      <span className="label-mono mr-2 text-[10px] text-navy-500">Reason</span>“{a.reason}”
                     </p>
                     {d.reasons?.length ? (
                       <ul className="flex flex-wrap gap-2">
@@ -116,24 +143,24 @@ async function Approvals() {
                         ))}
                       </ul>
                     ) : null}
-                    <div className="overflow-x-auto rounded-xl border border-navy-100">
-                      <table className="w-full min-w-[620px] text-sm">
+                    <div className="overflow-x-auto rounded-lg border border-navy-100">
+                      <table className="w-full min-w-[620px]">
                         <thead>
-                          <tr className="bg-navy-50/70 text-left text-xs uppercase tracking-wide text-navy-600">
-                            <th className="px-3 py-2">Item</th>
-                            <th className="px-3 py-2 text-right">Qty</th>
-                            <th className="px-3 py-2 text-right">List price</th>
-                            <th className="px-3 py-2 text-right">Charged</th>
-                            <th className="px-3 py-2 text-right">Line net</th>
-                            <th className="px-3 py-2 text-right">Discount</th>
+                          <tr>
+                            <th className={th}>Item</th>
+                            <th className={thNum}>Qty</th>
+                            <th className={thNum}>List price</th>
+                            <th className={thNum}>Charged</th>
+                            <th className={thNum}>Line net</th>
+                            <th className={thNum}>Discount</th>
                           </tr>
                         </thead>
                         <tbody>
                           {d.lines.map((l, i) => (
-                            <tr key={`${l.sku}-${i}`} className="border-t border-navy-50 align-top">
-                              <td className="px-3 py-2">
+                            <tr key={`${l.sku}-${i}`}>
+                              <td className={withPy(tdText, "py-2.5")}>
                                 <div className="font-medium">{l.name}</div>
-                                <div className="text-xs text-navy-500">{l.sku}</div>
+                                <div className="font-mono text-[11.5px] text-navy-500">{l.sku}</div>
                                 <div className="mt-1 flex flex-wrap gap-1">
                                   {l.overrideReason && <Badge tone="amber">Price changed: {l.overrideReason}</Badge>}
                                   {l.discountReason && <Badge tone="gold">{l.discountReason}</Badge>}
@@ -141,19 +168,21 @@ async function Approvals() {
                                   {!l.belowCost && l.belowMarginFloor && <Badge tone="amber">Below margin floor</Badge>}
                                 </div>
                               </td>
-                              <td className="px-3 py-2 text-right">
+                              <td className={withPy(tdNum, "py-2.5")}>
                                 <Qty value={l.quantity} unit={l.unit} />
                               </td>
-                              <td className="px-3 py-2 text-right">
+                              <td className={withPy(tdNum, "py-2.5")}>
                                 <Money value={l.listUnitPrice} />
                               </td>
-                              <td className="px-3 py-2 text-right">
+                              <td className={withPy(tdNum, "py-2.5")}>
                                 <Money value={l.unitPrice} />
                               </td>
-                              <td className="px-3 py-2 text-right">
+                              <td className={withPy(tdNum, "py-2.5")}>
                                 <Money value={l.netAmount} />
                               </td>
-                              <td className={`px-3 py-2 text-right font-semibold tabular ${D(l.discountPercent).greaterThan(0) ? "text-amber-700" : "text-navy-400"}`}>{l.discountPercent}%</td>
+                              <td className={`${withPy(tdNum, "py-2.5")} font-semibold`}>
+                                <span className={D(l.discountPercent).greaterThan(0) ? "text-amber-700" : "text-navy-400"}>{l.discountPercent}%</span>
+                              </td>
                             </tr>
                           ))}
                         </tbody>
@@ -161,7 +190,8 @@ async function Approvals() {
                     </div>
                     <div className="flex flex-wrap justify-between gap-2 text-sm text-navy-600">
                       <span>
-                        List value <Money value={d.listTotal} /> → bill <Money value={d.grandTotal} className="font-semibold text-navy-900" /> (overall {d.effectiveDiscountPercent}% off)
+                        List value <Money value={d.listTotal} className="font-mono text-[13px]" /> → bill <Money value={d.grandTotal} className="font-mono text-[13px] font-semibold text-navy-900" /> (overall{" "}
+                        <span className="font-mono text-[13px]">{d.effectiveDiscountPercent}%</span> off)
                       </span>
                       {d.cartDiscount && (
                         <span>
@@ -192,10 +222,7 @@ async function Approvals() {
 
       {canPrices && (
         <section aria-labelledby="price-h" className="space-y-4">
-          <h2 id="price-h" className="flex items-center gap-2 text-lg font-bold">
-            <Tag className="h-5 w-5 text-gold-600" /> Price changes
-            <Badge tone={prices.length ? "gold" : "neutral"}>{prices.length}</Badge>
-          </h2>
+          <SectionHeading id="price-h" title="Price changes" count={prices.length} />
           {prices.length === 0 ? (
             <EmptyState title="No price changes waiting" description="Price changes proposed by admins without approval rights appear here before they take effect." />
           ) : (
@@ -204,42 +231,46 @@ async function Approvals() {
               const change = v.previousPrice && D(v.previousPrice).greaterThan(0) ? D(v.price).minus(D(v.previousPrice)).div(D(v.previousPrice)).times(100) : null;
               return (
                 <Card key={v.id}>
-                  <CardBody className="space-y-3">
+                  <CardBody className="space-y-4">
                     <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div>
-                        <Link href={`/dashboard/products/${p.productId}`} className="font-bold text-navy-900 hover:underline">
+                      <div className="min-w-0">
+                        <Link href={`/dashboard/products/${p.productId}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
                           {p.productName} — {p.variantName}
                         </Link>
-                        <div className="text-xs text-navy-500">
-                          {p.sku} · {p.listName} list · proposed by {p.requestedBy} · <DateTime value={v.createdAt} />
+                        <div className="mt-0.5 text-xs text-navy-500">
+                          <span className="font-mono text-[11.5px] text-navy-600">{p.sku}</span> · {p.listName} list · proposed by {p.requestedBy} · <DateTime value={v.createdAt} />
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="flex items-baseline justify-end gap-2 tabular">
-                          <span className="text-navy-400 line-through">{v.previousPrice ? formatINR(v.previousPrice) : "no price"}</span>
-                          <span className="text-xl font-extrabold">{formatINR(v.price)}</span>
+                        <div className="flex items-baseline justify-end gap-2.5 font-mono tabular">
+                          {v.previousPrice ? (
+                            <span className="text-[13px] text-navy-400 line-through">{formatINR(v.previousPrice)}</span>
+                          ) : (
+                            <span className="font-sans text-xs text-navy-400">no price yet</span>
+                          )}
+                          <span className="text-xl font-semibold text-navy-950">{formatINR(v.price)}</span>
                         </div>
-                        <div className="text-xs text-navy-500">
+                        <div className="mt-0.5 text-xs text-navy-500">
                           {v.priceIncludesTax ? "incl. GST" : "excl. GST"}
                           {change && <span className={change.isNegative() ? " text-red-700" : " text-emerald-700"}> · {change.isNegative() ? "" : "+"}{change.toFixed(1)}%</span>}
                           {v.mrp && <> · MRP {formatINR(v.mrp)}</>}
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-wrap gap-2 text-sm">
-                      <span className="rounded-xl bg-navy-50 px-3 py-1.5">
-                        <span className="font-semibold">Reason:</span> “{v.reason}”
-                      </span>
-                      <span className="rounded-xl bg-navy-50 px-3 py-1.5">
-                        Effective <DateTime value={v.effectiveFrom} />
-                      </span>
+                    <dl className="grid gap-x-6 gap-y-3 border-y border-navy-100 py-3 sm:grid-cols-[minmax(0,2fr)_auto_auto_auto]">
+                      <Fact label="Reason">“{v.reason}”</Fact>
+                      <Fact label="Effective">
+                        <DateTime value={v.effectiveFrom} />
+                      </Fact>
                       {showCost && (
-                        <span className="rounded-xl bg-navy-50 px-3 py-1.5">
-                          Margin {v.previousMarginPercent ? `${v.previousMarginPercent}%` : "—"} → <strong>{v.marginPercentSnapshot ? `${v.marginPercentSnapshot}%` : "cost unknown"}</strong>
-                        </span>
+                        <Fact label="Margin">
+                          <span className="font-mono text-[13px]">
+                            {v.previousMarginPercent ? `${v.previousMarginPercent}%` : "—"} → <strong>{v.marginPercentSnapshot ? `${v.marginPercentSnapshot}%` : "cost unknown"}</strong>
+                          </span>
+                        </Fact>
                       )}
-                      {v.tiers.length > 0 && <span className="rounded-xl bg-navy-50 px-3 py-1.5">{v.tiers.length} quantity price(s)</span>}
-                    </div>
+                      {v.tiers.length > 0 && <Fact label="Quantity prices">{v.tiers.length} quantity price(s)</Fact>}
+                    </dl>
                     <DecisionButtons path={`/api/admin/prices/${v.id}/decision`} subject={`price for ${p.sku}`} />
                   </CardBody>
                 </Card>

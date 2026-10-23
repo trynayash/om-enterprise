@@ -8,7 +8,8 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog } from "@/components/ui/dialog";
 import { Checkbox, Field, Input, Textarea } from "@/components/ui/field";
-import { Alert, EmptyState, td, th } from "@/components/ui/page";
+import { Alert, EmptyState } from "@/components/ui/page";
+import { nameLink, rowHover, tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 
@@ -43,33 +44,30 @@ export function BrandsManager({ brands, canCreate, canEdit }: { brands: BrandRow
         </div>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[480px]">
+          <table className="w-full min-w-[320px]">
             <thead>
               <tr>
                 <th className={th}>Brand</th>
-                <th className={th}>Manufacturer</th>
-                <th className={`${th} text-right`}>Products</th>
-                <th className={th}>
+                <th className={thNum}>Products</th>
+                <th className={thNum}>
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               {brands.map((b) => (
-                <tr key={b.id}>
-                  <td className={td}>
-                    <Link href={`/dashboard/products?brandId=${b.id}`} className="font-semibold hover:underline">
-                      {b.name}
-                    </Link>
-                    {!b.isActive && (
-                      <Badge tone="red" className="ml-2">
-                        Inactive
-                      </Badge>
-                    )}
+                <tr key={b.id} className={rowHover}>
+                  <td className={tdText}>
+                    <span className="flex flex-wrap items-center gap-2">
+                      <Link href={`/dashboard/products?brandId=${b.id}`} className={nameLink}>
+                        {b.name}
+                      </Link>
+                      {!b.isActive && <Badge tone="red">Inactive</Badge>}
+                    </span>
+                    {b.manufacturer && <div className="mt-0.5 text-xs text-navy-500">{b.manufacturer}</div>}
                   </td>
-                  <td className={`${td} text-navy-600`}>{b.manufacturer ?? "—"}</td>
-                  <td className={`${td} text-right tabular`}>{b.productCount}</td>
-                  <td className={`${td} text-right`}>
+                  <td className={tdNum}>{b.productCount}</td>
+                  <td className={`${withPy(tdText, "py-1.5")} w-px text-right`}>
                     {canEdit && (
                       <Button size="sm" variant="ghost" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, brand: b })}>
                         Edit

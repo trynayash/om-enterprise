@@ -96,18 +96,18 @@ export function CostPanel({
   return (
     <div className="space-y-5">
       {cost ? (
-        <div className="rounded-2xl border border-navy-100 bg-white p-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="rounded-lg border border-navy-100 bg-white p-4">
+          <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wide text-navy-500">Current landed cost per {unitName}</div>
-              <div className="text-2xl font-extrabold tabular">{formatINR(cost.landedCost)}</div>
+              <div className="label-mono text-navy-500">Current landed cost per {unitName}</div>
+              <div className="headline mt-1.5 text-[1.75rem] font-bold tabular">{formatINR(cost.landedCost)}</div>
             </div>
             <div className="text-xs text-navy-500">
               since <DateTime value={cost.effectiveFrom} />
               {cost.sourceRef ? ` · ref ${cost.sourceRef}` : ""}
             </div>
           </div>
-          <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 text-sm sm:grid-cols-3">
+          <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-navy-100 pt-3 text-sm sm:grid-cols-3">
             <Row k="Purchase (excl. GST)" v={formatINR(cost.purchaseCost)} />
             <Row k="Purchase GST" v={`${Number(cost.purchaseTaxRate)}% · ${cost.itcPolicy === "recoverable" ? "claimed as ITC" : "added to cost"}`} />
             <Row k="Freight" v={formatINR(cost.freight)} />
@@ -120,15 +120,15 @@ export function CostPanel({
       )}
 
       {perms.canEditCosts ? (
-        <form onSubmit={submit} className="space-y-4 rounded-2xl border border-navy-100 bg-navy-50/40 p-4">
-          <h3 className="text-sm font-bold text-navy-900">Record a new purchase cost</h3>
+        <form onSubmit={submit} className="space-y-4 rounded-xl border border-rule bg-paper/50 p-4 sm:p-5">
+          <h3 className="border-b border-rule pb-3 text-[15px] font-semibold text-navy-900">Record a new purchase cost</h3>
           {error && <Alert tone="danger">{error}</Alert>}
           <div className="grid gap-3 sm:grid-cols-3">
             <Field label="Purchase cost (excl. GST)" htmlFor="c-cost" required hint={`Per ${unitName}, from the supplier bill.`}>
-              <Input id="c-cost" inputMode="decimal" className="tabular" value={f.purchaseCost} onChange={(e) => set("purchaseCost", e.target.value)} required />
+              <Input id="c-cost" inputMode="decimal" className="font-mono tabular" value={f.purchaseCost} onChange={(e) => set("purchaseCost", e.target.value)} required />
             </Field>
             <Field label="GST on purchase %" htmlFor="c-rate">
-              <Input id="c-rate" inputMode="decimal" className="tabular" value={f.purchaseTaxRate} onChange={(e) => set("purchaseTaxRate", e.target.value)} />
+              <Input id="c-rate" inputMode="decimal" className="font-mono tabular" value={f.purchaseTaxRate} onChange={(e) => set("purchaseTaxRate", e.target.value)} />
             </Field>
             <Field label="Supplier" htmlFor="c-supplier">
               <Select id="c-supplier" value={f.supplierId} onChange={(e) => set("supplierId", e.target.value)}>
@@ -141,23 +141,28 @@ export function CostPanel({
               </Select>
             </Field>
             <Field label="Freight per unit" htmlFor="c-freight">
-              <Input id="c-freight" inputMode="decimal" className="tabular" value={f.freight} onChange={(e) => set("freight", e.target.value)} />
+              <Input id="c-freight" inputMode="decimal" className="font-mono tabular" value={f.freight} onChange={(e) => set("freight", e.target.value)} />
             </Field>
             <Field label="Handling / loading" htmlFor="c-handling">
-              <Input id="c-handling" inputMode="decimal" className="tabular" value={f.handling} onChange={(e) => set("handling", e.target.value)} />
+              <Input id="c-handling" inputMode="decimal" className="font-mono tabular" value={f.handling} onChange={(e) => set("handling", e.target.value)} />
             </Field>
             <Field label="Other non-recoverable" htmlFor="c-other">
-              <Input id="c-other" inputMode="decimal" className="tabular" value={f.otherCosts} onChange={(e) => set("otherCosts", e.target.value)} />
+              <Input id="c-other" inputMode="decimal" className="font-mono tabular" value={f.otherCosts} onChange={(e) => set("otherCosts", e.target.value)} />
             </Field>
           </div>
-          <div className="flex gap-2 rounded-xl bg-white px-3 py-2.5 text-xs text-navy-600">
+          <div className="flex gap-2 rounded-lg border border-navy-100 bg-white px-3 py-2.5 text-xs leading-relaxed text-navy-600">
             <Info className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" />
             {regType === "regular"
               ? "Regular GST registration: GST paid on purchases is claimed as input tax credit, so it is NOT added to the landed cost. Enter freight/handling excluding any GST you can claim."
               : "Not registered as a regular GST taxpayer: GST paid on purchases can't be claimed back, so it IS added to the landed cost."}
           </div>
           {preview && (
-            <div className={cn("grid gap-2 rounded-xl px-3 py-2.5 text-sm sm:grid-cols-3", after?.belowCost ? "bg-red-50 text-red-900" : after?.belowFloor ? "bg-amber-50 text-amber-900" : "bg-white text-navy-800")}>
+            <div
+              className={cn(
+                "grid gap-2 rounded-lg border px-3 py-2.5 text-sm sm:grid-cols-3",
+                after?.belowCost ? "border-red-200 bg-red-50 text-red-900" : after?.belowFloor ? "border-amber-200 bg-amber-50 text-amber-900" : "border-navy-100 bg-white text-navy-800",
+              )}
+            >
               <div>
                 Landed cost: <b className="tabular">{formatINR(preview)}</b>
               </div>
@@ -197,8 +202,8 @@ export function CostPanel({
 function Row({ k, v }: { k: string; v: string }) {
   return (
     <div>
-      <dt className="text-xs text-navy-500">{k}</dt>
-      <dd className="font-semibold tabular">{v}</dd>
+      <dt className="label-mono text-[10px] text-navy-500">{k}</dt>
+      <dd className="mt-0.5 font-mono text-[13px] font-medium tabular">{v}</dd>
     </div>
   );
 }

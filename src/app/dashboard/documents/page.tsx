@@ -4,24 +4,26 @@ import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listDocuments } from "@/server/services/documents";
 import type { DocType } from "@/lib/document-types";
-import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
-import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
+import { SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money } from "@/components/ui/money";
 import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-bar";
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
 import { dayRange, num, str, type SearchParams } from "@/components/dashboard/ops/params";
 import { DOC_LABEL } from "@/components/dashboard/ops/guard";
+import { codeLink, rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Documents" };
 
 const TYPES = ["tax_invoice", "bill_of_supply", "cash_memo", "credit_note", "quotation"] as const;
-const TYPE_TONE: Record<string, "navy" | "gold" | "purple" | "blue" | "neutral"> = {
-  tax_invoice: "navy",
-  bill_of_supply: "navy",
-  cash_memo: "neutral",
-  credit_note: "purple",
-  quotation: "blue",
+// Document type as a small coloured dot rather than a badge on every row.
+const TYPE_DOT: Record<string, string> = {
+  tax_invoice: "bg-navy-800",
+  bill_of_supply: "bg-navy-500",
+  cash_memo: "bg-navy-300",
+  credit_note: "bg-violet-600",
+  quotation: "bg-sky-600",
 };
 
 export default function DocumentsPage({ searchParams }: PageProps<"/dashboard/documents">) {
@@ -72,6 +74,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
   return (
     <div>
       <PageHeader
+        eyebrow="Sales"
         title="Documents"
         description="Every issued quotation, bill and credit note. Issued documents are permanent — corrections are made by cancellation or credit note, never by editing."
         actions={
@@ -108,42 +111,50 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                 <th className={th}>Issued</th>
                 <th className={th}>Customer</th>
                 <th className={th}>Sale</th>
-                <th className={`${th} text-right`}>Amount</th>
+                <th className={thNum}>Amount</th>
                 <th className={th}>Status</th>
                 <th className={th}>Issued by</th>
               </tr>
             </thead>
             <tbody>
               {data.items.map((d) => (
-                <tr key={d.id} className="hover:bg-navy-50/50">
-                  <td className={td}>
-                    <Link href={`/dashboard/documents/${d.id}`} className="whitespace-nowrap font-semibold tabular hover:underline">
-                      {d.docNumber}
-                    </Link>
-                    {d.isTraining && <SampleBadge label="Training" className="ml-1.5" />}
+                <tr key={d.id} className={rowHover}>
+                  <td className={tdText}>
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <Link href={`/dashboard/documents/${d.id}`} className={`${codeLink} whitespace-nowrap`}>
+                        {d.docNumber}
+                      </Link>
+                      {d.isTraining && <SampleBadge label="Training" />}
+                    </span>
                   </td>
-                  <td className={td}>
-                    <Badge tone={TYPE_TONE[d.docType] ?? "neutral"}>{DOC_LABEL[d.docType] ?? d.docType}</Badge>
+                  <td className={tdText}>
+                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] text-navy-700">
+                      <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${TYPE_DOT[d.docType] ?? "bg-navy-300"}`} />
+                      {DOC_LABEL[d.docType] ?? d.docType}
+                    </span>
                   </td>
-                  <td className={`${td} text-navy-600`}>
+                  <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={d.issuedAt} />
                   </td>
-                  <td className={td}>{d.customerName ?? <span className="text-navy-400">Cash sale</span>}</td>
-                  <td className={td}>
-                    <Link href={`/dashboard/sales/${d.saleId}`} className="text-navy-700 hover:underline">
+                  <td className={tdText}>{d.customerName ?? <span className="text-navy-400">Cash sale</span>}</td>
+                  <td className={tdText}>
+                    <Link href={`/dashboard/sales/${d.saleId}`} className="font-mono text-[13px] text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
                       {d.saleNumber}
                     </Link>
                   </td>
-                  <td className={`${td} text-right font-semibold`}>
-                    {d.docType === "credit_note" ? "− " : ""}
-                    <Money value={d.grandTotal} />
+                  <td className={`${tdNum} font-semibold`}>
+                    <span className={d.docType === "credit_note" ? "text-violet-700" : undefined}>
+                      {d.docType === "credit_note" ? "− " : ""}
+                      <Money value={d.grandTotal} />
+                    </span>
                   </td>
-                  <td className={td}>
-                    <StatusBadge status={d.status} />
+                  <td className={tdText}>
+                    {/* Issued is the normal state; only a cancellation is stamped. */}
+                    {d.status === "issued" ? <span className="text-[13px] text-navy-500">Issued</span> : <StatusBadge status={d.status} />}
                   </td>
-                  <td className={`${td} text-navy-600`}>
+                  <td className={tdMuted}>
                     {d.issuedByName}
-                    {d.printCount > 0 && <div className="text-xs text-navy-400">Printed {d.printCount}×</div>}
+                    {d.printCount > 0 && <div className="font-mono text-[11.5px] text-navy-400">Printed {d.printCount}×</div>}
                   </td>
                 </tr>
               ))}

@@ -21,11 +21,11 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
   if (!needed) {
     if (sale.approvalStatus === "approved" && latest?.status === "approved") {
       return (
-        <div className="flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-          <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+        <div className="flex items-start gap-3 rounded-lg border border-emerald-200 border-l-[3px] border-l-emerald-600 bg-emerald-50/80 px-4 py-3 text-sm leading-relaxed text-emerald-950">
+          <BadgeCheck className="mt-0.5 h-[18px] w-[18px] shrink-0 text-emerald-700" />
           <div>
-            <div className="font-bold">Discount approved by {latest.decidedByName ?? "manager"}</div>
-            <div className="text-emerald-800">
+            <div className="font-semibold">Discount approved by {latest.decidedByName ?? "manager"}</div>
+            <div className="text-emerald-900">
               {latest.decisionChannel === "in_person" ? "In person at the counter" : "Approved remotely"}
               {latest.decisionNote ? ` · “${latest.decisionNote}”` : ""}. Changing the cart will need a new approval.
             </div>
@@ -40,28 +40,30 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
   const rejected = sale.approvalStatus === "rejected" || latest?.status === "rejected";
 
   return (
-    <section aria-label="Approval required" className="rounded-2xl border-2 border-amber-300 bg-amber-50 p-4 shadow-card">
+    <section aria-label="Approval required" className="animate-rise rounded-lg border border-amber-300 border-l-[3px] border-l-amber-500 bg-amber-50/80 p-4">
       <div className="flex items-start gap-3">
-        <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-amber-600" />
+        <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
         <div className="min-w-0 flex-1">
-          <h3 className="text-base font-extrabold text-amber-950">Approval needed before finalising</h3>
-          <ul className="mt-1 list-inside list-disc text-sm text-amber-900">
+          <h3 className="text-[15px] font-semibold text-amber-950">Approval needed before finalising</h3>
+          <ul className="mt-1 space-y-0.5 text-sm leading-relaxed text-amber-900">
             {evaluation!.approvalReasons.map((r) => (
-              <li key={r}>{r}</li>
+              <li key={r} className="flex gap-2 before:mt-[0.6em] before:h-1 before:w-1 before:shrink-0 before:rounded-full before:bg-amber-600 before:content-['']">
+                {r}
+              </li>
             ))}
           </ul>
         </div>
       </div>
 
       {pending && (
-        <div className="mt-3 flex items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-sm font-semibold text-amber-900">
-          <Spinner className="text-amber-600" />
-          <Clock className="h-4 w-4" /> Waiting for approval{latest ? ` (requested by ${latest.requestedByName})` : ""}… this updates automatically.
+        <div className="mt-3 flex items-center gap-2.5 rounded-md border border-amber-200 bg-white/80 px-3 py-2 text-sm font-medium text-amber-950">
+          <Spinner className="shrink-0 text-amber-600" />
+          <span>Waiting for approval{latest ? ` (requested by ${latest.requestedByName})` : ""}… this updates automatically.</span>
         </div>
       )}
       {rejected && !pending && latest?.status === "rejected" && (
-        <div className="mt-3 flex items-start gap-2 rounded-xl bg-red-50 px-3 py-2 text-sm text-red-900">
-          <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+        <div className="mt-3 flex items-start gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-950">
+          <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-700" />
           <span>
             Rejected by <b>{latest.decidedByName ?? "manager"}</b>
             {latest.decisionNote ? `: “${latest.decisionNote}”` : ""}. Reduce the discount or ask again with a reason.
@@ -69,14 +71,14 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
         </div>
       )}
 
-      <div className="mt-3 flex flex-wrap gap-2">
+      <div className="mt-3.5 flex flex-wrap gap-2">
         {!pending && (
           <Button variant="primary" icon={<Clock className="h-4 w-4" />} onClick={() => setRequestOpen(true)}>
             Request approval
           </Button>
         )}
         {config.discounts.inPersonApprovalEnabled && (
-          <Button variant="gold" icon={<UserCheck className="h-4 w-4" />} onClick={() => setInPersonOpen(true)}>
+          <Button variant="outline" icon={<UserCheck className="h-4 w-4" />} onClick={() => setInPersonOpen(true)}>
             Manager approves here
           </Button>
         )}

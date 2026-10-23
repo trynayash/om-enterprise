@@ -4,11 +4,14 @@ import { Package, Plus, Star, Upload } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listBrands, listCategories, listProductsAdmin, type AdminProductFilter } from "@/server/services/catalog";
-import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
+import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime } from "@/components/ui/money";
+import { cn } from "@/components/ui/cn";
 import { ProductFilters } from "@/components/dashboard/catalog/product-filters";
+import { Pagination } from "@/components/dashboard/ops/pagination";
+import { nameLink, rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Products" };
 
@@ -41,17 +44,6 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
     pageSize: 40,
   };
   const [result, categories, brands] = [await listProductsAdmin(actor, filter), await listCategories(), await listBrands()];
-  const totalPages = Math.max(1, Math.ceil(result.total / result.pageSize));
-  const pageHref = (p: number) => {
-    const next = new URLSearchParams();
-    for (const [k, v] of Object.entries(sp)) {
-      const val = one(v);
-      if (val && k !== "page") next.set(k, val);
-    }
-    if (p > 1) next.set("page", String(p));
-    return `/dashboard/products${next.size ? `?${next}` : ""}`;
-  };
-
   return (
     <div>
       <PageHeader
@@ -88,28 +80,24 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
       ) : (
         <>
           {/* Phones: stacked cards */}
-          <ul className="space-y-2 md:hidden">
+          <ul className="divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-100 bg-white shadow-card md:hidden">
             {result.items.map((p) => (
               <li key={p.id}>
-                <Link href={`/dashboard/products/${p.id}`} className="block rounded-2xl border border-navy-100 bg-white p-4 shadow-card active:bg-navy-50">
+                <Link href={`/dashboard/products/${p.id}`} className="block px-4 py-3.5 transition-colors active:bg-paper">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="font-semibold text-navy-900">{p.name}</div>
-                      <div className="text-xs text-navy-500">
-                        {[p.brandName, p.categoryName].filter(Boolean).join(" · ")} · {p.variantCount} variant{p.variantCount === 1 ? "" : "s"}
+                      <div className="font-semibold leading-snug text-navy-900">{p.name}</div>
+                      <div className="mt-0.5 text-xs text-navy-500">
+                        {[p.brandName, p.categoryName].filter(Boolean).join(" · ")}
                       </div>
                     </div>
-                    {p.isPublished ? <Badge tone="green">Published</Badge> : <Badge>Hidden</Badge>}
+                    <span className="shrink-0 font-mono text-xs tabular text-navy-500">
+                      {p.variantCount} var.
+                    </span>
                   </div>
-                  <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                    {p.isSample && <SampleBadge />}
-                    <StatusBadge status={p.reviewStatus} />
-                    {p.isFeatured && (
-                      <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-gold-700">
-                        <Star className="h-3 w-3 fill-gold-500 text-gold-500" /> Featured
-                      </span>
-                    )}
-                    {!p.isActive && <Badge tone="red">Inactive</Badge>}
+                  <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                    <ProductState published={p.isPublished} review={p.reviewStatus} />
+                    <ProductFlags sample={p.isSample} featured={p.isFeatured} inactive={!p.isActive} />
                   </div>
                 </Link>
               </li>
@@ -122,64 +110,74 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
                   <th className={th}>Product</th>
                   <th className={th}>Brand</th>
                   <th className={th}>Category</th>
-                  <th className={`${th} text-right`}>Variants</th>
-                  <th className={th}>Information</th>
-                  <th className={th}>Website</th>
-                  <th className={th}>Updated</th>
+                  <th className={thNum}>Variants</th>
+                  <th className={th}>Status</th>
+                  <th className={thNum}>Updated</th>
                 </tr>
               </thead>
               <tbody>
                 {result.items.map((p) => (
-                  <tr key={p.id} className="hover:bg-navy-50/50">
-                    <td className={td}>
-                      <Link href={`/dashboard/products/${p.id}`} className="font-semibold text-navy-900 hover:text-gold-700 hover:underline">
+                  <tr key={p.id} className={rowHover}>
+                    <td className={tdText}>
+                      <Link href={`/dashboard/products/${p.id}`} className={nameLink}>
                         {p.name}
                       </Link>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-1.5">
-                        {p.isSample && <SampleBadge />}
-                        {p.isFeatured && (
-                          <span className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-gold-700">
-                            <Star className="h-3 w-3 fill-gold-500 text-gold-500" /> Featured
-                          </span>
-                        )}
-                        {!p.isActive && <Badge tone="red">Inactive</Badge>}
-                        {p.model && <span className="text-xs text-navy-500">Model {p.model}</span>}
-                      </div>
+                      {(p.model || p.isSample || p.isFeatured || !p.isActive) && (
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                          <ProductFlags sample={p.isSample} featured={p.isFeatured} inactive={!p.isActive} />
+                          {p.model && <span className="font-mono text-[11.5px] text-navy-500">Model {p.model}</span>}
+                        </div>
+                      )}
                     </td>
-                    <td className={td}>{p.brandName ?? <span className="text-navy-400">—</span>}</td>
-                    <td className={td}>{p.categoryName}</td>
-                    <td className={`${td} text-right tabular`}>{p.variantCount}</td>
-                    <td className={td}>
-                      <StatusBadge status={p.reviewStatus === "approved" ? "approved" : p.reviewStatus} />
+                    <td className={tdMuted}>{p.brandName ?? <span className="text-navy-300">—</span>}</td>
+                    <td className={tdMuted}>{p.categoryName}</td>
+                    <td className={tdNum}>{p.variantCount}</td>
+                    <td className={tdText}>
+                      <ProductState published={p.isPublished} review={p.reviewStatus} />
                     </td>
-                    <td className={td}>{p.isPublished ? <Badge tone="green">Published</Badge> : <Badge>Hidden</Badge>}</td>
-                    <td className={`${td} text-navy-600`}>
-                      <DateTime value={p.updatedAt} dateOnly />
+                    <td className={tdNum}>
+                      <span className="text-navy-500">
+                        <DateTime value={p.updatedAt} dateOnly />
+                      </span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </TableWrap>
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-navy-600">
-            <span>
-              {result.total} product{result.total === 1 ? "" : "s"} · page {page} of {totalPages}
-            </span>
-            <div className="flex gap-2">
-              {page > 1 && (
-                <LinkButton href={pageHref(page - 1)} variant="outline" size="sm">
-                  Previous
-                </LinkButton>
-              )}
-              {page < totalPages && (
-                <LinkButton href={pageHref(page + 1)} variant="outline" size="sm">
-                  Next
-                </LinkButton>
-              )}
-            </div>
-          </div>
+          <Pagination total={result.total} page={page} pageSize={result.pageSize} sp={sp} basePath="/dashboard/products" />
         </>
       )}
     </div>
+  );
+}
+
+/**
+ * Website state as a quiet dot; the review state is shown only when it isn't "approved",
+ * so a list of finished products doesn't repeat the same two badges on every row.
+ */
+function ProductState({ published, review }: { published: boolean; review: "draft" | "pending_review" | "approved" }) {
+  return (
+    <span className="flex flex-col items-start gap-1">
+      <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap text-[13px]", published ? "text-navy-700" : "text-navy-400")}>
+        <span aria-hidden className={cn("h-1.5 w-1.5 rounded-full", published ? "bg-emerald-600" : "border border-navy-300")} />
+        {published ? "Published" : "Hidden"}
+      </span>
+      {review !== "approved" && <StatusBadge status={review} />}
+    </span>
+  );
+}
+
+function ProductFlags({ sample, featured, inactive }: { sample: boolean; featured: boolean; inactive: boolean }) {
+  return (
+    <>
+      {sample && <SampleBadge />}
+      {featured && (
+        <span className="inline-flex items-center gap-1 text-[11.5px] font-medium text-gold-700">
+          <Star className="h-3 w-3 fill-gold-500 text-gold-500" aria-hidden /> Featured
+        </span>
+      )}
+      {inactive && <Badge tone="red">Inactive</Badge>}
+    </>
   );
 }

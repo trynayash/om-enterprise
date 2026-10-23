@@ -24,6 +24,12 @@ export async function Sidebar() {
   return <SidebarNav groups={groups} user={{ name: actor.displayName, role: actor.roleName }} badges={badges} />;
 }
 
+/** Same footprint as the real sidebar so the page doesn't shift when it streams in. */
 export function SidebarSkeleton() {
-  return <aside className="hidden h-screen w-64 shrink-0 bg-navy-900 lg:block" aria-hidden />;
+  return (
+    <>
+      <div className="h-14 shrink-0 border-b border-navy-950 bg-navy-900 lg:hidden" aria-hidden />
+      <aside className="hidden w-60 shrink-0 border-r border-navy-950 bg-navy-900 lg:block" aria-hidden />
+    </>
+  );
 }

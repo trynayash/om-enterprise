@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { PackageSearch, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR, formatQty } from "@/lib/money";
 import { SampleBadge } from "@/components/ui/badge";
@@ -49,7 +49,7 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-navy-100 bg-white p-3 shadow-card sm:p-4">
+      <div className="rounded-xl border border-navy-200 bg-white p-3 shadow-card sm:p-4">
         <div className="relative">
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-navy-400" />
           <input
@@ -58,11 +58,11 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
             autoFocus
             placeholder="Search name, brand, size or SKU…"
             aria-label="Search products"
-            className="h-14 w-full rounded-xl border-2 border-navy-200 bg-navy-50/40 pl-12 pr-12 text-base font-medium focus:border-gold-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-gold-100"
+            className="h-14 w-full rounded-lg border border-navy-200 bg-white pl-12 pr-12 text-[17px] text-navy-950 placeholder:text-navy-400 transition-[border-color,box-shadow] duration-150 hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
           />
           {loading && <Spinner className="absolute right-4 top-1/2 -translate-y-1/2 text-navy-400" />}
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-1.5">
           <Chip active={!categoryId} onClick={() => setCategoryId("")}>
             All
           </Chip>
@@ -76,56 +76,63 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
 
       {error && <p className="text-sm text-red-700">{error}</p>}
       {!active ? (
-        <EmptyState icon={<PackageSearch className="h-10 w-10" />} title="Look up any price" description="Search or pick a category. Prices shown are the current selling prices — the same ones the bill will use." />
+        <EmptyState title="Look up any price" description="Search or pick a category. Prices shown are the current selling prices — the same ones the bill will use." />
       ) : groups.length === 0 && !loading ? (
         <EmptyState title="No products found" description="Try a brand, size or SKU." />
       ) : (
-        <div className="grid gap-3 lg:grid-cols-2">
+        <div className="grid items-start gap-4 lg:grid-cols-2">
           {groups.map((vs) => {
             const p = vs[0];
             return (
-              <article key={p.productId} className="rounded-2xl border border-navy-100 bg-white shadow-card">
-                <header className="border-b border-navy-100 px-4 py-3">
+              <article key={p.productId} className="overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+                <header className="border-b border-navy-200 bg-paper/60 px-4 py-3">
                   <div className="flex flex-wrap items-center gap-1.5">
-                    <h2 className="font-bold text-navy-900">{p.productName}</h2>
+                    <h2 className="font-semibold text-navy-950">{p.productName}</h2>
                     {p.isSample && <SampleBadge />}
                   </div>
-                  <div className="text-xs text-navy-500">{[p.brandName, p.categoryName, p.hsnCode ? `HSN ${p.hsnCode}` : null, taxCharged ? `GST ${D(p.gstRate).toString()}%` : null].filter(Boolean).join(" · ")}</div>
+                  <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-navy-500">
+                    {[p.brandName, p.categoryName].filter(Boolean).map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                    {p.hsnCode && <span className="font-mono">HSN {p.hsnCode}</span>}
+                    {taxCharged && <span className="font-mono">GST {D(p.gstRate).toString()}%</span>}
+                  </div>
                 </header>
-                <ul className="divide-y divide-navy-50">
+                <ul className="divide-y divide-navy-100">
                   {vs.map((v) => (
-                    <li key={v.variantId} className="flex items-start justify-between gap-3 px-4 py-2.5">
-                      <div className="min-w-0">
-                        <div className="text-sm font-semibold text-navy-800">{v.variantName}</div>
-                        <div className="text-[11px] text-navy-400">{v.sku}</div>
-                        {v.tiers.length > 0 && (
-                          <div className="text-[11px] font-semibold text-gold-700">
-                            Bulk: {v.tiers.map((t) => `${formatQty(t.minQty)}+ @ ${formatINR(t.price)}`).join(" · ")}
-                          </div>
-                        )}
-                        {v.conversions.length > 0 && (
-                          <div className="text-[11px] text-navy-500">
-                            Also sold by:{" "}
-                            {v.conversions
-                              .map((c) => `${units.find((u) => u.code === c.unitCode)?.name ?? c.unitCode} (${formatQty(c.factor)} ${v.unitName})`)
-                              .join(", ")}
-                          </div>
-                        )}
-                      </div>
-                      <div className="shrink-0 text-right">
+                    <li key={v.variantId} className="px-4 py-2.5">
+                      <div className="flex items-baseline">
+                        <span className="min-w-0 text-sm font-medium text-navy-900">{v.variantName}</span>
+                        <span aria-hidden className="leader" />
                         {v.price ? (
-                          <>
-                            <div className="text-base font-extrabold text-navy-900 tabular">{formatINR(v.price)}</div>
-                            <div className="text-[11px] text-navy-500">
-                              per {v.unitName}
-                              {taxCharged ? (v.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
-                            </div>
-                            {v.mrp && <div className="text-[11px] text-navy-400">MRP {formatINR(v.mrp)}</div>}
-                          </>
+                          <span className="shrink-0 font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(v.price)}</span>
                         ) : (
-                          <span className="text-xs font-semibold text-red-700">No price set</span>
+                          <span className="shrink-0 text-xs font-semibold text-red-700">No price set</span>
                         )}
                       </div>
+                      <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 text-[11px]">
+                        <span className="font-mono text-navy-500">{v.sku}</span>
+                        {v.price && (
+                          <span className="text-navy-500">
+                            per {v.unitName}
+                            {taxCharged ? (v.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
+                            {v.mrp && <span className="ml-2 font-mono text-navy-400">MRP {formatINR(v.mrp)}</span>}
+                          </span>
+                        )}
+                      </div>
+                      {v.tiers.length > 0 && (
+                        <div className="mt-1 text-[11px] font-medium text-gold-700">
+                          Bulk: <span className="font-mono">{v.tiers.map((t) => `${formatQty(t.minQty)}+ @ ${formatINR(t.price)}`).join(" · ")}</span>
+                        </div>
+                      )}
+                      {v.conversions.length > 0 && (
+                        <div className="mt-0.5 text-[11px] text-navy-500">
+                          Also sold by:{" "}
+                          {v.conversions
+                            .map((c) => `${units.find((u) => u.code === c.unitCode)?.name ?? c.unitCode} (${formatQty(c.factor)} ${v.unitName})`)
+                            .join(", ")}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -144,7 +151,10 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={cn("rounded-full px-3 py-1.5 text-xs font-bold transition-colors", active ? "bg-navy-900 text-white" : "bg-navy-50 text-navy-700 hover:bg-navy-100")}
+      className={cn(
+        "h-8 rounded-md border px-2.5 text-[13px] font-medium transition-colors duration-150",
+        active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:border-navy-400 hover:text-navy-950",
+      )}
     >
       {children}
     </button>

@@ -72,19 +72,19 @@ export function ImagesManager({ productId, productName, images, canEdit }: { pro
       <CardBody className="space-y-3">
         {error && <Alert tone="danger">{error}</Alert>}
         {images.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-navy-200 py-6 text-sm text-navy-500">
-            <ImageOff className="h-6 w-6 text-navy-300" />
+          <div className="blueprint flex flex-col items-center gap-2 rounded-lg border border-navy-200 px-4 py-7 text-center text-[13px] leading-relaxed text-navy-500">
+            <ImageOff className="h-5 w-5 text-navy-400" aria-hidden />
             No images yet — the website shows a category illustration instead.
           </div>
         ) : (
           <ul className="grid grid-cols-2 gap-3">
             {images.map((img, i) => (
-              <li key={img.id} className="group relative overflow-hidden rounded-xl border border-navy-100 bg-navy-50">
+              <li key={img.id} className="group relative overflow-hidden rounded-lg border border-navy-100 bg-white">
                 {/* eslint-disable-next-line @next/next/no-img-element -- served by our own upload route */}
                 <img src={img.url} alt={img.alt ?? productName} className="aspect-square w-full object-contain" loading="lazy" />
-                {i === 0 && <span className="absolute left-2 top-2 rounded-md bg-navy-900 px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">Main</span>}
+                {i === 0 && <span className="label-mono absolute left-1.5 top-1.5 rounded-[3px] bg-navy-900 px-1.5 py-0.5 text-[9.5px] text-white">Main</span>}
                 {canEdit && (
-                  <div className="absolute inset-x-0 bottom-0 flex justify-between bg-white/90 p-1">
+                  <div className="absolute inset-x-0 bottom-0 flex justify-between border-t border-navy-100 bg-white/95 p-0.5">
                     <span className="flex">
                       <button type="button" className="rounded p-1 text-navy-600 hover:bg-navy-100 disabled:opacity-30" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move earlier">
                         <ArrowLeft className="h-4 w-4" />

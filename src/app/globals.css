@@ -1,56 +1,201 @@
 @import "tailwindcss";
 
-/* OM Enterprise design tokens — navy, white, gold. */
+/*
+ * OM Enterprise design tokens. See DESIGN.md.
+ * Brand: navy, white, gold — set like a printed trade catalogue: ink navy type on white or
+ * warm paper, brass-gold used sparingly for markers and rules, monospace for anything that is
+ * read like a spec sheet (SKUs, sizes, quantities, money).
+ */
 @theme {
-  --color-navy-950: #06122a;
-  --color-navy-900: #0b1f3a;
-  --color-navy-800: #12294b;
-  --color-navy-700: #1b3a66;
-  --color-navy-600: #284f86;
-  --color-navy-500: #3a67a6;
-  --color-navy-300: #9db3d4;
-  --color-navy-200: #c9d6ea;
-  --color-navy-100: #e6ecf5;
-  --color-navy-50: #f3f6fb;
+  /* Ink navy: brand navy at 800–950; the lighter steps are muted ink greys, never bright blue. */
+  --color-navy-950: #070e1c;
+  --color-navy-900: #0d1b30;
+  --color-navy-800: #1a2a44;
+  --color-navy-700: #2d3c56;
+  --color-navy-600: #46546c;
+  --color-navy-500: #5d697e;
+  --color-navy-400: #8590a3;
+  --color-navy-300: #b1b9c6;
+  --color-navy-200: #d4d9e1;
+  --color-navy-100: #e8ebf0;
+  --color-navy-50: #f3f5f8;
 
-  --color-gold-700: #8f6a1f;
-  --color-gold-600: #b8892a;
-  --color-gold-500: #d4a537;
-  --color-gold-400: #e2be62;
-  --color-gold-300: #eed492;
-  --color-gold-200: #f6e6bd;
-  --color-gold-100: #fbf3dd;
-  --color-gold-50: #fdf9ee;
+  /* Brass: the brand gold, deeper and less yellow so it reads on white. */
+  --color-gold-700: #7a5a14;
+  --color-gold-600: #9e7518;
+  --color-gold-500: #c39222;
+  --color-gold-400: #d6ab4a;
+  --color-gold-300: #e5c784;
+  --color-gold-200: #f0e0b6;
+  --color-gold-100: #f7eed6;
+  --color-gold-50: #fbf7ec;
 
-  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  /* Paper: the warm off-white of a printed catalogue, and its ruling lines. */
+  --color-paper: #f6f4ef;
+  --color-paper-deep: #ece8df;
+  --color-rule: #ddd8cc;
 
-  --shadow-card: 0 1px 2px rgb(11 31 58 / 0.06), 0 4px 16px -4px rgb(11 31 58 / 0.08);
-  --shadow-lift: 0 2px 4px rgb(11 31 58 / 0.06), 0 12px 32px -8px rgb(11 31 58 / 0.18);
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
-  --animate-fade-in: fade-in 0.2s ease-out;
+  /* Crisp corners: tighter than Tailwind's defaults, applied everywhere. */
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 10px;
+  --radius-3xl: 14px;
+
+  --shadow-card: 0 1px 0 rgb(13 27 48 / 0.04), 0 1px 3px rgb(13 27 48 / 0.05);
+  --shadow-lift: 0 1px 2px rgb(13 27 48 / 0.06), 0 12px 32px -14px rgb(13 27 48 / 0.3);
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --animate-fade-in: fade-in 200ms var(--ease-out-quart) both;
+  --animate-rise: rise 460ms var(--ease-out-quart) both;
+  --animate-sheet-in: sheet-in 240ms var(--ease-out-quart) both;
+  --animate-slide-in: slide-in 280ms var(--ease-out-quart) both;
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
   }
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  scroll-behavior: smooth;
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
-body {
-  background: #ffffff;
-  color: var(--color-navy-900);
-  font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv11";
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+}
+
+@keyframes draw-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes draw-stroke {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+/* Condensed display type for headlines: Archivo's width axis, tightened. */
+@utility headline {
+  font-stretch: 78%;
+  letter-spacing: -0.012em;
+  line-height: 0.95;
+}
+
+/* Small uppercase labels in the monospace — section indexes, table heads, units. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Engineering-paper grid behind technical drawings. */
+@utility blueprint {
+  background-color: var(--color-paper);
+  background-image:
+    linear-gradient(to right, rgb(13 27 48 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(13 27 48 / 0.055) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: -1px -1px;
+}
+
+/* Dotted leader between a label and its value, as in a printed price list. */
+@utility leader {
+  flex: 1 1 auto;
+  min-width: 1rem;
+  margin-inline: 0.5rem;
+  border-bottom: 1px dotted var(--color-navy-300);
+  transform: translateY(-0.3em);
+}
+
+/* Underline that draws in from the left on hover. */
+@utility link-draw {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+  transition: background-size 240ms var(--ease-out-quart);
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}
+
+/* One-time entrance for the children of a list; set style={{ "--i": index }} on each child. */
+@utility stagger {
+  & > * {
+    animation: rise 460ms var(--ease-out-quart) both;
+    animation-delay: calc(min(var(--i, 0), 12) * 40ms);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-navy-900);
+    font-family: var(--font-sans);
+    font-feature-settings: "kern";
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-gold-200);
+    color: var(--color-navy-950);
+  }
+
+  /* Focus ring used across the app: brass reads on both white and navy. */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid var(--color-gold-600);
+    outline-offset: 2px;
+  }
+
+  dialog::backdrop {
+    background: rgb(7 14 28 / 0.55);
+  }
+
+  dialog[open] {
+    animation: sheet-in 240ms var(--ease-out-quart) both;
+  }
+
+  dialog[open]::backdrop {
+    animation: fade-in 200ms var(--ease-out-quart) both;
+  }
 }
 
 /* Numbers in tables & totals line up */
@@ -58,15 +203,64 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Focus ring used across the app */
-:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-gold-500);
-  outline-offset: 2px;
+/* A brass rule that draws across as its section scrolls into view (static where unsupported). */
+.rule-draw {
+  transform-origin: left;
+}
+@supports (animation-timeline: view()) {
+  .rule-draw {
+    animation: draw-x linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
 }
 
-dialog::backdrop {
-  background: rgb(6 18 42 / 0.55);
-  backdrop-filter: blur(2px);
+/* Technical drawings: strokes draw in once, one after another. */
+.drawing [data-draw] {
+  stroke-dasharray: 1;
+  animation: draw-stroke 900ms var(--ease-out-quart) both;
+}
+.drawing [data-draw]:nth-child(2) { animation-delay: 70ms; }
+.drawing [data-draw]:nth-child(3) { animation-delay: 140ms; }
+.drawing [data-draw]:nth-child(4) { animation-delay: 210ms; }
+.drawing [data-draw]:nth-child(5) { animation-delay: 280ms; }
+.drawing [data-draw]:nth-child(6) { animation-delay: 350ms; }
+.drawing [data-draw]:nth-child(7) { animation-delay: 420ms; }
+.drawing [data-draw]:nth-child(n + 8) { animation-delay: 490ms; }
+
+/* Toasts sit above a fixed bottom bar (the POS phone total bar) instead of covering it. */
+@media (width < 64rem) {
+  body:has([data-bottom-bar]) {
+    --toast-lift: 4.5rem;
+  }
+}
+
+/* The root crossfade runs alongside a product figure's morph from its card to the product page. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 160ms;
+  animation-timing-function: var(--ease-out-quart);
+}
+::view-transition-group(.product-figure) {
+  animation-duration: 380ms;
+  animation-timing-function: var(--ease-in-out-quart);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 /* Print: only the printable document */

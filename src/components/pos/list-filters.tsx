@@ -34,7 +34,7 @@ export function ListFilters({
     router.push(`${pathname}${qs.size ? `?${qs}` : ""}`);
   };
   return (
-    <form onSubmit={apply} className="flex flex-wrap items-end gap-2 rounded-2xl border border-navy-100 bg-white p-3 shadow-card">
+    <form onSubmit={apply} className="flex flex-wrap items-end gap-2 rounded-xl border border-navy-200 bg-white p-3 shadow-card">
       <div className="relative min-w-56 flex-1">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
         <Input value={values.q ?? ""} onChange={(e) => set("q", e.target.value)} placeholder={placeholder} className="h-11 pl-9" aria-label="Search" />

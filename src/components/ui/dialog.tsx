@@ -42,21 +42,21 @@ export function Dialog({
         e.preventDefault();
         onClose();
       }}
-      className={cn("m-auto w-[calc(100%-2rem)] rounded-2xl border border-navy-100 bg-white p-0 text-navy-900 shadow-lift", widths[size])}
+      className={cn("m-auto w-[calc(100%-2rem)] rounded-xl border border-navy-200 bg-white p-0 text-navy-900 shadow-lift", widths[size])}
     >
       {open && (
         <div className="flex max-h-[85vh] flex-col">
           <div className="flex items-start justify-between gap-4 border-b border-navy-100 px-5 py-4">
             <div>
-              <h2 className="text-lg font-bold">{title}</h2>
-              {description && <p className="mt-0.5 text-sm text-navy-500">{description}</p>}
+              <h2 className="text-[17px] font-semibold tracking-[-0.01em]">{title}</h2>
+              {description && <p className="mt-0.5 text-[13px] leading-relaxed text-navy-500">{description}</p>}
             </div>
-            <button type="button" onClick={onClose} className="rounded-lg p-1 text-navy-500 hover:bg-navy-50" aria-label="Close">
+            <button type="button" onClick={onClose} className="-mr-1 rounded-md p-1 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-900" aria-label="Close">
               <X className="h-5 w-5" />
             </button>
           </div>
           <div className="overflow-y-auto px-5 py-4">{children}</div>
-          {footer && <div className="flex flex-wrap justify-end gap-2 border-t border-navy-100 bg-navy-50/40 px-5 py-3">{footer}</div>}
+          {footer && <div className="flex flex-wrap justify-end gap-2 border-t border-navy-100 bg-paper/60 px-5 py-3">{footer}</div>}
         </div>
       )}
     </dialog>
