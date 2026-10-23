@@ -1,0 +1,3949 @@
+{
+  "group": "finolex",
+  "researchedOn": "2026-10-23",
+  "notes": [
+    "TOOLING LIMITATION: during this research the page-fetch tool could not resolve any host (DNS failure for every site, including finolexpipes.com), and the session web-search budget ran out before the end. All facts were taken from search-engine extracts of official finolexpipes.com product pages and Finolex catalogue PDFs (URLs in sourceUrls), not from directly opened pages. Spot-check against the live pages before publishing.",
+    "PRICES: no official, current Finolex Industries pipe price list could be found or opened. Search results only gave third-party aggregator pages, dealer listings, a 2021 distributor copy, and Finolex Cables (a separate company) lists. Every listPrice/mrp is therefore null; obtain the current list from the Finolex distributor.",
+    "IMAGES: none recorded. Official image URLs could not be read because product pages could not be fetched. All images arrays are empty and need to be filled from finolexpipes.com.",
+    "Material codes in specifications are Finolex's own codes as shown on the product pages. They can help when ordering from the distributor. Finolex pages sometimes give conflicting codes for similar items (e.g. Selfit vs Ringfit SWR bends), so confirm with the distributor.",
+    "CPVC Pipe SDR 13.5: the product page lists 15–50 mm in SDR 11 and SDR 13.5, but one Finolex brochure lists only SDR 11. Confirm which SDR 13.5 sizes the distributor actually stocks.",
+    "CPVC pipes come in 3 m and 5 m lengths, and ASTM pipes in 3 m and 6 m, so altUnit is null for them. Set altUnit once the stocked length is known.",
+    "CPVC Reducer: only combinations confirmed in search extracts are included. 40×32, 50×32, 50×40 and others probably exist (the code series continues) but were not confirmed.",
+    "CPVC Ball Valve: the size table lists 15–50 mm; the feature text on the same page says 15–80 mm. Only 15–50 mm is included. HSN set to 8481 (valves) per README; confirm with accountant.",
+    "CPVC FTA Brass Insert: the only source page found has an \"-old\" URL suffix. Sizes and codes come from that page.",
+    "CPVC Solvent Cement: Finolex lists pack sizes 59/118/237/473/946 labelled \"gms\" (PVC-U cements are labelled ml); the label is kept as Finolex shows it.",
+    "ASTM pipes and fittings: only ½\"–2\" variants are included for the shop's everyday range. Finolex lists pipes up to 8\", elbows, tees and couplers up to 4\" (and larger), and threaded elbows and tees only up to 2\". Plain vs threaded pipe ends are not split into variants; confirm what is stocked.",
+    "Agriculture Selfit pipe: Finolex states 20–400 mm in six classes (2.5–12.5 kg/cm²). The class-wise dimension table could not be read cleanly, so the variant set (63/75/90/110 mm × 4 and 6 kg/cm²) is limited to common IS 4985 combinations. The 6 m standard length (altUnit) was read from the Selfit table for 75 mm; confirm for the other sizes.",
+    "Column pipe: the size/type rows come from a table extract without column headers. Lengths (1.5 m or 3 m) differ by size and type. The variants listed are rows seen in the extract. Confirm length and the relevant standard with the distributor before selling.",
+    "SWR: only the Selfit (solvent-joint) pipe is included. A Ringfit (integrated rubber-ring) pipe range exists, but its lengths are given in feet with single- and double-socket options that could not be read reliably. Bend 45°, plain tee and single Y are listed on Finolex pages in more than one series; the joint type (Selfit/Ringfit) should be confirmed when stocking. P-trap was left out because the only page found was an old one.",
+    "SWR standards: Finolex states pipes conform to IS 13592 and fittings to IS 14735.",
+    "GST 18% is believed correct for all items (plastic pipes/fittings 3917, valves 8481, solvent cement 3506) but must be confirmed by the shop's accountant."
+  ],
+  "products": [
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Pipe SDR 11",
+      "model": null,
+      "description": "Chlorinated PVC pipe for hot and cold water supply lines, made by Finolex to IS 15778 in Copper Tube Size (CTS) dimensions. SDR 11 is the thicker-walled, higher-pressure class of the range and is identified by a red stripe on the pipe. The pipes are plain-ended, made from a lead-free compound and recommended for water up to 82 °C.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "IS 15778"
+        },
+        {
+          "label": "Pressure class",
+          "value": "SDR 11 (higher pressure rating than SDR 13.5)"
+        },
+        {
+          "label": "Sizing",
+          "value": "Copper Tube Size (CTS)"
+        },
+        {
+          "label": "Identification",
+          "value": "Red stripe"
+        },
+        {
+          "label": "Max. working temperature",
+          "value": "82 °C"
+        },
+        {
+          "label": "Ends",
+          "value": "Plain"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "3 m and 5 m"
+        },
+        {
+          "label": "Compound",
+          "value": "Lead-free"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-pipes/",
+        "https://www.finolexpipes.com/plumbing-products/cpvc-pipes-and-fittings/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-P11-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P11-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P11-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P11-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P11-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P11-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Pipe SDR 13.5",
+      "model": null,
+      "description": "Thinner-walled class of Finolex CPVC hot and cold water pipe to IS 15778 in CTS dimensions, identified by a brown stripe. It has a lower pressure rating than SDR 11 and suits lower-pressure domestic lines. Plain-ended, lead-free compound, recommended for water up to 82 °C.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "IS 15778"
+        },
+        {
+          "label": "Pressure class",
+          "value": "SDR 13.5 (lower pressure rating than SDR 11)"
+        },
+        {
+          "label": "Sizing",
+          "value": "Copper Tube Size (CTS)"
+        },
+        {
+          "label": "Identification",
+          "value": "Brown stripe"
+        },
+        {
+          "label": "Max. working temperature",
+          "value": "82 °C"
+        },
+        {
+          "label": "Ends",
+          "value": "Plain"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "3 m and 5 m"
+        },
+        {
+          "label": "Compound",
+          "value": "Lead-free"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-pipes/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-P135-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P135-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P135-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P135-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P135-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-P135-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Elbow 90°",
+      "model": null,
+      "description": "Moulded CPVC socket elbow that turns a CPVC water line through 90°. Finolex makes it to ASTM D 2846 in CTS sizes from ½\" to 2\" to match its IS 15778 CPVC pipes. Joined with CPVC solvent cement.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-90/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-E90-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Elbow 45°",
+      "model": null,
+      "description": "CPVC socket elbow that gives a 45° change of direction in a hot or cold water line. Made to ASTM D 2846 in CTS sizes from ½\" to 2\" for Finolex CPVC pipes.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-45/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-E45-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E45-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E45-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E45-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E45-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E45-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Tee",
+      "model": null,
+      "description": "Equal CPVC tee used to take a branch or service line off a main CPVC run. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6025 (15 mm) to 6030 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/tee/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-TEE-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEE-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEE-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEE-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEE-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEE-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Coupler",
+      "model": null,
+      "description": "Straight CPVC socket coupler for joining two lengths of CPVC pipe of the same size. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/coupler/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-CPL-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CPL-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CPL-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CPL-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CPL-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CPL-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Reducer",
+      "model": null,
+      "description": "Straight CPVC reducer that joins a larger CPVC pipe to a smaller one, stepping the line down in size. Finolex lists it in combinations from ¾\" × ½\" upwards; the common sizes are listed here.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6126 (20 × 15 mm) onwards, by size combination"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/reducer/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-RED-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-32X15",
+          "name": "32 × 15 mm (1¼\" × ½\")",
+          "attributes": {
+            "Size": "32 × 15 mm (1¼\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-32X20",
+          "name": "32 × 20 mm (1¼\" × ¾\")",
+          "attributes": {
+            "Size": "32 × 20 mm (1¼\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-32X25",
+          "name": "32 × 25 mm (1¼\" × 1\")",
+          "attributes": {
+            "Size": "32 × 25 mm (1¼\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-40X20",
+          "name": "40 × 20 mm (1½\" × ¾\")",
+          "attributes": {
+            "Size": "40 × 20 mm (1½\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-40X25",
+          "name": "40 × 25 mm (1½\" × 1\")",
+          "attributes": {
+            "Size": "40 × 25 mm (1½\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-RED-50X25",
+          "name": "50 × 25 mm (2\" × 1\")",
+          "attributes": {
+            "Size": "50 × 25 mm (2\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC End Cap",
+      "model": null,
+      "description": "CPVC socket cap that closes off the end of a CPVC pipe line. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/end-cap/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-CAP-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CAP-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CAP-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CAP-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CAP-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-CAP-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Female Threaded Adapter (FTA)",
+      "model": null,
+      "description": "All-CPVC adapter with a CPVC socket on one side and a female (internal) thread on the other, for connecting male-threaded fittings to a CPVC line. Finolex states it can be used with its own or any standard CPVC pipe.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Female, CPVC (plain, no metal insert)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6063 (15 mm) to 6068 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/female-threaded-adapter-f-t-a/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-FTA-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTA-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTA-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTA-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTA-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTA-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Male Threaded Adapter (MTA)",
+      "model": null,
+      "description": "All-CPVC adapter with a CPVC socket on one side and a male (external) thread on the other, used to connect a CPVC line to female-threaded fittings. Made in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Male, CPVC (plain, no metal insert)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6051 (15 mm) to 6056 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/male-threaded-adapter-m-t-a/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-MTA-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTA-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTA-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTA-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTA-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTA-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Male Threaded Adapter (MTA) – Brass Insert",
+      "model": null,
+      "description": "CPVC male threaded adapter whose external thread is a moulded-in brass insert, giving a stronger threaded joint to metal or female-threaded fittings. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Male, brass insert"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6057 (15 mm) to 6062 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/male-threaded-adapter-m-t-a-brass-insert/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-MTAB-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTAB-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTAB-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTAB-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTAB-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-MTAB-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Female Threaded Adapter (FTA) – Brass Insert",
+      "model": null,
+      "description": "CPVC female threaded adapter with a moulded-in brass internal thread, for connecting male-threaded metal fittings to a CPVC line. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Female, brass insert"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6069 (15 mm) to 6074 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/female-threaded-adapter-f-t-a-brass-insert-old/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-FTAB-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTAB-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTAB-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTAB-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTAB-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-FTAB-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Elbow 90° – Brass Insert",
+      "model": null,
+      "description": "CPVC 90° elbow with a female brass-threaded outlet. Finolex positions it for connecting male-threaded CP or metal fittings such as taps and showers to a CPVC line. Listed in ½\" to 1¼\" sizes to ASTM D 2846.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Female, brass insert"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6013 (15 mm) to 6016 (32 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-90-brass-insert/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-E90B-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90B-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90B-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-E90B-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Tee – Brass Insert",
+      "model": null,
+      "description": "CPVC tee whose branch outlet has a female brass thread, used to take off a tap, shower or other male-threaded metal fitting from a CPVC run. Listed in equal sizes ½\" to 1¼\" and in reducing combinations, to ASTM D 2846.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Thread",
+          "value": "Female, brass insert (branch)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "Equal 6037 (15 mm) to 6040 (32 mm); reducing 6041 (20×15), 6042 (25×15), 6043 (25×20), 6044 (32×15)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/tee-brass-insert/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-TEEB-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-TEEB-32X15",
+          "name": "32 × 15 mm (1¼\" × ½\")",
+          "attributes": {
+            "Size": "32 × 15 mm (1¼\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Union",
+      "model": null,
+      "description": "CPVC union that lets a section of CPVC pipe be disconnected for maintenance or replacement without cutting the line. Made to ASTM D 2846 in CTS sizes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2846 (Copper Tube Size, CTS)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6075 (15 mm) to 6080 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/union/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-UNI-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-UNI-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-UNI-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-UNI-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-UNI-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-UNI-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "cpvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Ball Valve",
+      "model": null,
+      "description": "CPVC ball valve for on/off control of hot and cold water in CPVC plumbing lines. Finolex lists it in CTS sizes from ½\" to 2\"; a replacement red handle is listed separately as an accessory.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Operation",
+          "value": "On/off (handle)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex CPVC pipes (IS 15778, CTS)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "6114 (15 mm) to 6119 (50 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-ball-valve/",
+        "https://www.finolexpipes.com/cpvc-pipes-fittings/ball-valve-accessories-red-handle/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-CPVC-BV-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-BV-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-BV-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-BV-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-BV-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-CPVC-BV-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U ASTM Pipe Schedule 40",
+      "model": null,
+      "description": "Rigid unplasticised PVC plumbing pipe made by Finolex to ASTM D 1785 in Iron Pipe Size (IPS) dimensions. Schedule 40 is the standard-wall series. Supplied in 3 m and 6 m lengths with plain or threaded ends.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "ASTM D 1785"
+        },
+        {
+          "label": "Series",
+          "value": "Schedule 40"
+        },
+        {
+          "label": "Sizing",
+          "value": "Iron Pipe Size (IPS)"
+        },
+        {
+          "label": "Dimensions",
+          "value": "Outside diameter: 21.34 mm (½\"), 26.67 mm (¾\"), 33.40 mm (1\"), 42.16 mm (1¼\"), 48.26 mm (1½\"), 60.32 mm (2\")"
+        },
+        {
+          "label": "Wall thickness (Sch 40)",
+          "value": "2.77 mm (½\"), 2.87 mm (¾\"), 3.38 mm (1\"), 3.56 mm (1¼\"), 3.68 mm (1½\"), 3.91 mm (2\")"
+        },
+        {
+          "label": "Ends",
+          "value": "Plain or threaded"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "3 m and 6 m"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/astm-pipes-fittings/pvc-u-schd-40/",
+        "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-UPVC-S40-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S40-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S40-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S40-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S40-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S40-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U ASTM Pipe Schedule 80",
+      "model": null,
+      "description": "Heavy-wall series of Finolex ASTM D 1785 PVC-U plumbing pipe. For the same size, Schedule 80 has a thicker wall and a higher pressure rating than Schedule 40. Supplied in 3 m and 6 m lengths with plain or threaded ends.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "ASTM D 1785"
+        },
+        {
+          "label": "Series",
+          "value": "Schedule 80"
+        },
+        {
+          "label": "Sizing",
+          "value": "Iron Pipe Size (IPS)"
+        },
+        {
+          "label": "Dimensions",
+          "value": "Outside diameter: 21.34 mm (½\"), 26.67 mm (¾\"), 33.40 mm (1\"), 42.16 mm (1¼\"), 48.26 mm (1½\"), 60.32 mm (2\")"
+        },
+        {
+          "label": "Wall thickness (Sch 80)",
+          "value": "3.73 mm (½\"), 3.91 mm (¾\"), 4.55 mm (1\"), 4.85 mm (1¼\"), 5.08 mm (1½\"), 5.54 mm (2\")"
+        },
+        {
+          "label": "Ends",
+          "value": "Plain or threaded"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "3 m and 6 m"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/astm-pipes-fittings/pvc-u-schd-40/",
+        "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-UPVC-S80-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S80-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S80-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S80-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S80-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-S80-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex ASTM Elbow 90° (Plain / Threaded)",
+      "model": null,
+      "description": "PVC-U 90° elbow for Finolex ASTM plumbing pipes, made to ASTM D 2467 (Schedule 80). Available with plain solvent-weld sockets or with threaded ends; the threaded version is made only up to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2467 (Schedule 80)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex ASTM D 1785 pipes"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "Plain 4512 (½\") to 4517 (2\"); threaded 4523 (½\") to 4528 (2\")"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "End"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/elbow-plain-threaded/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-UPVC-E90-15-P",
+          "name": "15 mm (½\") – Plain",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-15-T",
+          "name": "15 mm (½\") – Threaded",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-20-P",
+          "name": "20 mm (¾\") – Plain",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-20-T",
+          "name": "20 mm (¾\") – Threaded",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-25-P",
+          "name": "25 mm (1\") – Plain",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-25-T",
+          "name": "25 mm (1\") – Threaded",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-32-P",
+          "name": "32 mm (1¼\") – Plain",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-32-T",
+          "name": "32 mm (1¼\") – Threaded",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-40-P",
+          "name": "40 mm (1½\") – Plain",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-40-T",
+          "name": "40 mm (1½\") – Threaded",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-50-P",
+          "name": "50 mm (2\") – Plain",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-E90-50-T",
+          "name": "50 mm (2\") – Threaded",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex ASTM Tee (Plain / Threaded)",
+      "model": null,
+      "description": "Equal PVC-U tee for branching Finolex ASTM plumbing lines, made to ASTM D 2467 (Schedule 80). Offered with plain solvent-weld sockets or threaded ends; threaded tees are made only up to 2\".",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2467 (Schedule 80)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex ASTM D 1785 pipes"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "Plain from 4543 (½\"); threaded 4557 (½\") to 4562 (2\")"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "End"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/tee-plain-threaded/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-UPVC-TEE-15-P",
+          "name": "15 mm (½\") – Plain",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-15-T",
+          "name": "15 mm (½\") – Threaded",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-20-P",
+          "name": "20 mm (¾\") – Plain",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-20-T",
+          "name": "20 mm (¾\") – Threaded",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-25-P",
+          "name": "25 mm (1\") – Plain",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-25-T",
+          "name": "25 mm (1\") – Threaded",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-32-P",
+          "name": "32 mm (1¼\") – Plain",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-32-T",
+          "name": "32 mm (1¼\") – Threaded",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-40-P",
+          "name": "40 mm (1½\") – Plain",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-40-T",
+          "name": "40 mm (1½\") – Threaded",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-50-P",
+          "name": "50 mm (2\") – Plain",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "End": "Plain"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-TEE-50-T",
+          "name": "50 mm (2\") – Threaded",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "End": "Threaded"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex ASTM Coupler",
+      "model": null,
+      "description": "PVC-U socket coupler for joining two Finolex ASTM plumbing pipes of the same size, made to ASTM D 2467 (Schedule 80). Finolex lists it from ½\" to 4\"; the ½\"–2\" range is listed here.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D 2467 (Schedule 80)"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex ASTM D 1785 pipes"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "4501 (½\") to 4509 (4\")"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/astm-pipes-fittings/coupler/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-UPVC-CPL-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-CPL-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-CPL-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-CPL-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-CPL-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-UPVC-CPL-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U Agriculture Pipe – Selfit",
+      "model": null,
+      "description": "Rigid PVC-U pressure pipe for irrigation and farm water supply, made by Finolex to IS 4985:2021 with solvent-cement (Selfit) socket joints. Finolex makes it from 20 mm to 400 mm in six pressure classes from 2.5 to 12.5 kg/cm². Recommended for water between 1 °C and 45 °C.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "IS 4985:2021"
+        },
+        {
+          "label": "Pressure classes",
+          "value": "Class 1–6: 0.25, 0.40, 0.60, 0.80, 1.00, 1.25 MPa (2.5, 4, 6, 8, 10, 12.5 kg/cm²)"
+        },
+        {
+          "label": "Size range (manufacturer)",
+          "value": "20 mm to 400 mm"
+        },
+        {
+          "label": "Joint",
+          "value": "Selfit – solvent cement socket joint"
+        },
+        {
+          "label": "Water temperature",
+          "value": "1 °C to 45 °C"
+        },
+        {
+          "label": "Standard length",
+          "value": "6 m"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "Pressure class"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/agriculture-products/agriculture-pipes-fittings/selfit-pvc-u-pipes/",
+        "https://www.finolexpipes.com/agriculture-products/agriculture-pipes-fittings/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_agri_004.pdf"
+      ],
+      "altUnit": {
+        "unit": "length",
+        "factor": "6"
+      },
+      "featured": true,
+      "variants": [
+        {
+          "sku": "FNX-AGRI-SF-63-4KG",
+          "name": "63 mm (2\") – 4 kg/cm² (0.40 MPa)",
+          "attributes": {
+            "Size": "63 mm (2\")",
+            "Pressure class": "4 kg/cm² (0.40 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-63-6KG",
+          "name": "63 mm (2\") – 6 kg/cm² (0.60 MPa)",
+          "attributes": {
+            "Size": "63 mm (2\")",
+            "Pressure class": "6 kg/cm² (0.60 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-75-4KG",
+          "name": "75 mm (2½\") – 4 kg/cm² (0.40 MPa)",
+          "attributes": {
+            "Size": "75 mm (2½\")",
+            "Pressure class": "4 kg/cm² (0.40 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-75-6KG",
+          "name": "75 mm (2½\") – 6 kg/cm² (0.60 MPa)",
+          "attributes": {
+            "Size": "75 mm (2½\")",
+            "Pressure class": "6 kg/cm² (0.60 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-90-4KG",
+          "name": "90 mm (3\") – 4 kg/cm² (0.40 MPa)",
+          "attributes": {
+            "Size": "90 mm (3\")",
+            "Pressure class": "4 kg/cm² (0.40 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-90-6KG",
+          "name": "90 mm (3\") – 6 kg/cm² (0.60 MPa)",
+          "attributes": {
+            "Size": "90 mm (3\")",
+            "Pressure class": "6 kg/cm² (0.60 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-110-4KG",
+          "name": "110 mm (4\") – 4 kg/cm² (0.40 MPa)",
+          "attributes": {
+            "Size": "110 mm (4\")",
+            "Pressure class": "4 kg/cm² (0.40 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-AGRI-SF-110-6KG",
+          "name": "110 mm (4\") – 6 kg/cm² (0.60 MPa)",
+          "attributes": {
+            "Size": "110 mm (4\")",
+            "Pressure class": "6 kg/cm² (0.60 MPa)"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "pvc-upvc-pipes-fittings",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U Column Pipe",
+      "model": null,
+      "description": "PVC-U column (riser) pipe for hanging submersible pumps in borewells. The pipe has a square-threaded coupler joint for carrying the pump load and a thicker wall at the threaded end. Finolex offers 25–100 mm sizes in several duty types (V4, Crystal, Medium, Standard, Heavy, Super Heavy), chosen by installation depth.",
+      "unit": "length",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Joint",
+          "value": "Square-threaded coupler end (bell-end type also made)"
+        },
+        {
+          "label": "Types",
+          "value": "V4, Crystal, Medium, Standard, Heavy, Super Heavy (selected by installation depth, about 100–400 m)"
+        },
+        {
+          "label": "Size range (manufacturer)",
+          "value": "25 mm to 100 mm (1\" to 4\")"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "1.5 m and 3 m (depends on size and type)"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "Type"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/agriculture-products/column-pipes/pvc-u-column-pipes/",
+        "https://www.finolexpipes.com/agriculture-products/column-pipes/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-COL-32-STD",
+          "name": "32 mm (1¼\") – Standard",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "Type": "Standard"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-32-HVY",
+          "name": "32 mm (1¼\") – Heavy",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "Type": "Heavy"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-40-STD",
+          "name": "40 mm (1½\") – Standard",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "Type": "Standard"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-40-SHVY",
+          "name": "40 mm (1½\") – Super Heavy",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "Type": "Super Heavy"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-50-MED",
+          "name": "50 mm (2\") – Medium",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Type": "Medium"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-50-STD",
+          "name": "50 mm (2\") – Standard",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Type": "Standard"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-50-HVY",
+          "name": "50 mm (2\") – Heavy",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Type": "Heavy"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-COL-50-SHVY",
+          "name": "50 mm (2\") – Super Heavy",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Type": "Super Heavy"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Selfit PVC Pipe",
+      "model": null,
+      "description": "PVC-U soil, waste and rainwater (SWR) pipe made by Finolex to IS 13592, with a socket for solvent-cement (Selfit) jointing. Type A is meant for ventilation and rainwater lines; Type B has a thicker wall and is meant for soil and waste discharge as well as rainwater.",
+      "unit": "m",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Standard",
+          "value": "IS 13592"
+        },
+        {
+          "label": "Joint",
+          "value": "Selfit – solvent cement socket"
+        },
+        {
+          "label": "Type A",
+          "value": "Ventilation pipework and rainwater"
+        },
+        {
+          "label": "Type B",
+          "value": "Soil and waste discharge and rainwater (higher wall thickness)"
+        },
+        {
+          "label": "Standard lengths",
+          "value": "3 m, 3.66 m and 6 m"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "Type"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/swr-selfit-pvc-pipes-2/",
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-SF-75-A",
+          "name": "75 mm (2½\") – Type A",
+          "attributes": {
+            "Size": "75 mm (2½\")",
+            "Type": "Type A"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SF-75-B",
+          "name": "75 mm (2½\") – Type B",
+          "attributes": {
+            "Size": "75 mm (2½\")",
+            "Type": "Type B"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SF-90-A",
+          "name": "90 mm (3\") – Type A",
+          "attributes": {
+            "Size": "90 mm (3\")",
+            "Type": "Type A"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SF-90-B",
+          "name": "90 mm (3\") – Type B",
+          "attributes": {
+            "Size": "90 mm (3\")",
+            "Type": "Type B"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SF-110-A",
+          "name": "110 mm (4\") – Type A",
+          "attributes": {
+            "Size": "110 mm (4\")",
+            "Type": "Type A"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SF-110-B",
+          "name": "110 mm (4\") – Type B",
+          "attributes": {
+            "Size": "110 mm (4\")",
+            "Type": "Type B"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Bend 87.5° Plain",
+      "model": null,
+      "description": "Plain 87.5° SWR bend that collects waste water from branch lines and turns it into the main drain line. Made by Finolex to IS 14735.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "7591 (75 mm), 7592 (90 mm), 7593 (110 mm)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/bend-87-5-2/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-B875-75",
+          "name": "75 mm (2½\")",
+          "attributes": {
+            "Size": "75 mm (2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-B875-90",
+          "name": "90 mm (3\")",
+          "attributes": {
+            "Size": "90 mm (3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-B875-110",
+          "name": "110 mm (4\")",
+          "attributes": {
+            "Size": "110 mm (4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Bend 45° Plain",
+      "model": null,
+      "description": "Plain 45° SWR bend used to give a 45° turn in a drain line or as a shoe at the foot of a rainwater down-pipe. Made by Finolex to IS 14735.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/bend-45/",
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/plain-bend-45/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-B45-75",
+          "name": "75 mm (2½\")",
+          "attributes": {
+            "Size": "75 mm (2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-B45-90",
+          "name": "90 mm (3\")",
+          "attributes": {
+            "Size": "90 mm (3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-B45-110",
+          "name": "110 mm (4\")",
+          "attributes": {
+            "Size": "110 mm (4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Plain Tee",
+      "model": null,
+      "description": "Plain SWR tee that joins a lateral soil or waste pipe to the main vertical stack at 87.5°. Made by Finolex to IS 14735.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/tee/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-TEE-75",
+          "name": "75 mm (2½\")",
+          "attributes": {
+            "Size": "75 mm (2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-TEE-90",
+          "name": "90 mm (3\")",
+          "attributes": {
+            "Size": "90 mm (3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-TEE-110",
+          "name": "110 mm (4\")",
+          "attributes": {
+            "Size": "110 mm (4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Single Y Plain",
+      "model": null,
+      "description": "Plain single Y (wye) junction for bringing a branch drain into a main SWR line at an angle. Made by Finolex to IS 14735.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/single-y/",
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/plain-y/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-SY-75",
+          "name": "75 mm (2½\")",
+          "attributes": {
+            "Size": "75 mm (2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SY-90",
+          "name": "90 mm (3\")",
+          "attributes": {
+            "Size": "90 mm (3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-SY-110",
+          "name": "110 mm (4\")",
+          "attributes": {
+            "Size": "110 mm (4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Selfit Coupler",
+      "model": null,
+      "description": "Socket coupler for joining two SWR pipes of the same size with solvent cement. Made by Finolex to IS 14735.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        },
+        {
+          "label": "Joint",
+          "value": "Selfit – solvent cement"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/selfit-coupler/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-CPL-75",
+          "name": "75 mm (2½\")",
+          "attributes": {
+            "Size": "75 mm (2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-CPL-90",
+          "name": "90 mm (3\")",
+          "attributes": {
+            "Size": "90 mm (3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-CPL-110",
+          "name": "110 mm (4\")",
+          "attributes": {
+            "Size": "110 mm (4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "swr-drainage",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex SWR Nahani Trap without Jali – Short",
+      "model": null,
+      "description": "Short-body PVC floor trap (nahani trap) for floor drains, listed in 110 × 75, 110 × 90 and 110 × 110 mm sizes. Supplied without the grating (jali), which Finolex lists separately.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "PVC-U"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 14735"
+        },
+        {
+          "label": "For use with",
+          "value": "Finolex SWR pipes (IS 13592)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/nahani-trap-w-o-jali-short/",
+        "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/nahani-trap-jali-only-jali/",
+        "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SWR-NTS-110X75",
+          "name": "110 × 75 mm (4\" × 2½\")",
+          "attributes": {
+            "Size": "110 × 75 mm (4\" × 2½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-NTS-110X90",
+          "name": "110 × 90 mm (4\" × 3\")",
+          "attributes": {
+            "Size": "110 × 90 mm (4\" × 3\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SWR-NTS-110X110",
+          "name": "110 × 110 mm (4\" × 4\")",
+          "attributes": {
+            "Size": "110 × 110 mm (4\" × 4\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "plumbing-accessories",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex CPVC Solvent Cement – Yellow Medium Bodied (up to 50 mm)",
+      "model": null,
+      "description": "Yellow, medium-bodied solvent cement for jointing Finolex CPVC pipes and fittings in hot and cold water plumbing, for sizes up to 50 mm. Sold in tins.",
+      "unit": "pcs",
+      "hsn": "3506",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Type",
+          "value": "CPVC solvent cement, medium bodied"
+        },
+        {
+          "label": "Colour",
+          "value": "Yellow"
+        },
+        {
+          "label": "Pipe sizes",
+          "value": "Up to 50 mm"
+        },
+        {
+          "label": "Application",
+          "value": "Hot and cold water CPVC plumbing"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "9016 (59) to 9020 (946)"
+        }
+      ],
+      "variantAttributes": [
+        "Pack size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/medium-bodied-cpvc-solvent-cement/",
+        "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SC-CPVC-MB-59",
+          "name": "59 gm tin",
+          "attributes": {
+            "Pack size": "59 gm tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-CPVC-MB-118",
+          "name": "118 gm tin",
+          "attributes": {
+            "Pack size": "118 gm tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-CPVC-MB-237",
+          "name": "237 gm tin",
+          "attributes": {
+            "Pack size": "237 gm tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-CPVC-MB-473",
+          "name": "473 gm tin",
+          "attributes": {
+            "Pack size": "473 gm tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-CPVC-MB-946",
+          "name": "946 gm tin",
+          "attributes": {
+            "Pack size": "946 gm tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "plumbing-accessories",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex Medium Duty PVC-U Solvent Cement (up to 50 mm)",
+      "model": null,
+      "description": "Medium-duty solvent cement for jointing PVC-U (ASTM) plumbing pipes and fittings up to 50 mm. Sold in tins.",
+      "unit": "pcs",
+      "hsn": "3506",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Type",
+          "value": "PVC-U solvent cement, medium duty"
+        },
+        {
+          "label": "Pipe sizes",
+          "value": "Up to 50 mm"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "9010 (118 ml), 9011 (237 ml), 9012 (473 ml)"
+        }
+      ],
+      "variantAttributes": [
+        "Pack size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/solvent-cement-plumbing-products/medium-duty-pvc-u-solvent-cement/",
+        "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SC-UPVC-MD-118",
+          "name": "118 ml tin",
+          "attributes": {
+            "Pack size": "118 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-UPVC-MD-237",
+          "name": "237 ml tin",
+          "attributes": {
+            "Pack size": "237 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-UPVC-MD-473",
+          "name": "473 ml tin",
+          "attributes": {
+            "Pack size": "473 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "plumbing-accessories",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U Solvent Cement for Agriculture (up to 110 mm)",
+      "model": null,
+      "description": "Solvent cement for jointing Finolex PVC-U agriculture (Selfit) pipes and fittings up to 110 mm. Sold in tins from 100 ml to 1 litre and in a 5 litre can.",
+      "unit": "pcs",
+      "hsn": "3506",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Type",
+          "value": "PVC-U solvent cement"
+        },
+        {
+          "label": "Pipe sizes",
+          "value": "Up to 110 mm"
+        },
+        {
+          "label": "Application",
+          "value": "Agriculture / irrigation PVC-U pipes"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "9001 (100 ml) to 9005 (5000 ml)"
+        }
+      ],
+      "variantAttributes": [
+        "Pack size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/agriculture-products/solvent-cement-lubricants-agri-products/pvc-u-solvent-cement/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SC-AGRI-100",
+          "name": "100 ml tin",
+          "attributes": {
+            "Pack size": "100 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-AGRI-250",
+          "name": "250 ml tin",
+          "attributes": {
+            "Pack size": "250 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-AGRI-500",
+          "name": "500 ml tin",
+          "attributes": {
+            "Pack size": "500 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-AGRI-1000",
+          "name": "1000 ml tin",
+          "attributes": {
+            "Pack size": "1000 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-AGRI-5000",
+          "name": "5000 ml can",
+          "attributes": {
+            "Pack size": "5000 ml can"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    },
+    {
+      "category": "plumbing-accessories",
+      "brand": "Finolex",
+      "manufacturer": "Finolex Industries Ltd.",
+      "name": "Finolex PVC-U Solvent Cement for SWR",
+      "model": null,
+      "description": "Solvent cement for jointing Finolex Selfit SWR (soil, waste and rainwater) pipes and fittings. Sold in tins from 100 ml to 1 litre.",
+      "unit": "pcs",
+      "hsn": "3506",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        {
+          "label": "Type",
+          "value": "PVC-U solvent cement"
+        },
+        {
+          "label": "Application",
+          "value": "SWR drainage pipes and fittings"
+        },
+        {
+          "label": "Finolex material codes",
+          "value": "9025 (100 ml) to 9028 (1000 ml)"
+        }
+      ],
+      "variantAttributes": [
+        "Pack size"
+      ],
+      "images": [],
+      "sourceUrls": [
+        "https://www.finolexpipes.com/solvent-cement-plumbing-products/pvc-u-solvent-cement-for-swr-applications/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "FNX-SC-SWR-100",
+          "name": "100 ml tin",
+          "attributes": {
+            "Pack size": "100 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-SWR-250",
+          "name": "250 ml tin",
+          "attributes": {
+            "Pack size": "250 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-SWR-500",
+          "name": "500 ml tin",
+          "attributes": {
+            "Pack size": "500 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        },
+        {
+          "sku": "FNX-SC-SWR-1000",
+          "name": "1000 ml tin",
+          "attributes": {
+            "Pack size": "1000 ml tin"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+        }
+      ]
+    }
+  ]
+}

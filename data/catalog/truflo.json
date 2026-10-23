@@ -1,0 +1,2394 @@
+{
+  "group": "truflo",
+  "researchedOn": "2026-10-23",
+  "notes": [
+    "INCOMPLETE FILE. During this research run the page-fetch tool could not resolve any host, so no official page or PDF could be opened directly. Every fact here comes from web-search result text quoting truflopipes.com (Truflo by Hindware official site) and hindware.com. The shared web-search budget then ran out before UPVC pipes, SWR and solvent cement could be researched.",
+    "Missing scope (to be added in a follow-up run): UPVC Sch 40/Sch 80 plumbing pipes and their plain fittings, SWR pipes (Type A/B, Ringfit/Selfit) and SWR fittings, CPVC/UPVC solvent cement pack sizes, and PVC pressure (agri) pipes. Truflo does list all of these. Known official pages: /upvc-plumbing-system/, /pvc-plumbing-system/ (PVC pressure pipe to IS 4985:2000, 40–315 mm, 4 and 6 kg/cm² classes, per hindware.com/pvc-plumbing-system), /swr-ringfit-fittings/, /swr-selfit-fittings/, /cpvc-cement/, /cpvc-primer/ on www.truflopipes.com.",
+    "PRICES: all listPrice/mrp values are null. (1) The most recent list found is \"Truflo New Price List 05-02-26\" (effective 5 Feb 2026; SWR + lead-free uPVC only, no CPVC), but only as a third-party Scribd upload (scribd.com/document/1005821279), which could not be opened. (2) truflopipes.com/erp/ajax.php shows MRPs per item code, but it states no effective date and gives two different MRPs for the same codes (e.g. CP1103015 SDR 11 15 mm × 3 m: 310 and 363), so it was not used. (3) The official PDFs found (w.e.f. 01.10.2021 and 24.08.2022, hosted on imimg.com) are too old to use.",
+    "IMAGES: none. No image-file URL could be retrieved because pages could not be fetched. Product pages on www.truflopipes.com are the place to collect them.",
+    "Pipes are sold per length (unit \"length\"). Truflo lists them per piece. Lengths differ between variants (SDR 13.5 has 3 m and 5 m), so altUnit is left null and the length is a variant attribute. SDR 11 also has 5 m and 6 m length pages, but only 15 mm and 50 mm item codes were confirmed for 5 m, so only the 3 m length is loaded.",
+    "HSN 39172390 is the code shown on Truflo CPVC pipe and fitting pages, and on the concealed-valve page. The ball valve uses 8481 (valves) from the README table, because its own page HSN was not confirmed. GST 18% is believed but not confirmed. The shop's accountant must confirm both.",
+    "Reducer and Reducer Tee: Truflo lists 15 rows each, 20×15 to 50×40 mm, which is every run × branch combination of the six sizes. One Truflo listing page labels a few reducer-tee rows differently (25×15 vs 25×20), so check against the physical stock.",
+    "Brass Elbow 90°: 15×15, 20×15, 20×20, 25×25 and 32×32 were seen in two separate reads. 25×15 and 25×20 were seen in only one read of the product page (item codes CF24025015 and CF24025020). Verify these two before selling.",
+    "Pressure ratings: Hindware's CPVC page labels the low-temperature column 27 °C in one table and 23 °C in another. 27 °C is used here.",
+    "Truflo item codes were seen on the official pages and can be used to match a future price list. Pipes: CP11<len><size>, e.g. CP1103015 = SDR 11 3 m 15 mm. CP13<len><size> = SDR 13.5. Fittings: Coupler CF01, Elbow 90 CF02, Bend 45 CF03, Tee CF05, Reducer Tee CF06, End Cap CF08, Union CF14, Reducer CF15, Brass Elbow CF24, Brass Tee CF25, MABT CF26, FABT CF27 (+ size digits, e.g. CF02000015). Ball valve CEBV0100<size>. Concealed valves CECVQTT020 / CECVQTR020 / CECVFTT020 / CECVFTT025. UPVC MABT UF22000015–UF22000050. Note: the Elbow 90 product page shows the CF01 codes by mistake. CF01 is the coupler.",
+    "Manufacturer legal entity not confirmed from an official source in this run. \"Truflo by Hindware\" is the brand, and Truflo's 2023 corporate brochure calls itself part of the Somany Impresa Group."
+  ],
+  "products": [
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": true,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Pipe SDR 11",
+      "description": "Thick-wall CPVC pipe (SDR 11) for hot and cold potable water lines in homes and buildings, made to IS 15778:2007 in copper-tube (CTS) sizes from ½\" to 2\". It joins with Truflo CPVC fittings by solvent cement. SDR 11 has the higher pressure rating of Truflo's two plumbing classes.",
+      "unit": "length",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Class",
+          "value": "SDR 11"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 15778:2007"
+        },
+        {
+          "label": "Working pressure",
+          "value": "28.1 kg/cm² at 27 °C; 6.93 kg/cm² at 82 °C (as published by Truflo/Hindware)"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous"
+        },
+        {
+          "label": "Colour",
+          "value": "Ivory / off-white with a red or brown stripe indicating type/pressure rating"
+        },
+        {
+          "label": "Certification (as stated by Truflo)",
+          "value": "NSF/ANSI 14 and CFTRI"
+        },
+        {
+          "label": "Sizes",
+          "value": "½\" to 2\" (15–50 mm), CTS"
+        },
+        {
+          "label": "Lengths listed by Truflo",
+          "value": "3 m, 5 m and 6 m (only the 3 m length is loaded here)"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "Length"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-pipes/sdr-11-3mtr-length/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/c-p-v-c/",
+        "https://hindware.com/cpvc-pipes-and-fittings"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-P11-15-3M",
+          "name": "15 mm (½\") × 3 m",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P11-20-3M",
+          "name": "20 mm (¾\") × 3 m",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P11-25-3M",
+          "name": "25 mm (1\") × 3 m",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P11-32-3M",
+          "name": "32 mm (1¼\") × 3 m",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P11-40-3M",
+          "name": "40 mm (1½\") × 3 m",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P11-50-3M",
+          "name": "50 mm (2\") × 3 m",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Pipe SDR 13.5",
+      "description": "CPVC pipe in class SDR 13.5 for hot and cold water plumbing, made to IS 15778:2007 in CTS sizes from ½\" to 2\". It has a thinner wall and lower pressure rating than SDR 11 and uses the same Truflo CPVC fittings. Truflo lists it in 3 m and 5 m lengths.",
+      "unit": "length",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Class",
+          "value": "SDR 13.5"
+        },
+        {
+          "label": "Standard",
+          "value": "IS 15778:2007"
+        },
+        {
+          "label": "Working pressure",
+          "value": "22.23 kg/cm² at 27 °C; 5.61 kg/cm² at 82 °C (as published by Truflo/Hindware)"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous"
+        },
+        {
+          "label": "Colour",
+          "value": "Ivory / off-white with a red or brown stripe indicating type/pressure rating"
+        },
+        {
+          "label": "Certification (as stated by Truflo)",
+          "value": "NSF/ANSI 14 and CFTRI"
+        },
+        {
+          "label": "Sizes",
+          "value": "½\" to 2\" (15–50 mm), CTS"
+        },
+        {
+          "label": "Lengths listed by Truflo",
+          "value": "3 m and 5 m"
+        }
+      ],
+      "variantAttributes": [
+        "Size",
+        "Length"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-pipes/sdr-13-5-3mtr-length/",
+        "https://www.truflopipes.com/cpvc-pipes/sdr-13-5-5mtr-length/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/c-p-v-c/",
+        "https://hindware.com/cpvc-pipes-and-fittings"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-P135-15-3M",
+          "name": "15 mm (½\") × 3 m",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-20-3M",
+          "name": "20 mm (¾\") × 3 m",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-25-3M",
+          "name": "25 mm (1\") × 3 m",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-32-3M",
+          "name": "32 mm (1¼\") × 3 m",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-40-3M",
+          "name": "40 mm (1½\") × 3 m",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-50-3M",
+          "name": "50 mm (2\") × 3 m",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Length": "3 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-15-5M",
+          "name": "15 mm (½\") × 5 m",
+          "attributes": {
+            "Size": "15 mm (½\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-20-5M",
+          "name": "20 mm (¾\") × 5 m",
+          "attributes": {
+            "Size": "20 mm (¾\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-25-5M",
+          "name": "25 mm (1\") × 5 m",
+          "attributes": {
+            "Size": "25 mm (1\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-32-5M",
+          "name": "32 mm (1¼\") × 5 m",
+          "attributes": {
+            "Size": "32 mm (1¼\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-40-5M",
+          "name": "40 mm (1½\") × 5 m",
+          "attributes": {
+            "Size": "40 mm (1½\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-P135-50-5M",
+          "name": "50 mm (2\") × 5 m",
+          "attributes": {
+            "Size": "50 mm (2\")",
+            "Length": "5 m"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Coupler Plain",
+      "description": "Plain CPVC socket coupler that joins two CPVC pipes of the same size in a straight line. Solvent-cement joint; for Truflo SDR 11 and SDR 13.5 pipes from ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/coupler-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-CPL-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CPL-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CPL-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CPL-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CPL-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CPL-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": true,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Elbow 90° Plain",
+      "description": "Plain CPVC 90° elbow for right-angle turns in hot and cold water lines. Solvent-cement sockets on both ends, sized ½\" to 2\" to suit Truflo CPVC pipes.",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/elbow-90-degree-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-EL90-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL90-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL90-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL90-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL90-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL90-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Bend 45° Plain",
+      "description": "Plain CPVC 45° bend (45° elbow) for gentle changes of direction in CPVC water lines. Solvent-cement sockets, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/bend-45o-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-EL45-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL45-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL45-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL45-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL45-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-EL45-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Tee 90° Plain",
+      "description": "Equal CPVC tee that takes a 90° branch off a straight CPVC line, all three sockets the same size. Solvent-cement joint, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/tee-90-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-TEE-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-TEE-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-TEE-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-TEE-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-TEE-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-TEE-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Reducer Tee 90° Plain",
+      "description": "CPVC tee with a smaller 90° branch outlet than the run, used to branch a smaller line off a main CPVC pipe. Truflo lists 15 run × branch combinations from ¾\" × ½\" to 2\" × 1½\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Size format",
+          "value": "Run × branch"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/reducer-tee-90o-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-RTEE-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-32X15",
+          "name": "32 × 15 mm (1¼\" × ½\")",
+          "attributes": {
+            "Size": "32 × 15 mm (1¼\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-32X20",
+          "name": "32 × 20 mm (1¼\" × ¾\")",
+          "attributes": {
+            "Size": "32 × 20 mm (1¼\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-32X25",
+          "name": "32 × 25 mm (1¼\" × 1\")",
+          "attributes": {
+            "Size": "32 × 25 mm (1¼\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-40X15",
+          "name": "40 × 15 mm (1½\" × ½\")",
+          "attributes": {
+            "Size": "40 × 15 mm (1½\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-40X20",
+          "name": "40 × 20 mm (1½\" × ¾\")",
+          "attributes": {
+            "Size": "40 × 20 mm (1½\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-40X25",
+          "name": "40 × 25 mm (1½\" × 1\")",
+          "attributes": {
+            "Size": "40 × 25 mm (1½\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-40X32",
+          "name": "40 × 32 mm (1½\" × 1¼\")",
+          "attributes": {
+            "Size": "40 × 32 mm (1½\" × 1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-50X15",
+          "name": "50 × 15 mm (2\" × ½\")",
+          "attributes": {
+            "Size": "50 × 15 mm (2\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-50X20",
+          "name": "50 × 20 mm (2\" × ¾\")",
+          "attributes": {
+            "Size": "50 × 20 mm (2\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-50X25",
+          "name": "50 × 25 mm (2\" × 1\")",
+          "attributes": {
+            "Size": "50 × 25 mm (2\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-50X32",
+          "name": "50 × 32 mm (2\" × 1¼\")",
+          "attributes": {
+            "Size": "50 × 32 mm (2\" × 1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RTEE-50X40",
+          "name": "50 × 40 mm (2\" × 1½\")",
+          "attributes": {
+            "Size": "50 × 40 mm (2\" × 1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Reducer",
+      "description": "CPVC socket reducer that connects a larger CPVC pipe to a smaller one in a straight line. Truflo lists 15 size combinations from ¾\" × ½\" to 2\" × 1½\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Size format",
+          "value": "Larger × smaller"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/reducer/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-RED-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-32X15",
+          "name": "32 × 15 mm (1¼\" × ½\")",
+          "attributes": {
+            "Size": "32 × 15 mm (1¼\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-32X20",
+          "name": "32 × 20 mm (1¼\" × ¾\")",
+          "attributes": {
+            "Size": "32 × 20 mm (1¼\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-32X25",
+          "name": "32 × 25 mm (1¼\" × 1\")",
+          "attributes": {
+            "Size": "32 × 25 mm (1¼\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-40X15",
+          "name": "40 × 15 mm (1½\" × ½\")",
+          "attributes": {
+            "Size": "40 × 15 mm (1½\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-40X20",
+          "name": "40 × 20 mm (1½\" × ¾\")",
+          "attributes": {
+            "Size": "40 × 20 mm (1½\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-40X25",
+          "name": "40 × 25 mm (1½\" × 1\")",
+          "attributes": {
+            "Size": "40 × 25 mm (1½\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-40X32",
+          "name": "40 × 32 mm (1½\" × 1¼\")",
+          "attributes": {
+            "Size": "40 × 32 mm (1½\" × 1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-50X15",
+          "name": "50 × 15 mm (2\" × ½\")",
+          "attributes": {
+            "Size": "50 × 15 mm (2\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-50X20",
+          "name": "50 × 20 mm (2\" × ¾\")",
+          "attributes": {
+            "Size": "50 × 20 mm (2\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-50X25",
+          "name": "50 × 25 mm (2\" × 1\")",
+          "attributes": {
+            "Size": "50 × 25 mm (2\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-50X32",
+          "name": "50 × 32 mm (2\" × 1¼\")",
+          "attributes": {
+            "Size": "50 × 32 mm (2\" × 1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-RED-50X40",
+          "name": "50 × 40 mm (2\" × 1½\")",
+          "attributes": {
+            "Size": "50 × 40 mm (2\" × 1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC End Cap Plain",
+      "description": "Plain CPVC end cap that closes off the end of a CPVC pipe, for example at future extension points. Solvent-cement socket, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/end-cap-plain/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-CAP-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CAP-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CAP-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CAP-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CAP-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CAP-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Union",
+      "description": "CPVC union that lets a section of pipe or an appliance connection be opened later without cutting the line. Solvent-cement ends, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/union/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-UNI-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-UNI-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-UNI-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-UNI-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-UNI-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-UNI-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Female Adaptor Brass Threaded (FABT)",
+      "description": "CPVC female threaded adapter (FTA) with a brass threaded insert, used to connect CPVC pipe to taps, valves and other male-threaded fittings. Solvent-cement socket on the CPVC side, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Thread insert",
+          "value": "Brass, female thread"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings-brass/female-adaptor-brass-threaded-fabt/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/cpvc-fittings-brass/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-FABT-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-FABT-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-FABT-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-FABT-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-FABT-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-FABT-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Male Adaptor Brass Threaded (MABT)",
+      "description": "CPVC male threaded adapter (MTA) with a brass threaded end, used to connect CPVC pipe into female-threaded outlets, tanks and fixtures. Solvent-cement socket on the CPVC side, sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Thread insert",
+          "value": "Brass, male thread"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings-brass/male-adaptor-brass-threaded-mabt/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/cpvc-fittings-brass/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-MABT-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-MABT-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-MABT-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-MABT-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-MABT-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-MABT-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Elbow 90° (Brass)",
+      "description": "CPVC 90° elbow with one brass female-threaded outlet, typically used at tap and shower points. One end takes CPVC pipe by solvent cement, the other accepts a threaded connection.",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Thread insert",
+          "value": "Brass, female thread"
+        },
+        {
+          "label": "Size format",
+          "value": "CPVC socket × brass thread"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings-brass/elbow-90o/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/cpvc-fittings-brass/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-BEL90-15X15",
+          "name": "15 × 15 mm (½\" × ½\")",
+          "attributes": {
+            "Size": "15 × 15 mm (½\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-20X20",
+          "name": "20 × 20 mm (¾\" × ¾\")",
+          "attributes": {
+            "Size": "20 × 20 mm (¾\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-25X25",
+          "name": "25 × 25 mm (1\" × 1\")",
+          "attributes": {
+            "Size": "25 × 25 mm (1\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BEL90-32X32",
+          "name": "32 × 32 mm (1¼\" × 1¼\")",
+          "attributes": {
+            "Size": "32 × 32 mm (1¼\" × 1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Tee (Brass)",
+      "description": "CPVC tee whose branch outlet has a brass female thread, used to take a threaded tap or fixture connection off a running CPVC line.",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Thread insert",
+          "value": "Brass, female thread on branch"
+        },
+        {
+          "label": "Size format",
+          "value": "CPVC run × brass-threaded branch"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings-brass/tee/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/",
+        "https://www.truflopipes.com/cpvc-fittings-brass/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-BTEE-15X15",
+          "name": "15 × 15 mm (½\" × ½\")",
+          "attributes": {
+            "Size": "15 × 15 mm (½\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-20X15",
+          "name": "20 × 15 mm (¾\" × ½\")",
+          "attributes": {
+            "Size": "20 × 15 mm (¾\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-20X20",
+          "name": "20 × 20 mm (¾\" × ¾\")",
+          "attributes": {
+            "Size": "20 × 20 mm (¾\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-25X15",
+          "name": "25 × 15 mm (1\" × ½\")",
+          "attributes": {
+            "Size": "25 × 15 mm (1\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-25X20",
+          "name": "25 × 20 mm (1\" × ¾\")",
+          "attributes": {
+            "Size": "25 × 20 mm (1\" × ¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-25X25",
+          "name": "25 × 25 mm (1\" × 1\")",
+          "attributes": {
+            "Size": "25 × 25 mm (1\" × 1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BTEE-32X15",
+          "name": "32 × 15 mm (1¼\" × ½\")",
+          "attributes": {
+            "Size": "32 × 15 mm (1¼\" × ½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": true,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Ball Valve",
+      "description": "CPVC ball valve for on/off isolation of hot and cold water lines, with solvent-cement ends that suit Truflo CPVC pipes. Listed in sizes ½\" to 2\".",
+      "unit": "pcs",
+      "hsn": "8481",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "Standard",
+          "value": "ASTM D2846:2007 (fittings)"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC SDR 11 and SDR 13.5, ½\" to 2\" (15–50 mm)"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        },
+        {
+          "label": "Max. water temperature",
+          "value": "93 °C short-term, 82 °C continuous (Truflo/Hindware CPVC system rating)"
+        },
+        {
+          "label": "Operation",
+          "value": "Quarter-turn ball valve"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/ball-valve/",
+        "https://www.truflopipes.com/cpvc-pipes-and-fittings/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-BV-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BV-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BV-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BV-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BV-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-BV-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "cpvc-pipes-fittings",
+      "name": "Truflo CPVC Concealed Valves",
+      "description": "CPVC concealed (in-wall) valves for bathroom and kitchen lines, so only the handle shows on the finished wall. Truflo lists quarter-turn and full-turn versions with triangle or round handles in ¾\" (20 mm), and a full-turn triangle version in 1\" (25 mm).",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "CPVC"
+        },
+        {
+          "label": "For pipes",
+          "value": "Truflo CPVC"
+        }
+      ],
+      "variantAttributes": [
+        "Type",
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/cpvc-fittings/concealed-valves/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-CPVC-CVQTT-20",
+          "name": "Quarter turn, triangle – 20 mm (¾\")",
+          "attributes": {
+            "Type": "Quarter turn, triangle",
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CVQTR-20",
+          "name": "Quarter turn, round – 20 mm (¾\")",
+          "attributes": {
+            "Type": "Quarter turn, round",
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CVFTT-20",
+          "name": "Full turn, triangle – 20 mm (¾\")",
+          "attributes": {
+            "Type": "Full turn, triangle",
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-CPVC-CVFTT-25",
+          "name": "Full turn, triangle – 25 mm (1\")",
+          "attributes": {
+            "Type": "Full turn, triangle",
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "brand": "Truflo by Hindware",
+      "manufacturer": "Hindware (Truflo by Hindware)",
+      "model": null,
+      "gstRate": "18",
+      "warranty": null,
+      "images": [],
+      "altUnit": null,
+      "featured": false,
+      "category": "pvc-upvc-pipes-fittings",
+      "name": "Truflo UPVC Male Thread Adaptor (Brass) (MABT)",
+      "description": "UPVC male threaded adapter with a brass threaded end, used to connect UPVC plumbing pipe to female-threaded outlets and fixtures. Solvent-cement socket on the UPVC side, sizes ½\" to 2\". Truflo describes its UPVC range as lead-free.",
+      "unit": "pcs",
+      "hsn": "39172390",
+      "specifications": [
+        {
+          "label": "Material",
+          "value": "UPVC with brass threaded insert"
+        },
+        {
+          "label": "Thread insert",
+          "value": "Brass, male thread"
+        },
+        {
+          "label": "Jointing",
+          "value": "Solvent cement"
+        }
+      ],
+      "variantAttributes": [
+        "Size"
+      ],
+      "sourceUrls": [
+        "https://www.truflopipes.com/upvc-fittings-brass/male-thread-adaptor-brass-mabt/",
+        "https://www.truflopipes.com/upvc-plumbing-system/"
+      ],
+      "variants": [
+        {
+          "sku": "TRF-UPVC-MABT-15",
+          "name": "15 mm (½\")",
+          "attributes": {
+            "Size": "15 mm (½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-UPVC-MABT-20",
+          "name": "20 mm (¾\")",
+          "attributes": {
+            "Size": "20 mm (¾\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-UPVC-MABT-25",
+          "name": "25 mm (1\")",
+          "attributes": {
+            "Size": "25 mm (1\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-UPVC-MABT-32",
+          "name": "32 mm (1¼\")",
+          "attributes": {
+            "Size": "32 mm (1¼\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-UPVC-MABT-40",
+          "name": "40 mm (1½\")",
+          "attributes": {
+            "Size": "40 mm (1½\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "TRF-UPVC-MABT-50",
+          "name": "50 mm (2\")",
+          "attributes": {
+            "Size": "50 mm (2\")"
+          },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    }
+  ]
+}

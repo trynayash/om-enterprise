@@ -1,0 +1,341 @@
+{
+  "group": "umiya-gold",
+  "researchedOn": "2026-10-23",
+  "notes": [
+    "MANUFACTURER (identified with reasonable confidence, not officially confirmed): 'Umiya Gold' tanks are made and marketed by VISHVA ENTERPRISE, proprietor Mr Shailesh Patel, GSTIN 24BAPPP4121F1ZU (as printed on its site). Address: Plot H-1 to 3 & I-1, Block No. 57, Tempa Gali (Pipodara), Surat 394110, Gujarat. Its site also gives the Panchdev Industrial Estate, Bhambora Patiya, Kim, Ta. Mangrol 394110 address and a Kamrej office. The website says the firm was established in 2008. Websites: https://www.pvcwatertank.in (a TradeIndia-built catalogue site) and https://umiyagold.com. Email: umiyagold@gmail.com.",
+    "EVIDENCE for the manufacturer: (1) The Facebook page 'Umiya Gold Group' (Surat) links to http://www.pvcwatertank.in/ and umiyagold@gmail.com (https://www.facebook.com/UmiyaGoldGroup/videos/water-tank/659426237792942/). (2) pvcwatertank.in calls the firm the manufacturer of 'Umiya Gold Water Tank'. Its contact and fact-sheet pages name VISHVA ENTERPRISE, Mr Shailesh Patel and GSTIN 24BAPPP4121F1ZU. (3) The TradeIndia seller account 7048123 is shown as 'VISHVA ENTERPRISE – Umiya Gold Water Tank Manufacturer from Surat', and its older URL reads 'Seller-7048123-UMIYA-ENTERPISE'. Its product IDs (c1708881, c1712431, c4065978…) match the pvcwatertank.in page IDs, so 'Umiya Enterprise' (Mangrol) and 'Vishva Enterprise' (Surat) appear to be one business under two trade names. Mangrol is a taluka of Surat district, so the two addresses do not conflict. (4) A WebSearch snippet from umiyagold.com product pages shows the same Surat 394110 address. Not confirmed: GST registration details on the GST portal, and whether Vishva Enterprise is the only producer of the brand.",
+    "NOT the maker, despite the similar names: Shree Umiya Rotoplast Container (GIDC Vartej, Bhavnagar), whose brands are 'Shivaay' and 'Gold Ganga' (shivaaytank.com). Also not: Umiya Engineering (Vapi, industrial steel tanks), Umiya Gold Minerals LLP (Morbi, mining) and Kaka Water Tank (pvcwatertank.com, a Vadodara trader on a different domain from pvcwatertank.in).",
+    "The same maker also sells an 'Umiya Plus' tank line. Its site files some items (3-layer, 5-layer yellow, sky-blue 7-layer, white loft tanks) under 'Umiya Plus' as well as 'Umiya Gold', so the brand of those lines is ambiguous. It also lists 'Umiya Gold Pure' (a 3–10 L stainless-steel item, not a tank), 'PVC Pipe Umiya Gold' and plastic raw material. None of these are included here.",
+    "DATA QUALITY: The maker's own listings are B2B marketplace pages and contradict each other. The same tank appears as PP on one page and as LLDPE or HDPE on another. Colours sometimes don't match titles (for example, a '3 Layer WHITE' page lists colour Green). Some figures are clearly wrong: a 14 mm wall thickness, and a loft-tank diameter of 15240–20320 mm. Only figures that are plausible and specific are used in the specifications. Everything else is left out. No source states ISI marking, IS 12701 compliance or BIS licence numbers for the tanks; the ISI/ASTM claim on the site is for 'PVC Pipe Umiya Gold'. UV protection is claimed only in the 5-layer description.",
+    "CAPACITIES: Only the 5-layer line has a published list of sizes (500/1000/1500/2000/3000/5000 L). For the 3-layer line the maker gives a 500–5000 L range, so only the two ends are listed, plus 1500 L, which a Surat dealer's IndiaMART listing shows as a 3-layer Umiya Gold tank. For the 4-layer line the maker gives '500–2000 L' with a 1000 L volume, so only those three sizes are listed. For the 2-layer black tank only 1000 L is stated. Another snippet claimed a 200–20,000 L range, but it could not be tied reliably to one line, so it is not used. Intermediate sizes (such as 750 L or 1000 L in 3-layer) probably exist but were not found published. Add them after checking the shop's supplier invoices. The 7-layer line has no published capacities, only three diameters (46, 54 and 82 in), so its variants are by diameter.",
+    "OMITTED (not enough published data to make honest variants): Umiya Gold loft tanks (a black square PP loft tank with no capacity stated; a white LLDPE loft tank is listed at 175–1050 L but may be Umiya Plus), horizontal 4- and 5-layer tanks, underground tanks, customised tanks, a generic black 'Umiya Gold Water Tank' (layers not stated), and a yellow 5-layer listing on umiyagold.com (HDPE; possibly the same 5-layer tank in a different colour).",
+    "PRICES: No official Umiya Gold price list, MRP list or catalogue with prices was found. The maker's own marketplace listings show one 'approx.' B2B price per listing (for example 7000 INR for the 5-layer listing, which spans 500–5000 L; 3600, 2360 or 1728 INR on other pages), never tied to a capacity. Some are labelled 'per litre' by mistake, and some are years old. Dealer listings (IndiaMART, Plumbing Mart, ExportersIndia) vary just as much. So every listPrice and mrp is null. Prices should be entered from the shop's supplier invoices and approved in Price review.",
+    "WARRANTY: The manufacturer's 5-layer listing says these tanks 'come with a 10-year warranty'. This was found on one page only, with no terms, so the warranty field is left null. The Super Admin can add it after the supplier confirms it in writing.",
+    "IMAGES: None were added. WebFetch failed with a DNS error for every host during this research, so no page could be opened to read its real image-file URLs. Image URLs were not guessed. The maker's own product photos are on its pvcwatertank.in / TradeIndia pages (hosted on tiimg.tistatic.com) and on umiyagold.com. A follow-up with working page fetch, or photos the shop takes itself, is needed.",
+    "HSN/GST for the accountant: All variants in this file are 500 L or larger, so HSN 3925 (3925 10 00: plastic reservoirs, tanks, vats, capacity over 300 L) at 18% GST is used. If the shop adds tanks of 300 L or less (for example 200 L or loft tanks of 175–300 L), those may fall under 3923 or 3924 instead. Please confirm.",
+    "Research was done with WebSearch result snippets only; no page was opened directly. Every figure was seen in search snippets from the URLs listed in each product's sourceUrls. Re-verify against the live pages before publishing."
+  ],
+  "products": [
+    {
+      "category": "umiya-gold-water-tanks",
+      "brand": "Umiya Gold",
+      "manufacturer": "Vishva Enterprise (also trading as Umiya Enterprise), Surat, Gujarat",
+      "name": "Umiya Gold 3 Layer Water Tank",
+      "model": null,
+      "description": "A three-layer plastic water storage tank for overhead domestic use. It is round (cylindrical) and moulded in one piece without seams. The maker lists it in white and green, in sizes from 500 to 5000 litres. Place it on a level concrete base.",
+      "unit": "pcs",
+      "hsn": "3925",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Layers", "value": "3" },
+        { "label": "Shape", "value": "Round (cylindrical), vertical" },
+        { "label": "Plastic type", "value": "PP per the maker's 3-layer listing (another listing states LLDPE)" },
+        { "label": "Colours listed", "value": "White, Green" },
+        { "label": "Capacity range (maker)", "value": "500 L to 5000 L" },
+        { "label": "Diameter range (maker)", "value": "Approx. 861 mm to 2339 mm across sizes (size-wise figures not published)" },
+        { "label": "Construction", "value": "One-piece moulding without seam joints" },
+        { "label": "Foundation", "value": "Level concrete base" }
+      ],
+      "variantAttributes": ["Capacity"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.pvcwatertank.in/umiya-gold-water-tank.html",
+        "https://www.pvcwatertank.in/3-layer-water-tanks-1708895.html",
+        "https://www.pvcwatertank.in/3-layer-green-water-tanks-10974415.html",
+        "https://www.pvcwatertank.in/3-layer-white-water-tanks-1708880.html",
+        "https://www.indiamart.com/proddetail/umiya-gold-water-tank-17708122630.html",
+        "https://www.plumbingmart.in/product-page/water-tank-umiya-gold-3layer"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "UMG-3L-500",
+          "name": "500 L",
+          "attributes": { "Capacity": "500 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-3L-1500",
+          "name": "1500 L",
+          "attributes": { "Capacity": "1500 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-3L-5000",
+          "name": "5000 L",
+          "attributes": { "Capacity": "5000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "category": "umiya-gold-water-tanks",
+      "brand": "Umiya Gold",
+      "manufacturer": "Vishva Enterprise (also trading as Umiya Enterprise), Surat, Gujarat",
+      "name": "Umiya Gold 5 Layer Water Tank",
+      "model": null,
+      "description": "The maker's insulated five-layer overhead tank. It has a food-grade inner layer, a thermocol insulating core and a UV-treated outer layer. It comes in six sizes from 500 to 5000 litres, has a heavy-duty flat base, and is listed in white.",
+      "unit": "pcs",
+      "hsn": "3925",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Layers", "value": "5" },
+        { "label": "Construction (maker's description)", "value": "Food-grade polyethylene inner layer, thermocol insulation core, anti-UV treated polyethylene outer layer" },
+        { "label": "Material (listing)", "value": "Virgin plastic, food grade (plastic type field states PP)" },
+        { "label": "Colour", "value": "White (a separate maker listing shows a yellow 5-layer tank)" },
+        { "label": "Diameter", "value": "Varies by size; about 920 mm for 1000 L" },
+        { "label": "Base", "value": "Heavy-duty flat base; place on a flat concrete surface" },
+        { "label": "Use", "value": "Overhead water storage" }
+      ],
+      "variantAttributes": ["Capacity"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.pvcwatertank.in/5-layer-umiya-gold-water-tanks-1708881.html",
+        "https://www.tradeindia.com/products/5-layer-umiya-gold-water-tanks-c1708881.html",
+        "https://umiyagold.com/product/5-layers-yellow-water-tank/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "UMG-5L-500",
+          "name": "500 L",
+          "attributes": { "Capacity": "500 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-5L-1000",
+          "name": "1000 L",
+          "attributes": { "Capacity": "1000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-5L-1500",
+          "name": "1500 L",
+          "attributes": { "Capacity": "1500 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-5L-2000",
+          "name": "2000 L",
+          "attributes": { "Capacity": "2000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-5L-3000",
+          "name": "3000 L",
+          "attributes": { "Capacity": "3000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-5L-5000",
+          "name": "5000 L",
+          "attributes": { "Capacity": "5000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "category": "umiya-gold-water-tanks",
+      "brand": "Umiya Gold",
+      "manufacturer": "Vishva Enterprise (also trading as Umiya Enterprise), Surat, Gujarat",
+      "name": "Umiya Gold 2 Layer Water Tank (Black)",
+      "model": null,
+      "description": "A basic two-layer black cylindrical plastic water tank. The maker lists a 1000-litre size about 42.5 inches in diameter. It is the economy option in the range.",
+      "unit": "pcs",
+      "hsn": "3925",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Layers", "value": "2" },
+        { "label": "Colour", "value": "Black" },
+        { "label": "Shape", "value": "Cylindrical" },
+        { "label": "Plastic type", "value": "LLDPE per the '2 Layer Umiyagold Black Watertank' listing (other listings state HDPE or PP)" },
+        { "label": "Diameter (1000 L)", "value": "42.5 in (approx. 1080 mm)" }
+      ],
+      "variantAttributes": ["Capacity"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.pvcwatertank.in/",
+        "https://www.pvcwatertank.in/water-tank-4071858.html",
+        "https://www.pvcwatertank.in/umiya-water-tanks-1708886.html",
+        "https://www.pvcwatertank.in/black-2-layer-water-tanks-1708891.html",
+        "https://www.tradeindia.com/vishva-enterprise-7048123/product-services.html"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "UMG-2L-1000",
+          "name": "1000 L",
+          "attributes": { "Capacity": "1000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "category": "umiya-gold-water-tanks",
+      "brand": "Umiya Gold",
+      "manufacturer": "Vishva Enterprise (also trading as Umiya Enterprise), Surat, Gujarat",
+      "name": "Umiya Gold 4 Layer Water Tank",
+      "model": null,
+      "description": "A four-layer white cylindrical water storage tank for domestic use. The maker lists it in HDPE in sizes from 500 to 2000 litres, with 1000 litres as the standard volume.",
+      "unit": "pcs",
+      "hsn": "3925",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Layers", "value": "4" },
+        { "label": "Colour", "value": "White" },
+        { "label": "Shape", "value": "Cylindrical" },
+        { "label": "Plastic type", "value": "HDPE (a separate 4-layer listing states PP)" },
+        { "label": "Grade", "value": "Domestic" },
+        { "label": "Size range (maker)", "value": "500 L to 2000 L" }
+      ],
+      "variantAttributes": ["Capacity"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.pvcwatertank.in/4-layer-water-storage-tank-10974416.html",
+        "https://www.pvcwatertank.in/umiya-gold-water-tank.html",
+        "https://www.pvcwatertank.in/4-layer-water-tank-4065978.html"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "UMG-4L-500",
+          "name": "500 L",
+          "attributes": { "Capacity": "500 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-4L-1000",
+          "name": "1000 L",
+          "attributes": { "Capacity": "1000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-4L-2000",
+          "name": "2000 L",
+          "attributes": { "Capacity": "2000 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    },
+    {
+      "category": "umiya-gold-water-tanks",
+      "brand": "Umiya Gold",
+      "manufacturer": "Vishva Enterprise (also trading as Umiya Enterprise), Surat, Gujarat",
+      "name": "Umiya Gold 7 Layer Water Tank (Sky Blue)",
+      "model": null,
+      "description": "A seven-layer sky-blue plastic water tank, the top of the maker's layered range. It is listed in three diameters: 46, 54 and 82 inches. The maker does not publish the litre capacity for each diameter.",
+      "unit": "pcs",
+      "hsn": "3925",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Layers", "value": "7" },
+        { "label": "Colour", "value": "Sky blue" },
+        { "label": "Material (listing)", "value": "Food-grade PP plastic" },
+        { "label": "Diameters offered", "value": "46 in (1168 mm), 54 in (1372 mm), 82 in (2083 mm)" },
+        { "label": "Capacity", "value": "Not published per diameter" }
+      ],
+      "variantAttributes": ["Diameter"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.pvcwatertank.in/sky-blue-7-layer-water-tank-1712407.html",
+        "https://www.tradeindia.com/products/sky-blue-7-layer-water-tank-c1712407.html",
+        "https://www.tradeindia.com/products/sky-blue-7-layer-water-tank-c10974418.html"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "UMG-7L-D46",
+          "name": "46 in diameter",
+          "attributes": { "Diameter": "46 in" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-7L-D54",
+          "name": "54 in diameter",
+          "attributes": { "Diameter": "54 in" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        },
+        {
+          "sku": "UMG-7L-D82",
+          "name": "82 in diameter",
+          "attributes": { "Diameter": "82 in" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": null
+        }
+      ]
+    }
+  ]
+}

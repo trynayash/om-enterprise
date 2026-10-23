@@ -5,7 +5,8 @@
  *   npm run import:products -- --publish    # also mark new products reviewed and publish them
  *   npm run import:products -- --check      # validate the files only; write nothing
  *
- * Idempotent by SKU: existing variants are left alone, missing ones are added. Every file is
+ * Idempotent by SKU: missing variants are added; an existing variant only gains a price if it has
+ * never had one (so prices found later can be added by re-running). Every file is
  * validated before anything is written. List prices become PENDING proposals for the Super Admin
  * (Dashboard → Price review); the website shows "Price on request" until one is approved. Images are
  * downloaded, re-encoded by the normal upload service and stored; a failed image is reported and
@@ -33,7 +34,10 @@ const variantSchema = z.object({
   attributes: z.record(z.string(), z.string()).default({}),
   barcode: z.string().nullish(),
   listPrice: money.nullish(),
-  listPriceIncludesTax: z.boolean().default(true),
+  listPriceIncludesTax: z
+    .boolean()
+    .nullish()
+    .transform((v) => v ?? true),
   mrp: money.nullish(),
   priceSource: z.string().nullish(),
 });
@@ -175,7 +179,7 @@ async function main() {
     try {
       const skus = p.variants.map((v) => v.sku);
       const existing = await db
-        .select({ sku: schema.productVariants.sku, productId: schema.productVariants.productId })
+        .select({ sku: schema.productVariants.sku, variantId: schema.productVariants.id, productId: schema.productVariants.productId })
         .from(schema.productVariants)
         .where(inArray(sql`upper(${schema.productVariants.sku})`, skus));
       let productId = existing[0]?.productId;
@@ -215,18 +219,25 @@ async function main() {
       }
 
       for (const [i, v] of p.variants.entries()) {
-        if (existing.some((e) => e.sku.toUpperCase() === v.sku)) continue;
-        const variant = await catalog.createVariant(
-          actor,
-          productId,
-          variantInput.parse({ sku: v.sku, name: v.name, attributes: v.attributes, barcode: v.barcode ?? null, unitCode: p.unit, sortOrder: i }),
-        );
-        stats.variants++;
-        if (p.altUnit) await catalog.addUnitConversion(actor, variant.id, p.altUnit.unit, p.altUnit.factor);
+        let variantId = existing.find((e) => e.sku.toUpperCase() === v.sku)?.variantId;
+        if (variantId) {
+          // A price found after the first import fills a variant that has never had one.
+          const [{ n }] = (await db.execute<{ n: number }>(sql`select count(*)::int as n from variant_prices where variant_id = ${variantId}`)).rows;
+          if (Number(n) > 0) continue;
+        } else {
+          const variant = await catalog.createVariant(
+            actor,
+            productId,
+            variantInput.parse({ sku: v.sku, name: v.name, attributes: v.attributes, barcode: v.barcode ?? null, unitCode: p.unit, sortOrder: i }),
+          );
+          variantId = variant.id;
+          stats.variants++;
+          if (p.altUnit) await catalog.addUnitConversion(actor, variant.id, p.altUnit.unit, p.altUnit.factor);
+        }
         if (v.listPrice) {
           const reason = `Manufacturer list price: ${v.priceSource ?? "see product sources"}`;
           await pricing.proposePrice(actor, {
-            variantId: variant.id,
+            variantId,
             price: v.listPrice,
             priceIncludesTax: v.listPriceIncludesTax,
             mrp: v.mrp ?? null,
