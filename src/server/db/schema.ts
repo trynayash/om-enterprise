@@ -14,6 +14,7 @@ import {
   bigserial,
   boolean,
   check,
+  customType,
   index,
   integer,
   jsonb,
@@ -30,6 +31,7 @@ const ts = (name: string) => timestamp(name, { withTimezone: true, mode: "date" 
 const money = (name: string) => numeric(name, { precision: 14, scale: 2 });
 const cost = (name: string) => numeric(name, { precision: 14, scale: 4 });
 const qty = (name: string) => numeric(name, { precision: 14, scale: 3 });
+const bytea = customType<{ data: Buffer }>({ dataType: () => "bytea" });
 const rate = (name: string) => numeric(name, { precision: 6, scale: 3 });
 const pct = (name: string) => numeric(name, { precision: 5, scale: 2 });
 
@@ -197,6 +199,13 @@ export const uploads = pgTable("uploads", {
   purpose: text("purpose").notNull(),
   isPublic: boolean("is_public").notNull().default(false),
   uploadedBy: uuid("uploaded_by").references(() => users.id),
+  createdAt: ts("created_at").notNull().defaultNow(),
+});
+
+/** File bytes when UPLOAD_STORAGE=database (hosts without a persistent disk, e.g. Vercel). */
+export const uploadObjects = pgTable("upload_objects", {
+  storageKey: text("storage_key").primaryKey(),
+  data: bytea("data").notNull(),
   createdAt: ts("created_at").notNull().defaultNow(),
 });
 

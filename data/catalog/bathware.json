@@ -1,0 +1,1064 @@
+{
+  "group": "bathware",
+  "researchedOn": "2026-10-23",
+  "notes": [
+    "RESEARCH LIMITS (read first): during this research WebFetch failed with a DNS error (getaddrinfo ENOTFOUND) for every host tried, including the brand sites, google.com and wikipedia.org, and the shared WebSearch budget ran out part-way. Every fact below was therefore read from search-engine extracts of the official pages and PDFs listed in sourceUrls, not from opening the pages directly. No image URLs could be collected, so every product has an empty images list. Before approving any price, a reviewer should open the linked official page or PDF and check it.",
+    "AGL: identified as AGL Bathware by Asian Granito India Ltd. (Ahmedabad, Gujarat). Evidence: the official site aglasiangranito.com has faucet, bathware, sanitary-ware and allied-products sections. Trade news reported a 2019 launch of 300+ faucet, shower and accessory SKUs and an entry into sanitaryware with 160 SKUs under the AGL brand (retail4growth.com; thetilesofindia.com). AGL publishes a faucet price list titled 'May 2026 PRICELIST' at https://aglasiangranito.com/catalogue/Faucet_Collection.pdf.",
+    "AGL products come from one code family in that price list: 291101CP, 291103CP, 291105CP, 291106CP, 291201CP, 291204CP and 291212CP, plus 132207CP. The PDF's text layer is garbled, so codes and prices often don't line up. Only one price could be read the same way twice (291101CP = 2290) and it is included; all other AGL prices are null. Other readings, NOT used: 291103CP 2420, 291201CP 9520, and black finishes 291101BL 2470, 291103BL 2475, 291105BL 3260, 291106BL 2005. The source names no series for the 291 family, so 'Code family' is our own label. The CP suffix is read as chrome-plated (the usual Indian faucet code convention), but AGL does not state this.",
+    "AGL items not included: the Cham series (aglasiangranito.com/cham, 23 items; codes 222101CP and 222103CP appear there) was left out because the item names and prices for its codes came only from retailers (Yoobuy, Navya Ceramics, Veda Ceramics, IndiaMART). The Tigris 611-series (gold and black finishes) and the 502-series (BL/BR/BG finishes) were left out because the finish codes are not explained in the source. Sanitaryware (EWC, wall-hung WC, wash basin) was left out because no official codes or prices could be read before the tools ran out. The price list mentions a 12-year warranty subject to the warranty card, but it was not confirmed for these items, so the warranty field is null.",
+    "Blues: identified as Blues Bath Fittings by Shah Multilayer Pvt. Ltd., Noida, Uttar Pradesh. Evidence: the official site bluesbathfittings.in (its About page names founder Sanjeev Gupta and Shah Multilayer, with a Noida address and bluesfaucets@gmail.com). Shah Multilayer's IndiaMART and TradeIndia profiles list Blues series (Momento, Spa and others), and a sourcinghardware.net channel-partner listing names the company and brand. The founding year conflicts: 1994 on the About page, 2007 on other listings. Distribution in Gujarat was not checked. An older domain, bluesbathfittings.com, appears in listings but did not resolve.",
+    "Blues products are from the Ace Collection (13 items, the everyday range), plus SQ-40 from the Square Collection. Prices are the figures shown on the Blues website's collection and product pages. The site does not label them MRP and does not say whether GST is included; we treat them as tax-inclusive (Indian retail convention), so mrp is null. Search metadata suggested some pages are old (1,000+ days), so prices may be stale. No AC-40 price could be read, and individual Ace product page URLs were not confirmed, so the collection page is used as the source. Blues pages give no material or finish details, so the variants are named 'Standard'.",
+    "Plumber: identified as Plumber Bathware by Aqua Plumbings Pvt. Ltd. Evidence: the official site plumberbathware.com ('Bathroom Fitting Manufacturers and Suppliers in Mathura, Delhi NCR') and its company presentation PDF titled 'AQUA PLUMBINGS PVT. LTD.'. Its lifetime-warranty page names Aqua Plumbings Private Limited (APPL). The manufacturing unit is at Gaur Udyog Kendra, Delhi–Mathura Bypass, Mathura 281001 (UP), and the corporate office is in Sector 65, Gurgaon. Spengler is a sister brand. This is not the generic word 'plumber'.",
+    "Plumber prices: the newest official faucet price list found is 'Plumber Faucets Price List' w.e.f. 2 April 2022 (plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf), with MRP and HSN 84818020 for cocks. No 2023–2026 list was found, so these MRPs are probably out of date. MRPs on the website's product pages match the older April 2021 list (e.g. EC-5111 shows 5835 on the site against 6805 in the 2022 list), so the 2022 list is used where it covers the item. Items found only on product pages (EC-0209, U-0507, UBP-0450) use the product-page MRP and are marked as probably outdated.",
+    "Plumber warranty: plumberbathware.com/life-time-warranty describes a 'Lifetime Performance Warranty'. It covers residential use, needs a certificate generated within 30 days of purchase (otherwise the standard 10-year warranty applies) and is 5 years for commercial use. It was not confirmed that Economy and Universal items carry the lifetime certificate, so the warranty field is null.",
+    "Aris: NOT identified with confidence, so no products are included. No official website or manufacturer could be found. Results showed only unrelated traders using the name in Gujarat and elsewhere (IndiaMART/TradeIndia: Raj Tiles Vadodara, Home Sanitary Ahmedabad, Supro Sanitary Wares Morbi, Ajit Trading Mehsana, an 'Aris Bath Fittings' retailer in Rajkot, Zorba Constro Pune, D K Bath Shoppy Hyderabad). Their warranty claims (5, 7 and 10 years) and model codes (PAC-2501, WP210, NJ-020, 912, Mini Florentine) don't match each other. Similar names belong to other things: ARK Bath Fittings (Panchkula), 'Aris' as a product name at Artize, Prestige and Caisson, and an 'Aries' series in AGL's own faucet price list. The shop should check the manufacturer name and address printed on an Aris box or invoice.",
+    "Bottle traps were found (Plumber UN-1730 Bottle Trap 32mm, MRP 1395 on its product page; Plumber Bottle Trap 'Slim', MRP 1630; Blues BT-01 Bottle Trap Primex SS pipe 5\"x12\", no price). They were left out because the body material, and so the HSN code, is not stated. Plumber's price list lists health faucets (Ultima, Curvy, Bellezza, Italian Square) and an overhead shower (ITP-2031, 1975 in the 2022 list), but their details could not be confirmed, so they are not included.",
+    "HSN: 84818020 is taken from Plumber's own price list for its cocks. Other taps and mixers use 8481, and the PVC connection hose uses 3917 (plastic tubes and hoses). The 18% GST rate is believed correct, but the shop's accountant must confirm all HSN codes and GST rates."
+  ],
+  "products": [
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Pillar Cock 291101CP",
+      "model": "291101CP",
+      "description": "A deck-mounted pillar cock for wash basins, from AGL Bathware's 291 code family. It is a single-inlet tap for one water line. The CP code suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Pillar cock (deck mounted)" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": [
+        "https://aglasiangranito.com/catalogue/Faucet_Collection.pdf",
+        "https://aglasiangranito.com/faucet"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "AGL-291-PC-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": "2290.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "AGL 'May 2026 PRICELIST' (aglasiangranito.com/catalogue/Faucet_Collection.pdf), figure for 291101CP read from search-index text of the PDF on 23 Oct 2026; MRP status not stated - verify in PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Bib Cock with Wall Flange 291103CP",
+      "model": "291103CP",
+      "description": "A wall-mounted bib cock with a wall flange, from AGL Bathware's 291 code family. It is the standard single-outlet wall tap for bathrooms, utility areas and kitchens. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Bib cock (wall mounted)" },
+        { "label": "Wall flange", "value": "Included" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-BIB-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but the price could not be read reliably (garbled table text) - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL 2-Way Bib Cock with Wall Flange 291105CP",
+      "model": "291105CP",
+      "description": "A two-way bib cock with a wall flange, from AGL Bathware's 291 code family. It has two outlets, typically a spout plus a connection for a health faucet or washing machine. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "2-way bib cock (wall mounted)" },
+        { "label": "Wall flange", "value": "Included" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-BIB2W-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but the price could not be read reliably (garbled table text) - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Angle Cock with Wall Flange 291106CP",
+      "model": "291106CP",
+      "description": "An angle cock with a wall flange, from AGL Bathware's 291 code family. It is used as a stop valve under basins and sinks, or to feed a cistern or geyser. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Angle cock" },
+        { "label": "Wall flange", "value": "Included" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-ANG-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but the price could not be read reliably (garbled table text) - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Wall Mixer 3-in-1 291201CP",
+      "model": "291201CP",
+      "description": "A 3-in-1 wall mixer from AGL Bathware's 291 code family. It mixes hot and cold water and has provision for both a telephonic (hand) shower and an overhead shower. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Wall mixer 3-in-1" },
+        { "label": "Shower provision", "value": "Telephonic shower and overhead shower" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-WM3-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but the price could not be read reliably (garbled table text) - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Wall Mixer Non-Telephonic 291204CP",
+      "model": "291204CP",
+      "description": "A non-telephonic wall mixer from AGL Bathware's 291 code family. It mixes hot and cold water at a wall spout, without a hand-shower outlet. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Wall mixer, non-telephonic" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-WMNT-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but no price could be read - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Single Lever Basin Mixer 291212CP",
+      "model": "291212CP",
+      "description": "A single-lever basin mixer from AGL Bathware's 291 code family. One lever sets both flow and temperature at a wash basin. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Single lever basin mixer" },
+        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-291-SLBM-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but no price could be read - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "AGL",
+      "manufacturer": "Asian Granito India Ltd.",
+      "name": "AGL Sink Cock Wall Mounted 132207CP",
+      "model": "132207CP",
+      "description": "A wall-mounted sink cock for kitchen sinks, from AGL Bathware's 132 code family. The CP suffix denotes the chrome-plated version.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Sink cock (wall mounted)" },
+        { "label": "Code family", "value": "132" },
+        { "label": "Finish code", "value": "CP" }
+      ],
+      "variantAttributes": ["Finish"],
+      "images": [],
+      "sourceUrls": ["https://aglasiangranito.com/catalogue/Faucet_Collection.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "AGL-132-SINKW-CH",
+          "name": "Chrome (CP)",
+          "attributes": { "Finish": "Chrome (CP)" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed in AGL 'May 2026 PRICELIST' PDF but no price could be read - check the PDF"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-11 Pillar Cock (Ace Collection)",
+      "model": "AC-11",
+      "description": "A deck-mounted pillar cock from the Blues Ace Collection, the brand's everyday faucet range. It is a single-inlet tap for wash basins.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Pillar cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC11-PC",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "995.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-21 Bib Cock (Ace Collection)",
+      "model": "AC-21",
+      "description": "A wall-mounted bib cock from the Blues Ace Collection. It is the basic single-outlet wall tap for bathrooms, wash areas and kitchens.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Bib cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "BLU-AC21-BIB",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "830.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-26 2 in 1 Bib Cock (Ace Collection)",
+      "model": "AC-26",
+      "description": "A 2-in-1 bib cock from the Blues Ace Collection. It has two outlets from one wall point, commonly a tap spout plus a connection for a health faucet or washing machine.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "2 in 1 bib cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC26-BIB2IN1",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1590.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-27 Angle Valve (Ace Collection)",
+      "model": "AC-27",
+      "description": "An angle valve from the Blues Ace Collection. It is used as an isolating valve for basin and sink connections, cisterns and geysers.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Angle valve" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC27-ANGLE",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "830.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues Concealed Stop Cock (Ace Collection)",
+      "model": "AC-31 / AC-32",
+      "description": "A concealed stop cock from the Blues Ace Collection, fitted inside the wall to shut off the supply to a bathroom line. It comes in 15 mm (AC-31) and 20 mm (AC-32) fitting sizes.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Concealed stop cock" }
+      ],
+      "variantAttributes": ["Size"],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC31-CSC-15",
+          "name": "15 mm (AC-31)",
+          "attributes": { "Size": "15 mm" },
+          "barcode": null,
+          "listPrice": "1145.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        },
+        {
+          "sku": "BLU-AC32-CSC-20",
+          "name": "20 mm (AC-32)",
+          "attributes": { "Size": "20 mm" },
+          "barcode": null,
+          "listPrice": "1190.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-34 Sink Cock J Spout (Ace Collection)",
+      "model": "AC-34",
+      "description": "A sink cock with a brass J-shaped spout, from the Blues Ace Collection. It is meant for kitchen sinks, where the high spout leaves room for filling vessels.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Sink cock" },
+        { "label": "Spout", "value": "J spout, brass" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC34-SINK",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1715.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-35 Swan Neck J Spout (Ace Collection)",
+      "model": "AC-35",
+      "description": "A swan-neck tap with a brass J spout, from the Blues Ace Collection. It is a deck-mounted tap with a tall curved spout for kitchen sinks and wash basins.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Swan neck" },
+        { "label": "Spout", "value": "J spout, brass" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC35-SWAN",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1890.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-40 Wall Mixer with L Bend (Ace Collection)",
+      "model": "AC-40",
+      "description": "A wall mixer with an L-bend from the Blues Ace Collection. It mixes hot and cold water, and the L-bend pipe feeds an overhead shower.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Wall mixer with L bend" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC40-WM",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Listed on the Blues Ace Collection page; price not captured (23 Oct 2026) - check bluesbathfittings.in"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues AC-24 Flush Cock 1 inch Heavy (Ace Collection)",
+      "model": "AC-24",
+      "description": "A heavy-duty 1-inch flush cock from the Blues Ace Collection. It is a quick-flow valve used to flush WCs directly from the supply line, without a cistern.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Ace" },
+        { "label": "Type", "value": "Flush cock, heavy" },
+        { "label": "Size", "value": "1 inch" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product-category/our-products/best-faucets-online-at-the-best-prices-blues-faucet-collection/ace-collection/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-AC24-FLUSH",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1945.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website (bluesbathfittings.in) Ace Collection page, price shown; read via search-index snapshot on 23 Oct 2026 (page may be old); not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Blues",
+      "manufacturer": "Shah Multilayer Pvt. Ltd.",
+      "name": "Blues SQ-40 Wall Mixer with L Bend (Square Collection)",
+      "model": "SQ-40",
+      "description": "A wall mixer with an L-bend from the Blues Square Collection. It mixes hot and cold water, and the L-bend pipe feeds an overhead shower. It is a squarer-styled alternative to the Ace AC-40.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Collection", "value": "Square" },
+        { "label": "Type", "value": "Wall mixer with L bend" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://bluesbathfittings.in/product/sq-40-wall-mixer-with-l-bend/"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BLU-SQ40-WM",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "4215.00",
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "Blues website product page SQ-40 (bluesbathfittings.in/product/sq-40-wall-mixer-with-l-bend/), price shown; read via search index on 23 Oct 2026; not labelled MRP - verify on site"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Pillar Cock EC-0101 (Economy)",
+      "model": "EC-0101",
+      "description": "A deck-mounted pillar cock from Plumber Bathware's Economy series, its budget faucet range. It is a single-inlet tap for wash basins.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Pillar cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf",
+        "https://www.plumberbathware.com/category/faucets/economy"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0101-PC",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1050.00",
+          "listPriceIncludesTax": true,
+          "mrp": "1050.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Pillar Cock Long Nose EC-0106 (Economy)",
+      "model": "EC-0106",
+      "description": "A long-nose pillar cock from Plumber Bathware's Economy series. Its extended spout reaches further over larger basins.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Pillar cock, long nose" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0106-PCLN",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1315.00",
+          "listPriceIncludesTax": true,
+          "mrp": "1315.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Bib Cock EC-0202 (Economy)",
+      "model": "EC-0202",
+      "description": "A wall-mounted bib cock from Plumber Bathware's Economy series. It is the standard single-outlet wall tap for bathrooms, wash areas and kitchens.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Bib cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf",
+        "https://www.plumberbathware.com/images/Plumber_Bathware_A5_Price_List_with_Price.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0202-BIB",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1075.00",
+          "listPriceIncludesTax": true,
+          "mrp": "1075.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Bib Cock Long Body EC-0203 (Economy)",
+      "model": "EC-0203",
+      "description": "A long-body bib cock from Plumber Bathware's Economy series. The longer body brings the outlet further from the wall, which helps with buckets and sinks.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Bib cock, long body" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/category/faucets/economy/bib-cock-63",
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0203-BIBLB",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1225.00",
+          "listPriceIncludesTax": true,
+          "mrp": "1225.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; product page shows older 1045. Latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Bib Cock Two-Way EC-0209 (Economy)",
+      "model": "EC-0209",
+      "description": "A two-way bib cock from Plumber Bathware's Economy series. It gives two outlets from one wall point, e.g. a tap spout plus a health faucet or washing-machine connection.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Bib cock, two-way" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/category/faucets/economy/bib-cock-two-way-13"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0209-BIB2W",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "1980.00",
+          "listPriceIncludesTax": true,
+          "mrp": "1980.00",
+          "priceSource": "plumberbathware.com product page EC-0209, MRP shown; read via search index on 23 Oct 2026. Site prices appear to date from the Apr 2021 list - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Angle Cock EC-0507 (Economy)",
+      "model": "EC-0507",
+      "description": "An angle cock from Plumber Bathware's Economy series. It is used as a stop valve under basins and sinks, and to feed cisterns and geysers.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Angle cock" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "PLB-EC0507-ANGLE",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "930.00",
+          "listPriceIncludesTax": true,
+          "mrp": "930.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Angle Cock Two Way EC-0599 (Economy)",
+      "model": "EC-0599",
+      "description": "A two-way angle cock from Plumber Bathware's Economy series. It splits one supply point into two controlled outlets, e.g. for a WC cistern and a health faucet.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Angle cock, two-way" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0599-ANGLE2W",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "2310.00",
+          "listPriceIncludesTax": true,
+          "mrp": "2310.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Pillar/Sink Cock Deck Mounted EC-0104 (Economy)",
+      "model": "EC-0104",
+      "description": "A deck-mounted pillar/sink cock with a swivel spout, from Plumber Bathware's Economy series. It mounts on a basin or kitchen sink, and the spout swings sideways.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Pillar / sink cock" },
+        { "label": "Mounting", "value": "Deck mounted" },
+        { "label": "Spout", "value": "Swivel" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/category/faucets/economy/pillar-sink-cock-3",
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0104-PSC",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "2690.00",
+          "listPriceIncludesTax": true,
+          "mrp": "2690.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; product page shows older 2330. Latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Sink Cock Wall Mounted EC-0616 (Economy)",
+      "model": "EC-0616",
+      "description": "A wall-mounted sink cock with a swivel spout, from Plumber Bathware's Economy series. It is meant for kitchen sinks, where the swivel spout serves both sides of a sink.",
+      "unit": "pcs",
+      "hsn": "84818020",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Sink cock" },
+        { "label": "Mounting", "value": "Wall mounted" },
+        { "label": "Spout", "value": "Swivel" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/category/faucets/economy/sink-cock-25",
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-EC0616-SINKW",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "2420.00",
+          "listPriceIncludesTax": true,
+          "mrp": "2420.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; product page shows older 2100. Latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Wall Mixer 3-in-1 EC-5111 (Economy)",
+      "model": "EC-5111",
+      "description": "A 3-in-1 wall mixer from Plumber Bathware's Economy series. It mixes hot and cold water and has provision for both a hand shower and an overhead shower.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Series", "value": "Economy" },
+        { "label": "Type", "value": "Wall mixer 3-in-1" },
+        { "label": "Shower provision", "value": "Hand shower and overhead shower" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://www.plumberbathware.com/category/faucets/economy/wall-mixer-3-in-1-3",
+        "https://www.plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "PLB-EC5111-WM3",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "6805.00",
+          "listPriceIncludesTax": true,
+          "mrp": "6805.00",
+          "priceSource": "Plumber Faucets Price List w.e.f. 02.04.2022 (plumberbathware.com), MRP; product page shows older 5835. Latest official list found on 23 Oct 2026 - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber Angle Cock Universal with Wall Flange U-0507",
+      "model": "U-0507",
+      "description": "A low-cost angle cock with a wall flange, from Plumber Bathware's 'Universal Items' range of allied fittings. It is used as a stop valve for basin, sink, cistern and geyser connections.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Range", "value": "Universal Items" },
+        { "label": "Type", "value": "Angle cock" },
+        { "label": "Wall flange", "value": "Included" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/category/faucets/universal-items/angle-cock-universal"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-U0507-ANGLE",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "590.00",
+          "listPriceIncludesTax": true,
+          "mrp": "590.00",
+          "priceSource": "plumberbathware.com product page U-0507, MRP shown; read via search index on 23 Oct 2026. Site prices appear to date from the Apr 2021 list - probably outdated"
+        }
+      ]
+    },
+    {
+      "category": "plumbing-accessories",
+      "brand": "Plumber",
+      "manufacturer": "Aqua Plumbings Pvt. Ltd.",
+      "name": "Plumber PVC Flexible Connection Hose 450mm (18\") White UBP-0450",
+      "model": "UBP-0450",
+      "description": "A white PVC flexible connection hose, 450 mm (18 inches) long, from Plumber Bathware's Universal Items range. It connects an angle cock to a basin mixer, sink cock or cistern.",
+      "unit": "pcs",
+      "hsn": "3917",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Range", "value": "Universal Items" },
+        { "label": "Material", "value": "PVC" },
+        { "label": "Length", "value": "450 mm (18\")" },
+        { "label": "Colour", "value": "White" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": ["https://www.plumberbathware.com/category/faucets/universal-items/pvc-flexible-connection-1"],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "PLB-UBP0450-HOSE",
+          "name": "450 mm",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": "165.00",
+          "listPriceIncludesTax": true,
+          "mrp": "165.00",
+          "priceSource": "plumberbathware.com product page UBP-0450, MRP shown; read via search index on 23 Oct 2026. Site prices appear to date from the Apr 2021 list - probably outdated"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,390 @@
+{
+  "group": "berger-paints",
+  "researchedOn": "2026-10-23",
+  "notes": [
+    "RESEARCH LIMITS: WebFetch could not resolve any host (getaddrinfo ENOTFOUND for www.bergerpaints.com and every other host tried), so no page could be opened directly. Facts below come from web-search extracts of bergerpaints.com pages and data sheets. The session's web-search budget then ran out, so this file holds only the 7 products that have at least one pack size confirmed in a public listing. Spot-check the specs against the live product pages before publishing.",
+    "PRICES: all null. bergerpaints.com product pages show no MRP, and no shop.bergerpaints.com product page with a price came up in search. The only dealer/MRP lists found were dated Jan 2024 (DPL Non-XP, Scribd), Apr 2023 (DPL XP, Scribd), May 2021 and Dec 2018, and none could be opened. Prices from third-party aggregators and marketplaces (NoBroker, 1pdf.in, IndiaMART, Amazon.in) disagreed widely and were not used.",
+    "IMAGES: none. Page source could not be fetched. Search extracts showed only bare filenames (e.g. Silk_Glamor_High_Sheen_canshot.jpg, luxol_pu_enamel.png), never the full URL, so no image link is given rather than a guessed one.",
+    "PACK SIZES come from retailer and marketplace listings (Amazon.in, IndiaMART, Flipkart, IBO, colourdrive.in, BuildersMART, lntsufin), not from an official Berger pack-size list. Only sizes actually seen are included. Other sizes probably exist (e.g. Silk Glamor High Sheen 10 L, Easy Clean 1 L / 4 L, Bison Acrylic Distemper 10 kg) and can be added later, because the import adds missing SKUs to an existing product. WeatherCoat Anti Dustt 10 L and WeatherCoat Long Life 10 10 L are backed only by third-party listings or aggregator pages. One directory says tinted Easy Clean Fresh comes in 0.9 / 3.6 / 9 / 18 L; those packs are not included.",
+    "WARRANTY CONFLICTS on Berger's own pages: Easy Clean Fresh 6 vs 7 years; WeatherCoat Anti Dustt 8 vs 6 vs 5 years; WeatherCoat Long Life 10 is 10 years on the product page and 2020 data sheet but 12 years on an older listing. Where the sources conflict, warranty is left null or the conflict is stated.",
+    "COVERAGE figures are written as Berger's range listings give them (e.g. '150-170 sqft per 2 coats'). The listing does not say 'per litre', even though that is the usual meaning.",
+    "GST 18% is assumed (believed rate). No official source confirmed it in this research. HSN follows the README (3209 for water-based emulsions and distempers).",
+    "RESEARCHED BUT NOT INCLUDED (current Berger products, pack sizes not confirmed). Add them in a follow-up session:",
+    "Silk Glamor Matt: https://www.bergerpaints.com/products/interior-wall-coatings/silk-glamor-matt (100% acrylic, matt, 150-170 sqft per 2 coats, 7-yr warranty, GreenPro; data sheet https://www.bergerpaints.com/upload/product/DataSheet-21022023060139.pdf). Silk Glamor Dazzle: super high sheen, 8-yr warranty.",
+    "Easy Clean Silky Touch (7-yr warranty): https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean-silky-touch. Easy Clean Advanced (cross-linking polymers, anti-fading, claims 10% higher coverage, warranty not found): https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean-advanced",
+    "Rangoli Total Care: https://www.bergerpaints.com/products/interior-wall-coatings/rangoli-total-care (anti-microbial, low VOC, 5-yr warranty, 100-120 sqft per 2 coats; data sheet https://www.bergerpaints.com/upload/product/DataSheet-04122019043443.pdf). Rangoli Rich Matt: https://www.bergerpaints.com/products/interior-wall-coatings/rangoli-rich-matt (water-based 100% acrylic, matt, 5-yr warranty).",
+    "Bison Emulsion: https://www.bergerpaints.com/products/interior-wall-coatings/bison-emulsion (acrylic, matt, GreenPro, 3-yr warranty). Bison Glow: https://www.bergerpaints.com/products/interior-wall-coatings/bison-glow (soft sheen, 3-yr warranty).",
+    "WeatherCoat Long Life 15: https://www.bergerpaints.com/products/exterior-wall-coatings/weathercoat-long-life-15 (elastomeric acrylic with PU + silicone, bridges cracks up to 3.2 mm; warranty given as 15 or 16 yrs). Walmasta (exterior matt acrylic, 4-yr performance warranty): data sheet https://www.bergerpaints.com/upload/product/DataSheet-25072016040815.pdf",
+    "Primers: Walmasta Exterior Interior Primer https://www.bergerpaints.com/products/primers/walmasta-exterior-interior-primer; BP White Primer (WT) https://www.bergerpaints.com/products/primers/bp-white-primer; BP Exterior Cement Primer https://www.bergerpaints.com/products/primers/bp-exterior-cement-primer; BP Cement Primer (ST), an alkyd/solvent product, so HSN 3208: https://www.bergerpaints.com/products/undercoats/31/interior-primers/31/bp-cement-primer-st",
+    "Putty (HSN 3214): Bison Wall Putty, a cement powder for interior and exterior: https://www.bergerpaints.com/products/putty-and-cement-paint/bison-wall-putty; Happy Walls Acrylic Putty (water-based paste): https://www.bergerpaints.com/products/undercoats/30/putty/36/happy-wall-acrylic-putty; also Bison Flex Putty and Bison Levelling Putty.",
+    "Enamels (solvent-based, HSN 3208): Luxol Hi-Gloss https://www.bergerpaints.com/products/enamels/luxol-hi-gloss; Luxol Satin Enamel https://www.bergerpaints.com/products/enamels/luxol-satin-enamel; Luxol PU Enamel https://www.bergerpaints.com/products/enamels/luxol-pu-enamel; Butterfly GP Enamel (interior only) https://www.bergerpaints.com/products/enamels/butterfly-gp-enamel; Butterfly AC Metal Primer RO (lead/chromium free) https://www.bergerpaints.com/upload/product/Butterfly_AC_Metal_Primer.pdf",
+    "Waterproofing: Dampstop Advanced https://www.bergerpaints.com/products/waterproofing/dampstop-advanced; HomeShield Dampstop Duo (warranty 7 yrs exterior / 2 yrs interior) https://www.bergerpaints.com/products/waterproofing/homeshield-dampstop-duo; HomeShield Advanced Latex Plus (repairs cracks up to 5 mm) https://www.bergerpaints.com/upload/product/DataSheet-25072016045701.pdf; HomeShield PU Roofkoat (350% elongation) https://www.bergerpaints.com/upload/product/DataSheet-27082021071331.pdf"
+  ],
+  "products": [
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger Silk Glamor High Sheen",
+      "model": null,
+      "description": "High-sheen luxury interior emulsion from Berger's Silk Glamor range. Berger describes it as a 100% acrylic emulsion with 'Crystal Reflective' technology and an elastomeric film that helps cover hairline cracks. It is washable and stain-resistant, low in VOC, and has no added APEO or formaldehyde.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": "7 years (washability), as listed on Berger's Silk range page; terms as per Berger warranty certificate",
+      "specifications": [
+        { "label": "Type", "value": "Interior luxury emulsion, water-based (100% acrylic)" },
+        { "label": "Finish", "value": "High sheen" },
+        { "label": "Coverage", "value": "150-170 sq ft per 2 coats (Berger range listing)" },
+        { "label": "VOC", "value": "Low VOC; free of added APEO and formaldehyde" },
+        { "label": "Certification", "value": "GreenPro certified" },
+        { "label": "Shade range", "value": "10,000+ shades via tinting (base white listed here)" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/interior-wall-coatings/silk-glamor-high-sheen",
+        "https://www.bergerpaints.com/products/interior-wall-coatings/brand/silk",
+        "https://www.bergerpaints.com/upload/product/Datasheet-silk-glamor.pdf",
+        "https://www.amazon.in/Silk-Glamor-High-Sheen-White/dp/B0F3P6LWMD",
+        "https://www.indiamart.com/proddetail/4-l-berger-silk-glamor-high-sheen-paints-2851239079630.html",
+        "https://www.indiamart.com/proddetail/berger-silk-glamor-high-sheen-emulsion-paint-2850824885130.html",
+        "https://thebuildmall.com/berger-20-ltr-silk-glamor-xp-andvanced-emulsion-white.html"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "BRG-SILKGLAMHS-1L",
+          "name": "1 L",
+          "attributes": { "Pack size": "1 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-SILKGLAMHS-4L",
+          "name": "4 L",
+          "attributes": { "Pack size": "4 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-SILKGLAMHS-20L",
+          "name": "20 L",
+          "attributes": { "Pack size": "20 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger Silk Glamor Soft Sheen",
+      "model": null,
+      "description": "Soft-sheen version of Berger's Silk Glamor luxury interior emulsion. Berger says the elastomeric film helps protect walls from cracks and the paint cleans easily. It is low in VOC, has no added APEO or formaldehyde, and is GreenPro certified.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": "7 years (washability), as listed on Berger's Silk range page; terms as per Berger warranty certificate",
+      "specifications": [
+        { "label": "Type", "value": "Interior luxury emulsion, water-based" },
+        { "label": "Finish", "value": "Soft sheen" },
+        { "label": "Coverage", "value": "150-170 sq ft per 2 coats (Berger range listing)" },
+        { "label": "VOC", "value": "Low VOC; free of added APEO and formaldehyde" },
+        { "label": "Certification", "value": "GreenPro certified" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/interior-wall-coatings/silk-glamor-soft-sheen",
+        "https://www.bergerpaints.com/products/interior-wall-coatings/brand/silk",
+        "https://lntsufin.com/product/berger-teaberry-buds-interior-emulsion-paints-1-l/17141-2488"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BRG-SILKGLAMSS-1L",
+          "name": "1 L",
+          "attributes": { "Pack size": "1 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger Easy Clean",
+      "model": null,
+      "description": "Washable, stain-resistant interior emulsion with a rich sheen finish. Berger says its cross-linking polymers form a tough, non-porous film, so most household stains wipe off without damaging the paint.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": "6 years (washability), as listed on Berger's Easy Clean range page; terms as per Berger warranty certificate",
+      "specifications": [
+        { "label": "Type", "value": "Interior washable emulsion, water-based" },
+        { "label": "Finish", "value": "Rich sheen (velvety)" },
+        { "label": "Technology", "value": "Cross-linking polymers for stain resistance and washability" },
+        { "label": "Coverage", "value": "120-130 sq ft per 2 coats (Berger range listing)" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean",
+        "https://www.bergerpaints.com/products/interior-wall-coatings/brand/easy-clean",
+        "https://www.amazon.in/berger-paint-price-20-liter/s?k=berger+paint+price+20+liter",
+        "https://www.indiamart.com/proddetail/berger-easy-clean-paint-16540689097.html"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BRG-EASYCLEAN-10L",
+          "name": "10 L",
+          "attributes": { "Pack size": "10 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-EASYCLEAN-20L",
+          "name": "20 L",
+          "attributes": { "Pack size": "20 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger Easy Clean Fresh",
+      "model": null,
+      "description": "Stain-resistant, washable interior emulsion in Berger's Easy Clean family. Berger sells it for everyday living spaces where walls need regular wiping. White packs come in four sizes from 1 L to 20 L.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Interior washable emulsion, water-based" },
+        { "label": "Coverage", "value": "120-130 sq ft per 2 coats (Berger Easy Clean range listing)" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean-fresh",
+        "https://www.bergerpaints.com/products/interior-wall-coatings/brand/easy-clean",
+        "https://www.colourdrive.in/products/paints/berger-paint/interior-paint/easy-clean/84",
+        "https://www.buildersmart.in/easy-clean-fresh",
+        "https://www.amazon.in/Berger-Clean-Luxury-Interior-Emulsion/dp/B07WZDRJBR"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "BRG-ECFRESH-1L",
+          "name": "1 L",
+          "attributes": { "Pack size": "1 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-ECFRESH-4L",
+          "name": "4 L",
+          "attributes": { "Pack size": "4 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-ECFRESH-10L",
+          "name": "10 L",
+          "attributes": { "Pack size": "10 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-ECFRESH-20L",
+          "name": "20 L",
+          "attributes": { "Pack size": "20 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger Bison Acrylic Distemper",
+      "model": null,
+      "description": "Economy water-based acrylic copolymer distemper for interior walls, with a matt finish. It comes in ready shades or as a tintable base. Berger says it is whiter and holds its colour longer than ordinary distemper. It is sold by weight.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Interior acrylic distemper, water-based (acrylic copolymer)" },
+        { "label": "Finish", "value": "Matt" },
+        { "label": "Shades", "value": "Ready shades or tintable base (white listed here)" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/interior-wall-coatings/bison-acrylic-distemper",
+        "https://www.bergerpaints.com/products/interior-wall-coatings/brand/bison",
+        "https://www.flipkart.com/berger-bison-acrylic-distemper-20kg-white-wall-paint/p/itmef169eb30a24a",
+        "https://www.ibo.com/berger-paints-bison-acrylic-20-kg-white-interior-distemper-color/p/EAMPF8ACZ7",
+        "https://www.indiamart.com/proddetail/berger-bison-acrylic-white-distemper-25499617433.html",
+        "https://dir.indiamart.com/impcat/berger-distemper.html"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "BRG-BISONDIST-1KG",
+          "name": "1 kg",
+          "attributes": { "Pack size": "1 kg" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-BISONDIST-5KG",
+          "name": "5 kg",
+          "attributes": { "Pack size": "5 kg" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        },
+        {
+          "sku": "BRG-BISONDIST-20KG",
+          "name": "20 kg",
+          "attributes": { "Pack size": "20 kg" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger WeatherCoat Anti Dustt",
+      "model": null,
+      "description": "100% acrylic exterior wall emulsion with Berger's 'Dust Guard' technology, which is meant to stop dust settling on outside walls. Berger also says it resists algae and fungus.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": null,
+      "specifications": [
+        { "label": "Type", "value": "Exterior emulsion, water-based (100% acrylic)" },
+        { "label": "Technology", "value": "Dust Guard (dust repellence)" },
+        { "label": "Protection", "value": "Anti-algal / anti-fungal" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/exterior-wall-coatings/weathercoat-anti-dustt",
+        "https://www.bergerpaints.com/products/exterior-wall-coatings/brand/weathercoat",
+        "https://www.amazon.in/berger-paint-price-20-liter/s?k=berger+paint+price+20+liter"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "BRG-WCANTIDUST-10L",
+          "name": "10 L",
+          "attributes": { "Pack size": "10 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    },
+    {
+      "category": "berger-paints",
+      "brand": "Berger",
+      "manufacturer": "Berger Paints India Ltd.",
+      "name": "Berger WeatherCoat Long Life 10",
+      "model": null,
+      "description": "Premium exterior emulsion that Berger aims at heavy-rainfall areas. Berger calls it the first paint to combine PU and silicone: the PU adds film strength and sheen, and the silicone repels rain. Berger also says it repels dust and resists algae and fungus.",
+      "unit": "pcs",
+      "hsn": "3209",
+      "gstRate": "18",
+      "warranty": "10-year performance warranty per Berger product page and 2020 data sheet (an older Berger listing states 12 years); terms as per Berger warranty certificate",
+      "specifications": [
+        { "label": "Type", "value": "Exterior emulsion, water-based" },
+        { "label": "Technology", "value": "PU + silicone" },
+        { "label": "Finish", "value": "Sheen" },
+        { "label": "Protection", "value": "Water repellence, dust repellence, anti-algal / anti-fungal" },
+        { "label": "Recommended for", "value": "Exterior walls in heavy-rainfall areas" }
+      ],
+      "variantAttributes": ["Pack size"],
+      "images": [],
+      "sourceUrls": [
+        "https://www.bergerpaints.com/products/exterior-wall-coatings/weathercoat-long-life-10",
+        "https://www.bergerpaints.com/products/exterior-wall-coatings/brand/long-life",
+        "https://www.bergerpaints.com/upload/product/DataSheet-31082020022101.pdf",
+        "https://www.nobroker.in/painting-services/home-painting-ideas/berger-paint-20-litre-price/",
+        "https://1pdf.in/berger-paints-price-list/"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "BRG-WCLL10-10L",
+          "name": "10 L",
+          "attributes": { "Pack size": "10 L" },
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+        }
+      ]
+    }
+  ]
+}
