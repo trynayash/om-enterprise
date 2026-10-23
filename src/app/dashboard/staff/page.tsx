@@ -33,7 +33,7 @@ async function Staff() {
         description="Create accounts, set discount and approval limits, and decide exactly what each person can do. Every change is recorded in the audit log."
       />
       {!actor.isSuperAdmin && (
-        <Alert className="mb-4">You can manage Sales & Operations staff. Administrator accounts, roles and permissions can only be changed by the Super Admin.</Alert>
+        <Alert className="mb-5">You can manage Sales & Operations staff. Administrator accounts, roles and permissions can only be changed by the Super Admin.</Alert>
       )}
       <StaffManager
         staff={staff.map((s) => ({ ...s, lastLoginAt: s.lastLoginAt?.toISOString() ?? null, createdAt: s.createdAt.toISOString(), lockedUntil: s.lockedUntil?.toISOString() ?? null }))}

@@ -200,11 +200,11 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
       </Card>
 
       <div className="grid gap-6 xl:grid-cols-3">
-        <div className="space-y-6 xl:col-span-2">
+        <div className="min-w-0 space-y-6 xl:col-span-2">
           <Card>
             <CardHeader title="Payments" description="Payment status is separate from the bill. A QR shown to the customer is NOT proof of payment until verified." />
             {payments.length ? (
-              <div className="overflow-x-auto">
+              <div className="relative overflow-x-auto">
                 <table className="w-full min-w-[640px]">
                   <thead>
                     <tr>
@@ -316,7 +316,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Card>
             <CardHeader title="Amounts" />
             <CardBody>

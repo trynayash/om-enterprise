@@ -67,7 +67,8 @@ export function Alert({ tone = "info", title, children, className }: { tone?: "i
 
 /** Wrapper for data tables with horizontal scroll on small screens. */
 export function TableWrap({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("overflow-x-auto rounded-xl border border-navy-100 bg-white shadow-card", className)}>{children}</div>;
+  // `relative` keeps visually hidden (sr-only) labels inside the scroll box, so they cannot widen the page.
+  return <div className={cn("relative overflow-x-auto rounded-xl border border-navy-100 bg-white shadow-card", className)}>{children}</div>;
 }
 
 export const th = "label-mono whitespace-nowrap border-b border-navy-200 bg-paper/70 px-3 py-2.5 text-left text-navy-500";

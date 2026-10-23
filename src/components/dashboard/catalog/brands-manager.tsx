@@ -43,7 +43,7 @@ export function BrandsManager({ brands, canCreate, canEdit }: { brands: BrandRow
           <EmptyState title="No brands yet" />
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full min-w-[320px]">
             <thead>
               <tr>

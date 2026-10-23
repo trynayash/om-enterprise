@@ -107,7 +107,7 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
             </div>
           </CardBody>
         </Card>
-        <Card className="xl:col-span-2">
+        <Card className="min-w-0 xl:col-span-2">
           <CardHeader title="Purchase history" description="Real sales only (training sales are excluded)." />
           {history.length === 0 ? (
             <CardBody>

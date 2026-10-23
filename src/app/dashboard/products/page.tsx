@@ -91,8 +91,8 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
                         {[p.brandName, p.categoryName].filter(Boolean).join(" · ")}
                       </div>
                     </div>
-                    <span className="shrink-0 font-mono text-xs tabular text-navy-500">
-                      {p.variantCount} var.
+                    <span className="shrink-0 whitespace-nowrap font-mono text-xs tabular text-navy-500">
+                      {p.variantCount} variant{p.variantCount === 1 ? "" : "s"}
                     </span>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">

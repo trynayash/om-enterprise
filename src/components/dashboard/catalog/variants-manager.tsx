@@ -93,7 +93,7 @@ export function VariantsManager(props: VariantsManagerProps) {
               <EmptyState title="No variants yet" description="Add at least one variant (e.g. “White · 10 L”) with a SKU, then set its price." action={perms.canCreate && <Button onClick={() => setDialog({ open: true, variant: null })}>Add first variant</Button>} />
             </CardBody>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="relative overflow-x-auto">
               <table className="w-full min-w-[640px]">
                 <thead>
                   <tr>

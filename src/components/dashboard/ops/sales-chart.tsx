@@ -6,9 +6,11 @@ export interface DayPoint {
   bills: number;
 }
 
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 function label(day: string) {
-  const [y, m, d] = day.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-IN", { day: "numeric", month: "short", timeZone: "UTC" });
+  const [, m, d] = day.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
 }
 
 function compact(v: number) {

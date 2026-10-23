@@ -43,7 +43,7 @@ export function SuppliersManager({ suppliers, canManage }: { suppliers: Supplier
           <EmptyState title="No suppliers yet" description={canManage ? "Add the distributors and dealers you purchase from." : undefined} />
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full min-w-[640px]">
             <thead>
               <tr>
