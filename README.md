@@ -152,7 +152,10 @@ npm run dev                     # http://localhost:3000  (owner: /admin, staff: 
 | `TEST_DATABASE_URL` | tests | A separate database. **It is wiped** by `npm run test:integration`. |
 | `APP_BASE_URL` | yes (prod) | Public URL, e.g. `https://omenterprise.in`. Used for the same-origin check and share links. |
 | `APP_SECRET` | yes | ≥ 32 random characters. Keyed hashing of IP addresses for rate limits and enquiries. Generate: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"` |
-| `UPLOAD_DIR` | no | Where product images are stored (default `./storage/uploads`). Must be persistent storage. |
+| `DATABASE_URL_UNPOOLED` | no | Direct (non-pooled) connection used by migrations when the host also gives a pooled one (Neon sets it). |
+| `UPLOAD_STORAGE` | no | `local` (default) keeps product images under `UPLOAD_DIR`; `database` keeps them in PostgreSQL, for hosts without a persistent disk. Defaults to `database` on Vercel. |
+| `UPLOAD_DIR` | no | Where product images are stored with `UPLOAD_STORAGE=local` (default `./storage/uploads`). Must be persistent storage. |
+| `SA_USERNAME`, `SA_NAME`, `SA_PASSWORD` | first deploy | Owner account created by `create-super-admin --if-missing` (hosted builds). The password is temporary; remove it after the first sign-in. |
 | `TRUST_PROXY` | no | `true` (default) reads client IPs from `X-Forwarded-For` set by your reverse proxy. Keep the app port private (only the proxy may reach it). |
 | `TRUST_PROXY_HOPS` | no | Number of reverse proxies in front of the app (default `1`). The client IP is taken that many entries from the right of `X-Forwarded-For`, so a forged header can't dodge rate limits. |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | optional | Only for the Razorpay dynamic-QR integration. |
@@ -247,6 +250,21 @@ Save your spreadsheet as **CSV UTF-8**, one row per variant. Rows with the same 
 | `is_sample` (yes/no) | | Marks demonstration data |
 
 **Validate** gives a row-by-row report: duplicate SKUs or barcodes (against the database and within the file), missing fields, unknown categories, units or tax rates, invalid numbers, and price above MRP. **Import** is enabled only when there are no errors, and it is all-or-nothing.
+
+### Real catalogue files (`data/catalog/`)
+
+The brands the shop stocks (Berger, Truflo by Hindware, Finolex, Umiya Gold, AGL, Blues, Plumber) are kept as JSON files researched from public manufacturer sources. The format and rules are in [`data/catalog/README.md`](data/catalog/README.md).
+
+```bash
+npm run import:products -- --check     # validate only
+npm run import:products                # add missing products as unpublished drafts
+npm run import:products -- --publish   # also mark new products reviewed and publish them
+```
+
+- Idempotent by SKU. A later run adds new variants, a price for a variant that never had one, and images for products that still have none.
+- List prices are imported as **pending proposals** for the Super Admin (Price review). Until one is approved the website shows "Price on request".
+- Image URLs are downloaded on the server, re-encoded and stored like any upload. A failed link is reported and skipped.
+- Hosted builds (`npm run vercel-build`) run the import with `--publish` on every deploy.
 
 ---
 
@@ -556,8 +574,29 @@ docker compose --env-file .env.production run --rm tools npm run create-super-ad
   - With Supabase, use the direct or session-pooler connection string. The RLS lockdown keeps its public REST API from exposing tables.
 - **App:** run `npm ci && npm run build && npm run db:migrate && npm start` on any Node 20+ host.
   - If you ship only the `.next/standalone` folder to another machine, note that Next.js copies the `.env` files present at build time into it. Build with production settings only, or delete `.next/standalone/.env` before copying. Docker builds never contain `.env` (see `.dockerignore`), and build tracing is configured to leave out backups, uploads, tests and scripts.
-- **Image storage:** if the host's disk is ephemeral (most serverless platforms), move image storage to S3-compatible storage. The storage functions are isolated in `src/server/services/uploads.ts`.
-- **Vercel:** usable, but the Hobby plan is for non-commercial use only, and uploads need object storage.
+- **Image storage:** if the host's disk is ephemeral (most serverless platforms), set `UPLOAD_STORAGE=database` so product images are kept in PostgreSQL (`upload_objects` table, included in database backups). The storage functions are isolated in `src/server/services/uploads.ts`.
+
+### Option C — Vercel + Neon (the current trial setup)
+
+Live trial: **https://om-enterprise-naswadi.vercel.app** (Vercel project `om-enterprise`, deploys `main`). The free Hobby plan is for **non-commercial use**: before real billing, move to Vercel Pro or Option A.
+
+1. Import the GitHub repository as a Vercel project (framework Next.js). `vercel.json` sets the build command to `npm run vercel-build`, which runs: migrations → owner account if missing → catalogue import (`--publish`) → `next build`.
+2. **Storage → Create Database → Neon**, region **Singapore**, connected to **Production**. This sets `DATABASE_URL` (pooled) and `DATABASE_URL_UNPOOLED` (used for migrations).
+3. Project settings: Node 22; Functions region `sin1` (next to the database); preview deployments off, so unmerged branches never touch the live database.
+4. Environment variables (Production):
+
+   | Variable | Value |
+   |---|---|
+   | `APP_SECRET` | ≥ 32 random characters (Sensitive) |
+   | `APP_BASE_URL` | `https://om-enterprise-naswadi.vercel.app` |
+   | `SA_USERNAME`, `SA_NAME` | `Kishan`, `Kishan Suthar` |
+   | `SA_PASSWORD` | Temporary owner password, ≥ 12 characters (Sensitive). Used once, by the first deploy; must be changed at first sign-in. Delete it afterwards. |
+   | `UPLOAD_STORAGE` | `database` (the default on Vercel anyway) |
+   | `DB_POOL_MAX` | `5` |
+
+Builds run in Washington (iad1) and talk to the database in Singapore, so the migrate/import steps take a few minutes. Pages are served from Singapore, next to the database.
+
+**The trial database is for practice.** Bills issued there use up real numbers (`OE/26-27/00001`…) and can't be deleted. Before going live, create a fresh Neon database (or branch) so the numbering starts at 1.
 
 **Go-live checklist:**
 1. Super Admin created.
