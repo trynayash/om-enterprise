@@ -9,6 +9,8 @@
  * Set SA_TEMPORARY=false only for automated test fixtures.
  *
  * Refuses to run if a Super Admin already exists (pass --additional to add another one deliberately).
+ * With --if-missing (hosted builds) it never prompts: it does nothing when a Super Admin exists or
+ * when SA_USERNAME / SA_PASSWORD are not set, so it is safe to run on every deploy.
  */
 import "dotenv/config";
 import { createInterface } from "node:readline";
@@ -37,6 +39,23 @@ async function main() {
   const { createInitialSuperAdmin } = await import("../src/server/services/users");
   const { getPool } = await import("../src/server/db/client");
   const additional = process.argv.includes("--additional");
+
+  if (process.argv.includes("--if-missing")) {
+    const { getDb } = await import("../src/server/db/client");
+    const { roles, users } = await import("../src/server/db/schema");
+    const { eq } = await import("drizzle-orm");
+    const existing = await getDb().select({ id: users.id }).from(users).innerJoin(roles, eq(roles.id, users.roleId)).where(eq(roles.key, "super_admin")).limit(1);
+    const skip = existing.length
+      ? "A Super Admin already exists; nothing to do."
+      : !process.env.SA_USERNAME || !process.env.SA_PASSWORD
+        ? "No Super Admin yet. Set SA_USERNAME, SA_NAME and SA_PASSWORD to create one (skipped)."
+        : null;
+    if (skip) {
+      console.log(skip);
+      await getPool().end();
+      return;
+    }
+  }
 
   const username = process.env.SA_USERNAME || (await ask("Username (e.g. kishan): "));
   const displayName = process.env.SA_NAME || (await ask("Full name (e.g. Kishan Suthar): "));

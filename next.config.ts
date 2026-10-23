@@ -30,7 +30,8 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
-  output: "standalone",
+  // Self-hosting (Docker) ships the standalone server; Vercel packages the app itself.
+  output: process.env.VERCEL ? undefined : "standalone",
   poweredByHeader: false,
   // pdfkit reads its own font metric files at runtime; keep it out of the bundle.
   serverExternalPackages: ["pdfkit"],

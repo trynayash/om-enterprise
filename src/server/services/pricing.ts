@@ -170,6 +170,8 @@ export async function proposePrice(
     tiers?: PriceTier[];
     effectiveFrom?: string | null;
     reason: string;
+    /** Leave the proposal pending even for an approver (e.g. imported list prices awaiting review). */
+    requireApproval?: boolean;
   },
 ) {
   requirePermission(actor, "prices.edit");
@@ -212,7 +214,7 @@ export async function proposePrice(
       ? marginFor(current.price, current.priceIncludesTax, ctx.gstRate, ctx.cessRate, cost?.landedCost ?? null, taxMode)
       : null;
 
-    const autoApprove = can(actor, "prices.approve") || !pricingSettings.priceChangeRequiresApproval;
+    const autoApprove = !input.requireApproval && (can(actor, "prices.approve") || !pricingSettings.priceChangeRequiresApproval);
     // A new proposal supersedes older pending ones for the same variant & list.
     const superseded = await tx
       .update(variantPrices)

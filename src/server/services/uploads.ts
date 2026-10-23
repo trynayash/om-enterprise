@@ -2,8 +2,9 @@ import "server-only";
 /**
  * Product image uploads. Every image is decoded and re-encoded with sharp (WebP, max 1600px):
  * this validates it really is an image, strips EXIF/GPS metadata and neutralises polyglot files.
- * Storage driver: local filesystem (UPLOAD_DIR). Swap `writeObject`/`readObject` for S3-compatible
- * storage (Supabase Storage, Cloudflare R2…) in production if the host has ephemeral disks.
+ * Storage driver (UPLOAD_STORAGE): `local` filesystem under UPLOAD_DIR (default), or `database`
+ * (bytes in the upload_objects table) for hosts with ephemeral disks. On Vercel it defaults to
+ * `database`. Keys are content-addressed, so either driver serves them with immutable caching.
  */
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -11,7 +12,7 @@ import path from "node:path";
 import sharp, { type Metadata } from "sharp";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
-import { productImages, products, uploads } from "@/server/db/schema";
+import { productImages, products, uploadObjects, uploads } from "@/server/db/schema";
 import { audit } from "@/server/audit";
 import { auditActorOf, requirePermission, type Actor } from "@/server/auth/actor";
 import { invalid, notFound } from "@/server/errors";
@@ -25,7 +26,15 @@ function uploadRoot() {
   return path.resolve(/* turbopackIgnore: true */ process.cwd(), process.env.UPLOAD_DIR ?? "storage/uploads");
 }
 
+function storesInDatabase() {
+  return (process.env.UPLOAD_STORAGE ?? (process.env.VERCEL ? "database" : "local")) === "database";
+}
+
 async function writeObject(key: string, data: Buffer) {
+  if (storesInDatabase()) {
+    await getDb().insert(uploadObjects).values({ storageKey: key, data }).onConflictDoNothing();
+    return;
+  }
   const full = path.join(uploadRoot(), key);
   if (!full.startsWith(uploadRoot())) throw invalid("Bad storage key");
   await mkdir(path.dirname(full), { recursive: true });
@@ -34,6 +43,10 @@ async function writeObject(key: string, data: Buffer) {
 
 export async function readObject(key: string): Promise<Buffer | null> {
   if (!/^[a-z0-9/_-]+\.webp$/.test(key)) return null;
+  if (storesInDatabase()) {
+    const [row] = await getDb().select({ data: uploadObjects.data }).from(uploadObjects).where(eq(uploadObjects.storageKey, key));
+    return row?.data ?? null;
+  }
   const full = path.join(uploadRoot(), key);
   if (!full.startsWith(uploadRoot())) return null;
   try {

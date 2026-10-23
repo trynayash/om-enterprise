@@ -54,6 +54,17 @@ describe("centralised prices & protection", () => {
     expect(pending.marginPercentSnapshot).toBe("24.48");
   });
 
+  it("imported list prices stay pending for review even when entered by the Super Admin", async () => {
+    const kishan = await makeUser("super_admin");
+    const item = await makeItem(kishan, { price: "1180" });
+    const list = await getDefaultPriceList();
+    const proposal = await proposePrice(kishan, { variantId: item.variantId, price: "1300", priceIncludesTax: true, reason: "Manufacturer list price", requireApproval: true });
+    expect(proposal.status).toBe("pending");
+    expect((await getActivePrices([item.variantId], list.id)).get(item.variantId)?.price).toBe("1180.00");
+    await decidePriceChange(kishan, proposal.id, "approve", "checked");
+    expect((await getActivePrices([item.variantId], list.id)).get(item.variantId)?.price).toBe("1300.00");
+  });
+
   it("cost and margin snapshots are hidden from approvers without cost access", async () => {
     const kishan = await makeUser("super_admin");
     const yash = await makeUser("admin");
