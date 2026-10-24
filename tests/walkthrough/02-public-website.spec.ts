@@ -60,7 +60,7 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await check(page, "About page", () => expect(page.getByRole("heading", { level: 1 })).toBeVisible());
   await pause(page, 1200);
   await page.goto("/contact");
-  await check(page, "Contact page shows the phone number", () => expect(page.getByText("7621934414").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "Contact page shows the phone number", () => expect(page.getByText("+91 76219 34414").filter({ visible: true }).first()).toBeVisible());
   await pause(page, 1200);
 
   await say(page, "Unknown addresses get a friendly 'not listed' page.");
