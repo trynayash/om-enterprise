@@ -30,7 +30,7 @@ async function CategoriesContent() {
   return (
     <div>
       <PageHeader eyebrow="Catalogue" title="Categories & brands" description="Organise the catalogue. Categories and brands are never deleted — make them inactive or hide them from the website instead." />
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px] xl:items-start">
         <CategoriesManager
           canCreate={can(actor, "catalog.create")}
           canEdit={can(actor, "catalog.edit")}

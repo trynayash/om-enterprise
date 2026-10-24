@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Field, Input, Select } from "@/components/ui/field";
-import { Alert, EmptyState, td, th } from "@/components/ui/page";
+import { Alert, EmptyState } from "@/components/ui/page";
+import { rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 import { DateTime, Qty } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
@@ -51,7 +52,7 @@ export function StockPanel({ items, recent, canManage }: { items: StockItem[]; r
         <CardBody className="space-y-3">
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative min-w-60 flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
               <Input type="search" aria-label="Filter stock" placeholder="Filter by name or SKU" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
             </div>
             <label className="inline-flex items-center gap-2 text-sm text-navy-700">
@@ -61,34 +62,35 @@ export function StockPanel({ items, recent, canManage }: { items: StockItem[]; r
           {visible.length === 0 ? (
             <EmptyState title="No matching items" />
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-navy-100">
+            <div className="overflow-x-auto rounded-lg border border-navy-100">
               <table className="w-full min-w-[560px]">
                 <thead>
                   <tr>
                     <th className={th}>Item</th>
-                    <th className={`${th} text-right`}>On hand</th>
-                    <th className={`${th} text-right`}>Reorder at</th>
+                    <th className={thNum}>On hand</th>
+                    <th className={thNum}>Reorder at</th>
                     <th className={th}>Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {visible.map((i) => (
-                    <tr key={i.variantId}>
-                      <td className={td}>
+                    <tr key={i.variantId} className={rowHover}>
+                      <td className={tdText}>
                         <div className="font-medium">{i.name}</div>
-                        <div className="font-mono text-xs text-navy-500">{i.sku}</div>
+                        <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{i.sku}</div>
                       </td>
-                      <td className={`${td} text-right font-semibold`}>{i.movements ? <Qty value={i.onHand} /> : <span className="text-navy-400">not counted</span>}</td>
-                      <td className={`${td} text-right`}>{i.reorderLevel ? <Qty value={i.reorderLevel} /> : "—"}</td>
-                      <td className={td}>
+                      <td className={`${tdNum} font-semibold`}>{i.movements ? <Qty value={i.onHand} /> : <span className="font-sans text-xs font-normal text-navy-400">not counted</span>}</td>
+                      <td className={tdNum}>{i.reorderLevel ? <Qty value={i.reorderLevel} /> : <span className="text-navy-300">—</span>}</td>
+                      <td className={tdText}>
+                        {/* Only a low level is stamped; the rest read as quiet text. */}
                         {i.low ? (
                           <Badge tone="red">
                             <AlertTriangle className="h-3 w-3" /> Low
                           </Badge>
                         ) : i.movements ? (
-                          <Badge tone="green">OK</Badge>
+                          <span className="text-[13px] text-navy-500">OK</span>
                         ) : (
-                          <Badge>No count</Badge>
+                          <span className="text-[13px] text-navy-400">No count</span>
                         )}
                       </td>
                     </tr>
@@ -113,23 +115,25 @@ export function StockPanel({ items, recent, canManage }: { items: StockItem[]; r
                   <th className={th}>When</th>
                   <th className={th}>Item</th>
                   <th className={th}>Type</th>
-                  <th className={`${th} text-right`}>Change</th>
+                  <th className={thNum}>Change</th>
                   <th className={th}>Note</th>
                 </tr>
               </thead>
               <tbody>
                 {recent.map((m) => (
-                  <tr key={m.id}>
-                    <td className={td}>
+                  <tr key={m.id} className={rowHover}>
+                    <td className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={m.createdAt} />
                     </td>
-                    <td className={td}>{names.get(m.variantId) ?? m.variantId}</td>
-                    <td className={td}>{m.movementType.replace(/_/g, " ")}</td>
-                    <td className={`${td} text-right tabular font-semibold ${Number(m.quantityChange) < 0 ? "text-red-700" : "text-emerald-700"}`}>
-                      {Number(m.quantityChange) > 0 ? "+" : ""}
-                      {Number(m.quantityChange)}
+                    <td className={tdText}>{names.get(m.variantId) ?? m.variantId}</td>
+                    <td className={`${tdMuted} first-letter:uppercase`}>{m.movementType.replace(/_/g, " ")}</td>
+                    <td className={`${tdNum} font-semibold`}>
+                      <span className={Number(m.quantityChange) < 0 ? "text-red-700" : "text-emerald-700"}>
+                        {Number(m.quantityChange) > 0 ? "+" : ""}
+                        {Number(m.quantityChange)}
+                      </span>
                     </td>
-                    <td className={`${td} text-navy-700`}>{m.note}</td>
+                    <td className={tdMuted}>{m.note}</td>
                   </tr>
                 ))}
               </tbody>
@@ -212,7 +216,7 @@ function MovementForm() {
           {error && <Alert tone="danger" className="lg:col-span-4">{error}</Alert>}
           <Field label="Item" htmlFor="sm-item" required>
             {picked ? (
-              <div className="flex h-10 items-center justify-between rounded-lg border border-navy-200 bg-navy-50 px-3 text-sm">
+              <div className="flex h-10 items-center justify-between gap-2 rounded-lg border border-navy-200 bg-paper px-3 text-sm">
                 <span className="truncate">
                   {picked.productName} — {picked.variantName} <span className="font-mono text-xs text-navy-500">{picked.sku}</span>
                 </span>
@@ -224,10 +228,10 @@ function MovementForm() {
               <div className="relative">
                 <Input id="sm-item" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search name or SKU" autoComplete="off" />
                 {hits.length > 0 && (
-                  <ul className="absolute z-10 mt-1 max-h-64 w-full overflow-y-auto rounded-xl border border-navy-100 bg-white shadow-lift">
+                  <ul className="absolute z-10 mt-1 max-h-64 w-full overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-lift">
                     {hits.map((h) => (
                       <li key={h.variantId}>
-                        <button type="button" className="w-full px-3 py-2 text-left text-sm hover:bg-navy-50" onClick={() => setPicked(h)}>
+                        <button type="button" className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-paper" onClick={() => setPicked(h)}>
                           {h.productName} — {h.variantName} <span className="font-mono text-xs text-navy-500">{h.sku}</span>
                         </button>
                       </li>

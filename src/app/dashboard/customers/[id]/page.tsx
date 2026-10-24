@@ -1,18 +1,21 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowLeft, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getCustomer } from "@/server/services/customers";
 import { stateName, whatsappLink } from "@/lib/india";
 import { D, formatINR, m } from "@/lib/money";
 import { Card, CardBody, CardHeader, Stat } from "@/components/ui/card";
-import { EmptyState, PageHeader, PageSkeleton, td, th } from "@/components/ui/page";
+import { EmptyState, PageHeader, PageSkeleton } from "@/components/ui/page";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money } from "@/components/ui/money";
 import { buttonClass } from "@/components/ui/button";
 import { CustomerFormButton } from "@/components/dashboard/ops/customer-form";
 import { loadOr404 } from "@/components/dashboard/ops/guard";
+import { BackLink } from "@/components/dashboard/back-link";
+import { TitleStamps } from "@/components/dashboard/title-stamps";
+import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Customer" };
 
@@ -36,15 +39,17 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
 
   return (
     <div className="space-y-6">
-      <Link href="/dashboard/customers" className="inline-flex items-center gap-1 text-sm font-semibold text-navy-600 hover:text-navy-900">
-        <ArrowLeft className="h-4 w-4" /> All customers
-      </Link>
+      <BackLink href="/dashboard/customers">All customers</BackLink>
       <PageHeader
         eyebrow="Customer"
         title={
           <span className="flex flex-wrap items-center gap-2">
             {c.name}
-            <Badge tone={c.customerType === "contractor" ? "gold" : c.customerType === "business" ? "navy" : "neutral"}>{c.customerType}</Badge>
+            <TitleStamps>
+              <Badge tone={c.customerType === "contractor" ? "gold" : c.customerType === "business" ? "navy" : "neutral"} className="capitalize">
+                {c.customerType}
+              </Badge>
+            </TitleStamps>
           </span>
         }
         description={c.businessName ?? undefined}
@@ -92,17 +97,17 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
         <Card>
           <CardHeader title="Details" />
           <CardBody className="space-y-3 text-sm">
-            <Detail icon={<Phone className="h-4 w-4" />} label="Mobile" value={c.mobile} />
+            <Detail icon={<Phone className="h-4 w-4" />} label="Mobile" value={c.mobile} mono />
             <Detail icon={<Mail className="h-4 w-4" />} label="Email" value={c.email} />
             <Detail label="GSTIN" value={c.gstin} mono />
             <Detail icon={<MapPin className="h-4 w-4" />} label="Address" value={[c.billingAddress, c.city, c.pincode, stateName(c.stateCode)].filter(Boolean).join(", ") || null} />
             {c.notes && <Detail label="Notes" value={c.notes} />}
-            <div className="text-xs text-navy-400">
+            <div className="pt-1 text-xs text-navy-500">
               Added <DateTime value={c.createdAt} dateOnly />
             </div>
           </CardBody>
         </Card>
-        <Card className="xl:col-span-2">
+        <Card className="min-w-0 xl:col-span-2">
           <CardHeader title="Purchase history" description="Real sales only (training sales are excluded)." />
           {history.length === 0 ? (
             <CardBody>
@@ -117,29 +122,29 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
                     <th className={th}>Date</th>
                     <th className={th}>Bill</th>
                     <th className={th}>Status</th>
-                    <th className={`${th} text-right`}>Total</th>
-                    <th className={`${th} text-right`}>Paid</th>
+                    <th className={thNum}>Total</th>
+                    <th className={thNum}>Paid</th>
                   </tr>
                 </thead>
                 <tbody>
                   {history.map((h) => (
-                    <tr key={h.id} className="hover:bg-navy-50/50">
-                      <td className={td}>
-                        <Link href={`/dashboard/sales/${h.id}`} className="font-semibold hover:underline">
+                    <tr key={h.id} className={rowHover}>
+                      <td className={tdText}>
+                        <Link href={`/dashboard/sales/${h.id}`} className={codeLink}>
                           {h.saleNumber}
                         </Link>
                       </td>
-                      <td className={`${td} text-navy-600`}>
+                      <td className={`${tdMuted} whitespace-nowrap`}>
                         <DateTime value={h.createdAt} dateOnly />
                       </td>
-                      <td className={`${td} whitespace-nowrap tabular`}>{h.docNumber ?? <span className="text-navy-300">—</span>}</td>
-                      <td className={td}>
+                      <td className={tdCode}>{h.docNumber ?? <span className="text-navy-300">—</span>}</td>
+                      <td className={tdText}>
                         <StatusBadge status={h.status === "completed" ? h.paymentStatus : h.status} />
                       </td>
-                      <td className={`${td} text-right font-semibold`}>
+                      <td className={`${tdNum} font-semibold`}>
                         <Money value={h.grandTotal} />
                       </td>
-                      <td className={`${td} text-right`}>
+                      <td className={tdNum}>
                         <Money value={h.amountPaid} />
                       </td>
                     </tr>
@@ -156,11 +161,11 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
 
 function Detail({ icon, label, value, mono }: { icon?: React.ReactNode; label: string; value: string | null; mono?: boolean }) {
   return (
-    <div className="flex gap-3">
-      <span className="mt-0.5 w-4 shrink-0 text-navy-300">{icon}</span>
-      <div>
-        <div className="text-xs font-semibold uppercase tracking-wide text-navy-500">{label}</div>
-        <div className={mono ? "tabular" : undefined}>{value ?? <span className="text-navy-300">Not recorded</span>}</div>
+    <div className="flex gap-3 border-b border-navy-100 pb-3 last:border-0 last:pb-0">
+      <span className="mt-0.5 w-4 shrink-0 text-navy-400">{icon}</span>
+      <div className="min-w-0">
+        <div className="label-mono text-navy-500">{label}</div>
+        <div className={mono ? "mt-0.5 break-all font-mono text-[13px]" : "mt-0.5"}>{value ?? <span className="text-navy-400">Not recorded</span>}</div>
       </div>
     </div>
   );

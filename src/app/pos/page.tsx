@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { ArrowRight, ClipboardList, Globe, Receipt, Search, Wallet } from "lucide-react";
+import { ArrowRight, Globe, Receipt, Search, Wallet } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listSales } from "@/server/services/sales";
@@ -40,64 +40,69 @@ async function PosHome() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-xs font-bold uppercase tracking-[0.16em] text-gold-600">
-            {new Date(Date.UTC(today.year, today.month - 1, today.day)).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })}
-          </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-navy-900 sm:text-3xl">
-            {greeting()}, {actor.displayName.split(" ")[0]}
-          </h1>
+      <div>
+        <div className="label-mono mb-2 flex items-center gap-2 text-gold-700">
+          <span aria-hidden className="h-px w-5 bg-gold-500" />
+          {new Date(Date.UTC(today.year, today.month - 1, today.day)).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })}
         </div>
+        <h1 className="headline text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">
+          {greeting()}, {actor.displayName.split(" ")[0]}
+        </h1>
       </div>
 
       <TaxBanner registrationType={cfg.registrationType} />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <NewSaleButton className="sm:col-span-2 lg:row-span-2 lg:min-h-full" />
-        <Tile href="/pos/products" icon={<Search className="h-6 w-6" />} title="Search products" text="Look up any item, variant and price" />
-        <Tile href="/pos/bills" icon={<Receipt className="h-6 w-6" />} title="Recent bills" text="Find, reprint and share bills" />
-        <Tile href="/pos/payments" icon={<Wallet className="h-6 w-6" />} title="Payment history" text="Verified, pending and refunded payments" />
-        {can(actor, "orders.view") && (
-          <Tile
-            href="/pos/orders"
-            icon={<Globe className="h-6 w-6" />}
-            title="Customer orders"
-            text="Enquiries & order requests from the website"
-            badge={ordersCount ? `${ordersCount} new` : undefined}
-          />
-        )}
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <NewSaleButton className="lg:min-h-full" />
+        <ul className="divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+          <Shortcut href="/pos/products" icon={<Search />} title="Search products" text="Look up any item, variant and price" />
+          <Shortcut href="/pos/bills" icon={<Receipt />} title="Recent bills" text="Find, reprint and share bills" />
+          <Shortcut href="/pos/payments" icon={<Wallet />} title="Payment history" text="Verified, pending and refunded payments" />
+          {can(actor, "orders.view") && (
+            <Shortcut
+              href="/pos/orders"
+              icon={<Globe />}
+              title="Customer orders"
+              text="Enquiries & order requests from the website"
+              badge={ordersCount ? `${ordersCount} new` : undefined}
+            />
+          )}
+        </ul>
       </div>
 
-      <section aria-labelledby="open-sales" className="rounded-2xl border border-navy-100 bg-white shadow-card">
-        <div className="flex items-center justify-between border-b border-navy-100 px-5 py-4">
-          <h2 id="open-sales" className="flex items-center gap-2 text-base font-bold text-navy-900">
-            <ClipboardList className="h-5 w-5 text-gold-600" /> Your open sales
+      <section aria-labelledby="open-sales" className="overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-navy-200 bg-paper/60 px-5 py-3">
+          <h2 id="open-sales" className="text-[15px] font-semibold text-navy-950">
+            Your open sales
+            {open.length > 0 && <span className="ml-2 font-mono text-xs font-medium text-navy-500 tabular">{open.length}</span>}
           </h2>
-          <span className="hidden text-xs text-navy-500 sm:inline">Drafts and sales awaiting payment</span>
+          <span className="text-xs text-navy-500">Drafts and sales awaiting payment</span>
         </div>
         {open.length === 0 ? (
-          <p className="px-5 py-8 text-center text-sm text-navy-500">No open sales. Tap NEW SALE to start one.</p>
+          <p className="px-5 py-10 text-center text-sm text-navy-500">No open sales. Tap NEW SALE to start one.</p>
         ) : (
-          <ul className="divide-y divide-navy-50">
-            {open.map((s) => (
-              <li key={s.id}>
-                <Link href={`/pos/sale/${s.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3 hover:bg-navy-50/60">
-                  <span className="font-mono text-sm font-bold text-navy-900">{s.saleNumber}</span>
-                  <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
-                  {s.isTraining && <Badge tone="red">Training</Badge>}
-                  {s.approvalStatus === "pending" && <Badge tone="amber">Approval pending</Badge>}
-                  <span className="text-sm text-navy-500">
-                    {s.itemCount} item{s.itemCount === 1 ? "" : "s"}
-                    {s.customerName ? ` · ${s.customerName}` : ""}
-                  </span>
-                  <span className="ml-auto flex items-center gap-4">
-                    <span className="text-xs text-navy-400">
-                      <DateTime value={s.createdAt} />
+          <ul className="stagger divide-y divide-navy-100">
+            {open.map((s, i) => (
+              <li key={s.id} style={{ "--i": i } as React.CSSProperties}>
+                <Link
+                  href={`/pos/sale/${s.id}`}
+                  className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 px-5 py-3.5 transition-colors hover:bg-paper/60 sm:flex"
+                >
+                  <span className="font-mono text-sm font-semibold text-navy-950 sm:order-1 sm:w-[5.5rem]">{s.saleNumber}</span>
+                  <Money value={s.grandTotal} className="text-right font-mono text-[15px] font-semibold text-navy-950 sm:order-4" />
+                  <span className="col-span-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:order-2">
+                    <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
+                    {s.isTraining && <Badge tone="red">Training</Badge>}
+                    {s.approvalStatus === "pending" && <Badge tone="amber">Approval pending</Badge>}
+                    <span className="ml-1.5 text-sm text-navy-500">
+                      {s.itemCount} item{s.itemCount === 1 ? "" : "s"}
+                      {s.customerName ? ` · ${s.customerName}` : ""}
                     </span>
-                    <Money value={s.grandTotal} className="text-base font-bold" />
-                    <ArrowRight className="h-4 w-4 text-navy-300" />
                   </span>
+                  <span className="hidden text-xs text-navy-400 sm:order-3 sm:ml-auto sm:inline">
+                    <DateTime value={s.createdAt} />
+                  </span>
+                  <ArrowRight className="hidden h-4 w-4 text-navy-300 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:text-navy-900 sm:order-5 sm:block" />
                 </Link>
               </li>
             ))}
@@ -108,21 +113,22 @@ async function PosHome() {
   );
 }
 
-function Tile({ href, icon, title, text, badge }: { href: string; icon: React.ReactNode; title: string; text: string; badge?: string }) {
+function Shortcut({ href, icon, title, text, badge }: { href: string; icon: React.ReactElement; title: string; text: string; badge?: string }) {
   return (
-    <Link
-      href={href}
-      className="group relative flex min-h-32 flex-col justify-between rounded-3xl border border-navy-100 bg-white p-5 shadow-card sm:min-h-36 transition-all hover:-translate-y-0.5 hover:border-gold-300 hover:shadow-lift"
-    >
-      <span className="flex items-center justify-between">
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy-900 text-gold-400">{icon}</span>
-        {badge && <span className="rounded-full bg-gold-500 px-2.5 py-1 text-xs font-extrabold text-navy-950">{badge}</span>}
-      </span>
-      <span className="mt-4 pr-7">
-        <span className="block text-lg font-extrabold uppercase tracking-wide text-navy-900">{title}</span>
-        <span className="mt-0.5 block text-sm text-navy-500">{text}</span>
-      </span>
-      <ArrowRight className="absolute bottom-5 right-5 h-5 w-5 text-navy-200 transition-colors group-hover:text-gold-500" />
-    </Link>
+    <li>
+      <Link href={href} className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-paper/60 sm:py-[1.15rem]">
+        <span aria-hidden className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-navy-200 text-navy-600 transition-colors group-hover:border-navy-900 group-hover:text-navy-900 [&>svg]:h-[18px] [&>svg]:w-[18px]">
+          {icon}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className="text-[15px] font-semibold text-navy-950">{title}</span>
+            {badge && <Badge tone="gold">{badge}</Badge>}
+          </span>
+          <span className="mt-0.5 block text-[13px] text-navy-500">{text}</span>
+        </span>
+        <ArrowRight className="h-4 w-4 shrink-0 text-navy-300 transition-[color,transform] duration-200 group-hover:translate-x-0.5 group-hover:text-navy-900" />
+      </Link>
+    </li>
   );
 }

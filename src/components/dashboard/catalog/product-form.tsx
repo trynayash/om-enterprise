@@ -153,7 +153,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
                 <Input id="p-model" value={f.model} onChange={(e) => set("model", e.target.value)} maxLength={80} />
               </Field>
               <Field label="Web address (slug)" htmlFor="p-slug" hint={mode === "create" ? "Leave blank to generate from the name." : "Changing it changes the product's website link."}>
-                <Input id="p-slug" value={f.slug} onChange={(e) => set("slug", e.target.value.toLowerCase())} placeholder="easy-clean-interior-emulsion" maxLength={80} />
+                <Input id="p-slug" className="font-mono text-[13px]" value={f.slug} onChange={(e) => set("slug", e.target.value.toLowerCase())} placeholder="easy-clean-interior-emulsion" maxLength={80} />
               </Field>
               <Field label="Warranty" htmlFor="p-warranty" hint="Only as stated by the manufacturer.">
                 <Input id="p-warranty" value={f.warrantyInfo} onChange={(e) => set("warrantyInfo", e.target.value)} maxLength={500} />
@@ -166,25 +166,39 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
 
             <div>
               <div className="mb-1 flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wide text-navy-700">Technical specifications</span>
+                <span className="label-mono text-navy-600">Technical specifications</span>
                 <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setSpecs([...specs, { label: "", value: "" }])}>
                   Add row
                 </Button>
               </div>
-              <p className="mb-2 text-xs text-navy-500">Copy from the official data sheet — never guess specifications.</p>
-              <div className="space-y-2">
+              <p className="mb-2.5 text-xs text-navy-500">Copy from the official data sheet — never guess specifications.</p>
+              {/* A spec sheet: name | value | remove. On phones the value drops under the name. */}
+              <div className="divide-y divide-navy-100 rounded-lg border border-navy-100 bg-paper/40">
                 {specs.map((s, i) => (
-                  <div key={i} className="grid grid-cols-[1fr_auto] gap-2 border-b border-navy-50 pb-2 sm:grid-cols-[1fr_2fr_auto] sm:border-0 sm:pb-0">
-                    <Input aria-label={`Specification ${i + 1} name`} placeholder="e.g. Coverage" value={s.label} onChange={(e) => setSpecs(specs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))} maxLength={60} />
+                  <div key={i} className="grid grid-cols-[minmax(0,1fr)_auto] gap-2 p-2 sm:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_auto] sm:items-center">
+                    <Input
+                      aria-label={`Specification ${i + 1} name`}
+                      placeholder="e.g. Coverage"
+                      value={s.label}
+                      onChange={(e) => setSpecs(specs.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
+                      maxLength={60}
+                      className="col-start-1 row-start-1"
+                    />
                     <Input
                       aria-label={`Specification ${i + 1} value`}
                       placeholder="Value from the data sheet"
                       value={s.value}
                       onChange={(e) => setSpecs(specs.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))}
                       maxLength={300}
-                      className="col-span-2 row-start-2 sm:col-span-1 sm:row-start-auto"
+                      className="col-span-2 col-start-1 row-start-2 sm:col-span-1 sm:col-start-2 sm:row-start-1"
                     />
-                    <Button variant="ghost" size="md" className="col-start-2 row-start-1 sm:col-start-auto" aria-label="Remove row" onClick={() => setSpecs(specs.length > 1 ? specs.filter((_, j) => j !== i) : [{ label: "", value: "" }])}>
+                    <Button
+                      variant="ghost"
+                      size="md"
+                      className="col-start-2 row-start-1 px-2.5 text-navy-400 hover:text-red-700 sm:col-start-3"
+                      aria-label="Remove row"
+                      onClick={() => setSpecs(specs.length > 1 ? specs.filter((_, j) => j !== i) : [{ label: "", value: "" }])}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -193,34 +207,35 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
             </div>
 
             <div>
-              <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">Variant attributes</span>
-              <p className="mb-2 text-xs text-navy-500">What makes each variant different, e.g. Colour, Pack size, Capacity, Diameter, Class.</p>
+              <span className="label-mono mb-1 block text-navy-600">Variant attributes</span>
+              <p className="mb-2.5 text-xs text-navy-500">What makes each variant different, e.g. Colour, Pack size, Capacity, Diameter, Class.</p>
               <div className="flex flex-wrap items-center gap-2">
                 {attrs.map((a) => (
-                  <span key={a} className="inline-flex items-center gap-1 rounded-full bg-navy-100 px-3 py-1 text-sm font-medium text-navy-800">
+                  <span key={a} className="inline-flex h-8 items-center gap-1.5 rounded-md border border-navy-200 bg-white pl-2.5 pr-1 text-sm font-medium text-navy-800">
                     {a}
-                    <button type="button" aria-label={`Remove ${a}`} onClick={() => setAttrs(attrs.filter((x) => x !== a))} className="rounded-full p-0.5 hover:bg-navy-200">
+                    <button type="button" aria-label={`Remove ${a}`} onClick={() => setAttrs(attrs.filter((x) => x !== a))} className="rounded p-1 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-900">
                       <X className="h-3 w-3" />
                     </button>
                   </span>
                 ))}
                 {attrs.length < 6 && (
                   <div className="flex gap-2">
-                    <Input
-                      aria-label="New attribute name"
-                      value={attrDraft}
-                      onChange={(e) => setAttrDraft(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          addAttr();
-                        }
-                      }}
-                      placeholder="Add attribute"
-                      className="h-8 w-40"
-                      maxLength={40}
-                    />
-                    <Button size="sm" variant="outline" onClick={addAttr} disabled={!attrDraft.trim()}>
+                    <div className="w-44">
+                      <Input
+                        aria-label="New attribute name"
+                        value={attrDraft}
+                        onChange={(e) => setAttrDraft(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            addAttr();
+                          }
+                        }}
+                        placeholder="Add attribute"
+                        maxLength={40}
+                      />
+                    </div>
+                    <Button variant="outline" onClick={addAttr} disabled={!attrDraft.trim()}>
                       Add
                     </Button>
                   </div>
@@ -230,7 +245,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
 
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="HSN code" htmlFor="p-hsn" hint="4–8 digits. Needed on tax invoices to registered buyers.">
-                <Input id="p-hsn" inputMode="numeric" value={f.hsnCode} onChange={(e) => set("hsnCode", e.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="e.g. 3209" />
+                <Input id="p-hsn" className="font-mono" inputMode="numeric" value={f.hsnCode} onChange={(e) => set("hsnCode", e.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="e.g. 3209" />
               </Field>
               <Field label="GST class" htmlFor="p-tax" hint={selectedTax?.isExempt ? "Exempt / nil-rated: no GST charged." : "Confirm the rate for this HSN with your accountant."}>
                 <Select id="p-tax" value={f.taxClassId} onChange={(e) => set("taxClassId", e.target.value)}>
@@ -255,7 +270,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
               </Field>
             </div>
 
-            <div className="grid gap-3 rounded-xl border border-navy-100 bg-navy-50/40 p-4 sm:grid-cols-2">
+            <div className="grid gap-x-6 gap-y-3.5 rounded-lg border border-rule bg-paper/50 p-4 sm:grid-cols-2">
               <Checkbox checked={f.isActive} onChange={(e) => set("isActive", e.target.checked)} label={<><b>Active</b> — can be sold at the counter</>} />
               <Checkbox checked={f.discountEligible} onChange={(e) => set("discountEligible", e.target.checked)} label={<><b>Discounts allowed</b> on this product</>} />
               <Checkbox checked={f.isFeatured} onChange={(e) => set("isFeatured", e.target.checked)} label={<><b>Featured</b> on the website home page</>} />

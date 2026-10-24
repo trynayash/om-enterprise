@@ -145,7 +145,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
   };
 
   return (
-    <section className="rounded-2xl border border-navy-100 bg-white shadow-card" aria-label="Add products">
+    <section className="rounded-xl border border-navy-200 bg-white shadow-card" aria-label="Add products">
       <div className="p-3 sm:p-4">
         <label htmlFor="pos-search" className="sr-only">
           Search products
@@ -166,7 +166,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
             autoComplete="off"
             spellCheck={false}
             placeholder="Search name, brand, size, SKU or scan barcode…"
-            className="h-14 w-full rounded-xl border-2 border-navy-200 bg-navy-50/40 pl-12 pr-24 text-base font-medium text-navy-900 placeholder:text-navy-400 focus:border-gold-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-gold-100"
+            className="h-14 w-full rounded-lg border border-navy-200 bg-white pl-12 pr-24 text-[17px] max-sm:pr-20 text-navy-950 placeholder:text-navy-400 transition-[border-color,box-shadow] duration-150 hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
             role="combobox"
             aria-expanded={visible.length > 0}
             aria-controls="pos-search-results"
@@ -175,17 +175,26 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
           <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
             {loading && <Spinner className="text-navy-400" />}
             {q ? (
-              <button type="button" onClick={reset} className="rounded-lg p-1.5 text-navy-400 hover:bg-navy-100" aria-label="Clear search">
+              <button type="button" onClick={reset} className="rounded-md p-1.5 text-navy-400 transition-colors hover:bg-navy-50 hover:text-navy-900" aria-label="Clear search">
                 <X className="h-5 w-5" />
               </button>
             ) : (
-              <kbd className="hidden rounded-md border border-navy-200 bg-white px-2 py-0.5 text-xs font-bold text-navy-400 sm:inline">/</kbd>
+              <Kbd className="hidden sm:inline-flex">/</Kbd>
             )}
           </div>
         </div>
         {!q.trim() && (
-          <p className="mt-2 flex items-center gap-1.5 px-1 text-xs text-navy-500">
-            <ScanLine className="h-3.5 w-3.5" /> Type to search · ↑↓ to move · Enter to choose · exact SKU/barcode + Enter adds 1 instantly
+          <p className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 px-0.5 text-xs text-navy-500">
+            <span className="inline-flex items-center gap-1">
+              <Kbd>↑</Kbd>
+              <Kbd>↓</Kbd> move
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Kbd>Enter</Kbd> choose
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <ScanLine className="h-3.5 w-3.5" /> exact SKU or barcode + <Kbd>Enter</Kbd> adds 1 instantly
+            </span>
           </p>
         )}
       </div>
@@ -195,7 +204,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
       )}
 
       {q.trim() && !selected && (
-        <ul id="pos-search-results" role="listbox" className="max-h-[52vh] divide-y divide-navy-50 overflow-y-auto border-t border-navy-100">
+        <ul id="pos-search-results" role="listbox" className="max-h-[52vh] divide-y divide-navy-100 overflow-y-auto border-t border-navy-200">
           {visible.length === 0 && !loading && <li className="px-5 py-6 text-center text-sm text-navy-500">No matching products. Try a brand, size or SKU.</li>}
           {visible.map((r, i) => (
             <li key={r.variantId} id={`res-${r.variantId}`} role="option" aria-selected={i === active}>
@@ -203,24 +212,32 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
                 type="button"
                 onMouseEnter={() => setActive(i)}
                 onClick={() => setSelected(r)}
-                className={cn("flex w-full items-center gap-3 px-4 py-3 text-left transition-colors sm:px-5", i === active ? "bg-gold-50" : "hover:bg-navy-50/60")}
+                className={cn(
+                  "flex w-full items-center gap-4 px-4 py-3 text-left transition-colors duration-100 sm:px-5",
+                  i === active ? "bg-gold-50 shadow-[inset_3px_0_0_var(--color-gold-500)]" : "hover:bg-paper/60",
+                )}
               >
                 <span className="min-w-0 flex-1">
                   <span className="flex flex-wrap items-center gap-1.5">
-                    <span className="font-semibold text-navy-900">{r.productName}</span>
+                    <span className="font-semibold text-navy-950">{r.productName}</span>
                     {r.isSample && <SampleBadge label="Sample" />}
                   </span>
                   <span className="block text-sm text-navy-700">{r.variantName}</span>
-                  <span className="mt-0.5 block text-xs text-navy-400">
-                    {[r.brandName, r.categoryName, r.sku].filter(Boolean).join(" · ")}
-                    {r.tiers.length > 0 && <span className="ml-1 font-semibold text-gold-700">· bulk prices</span>}
+                  <span className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-navy-500">
+                    <span className="font-mono text-navy-700">{r.sku}</span>
+                    {[r.brandName, r.categoryName].filter(Boolean).map((t) => (
+                      <span key={t} className="before:mr-2 before:text-navy-300 before:content-['·']">
+                        {t}
+                      </span>
+                    ))}
+                    {r.tiers.length > 0 && <span className="font-medium text-gold-700 before:mr-2 before:text-navy-300 before:content-['·']">bulk prices</span>}
                   </span>
                 </span>
                 <span className="shrink-0 text-right">
                   {r.price ? (
                     <>
-                      <span className="block text-base font-extrabold text-navy-900 tabular">{formatINR(r.price)}</span>
-                      <span className="block text-[11px] text-navy-500">
+                      <span className="block font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(r.price)}</span>
+                      <span className="mt-0.5 block text-[11px] text-navy-500">
                         per {r.unitName}
                         {taxCharged ? (r.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
                       </span>
@@ -235,6 +252,19 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
         </ul>
       )}
     </section>
+  );
+}
+
+function Kbd({ children, className }: { children: React.ReactNode; className?: string }) {
+  return (
+    <kbd
+      className={cn(
+        "inline-flex h-5 min-w-5 items-center justify-center rounded-[3px] border border-navy-200 bg-paper px-1 font-mono text-[10.5px] font-medium leading-none text-navy-600 shadow-[inset_0_-1px_0_var(--color-navy-200)]",
+        className,
+      )}
+    >
+      {children}
+    </kbd>
   );
 }
 
@@ -289,46 +319,48 @@ function AddPanel({
   };
 
   return (
-    <div className="animate-fade-in border-t border-gold-200 bg-gold-50/60 px-4 py-4 sm:px-5">
+    <div className="animate-fade-in border-t border-navy-200 bg-paper/70 px-4 py-4 sm:px-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-1.5 font-bold text-navy-900">
+          <div className="flex flex-wrap items-center gap-1.5 text-[15px] font-semibold text-navy-950">
             {r.productName}
             {r.isSample && <SampleBadge label="Sample" />}
           </div>
           <div className="text-sm text-navy-700">{r.variantName}</div>
-          <div className="text-xs text-navy-500">
-            {r.sku}
-            {r.hsnCode ? ` · HSN ${r.hsnCode}` : ""}
-            {r.mrp ? ` · MRP ${formatINR(r.mrp)}` : ""}
+          <div className="mt-1 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
+            <span className="text-navy-700">{r.sku}</span>
+            {r.hsnCode && <span>HSN {r.hsnCode}</span>}
+            {r.mrp && <span>MRP {formatINR(r.mrp)}</span>}
           </div>
           {r.tiers.length > 0 && (
-            <div className="mt-1 text-xs font-semibold text-gold-700">
-              Bulk: {r.tiers.map((t) => `${formatQty(t.minQty)}+ ${r.unitName} @ ${formatINR(t.price)}`).join(" · ")}
+            <div className="mt-1.5 text-xs font-medium text-gold-700">
+              Bulk: <span className="font-mono">{r.tiers.map((t) => `${formatQty(t.minQty)}+ ${r.unitName} @ ${formatINR(t.price)}`).join(" · ")}</span>
             </div>
           )}
         </div>
-        <button type="button" onClick={onCancel} className="rounded-lg p-1.5 text-navy-500 hover:bg-white" aria-label="Back to results">
+        <button type="button" onClick={onCancel} className="rounded-md p-1.5 text-navy-500 transition-colors hover:bg-white hover:text-navy-900" aria-label="Back to results">
           <X className="h-5 w-5" />
         </button>
       </div>
 
       {!r.price ? (
-        <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm font-medium text-red-800">No selling price is configured for this item. An authorised admin must set a price before it can be sold.</p>
+        <p className="mt-3 rounded-md border-l-[3px] border-red-600 bg-red-50 px-3 py-2 text-sm font-medium text-red-900">
+          No selling price is configured for this item. An authorised admin must set a price before it can be sold.
+        </p>
       ) : (
         <form
-          className="mt-3 flex flex-wrap items-end gap-3"
+          className="mt-4 flex flex-wrap items-end gap-x-4 gap-y-3"
           onSubmit={(e) => {
             e.preventDefault();
             if (valid) onAdd(qty, unitCode);
           }}
         >
           <div>
-            <label htmlFor="add-qty" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">
+            <label htmlFor="add-qty" className="label-mono mb-1.5 block text-navy-600">
               Quantity
             </label>
-            <div className="flex items-center">
-              <button type="button" onClick={() => step(-1)} className="h-12 w-12 rounded-l-xl border border-r-0 border-navy-200 bg-white text-navy-700 hover:bg-navy-50" aria-label="Decrease">
+            <div className="flex h-12 items-stretch overflow-hidden rounded-lg border border-navy-200 bg-white focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">
+              <button type="button" onClick={() => step(-1)} className="w-12 text-navy-600 transition-colors hover:bg-navy-50 active:bg-navy-100" aria-label="Decrease">
                 <Minus className="mx-auto h-4 w-4" />
               </button>
               <input
@@ -337,24 +369,24 @@ function AddPanel({
                 inputMode={unit.decimals ? "decimal" : "numeric"}
                 value={qty}
                 onChange={(e) => setQty(e.target.value.replace(/[^\d.]/g, ""))}
-                className="h-12 w-24 border border-navy-200 bg-white text-center text-lg font-bold tabular focus:border-gold-500 focus:outline-none"
+                className="w-20 border-x border-navy-200 bg-white text-center font-mono text-lg font-semibold text-navy-950 tabular focus:outline-none"
                 aria-invalid={!valid}
               />
-              <button type="button" onClick={() => step(1)} className="h-12 w-12 rounded-r-xl border border-l-0 border-navy-200 bg-white text-navy-700 hover:bg-navy-50" aria-label="Increase">
+              <button type="button" onClick={() => step(1)} className="w-12 text-navy-600 transition-colors hover:bg-navy-50 active:bg-navy-100" aria-label="Increase">
                 <Plus className="mx-auto h-4 w-4" />
               </button>
             </div>
           </div>
           {unitOptions.length > 1 ? (
             <div>
-              <label htmlFor="add-unit" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">
+              <label htmlFor="add-unit" className="label-mono mb-1.5 block text-navy-600">
                 Sell by
               </label>
               <select
                 id="add-unit"
                 value={unitCode}
                 onChange={(e) => setUnitCode(e.target.value)}
-                className="h-12 rounded-xl border border-navy-200 bg-white px-3 text-sm font-semibold focus:border-gold-500 focus:outline-none"
+                className="h-12 min-w-36 rounded-lg border border-navy-200 bg-white px-3 pr-8 text-sm font-medium text-navy-900 transition-[border-color,box-shadow] duration-150 hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
               >
                 {unitOptions.map((u) => (
                   <option key={u.code} value={u.code}>
@@ -365,21 +397,21 @@ function AddPanel({
               </select>
             </div>
           ) : (
-            <div className="pb-3 text-sm font-semibold text-navy-600">{r.unitName}</div>
+            <div className="flex h-12 items-center text-sm font-medium text-navy-600">{r.unitName}</div>
           )}
-          <div className="min-w-32 flex-1 pb-1 text-sm">
+          <div className="min-w-36 flex-1 text-sm">
             {pricePerChosen && (
               <>
-                <div className="text-navy-500">
-                  {formatINR(pricePerChosen)} / {unit.name}
+                <div className="text-[13px] text-navy-500">
+                  <span className="font-mono">{formatINR(pricePerChosen)}</span> / {unit.name}
                   {taxCharged ? (r.priceIncludesTax ? " incl. GST" : " + GST") : ""}
-                  {tierApplied && <span className="ml-1 font-semibold text-gold-700">(bulk price)</span>}
+                  {tierApplied && <span className="ml-1 font-medium text-gold-700">(bulk price)</span>}
                 </div>
-                {valid && <div className="text-lg font-extrabold text-navy-900 tabular">{formatINR(pricePerChosen.times(D(qty)))}</div>}
+                {valid && <div className="mt-0.5 font-mono text-xl font-semibold text-navy-950 tabular">{formatINR(pricePerChosen.times(D(qty)))}</div>}
               </>
             )}
           </div>
-          <Button type="submit" variant="gold" size="lg" loading={busy} disabled={!valid} icon={<PackagePlus className="h-5 w-5" />}>
+          <Button type="submit" variant="primary" size="lg" loading={busy} disabled={!valid} icon={<PackagePlus className="h-5 w-5" />}>
             Add to cart
           </Button>
         </form>
@@ -387,7 +419,7 @@ function AddPanel({
       {!valid && qty && (
         <p className="mt-2 text-xs text-red-700">{unit.decimals ? `Up to ${unit.decimals} decimal places` : `${unit.name} must be a whole number`}</p>
       )}
-      {r.price && <p className="mt-2 text-[11px] text-navy-500">Price shown: {priceLabel(r, taxCharged)} per {r.unitName}. The server recalculates every amount.</p>}
+      {r.price && <p className="mt-3 text-[11px] text-navy-500">Price shown: {priceLabel(r, taxCharged)} per {r.unitName}. The server recalculates every amount.</p>}
     </div>
   );
 }

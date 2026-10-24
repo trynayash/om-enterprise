@@ -5,7 +5,8 @@ import { CheckCircle2, FileSpreadsheet, ShieldCheck, Upload } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Alert, td, th } from "@/components/ui/page";
+import { Alert } from "@/components/ui/page";
+import { tdCode, tdText, th } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
 
@@ -84,11 +85,11 @@ export function ImportWizard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
+      <ol className="grid overflow-hidden rounded-xl border border-navy-100 bg-white shadow-card md:grid-cols-3 md:divide-x md:divide-navy-100">
         <Step n={1} title="Download the template" done={false}>
           <p>One row per variant. Rows with the same product name, brand and category become one product.</p>
-          <a href="/api/admin/import/template" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-gold-700 hover:underline">
-            <FileSpreadsheet className="h-4 w-4" /> om-product-import-template.csv
+          <a href="/api/admin/import/template" className="mt-2.5 inline-flex items-center gap-1.5 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
+            <FileSpreadsheet className="h-4 w-4 shrink-0" aria-hidden /> om-product-import-template.csv
           </a>
         </Step>
         <Step n={2} title="Fill it in & save as CSV" done={false}>
@@ -99,7 +100,7 @@ export function ImportWizard() {
         <Step n={3} title="Upload, check, import" done={!!result}>
           <p>We check every row first. Nothing is saved until the file has no errors.</p>
         </Step>
-      </div>
+      </ol>
 
       <Card>
         <CardHeader title="Upload file" description="Imported products are created as unpublished drafts — review and publish them individually." />
@@ -119,7 +120,7 @@ export function ImportWizard() {
             <Button variant="outline" icon={<Upload className="h-4 w-4" />} onClick={() => fileRef.current?.click()} loading={busy === "validate"}>
               {fileName ? "Choose another file" : "Choose CSV file"}
             </Button>
-            {fileName && <span className="text-sm text-navy-700">{fileName}</span>}
+            {fileName && <span className="font-mono text-[13px] text-navy-700">{fileName}</span>}
             {csv && report && (
               <Button variant="ghost" size="sm" onClick={() => validate()} loading={busy === "validate"}>
                 Re-check
@@ -152,9 +153,9 @@ export function ImportWizard() {
                   Import {report.variantCount} variants
                 </Button>
               </div>
-              <div className="max-h-[560px] overflow-auto rounded-xl border border-navy-100">
+              <div className="max-h-[560px] overflow-auto rounded-lg border border-navy-100">
                 <table className="w-full min-w-[640px]">
-                  <thead className="sticky top-0">
+                  <thead className="sticky top-0 z-[1] bg-white">
                     <tr>
                       <th className={th}>Row</th>
                       <th className={th}>SKU</th>
@@ -165,11 +166,17 @@ export function ImportWizard() {
                   <tbody>
                     {rows.map((r) => (
                       <tr key={r.row} className={cn(r.status === "error" && "bg-red-50/60")}>
-                        <td className={`${td} tabular text-navy-500`}>{r.row}</td>
-                        <td className={`${td} font-mono text-xs`}>{r.sku || "—"}</td>
-                        <td className={td}>{r.product || "—"}</td>
-                        <td className={td}>
-                          <Badge tone={r.status === "ok" ? "green" : r.status === "warning" ? "amber" : "red"}>{r.status === "ok" ? "OK" : r.status === "warning" ? "Warning" : "Error"}</Badge>
+                        <td className={tdCode}>
+                          <span className="text-navy-500">{r.row}</span>
+                        </td>
+                        <td className={tdCode}>{r.sku || "—"}</td>
+                        <td className={tdText}>{r.product || "—"}</td>
+                        <td className={tdText}>
+                          {r.status === "ok" ? (
+                            <span className="text-[13px] text-navy-500">OK</span>
+                          ) : (
+                            <Badge tone={r.status === "warning" ? "amber" : "red"}>{r.status === "warning" ? "Warning" : "Error"}</Badge>
+                          )}
                           {r.messages.length > 0 && (
                             <ul className="mt-1 list-inside list-disc text-xs text-navy-700">
                               {r.messages.map((m) => (
@@ -191,11 +198,11 @@ export function ImportWizard() {
       <Card>
         <CardHeader title="Columns" description="Required columns are marked *. Use the exact header names from the template." />
         <CardBody>
-          <dl className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
+          <dl className="grid gap-x-10 text-sm sm:grid-cols-2">
             {COLUMNS.map(([k, v]) => (
-              <div key={k} className="flex gap-2">
-                <dt className="w-40 shrink-0 font-mono text-xs font-semibold text-navy-900">{k}</dt>
-                <dd className="text-navy-600">{v}</dd>
+              <div key={k} className="flex gap-3 border-b border-navy-100 py-2">
+                <dt className="w-44 shrink-0 pt-px font-mono text-[12px] font-medium text-navy-900">{k}</dt>
+                <dd className="leading-snug text-navy-600">{v}</dd>
               </div>
             ))}
           </dl>
@@ -231,23 +238,23 @@ const COLUMNS: [string, string][] = [
 
 function Step({ n, title, done, children }: { n: number; title: string; done: boolean; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl border border-navy-100 bg-white p-4 text-sm text-navy-600 shadow-card">
-      <div className="mb-1 flex items-center gap-2 font-bold text-navy-900">
-        <span className={cn("flex h-6 w-6 items-center justify-center rounded-full text-xs", done ? "bg-emerald-600 text-white" : "bg-navy-900 text-white")}>
+    <li className="border-b border-navy-100 p-4 text-sm leading-relaxed text-navy-600 last:border-b-0 md:border-b-0 md:p-5">
+      <div className="mb-1.5 flex items-center gap-2.5 font-semibold text-navy-900">
+        <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-xs", done ? "bg-emerald-600 text-white" : "border border-navy-200 text-navy-700")}>
           {done ? <CheckCircle2 className="h-4 w-4" /> : n}
         </span>
         {title}
       </div>
       {children}
-    </div>
+    </li>
   );
 }
 
 function Mini({ label, value, tone }: { label: string; value: number; tone?: "red" | "amber" | "green" }) {
   return (
-    <div className="rounded-xl border border-navy-100 bg-white px-4 py-3">
-      <div className="text-[11px] font-bold uppercase tracking-wide text-navy-500">{label}</div>
-      <div className={cn("text-2xl font-extrabold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>{value}</div>
+    <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
+      <div className="label-mono text-navy-500">{label}</div>
+      <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>{value}</div>
     </div>
   );
 }

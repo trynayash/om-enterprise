@@ -4,6 +4,7 @@ import { ShieldCheck, ShieldOff } from "lucide-react";
 import { Button, LinkButton } from "@/components/ui/button";
 import { Field, Input } from "@/components/ui/field";
 import { Alert } from "@/components/ui/page";
+import { cn } from "@/components/ui/cn";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 
 /** Add, change or remove the sign-in secret key (asked after the password at every sign-in). */
@@ -42,27 +43,37 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
   return (
     <form onSubmit={submit} className="space-y-4">
       <div>
-        <h1 className="flex items-center gap-2 text-xl font-extrabold text-navy-900">
-          <ShieldCheck className="h-5 w-5 text-gold-600" /> {setup ? "Protect your account" : "Secret key"}
-        </h1>
-        <p className="mt-1 text-sm text-navy-500">
+        <h1 className="headline text-[2.25rem] font-bold text-navy-950">{setup ? "Protect your account" : "Secret key"}</h1>
+        <p className="mt-2 text-sm leading-relaxed text-navy-500">
           A secret key is a second code, asked after your password every time you sign in. Even someone who learns your password can&apos;t get in without it.
         </p>
       </div>
 
-      <div className={`rounded-xl px-4 py-3 text-sm ${hasKey ? "bg-emerald-50 text-emerald-900" : "bg-amber-50 text-amber-900"}`}>
+      <div
+        className={cn(
+          "flex items-center gap-2.5 rounded-md border border-l-[3px] px-3.5 py-2.5 text-sm",
+          hasKey ? "border-emerald-200 border-l-emerald-600 bg-emerald-50/70 text-emerald-950" : "border-amber-200 border-l-amber-500 bg-amber-50/70 text-amber-950",
+        )}
+      >
         {hasKey ? (
-          <>
-            <b>Secret key is on</b>
-            {setAt ? ` · set ${new Date(setAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" })}` : ""}
-          </>
+          <span>
+            <b className="font-semibold">Secret key is on</b>
+            {setAt ? (
+              <span className="text-emerald-800">
+                {" "}
+                · set <span className="font-mono text-[13px]">{new Date(setAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" })}</span>
+              </span>
+            ) : (
+              ""
+            )}
+          </span>
         ) : (
-          <b>No secret key yet — sign-in needs only your password.</b>
+          <b className="font-semibold">No secret key yet — sign-in needs only your password.</b>
         )}
       </div>
 
       {hasKey && (
-        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="What to do">
+        <div className="grid grid-cols-2 gap-1 rounded-lg border border-navy-200 bg-paper/60 p-1" role="radiogroup" aria-label="What to do">
           {(["set", "remove"] as const).map((m) => (
             <button
               key={m}
@@ -73,7 +84,10 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
                 setMode(m);
                 setError(null);
               }}
-              className={`h-10 rounded-xl border text-sm font-bold ${mode === m ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:bg-navy-50"}`}
+              className={cn(
+                "h-9 rounded-md text-sm font-semibold transition-colors duration-150",
+                mode === m ? "bg-navy-900 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)]" : "text-navy-600 hover:bg-white hover:text-navy-900",
+              )}
             >
               {m === "set" ? "Change key" : "Remove key"}
             </button>
@@ -100,7 +114,7 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
           <Field label="Confirm secret key" htmlFor="sk-confirm">
             <Input id="sk-confirm" type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
           </Field>
-          <p className="text-xs text-navy-500">Write it down and keep it somewhere safe and separate from your password. If you forget it, see “Recovery” in the handover note.</p>
+          <p className="text-xs leading-relaxed text-navy-500">Write it down and keep it somewhere safe and separate from your password. If you forget it, see “Recovery” in the handover note.</p>
         </>
       )}
 
@@ -108,7 +122,7 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
         type="submit"
         size="lg"
         variant={mode === "remove" ? "danger" : "primary"}
-        className="w-full"
+        className="mt-2 w-full"
         loading={busy}
         disabled={!valid || !!done}
         icon={mode === "remove" ? <ShieldOff className="h-5 w-5" /> : <ShieldCheck className="h-5 w-5" />}

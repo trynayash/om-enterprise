@@ -1,6 +1,6 @@
 "use client";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Input, Select } from "@/components/ui/field";
+import { Input, Label, Select } from "@/components/ui/field";
 
 function istToday() {
   return new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
@@ -48,13 +48,10 @@ export function PeriodFilter({ from, to }: { from: string; to: string }) {
   };
   return (
     <div className="no-print mb-5 flex flex-wrap items-end gap-3">
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700" htmlFor="preset">
-          Period
-        </label>
+      <div className="w-48">
+        <Label htmlFor="preset">Period</Label>
         <Select
           id="preset"
-          className="w-44"
           defaultValue=""
           onChange={(e) => {
             if (!e.target.value) return;
@@ -71,17 +68,13 @@ export function PeriodFilter({ from, to }: { from: string; to: string }) {
           <option value="fy">This financial year</option>
         </Select>
       </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700" htmlFor="from">
-          From
-        </label>
-        <Input id="from" type="date" value={from} max={to} onChange={(e) => e.target.value && go(e.target.value, to)} className="w-40" />
+      <div className="w-[152px]">
+        <Label htmlFor="from">From</Label>
+        <Input id="from" type="date" value={from} max={to} onChange={(e) => e.target.value && go(e.target.value, to)} className="font-mono text-[13px]" />
       </div>
-      <div>
-        <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700" htmlFor="to">
-          To
-        </label>
-        <Input id="to" type="date" value={to} min={from} onChange={(e) => e.target.value && go(from, e.target.value)} className="w-40" />
+      <div className="w-[152px]">
+        <Label htmlFor="to">To</Label>
+        <Input id="to" type="date" value={to} min={from} onChange={(e) => e.target.value && go(from, e.target.value)} className="font-mono text-[13px]" />
       </div>
     </div>
   );

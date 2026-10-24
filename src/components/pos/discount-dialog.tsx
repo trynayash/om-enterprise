@@ -90,7 +90,7 @@ export function DiscountDialog({
     >
       <div className="space-y-4">
         {error && <Alert tone="danger">{error}</Alert>}
-        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Discount type">
+        <div className="grid grid-cols-2 gap-1 rounded-lg border border-navy-200 bg-paper/60 p-1" role="radiogroup" aria-label="Discount type">
           {(["percent", "amount"] as const).map((t) => (
             <button
               key={t}
@@ -99,8 +99,8 @@ export function DiscountDialog({
               aria-checked={type === t}
               onClick={() => setType(t)}
               className={cn(
-                "h-11 rounded-xl border text-sm font-bold transition-colors",
-                type === t ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:bg-navy-50",
+                "h-10 rounded-md text-sm font-semibold transition-colors duration-150",
+                type === t ? "bg-navy-900 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)]" : "text-navy-600 hover:bg-white hover:text-navy-900",
               )}
             >
               {t === "percent" ? "Percent (%)" : "Amount (₹)"}
@@ -113,7 +113,7 @@ export function DiscountDialog({
             inputMode="decimal"
             value={value}
             onChange={(e) => setValue(e.target.value.replace(/[^\d.]/g, ""))}
-            className="h-12 text-lg font-bold tabular"
+            className="h-12 font-mono text-lg font-semibold tabular"
             autoFocus
             onKeyDown={(e) => {
               if (e.key === "Enter" && valid && !D(value).isZero() && !(reasonRequired && !reason.trim())) save({ type, value });
@@ -121,12 +121,22 @@ export function DiscountDialog({
           />
         </Field>
         {valid && !D(value).isZero() && (
-          <div className="flex items-center justify-between rounded-xl bg-navy-50 px-4 py-3 text-sm">
-            <span className="text-navy-600">
-              Discount {formatINR(amount)} ({pct.toFixed(2)}%)
-            </span>
-            <span className="font-bold text-navy-900">New amount {formatINR(base.minus(amount))}</span>
-          </div>
+          <dl className="animate-fade-in rounded-lg border border-navy-200 bg-paper/60 px-4 py-3 text-sm">
+            <div className="flex items-baseline">
+              <dt className="flex flex-1 items-baseline text-navy-600">
+                Discount <span className="ml-1 font-mono text-xs text-navy-500">({pct.toFixed(2)}%)</span>
+                <span aria-hidden className="leader" />
+              </dt>
+              <dd className="font-mono text-emerald-700 tabular">− {formatINR(amount)}</dd>
+            </div>
+            <div className="mt-1 flex items-baseline">
+              <dt className="flex flex-1 items-baseline font-semibold text-navy-950">
+                New amount
+                <span aria-hidden className="leader" />
+              </dt>
+              <dd className="font-mono font-semibold text-navy-950 tabular">{formatINR(base.minus(amount))}</dd>
+            </div>
+          </dl>
         )}
         {overLimit && (
           <Alert tone="warning">

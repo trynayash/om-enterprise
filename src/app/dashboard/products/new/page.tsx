@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { listBrands, listCategories, listTaxClasses, listUnits } from "@/server/services/catalog";
 import { PageHeader, PageSkeleton } from "@/components/ui/page";
 import { ProductForm } from "@/components/dashboard/catalog/product-form";
+import { BackLink } from "@/components/dashboard/back-link";
 
 export const metadata = { title: "New product" };
 
@@ -22,9 +21,7 @@ async function NewProductContent({ searchParams }: { searchParams: PageProps<"/d
   const [categories, brands, units, taxClasses] = [await listCategories(), await listBrands(), await listUnits(), await listTaxClasses()];
   return (
     <div className="mx-auto max-w-4xl">
-      <Link href="/dashboard/products" className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-navy-600 hover:text-navy-900">
-        <ArrowLeft className="h-4 w-4" /> Products
-      </Link>
+      <BackLink href="/dashboard/products">Products</BackLink>
       <PageHeader eyebrow="Catalogue" title="New product" description="New products start hidden from the website as drafts until their information has been reviewed." />
       <ProductForm
         mode="create"

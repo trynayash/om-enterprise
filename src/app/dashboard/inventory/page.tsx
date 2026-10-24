@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Boxes, CheckCircle2, Lock } from "lucide-react";
+import { CheckCircle2, Lock } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listSuppliers, recentMovements, stockLevels } from "@/server/services/inventory";
@@ -39,31 +39,32 @@ async function InventoryContent() {
 
       {!inv.enabled && (
         <Card className="overflow-hidden">
-          <div className="grid gap-0 md:grid-cols-[auto_1fr]">
-            <div className="flex items-center justify-center bg-navy-900 px-8 py-8 text-gold-400">
-              <Boxes className="h-14 w-14" />
-            </div>
+          <div className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <CardBody className="space-y-3 py-6">
-              <h2 className="text-lg font-bold text-navy-900">Stock tracking is ready but not switched on</h2>
-              <p className="max-w-3xl text-sm text-navy-600">
+              <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Stock tracking is ready but not switched on</h2>
+              <p className="max-w-xl text-sm leading-relaxed text-navy-600">
                 The system already records everything needed for inventory — stock by variant and location, purchases and goods received, customer and supplier returns,
-                damage, adjustments and reorder levels. Until it is switched on:
+                damage, adjustments and reorder levels.
               </p>
-              <ul className="space-y-1.5 text-sm text-navy-700">
-                <li className="flex gap-2">
-                  <Lock className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" /> Sales never deduct stock, so nothing can go wrong with half-counted shelves.
-                </li>
-                <li className="flex gap-2">
-                  <Lock className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" /> The website never shows stock availability.
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" /> Supplier records and purchase costs can already be maintained.
-                </li>
-              </ul>
-              <p className="text-sm text-navy-600">
-                To start: count the opening stock, then the <b>Super Admin</b> switches on inventory in <b>Settings → Inventory</b> and enters the counted quantities here.
+              <p className="max-w-xl text-sm leading-relaxed text-navy-600">
+                To start: count the opening stock, then the <b className="font-semibold text-navy-900">Super Admin</b> switches on inventory in{" "}
+                <b className="font-semibold text-navy-900">Settings → Inventory</b> and enters the counted quantities here.
               </p>
             </CardBody>
+            <div className="border-t border-navy-100 bg-paper/50 px-5 py-6 md:border-l md:border-t-0">
+              <div className="label-mono mb-3 text-navy-500">Until it is switched on</div>
+              <ul className="divide-y divide-rule text-sm text-navy-700">
+                <li className="flex gap-2.5 py-2.5 first:pt-0">
+                  <Lock className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" aria-hidden /> Sales never deduct stock, so nothing can go wrong with half-counted shelves.
+                </li>
+                <li className="flex gap-2.5 py-2.5">
+                  <Lock className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" aria-hidden /> The website never shows stock availability.
+                </li>
+                <li className="flex gap-2.5 py-2.5 last:pb-0">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden /> Supplier records and purchase costs can already be maintained.
+                </li>
+              </ul>
+            </div>
           </div>
         </Card>
       )}

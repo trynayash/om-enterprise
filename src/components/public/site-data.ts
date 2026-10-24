@@ -34,6 +34,12 @@ export function addressShort(b: Settings["business"]): string {
   return `${b.addressLine1}, ${b.city}, ${stateName(b.stateCode) ?? ""} ${b.pincode}`.replace(/\s+/g, " ").trim();
 }
 
+/** The configured map link, or a Maps search for the shop's address. */
+export function mapsHref(b: Settings["business"]): string {
+  if (b.mapUrl) return b.mapUrl;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${b.name}, ${addressShort(b)}`)}`;
+}
+
 export function telHref(phone: string): string {
   const digits = phone.replace(/\D/g, "");
   return `tel:+91${digits.slice(-10)}`;

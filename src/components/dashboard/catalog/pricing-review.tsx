@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge, SampleBadge, type Tone } from "@/components/ui/badge";
-import { EmptyState, td, th } from "@/components/ui/page";
+import { SampleBadge, type Tone } from "@/components/ui/badge";
+import { EmptyState } from "@/components/ui/page";
+import { nameLink, rowHover, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 import { DateTime } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
@@ -34,6 +35,27 @@ function issueKind(issue: string): { key: string; tone: Tone } {
   return { key: issue, tone: "neutral" };
 }
 
+const ISSUE_TEXT: Record<Tone, string> = {
+  red: "text-red-800",
+  amber: "text-amber-800",
+  blue: "text-sky-800",
+  purple: "text-violet-800",
+  neutral: "text-navy-600",
+  navy: "text-navy-800",
+  gold: "text-gold-700",
+  green: "text-emerald-800",
+};
+const ISSUE_DOT: Record<Tone, string> = {
+  red: "bg-red-600",
+  amber: "bg-amber-500",
+  blue: "bg-sky-600",
+  purple: "bg-violet-600",
+  neutral: "bg-navy-300",
+  navy: "bg-navy-700",
+  gold: "bg-gold-500",
+  green: "bg-emerald-600",
+};
+
 export function NeedsReviewList({ items, showCost }: { items: ReviewItem[]; showCost: boolean }) {
   const [filter, setFilter] = useState<string>("all");
   const [includeSample, setIncludeSample] = useState(true);
@@ -48,57 +70,59 @@ export function NeedsReviewList({ items, showCost }: { items: ReviewItem[]; show
 
   return (
     <div>
-      <div className="mb-3 flex flex-wrap items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-1.5">
         <Chip active={filter === "all"} onClick={() => setFilter("all")}>
-          All <span className="tabular opacity-70">{items.length}</span>
+          All <span className="font-mono text-[11.5px] tabular opacity-70">{items.length}</span>
         </Chip>
         {counts.map(([k, n]) => (
           <Chip key={k} active={filter === k} onClick={() => setFilter(k)}>
-            {k} <span className="tabular opacity-70">{n}</span>
+            {k} <span className="font-mono text-[11.5px] tabular opacity-70">{n}</span>
           </Chip>
         ))}
         <label className="ml-auto inline-flex items-center gap-2 text-sm text-navy-600">
           <input type="checkbox" className="accent-navy-900" checked={includeSample} onChange={(e) => setIncludeSample(e.target.checked)} /> Include sample data
         </label>
       </div>
-      <div className="overflow-x-auto rounded-xl border border-navy-100">
+      <div className="overflow-x-auto rounded-lg border border-navy-100">
         <table className="w-full min-w-[720px]">
           <thead>
             <tr>
               <th className={th}>Variant</th>
-              <th className={`${th} text-right`}>Retail price</th>
-              {showCost && <th className={`${th} text-right`}>Landed cost</th>}
-              {showCost && <th className={`${th} text-right`}>Margin</th>}
+              <th className={thNum}>Retail price</th>
+              {showCost && <th className={thNum}>Landed cost</th>}
+              {showCost && <th className={thNum}>Margin</th>}
               <th className={th}>Needs attention</th>
             </tr>
           </thead>
           <tbody>
             {visible.map((i) => (
-              <tr key={i.variantId} className="hover:bg-navy-50/50">
-                <td className={td}>
-                  <Link href={`/dashboard/products/${i.productId}`} className="font-semibold hover:underline">
+              <tr key={i.variantId} className={rowHover}>
+                <td className={tdText}>
+                  <Link href={`/dashboard/products/${i.productId}`} className={nameLink}>
                     {i.product}
                   </Link>
-                  <div className="flex items-center gap-1.5 text-xs text-navy-500">
-                    <span className="font-mono">{i.sku}</span>
+                  <div className="mt-0.5 flex items-center gap-1.5 text-xs text-navy-500">
+                    <span className="font-mono text-[11.5px]">{i.sku}</span>
                     {i.isSample && <SampleBadge label="Sample" />}
                   </div>
                 </td>
-                <td className={`${td} text-right tabular`}>{i.price ? formatINR(i.price) : "—"}</td>
-                {showCost && <td className={`${td} text-right tabular`}>{i.landedCost ? formatINR(i.landedCost) : "—"}</td>}
+                <td className={tdNum}>{i.price ? formatINR(i.price) : <span className="text-navy-300">—</span>}</td>
+                {showCost && <td className={tdNum}>{i.landedCost ? formatINR(i.landedCost) : <span className="text-navy-300">—</span>}</td>}
                 {showCost && (
-                  <td className={cn(td, "text-right tabular font-semibold", i.marginPercent && Number(i.marginPercent) < 0 ? "text-red-700" : "")}>
-                    {i.marginPercent ? `${Number(i.marginPercent).toFixed(1)}%` : "—"}
+                  <td className={`${tdNum} font-semibold`}>
+                    <span className={i.marginPercent && Number(i.marginPercent) < 0 ? "text-red-700" : undefined}>{i.marginPercent ? `${Number(i.marginPercent).toFixed(1)}%` : <span className="font-normal text-navy-300">—</span>}</span>
                   </td>
                 )}
-                <td className={td}>
-                  <div className="flex flex-wrap gap-1">
+                <td className={tdText}>
+                  {/* Issues as quiet dotted notes — a column of badges on every row is mostly noise. */}
+                  <ul className="space-y-0.5">
                     {i.issues.map((x) => (
-                      <Badge key={x} tone={issueKind(x).tone}>
+                      <li key={x} className={cn("flex items-baseline gap-1.5 text-[13px] leading-snug", ISSUE_TEXT[issueKind(x).tone])}>
+                        <span aria-hidden className={cn("h-1.5 w-1.5 shrink-0 -translate-y-px rounded-full", ISSUE_DOT[issueKind(x).tone])} />
                         {x}
-                      </Badge>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </td>
               </tr>
             ))}
@@ -116,8 +140,8 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors",
-        active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:border-navy-300",
+        "inline-flex h-8 items-center gap-1.5 rounded-md border px-2.5 text-[13px] font-medium transition-colors duration-150",
+        active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:border-navy-900",
       )}
     >
       {children}
@@ -163,32 +187,46 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
   };
   if (!items.length) return <p className="text-sm text-navy-500">No price changes are waiting for approval.</p>;
   return (
-    <ul className="space-y-2">
+    <ul className="divide-y divide-navy-100">
       {items.map((c) => {
         const change = c.previousPrice && Number(c.previousPrice) > 0 ? ((Number(c.price) - Number(c.previousPrice)) / Number(c.previousPrice)) * 100 : null;
         return (
-          <li key={c.id} className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50/70 px-4 py-3">
-            <div className="min-w-0 text-sm">
-              <Link href={`/dashboard/products/${c.productId}`} className="font-semibold text-navy-900 hover:underline">
-                {c.productName} — {c.variantName}
-              </Link>{" "}
-              <span className="font-mono text-xs text-navy-500">{c.sku}</span>
-              <div className="mt-0.5 text-navy-800">
-                {c.listName}: {c.previousPrice ? formatINR(c.previousPrice) : "—"} → <b>{formatINR(c.price)}</b> {c.priceIncludesTax ? "incl." : "excl."} GST
-                {change !== null && <span className={cn("ml-1 font-semibold", change < 0 ? "text-red-700" : "text-emerald-700")}>({change > 0 ? "+" : ""}{change.toFixed(1)}%)</span>}
+          <li key={c.id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-4">
+            <div className="min-w-0 flex-1 text-sm">
+              <div className="flex flex-wrap items-baseline gap-x-2">
+                <Link href={`/dashboard/products/${c.productId}`} className={nameLink}>
+                  {c.productName} — {c.variantName}
+                </Link>
+                <span className="font-mono text-[11.5px] text-navy-500">{c.sku}</span>
+              </div>
+              <div className="mt-1 text-navy-700">
+                <span className="text-navy-500">{c.listName}:</span>{" "}
+                <span className="font-mono text-[13px] tabular">
+                  <span className="text-navy-400">{c.previousPrice ? formatINR(c.previousPrice) : "—"}</span> → <span className="font-semibold text-navy-950">{formatINR(c.price)}</span>
+                </span>{" "}
+                <span className="text-navy-500">{c.priceIncludesTax ? "incl." : "excl."} GST</span>
+                {change !== null && (
+                  <span className={cn("ml-1.5 font-mono text-[12.5px] font-semibold", change < 0 ? "text-red-700" : "text-emerald-700")}>
+                    {change > 0 ? "+" : ""}
+                    {change.toFixed(1)}%
+                  </span>
+                )}
                 {showCost && c.marginPercent && (
-                  <span className="ml-1 text-navy-600">
-                    · margin {c.previousMarginPercent ? `${Number(c.previousMarginPercent).toFixed(1)}% → ` : ""}
-                    {Number(c.marginPercent).toFixed(1)}%
+                  <span className="ml-1.5 text-navy-500">
+                    · margin{" "}
+                    <span className="font-mono text-[12.5px]">
+                      {c.previousMarginPercent ? `${Number(c.previousMarginPercent).toFixed(1)}% → ` : ""}
+                      {Number(c.marginPercent).toFixed(1)}%
+                    </span>
                   </span>
                 )}
               </div>
-              <div className="text-xs text-navy-500">
+              <div className="mt-1 text-xs leading-relaxed text-navy-500">
                 “{c.reason}” — {c.requestedBy}, <DateTime value={c.createdAt} />
               </div>
             </div>
             {canApprove && (
-              <div className="flex gap-2">
+              <div className="flex shrink-0 gap-2">
                 <Button size="sm" variant="success" loading={busy === c.id} icon={<Check className="h-3.5 w-3.5" />} onClick={() => decide(c.id, "approve")}>
                   Approve
                 </Button>

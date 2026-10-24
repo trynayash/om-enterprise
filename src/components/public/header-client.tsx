@@ -2,11 +2,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
-import { ChevronDown, ClipboardList, MapPin, Menu, MessageCircle, Phone, Search, X } from "lucide-react";
+import { ArrowRight, ChevronDown, ClipboardList, MapPin, Menu, MessageCircle, Phone, Search, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
 import { whatsappLink } from "@/lib/india";
-import { CategoryIcon } from "./category-icon";
 import { useEnquiryList } from "./cart-store";
 
 export interface HeaderCategory {
@@ -36,6 +35,36 @@ function isActive(pathname: string | null, href: string) {
   return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 }
 
+const navItem = (active: boolean) =>
+  cn(
+    "relative flex h-10 items-center px-3 text-[14px] font-medium transition-colors",
+    active ? "text-navy-950" : "text-navy-600 hover:text-navy-950",
+    "after:absolute after:inset-x-3 after:bottom-1 after:h-[2px] after:origin-left after:bg-gold-500 after:transition-transform after:duration-300 after:ease-out",
+    active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
+  );
+
+/** Categories set like a printed index: number · name · dotted leader · count. */
+function CategoryIndex({ categories, onPick, dense }: { categories: HeaderCategory[]; onPick?: () => void; dense?: boolean }) {
+  return (
+    <ol className={cn("grid", dense ? "gap-0" : "gap-x-8 sm:grid-cols-2")}>
+      {categories.map((c, i) => (
+        <li key={c.slug}>
+          <Link
+            href={`/category/${c.slug}`}
+            onClick={onPick}
+            className="group flex items-baseline gap-3 border-b border-navy-100 py-2.5 text-sm text-navy-900 transition-colors hover:text-navy-950"
+          >
+            <span className="font-mono text-[11px] text-navy-400 transition-colors group-hover:text-gold-700">{String(i + 1).padStart(2, "0")}</span>
+            <span className="font-medium">{c.name}</span>
+            <span aria-hidden className="leader" />
+            <span className="font-mono text-[12px] text-navy-500 tabular">{c.productCount}</span>
+          </Link>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 function NavLinks({ pathname, categories }: { pathname: string | null; categories: HeaderCategory[] }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -54,22 +83,12 @@ function NavLinks({ pathname, categories }: { pathname: string | null; categorie
   }, [open]);
   const top = categories.filter((c) => !c.parentId);
   const link = (href: string, label: string) => (
-    <Link
-      key={href}
-      href={href}
-      aria-current={isActive(pathname, href) ? "page" : undefined}
-      className={cn(
-        "relative rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-        isActive(pathname, href) ? "text-navy-900" : "text-navy-600 hover:text-navy-900",
-        "after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-gold-500 after:transition-transform",
-        isActive(pathname, href) ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
-      )}
-    >
+    <Link key={href} href={href} aria-current={isActive(pathname, href) ? "page" : undefined} className={navItem(isActive(pathname, href))}>
       {label}
     </Link>
   );
   return (
-    <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+    <nav className="hidden items-center lg:flex" aria-label="Main">
       {link("/", "Home")}
       {link("/products", "Products")}
       <div ref={ref} className="relative" onMouseLeave={() => setOpen(false)}>
@@ -79,38 +98,25 @@ function NavLinks({ pathname, categories }: { pathname: string | null; categorie
           onMouseEnter={() => setOpen(true)}
           aria-expanded={open}
           aria-haspopup="true"
-          className={cn(
-            "flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition-colors",
-            pathname?.startsWith("/category") ? "text-navy-900" : "text-navy-600 hover:text-navy-900",
-          )}
+          className={cn(navItem(!!pathname?.startsWith("/category")), "gap-1")}
         >
-          Categories <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} />
+          Categories <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200", open && "rotate-180")} />
         </button>
         {open && top.length > 0 && (
-          <div className="absolute left-1/2 top-full z-50 w-[640px] -translate-x-1/2 pt-2">
-            <div className="animate-fade-in rounded-2xl border border-navy-100 bg-white p-3 shadow-lift">
-              <div className="grid grid-cols-2 gap-1">
-                {top.map((c) => (
-                  <Link
-                    key={c.slug}
-                    href={`/category/${c.slug}`}
-                    onClick={() => setOpen(false)}
-                    className="group flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-navy-50"
-                  >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-700 transition-colors group-hover:bg-gold-500 group-hover:text-navy-950">
-                      <CategoryIcon name={c.icon} className="h-5 w-5" />
-                    </span>
-                    <span className="min-w-0">
-                      <span className="block truncate text-sm font-semibold text-navy-900">{c.name}</span>
-                      <span className="block text-xs text-navy-500">
-                        {c.productCount} {c.productCount === 1 ? "product" : "products"}
-                      </span>
-                    </span>
-                  </Link>
-                ))}
+          <div className="absolute left-1/2 top-full z-50 w-[620px] -translate-x-1/2 pt-2">
+            <div className="animate-sheet-in rounded-xl border border-navy-200 bg-white p-5 shadow-lift">
+              <div className="label-mono mb-2 flex items-center justify-between text-navy-400">
+                <span>Catalogue index</span>
+                <span>Products</span>
               </div>
-              <Link href="/products" onClick={() => setOpen(false)} className="mt-2 block rounded-xl bg-navy-900 px-4 py-2.5 text-center text-sm font-semibold text-white hover:bg-navy-800">
+              <CategoryIndex categories={top} onPick={() => setOpen(false)} />
+              <Link
+                href="/products"
+                onClick={() => setOpen(false)}
+                className="group mt-4 flex items-center justify-between rounded-lg bg-navy-900 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-800"
+              >
                 Browse all products
+                <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
             </div>
           </div>
@@ -132,13 +138,16 @@ function EnquiryButton() {
   return (
     <Link
       href="/enquiry"
-      className="relative flex h-10 items-center gap-2 rounded-xl px-2.5 text-navy-800 hover:bg-navy-50 sm:px-3"
+      className="relative flex h-10 items-center gap-2 rounded-lg px-2.5 text-navy-800 transition-colors hover:bg-navy-50 sm:px-3"
       aria-label={`Enquiry list, ${count} ${count === 1 ? "item" : "items"}`}
     >
-      <ClipboardList className="h-5 w-5" />
-      <span className="hidden text-sm font-semibold 2xl:inline">Enquiry list</span>
+      <ClipboardList className="h-[18px] w-[18px]" strokeWidth={1.75} />
+      <span className="hidden text-sm font-medium 2xl:inline">Enquiry list</span>
       {count > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-gold-500 px-1 text-[11px] font-extrabold text-navy-950 ring-2 ring-white">
+        <span
+          key={count}
+          className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] animate-sheet-in items-center justify-center rounded-[4px] bg-navy-900 px-1 font-mono text-[10.5px] font-semibold text-white ring-2 ring-white"
+        >
           {count}
         </span>
       )}
@@ -157,9 +166,9 @@ function SearchBox({ className, autoFocus, onSubmit }: { className?: string; aut
         id={autoFocus ? "site-search-m" : "site-search"}
         name="q"
         type="search"
-        placeholder="Search paints, tanks, pipes…"
+        placeholder="Search pipes, tanks, paints…"
         autoFocus={autoFocus}
-        className="h-10 w-full rounded-xl border border-navy-100 bg-navy-50/70 pl-9 pr-3 text-sm text-navy-900 placeholder:text-navy-400 focus:border-gold-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-gold-200"
+        className="h-10 w-full rounded-lg border border-navy-200 bg-paper/60 pl-9 pr-3 text-sm text-navy-900 placeholder:text-navy-400 transition-[border-color,box-shadow,background-color] hover:border-navy-300 focus:border-navy-800 focus:bg-white focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
       />
     </form>
   );
@@ -167,7 +176,9 @@ function SearchBox({ className, autoFocus, onSubmit }: { className?: string; aut
 
 export function HeaderClient({ categories, whatsapp, phone, addressShort }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const wa = whatsapp ? whatsappLink(whatsapp, "Hello OM ENTERPRISE, I have an enquiry about building materials.") : null;
+  const top = categories.filter((c) => !c.parentId);
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -176,30 +187,41 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
     };
   }, [menuOpen]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40">
-      <div className="hidden bg-navy-950 text-navy-200 md:block">
-        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 text-xs sm:px-6 lg:px-8">
-          <span className="flex min-w-0 items-center gap-1.5 truncate">
+      <div className="hidden bg-navy-950 text-navy-300 md:block">
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 font-mono text-[11.5px] sm:px-6 lg:px-8">
+          <span className="flex min-w-0 items-center gap-2 truncate">
             {addressShort && (
               <>
-                <MapPin className="h-3.5 w-3.5 shrink-0 text-gold-400" />
+                <MapPin className="h-3.5 w-3.5 shrink-0 text-gold-400" strokeWidth={1.75} />
                 <span className="truncate">{addressShort}</span>
               </>
             )}
           </span>
-          <span className="flex shrink-0 items-center gap-4">
+          <span className="flex shrink-0 items-center gap-5">
             {phone && (
-              <a href={`tel:+91${phone.replace(/\D/g, "").slice(-10)}`} className="flex items-center gap-1.5 hover:text-white">
-                <Phone className="h-3.5 w-3.5 text-gold-400" /> {phone}
+              <a href={`tel:+91${phone.replace(/\D/g, "").slice(-10)}`} className="flex items-center gap-1.5 transition-colors hover:text-white">
+                <Phone className="h-3.5 w-3.5 text-gold-400" strokeWidth={1.75} /> {phone}
               </a>
             )}
-            <span className="text-navy-400">Your Complete Building Solution</span>
+            {wa && (
+              <a href={wa} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 transition-colors hover:text-white">
+                <MessageCircle className="h-3.5 w-3.5 text-gold-400" strokeWidth={1.75} /> WhatsApp
+              </a>
+            )}
           </span>
         </div>
       </div>
-      <div className="border-b border-navy-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
-        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-20 lg:gap-6 lg:px-8">
+      <div className={cn("border-b bg-white transition-[box-shadow,border-color] duration-300", scrolled ? "border-navy-200 shadow-[0_6px_24px_-18px_rgb(13_27_48/0.45)]" : "border-navy-100")}>
+        <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 sm:px-6 lg:h-[72px] lg:gap-6 lg:px-8">
           <Link href="/" className="shrink-0" aria-label="OM ENTERPRISE home">
             <span className="sm:hidden">
               <Logo size="sm" />
@@ -219,15 +241,15 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden h-10 items-center gap-2 rounded-xl bg-gold-500 px-4 text-sm font-bold text-navy-950 shadow-sm transition-colors hover:bg-gold-400 sm:flex"
+                className="hidden h-10 items-center gap-2 rounded-lg bg-gold-500 px-4 text-sm font-semibold text-navy-950 shadow-[inset_0_-1px_0_rgb(0_0_0/0.18)] transition-[background-color,transform] hover:bg-gold-400 active:translate-y-px sm:flex"
               >
-                <MessageCircle className="h-4 w-4" /> WhatsApp
+                <MessageCircle className="h-4 w-4" strokeWidth={2} /> WhatsApp
               </a>
             )}
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl text-navy-800 hover:bg-navy-50 lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-navy-800 transition-colors hover:bg-navy-50 lg:hidden"
               aria-label="Open menu"
               aria-expanded={menuOpen}
             >
@@ -239,50 +261,52 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
 
       {menuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
-          <button type="button" className="absolute inset-0 bg-navy-950/60 backdrop-blur-[2px]" aria-label="Close menu" onClick={() => setMenuOpen(false)} />
-          <div className="absolute inset-y-0 right-0 flex w-[min(22rem,100%)] animate-fade-in flex-col bg-white shadow-lift">
+          <button type="button" className="absolute inset-0 animate-fade-in bg-navy-950/55" aria-label="Close menu" onClick={() => setMenuOpen(false)} />
+          <div className="absolute inset-y-0 right-0 flex w-[min(23rem,100%)] animate-slide-in flex-col bg-white shadow-lift">
             <div className="flex items-center justify-between border-b border-navy-100 px-4 py-3">
               <Logo size="sm" compact />
-              <button type="button" onClick={() => setMenuOpen(false)} className="rounded-lg p-2 text-navy-700 hover:bg-navy-50" aria-label="Close menu">
+              <button type="button" onClick={() => setMenuOpen(false)} className="rounded-md p-2 text-navy-700 transition-colors hover:bg-navy-50" aria-label="Close menu">
                 <X className="h-5 w-5" />
               </button>
             </div>
             <div className="flex-1 overflow-y-auto px-4 py-4">
               <SearchBox autoFocus onSubmit={() => setMenuOpen(false)} />
-              <nav className="mt-4 space-y-1" aria-label="Mobile">
+              <nav className="mt-5" aria-label="Mobile">
                 {NAV.map((n) => (
-                  <Link key={n.href} href={n.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-base font-semibold text-navy-900 hover:bg-navy-50">
+                  <Link
+                    key={n.href}
+                    href={n.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center justify-between border-b border-navy-100 py-3 text-[17px] font-semibold text-navy-950"
+                  >
                     {n.label}
+                    <ArrowRight className="h-4 w-4 text-navy-300" />
                   </Link>
                 ))}
-                <Link href="/enquiry" onClick={() => setMenuOpen(false)} className="block rounded-xl px-3 py-2.5 text-base font-semibold text-navy-900 hover:bg-navy-50">
+                <Link
+                  href="/enquiry"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center justify-between border-b border-navy-100 py-3 text-[17px] font-semibold text-navy-950"
+                >
                   Enquiry list
+                  <ArrowRight className="h-4 w-4 text-navy-300" />
                 </Link>
               </nav>
-              {categories.length > 0 && (
-                <div className="mt-5">
-                  <div className="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-gold-600">Categories</div>
-                  <div className="mt-2 space-y-1">
-                    {categories
-                      .filter((c) => !c.parentId)
-                      .map((c) => (
-                        <Link
-                          key={c.slug}
-                          href={`/category/${c.slug}`}
-                          onClick={() => setMenuOpen(false)}
-                          className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-navy-800 hover:bg-navy-50"
-                        >
-                          <CategoryIcon name={c.icon} className="h-4 w-4 text-gold-600" />
-                          {c.name}
-                        </Link>
-                      ))}
-                  </div>
+              {top.length > 0 && (
+                <div className="mt-7">
+                  <div className="label-mono mb-1 text-gold-700">Categories</div>
+                  <CategoryIndex categories={top} onPick={() => setMenuOpen(false)} dense />
                 </div>
               )}
             </div>
             {wa && (
               <div className="border-t border-navy-100 p-4">
-                <a href={wa} target="_blank" rel="noopener noreferrer" className="flex h-12 items-center justify-center gap-2 rounded-xl bg-gold-500 text-base font-bold text-navy-950 hover:bg-gold-400">
+                <a
+                  href={wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-12 items-center justify-center gap-2 rounded-lg bg-gold-500 text-[15px] font-semibold text-navy-950 transition-colors hover:bg-gold-400"
+                >
                   <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
                 </a>
               </div>

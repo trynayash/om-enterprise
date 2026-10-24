@@ -7,7 +7,8 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog } from "@/components/ui/dialog";
 import { Checkbox, Field, Input, Textarea } from "@/components/ui/field";
-import { Alert, EmptyState, td, th } from "@/components/ui/page";
+import { Alert, EmptyState } from "@/components/ui/page";
+import { rowHover, tdCode, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 
@@ -42,33 +43,33 @@ export function SuppliersManager({ suppliers, canManage }: { suppliers: Supplier
           <EmptyState title="No suppliers yet" description={canManage ? "Add the distributors and dealers you purchase from." : undefined} />
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full min-w-[640px]">
             <thead>
               <tr>
                 <th className={th}>Supplier</th>
                 <th className={th}>GSTIN</th>
                 <th className={th}>Contact</th>
-                <th className={th}>
+                <th className={thNum}>
                   <span className="sr-only">Actions</span>
                 </th>
               </tr>
             </thead>
             <tbody>
               {suppliers.map((s) => (
-                <tr key={s.id}>
-                  <td className={td}>
-                    <div className="font-semibold">
+                <tr key={s.id} className={rowHover}>
+                  <td className={tdText}>
+                    <div className="flex flex-wrap items-center gap-2 font-semibold">
                       {s.name} {!s.isActive && <Badge tone="red">Inactive</Badge>}
                     </div>
-                    {s.address && <div className="text-xs text-navy-500">{s.address}</div>}
+                    {s.address && <div className="mt-0.5 text-xs text-navy-500">{s.address}</div>}
                   </td>
-                  <td className={`${td} font-mono text-xs`}>{s.gstin ?? "—"}</td>
-                  <td className={`${td} text-navy-700`}>
-                    {s.mobile ?? "—"}
+                  <td className={tdCode}>{s.gstin ?? <span className="text-navy-300">—</span>}</td>
+                  <td className={tdText}>
+                    {s.mobile ? <span className="font-mono text-[13px]">{s.mobile}</span> : <span className="text-navy-300">—</span>}
                     {s.email && <div className="text-xs text-navy-500">{s.email}</div>}
                   </td>
-                  <td className={`${td} text-right`}>
+                  <td className={`${withPy(tdText, "py-1.5")} w-px text-right`}>
                     {canManage && (
                       <Button size="sm" variant="ghost" icon={<Pencil className="h-3.5 w-3.5" />} onClick={() => setDialog({ open: true, supplier: s })}>
                         Edit

@@ -9,11 +9,13 @@ export function PdfCopySelector({ documentId }: { documentId: string }) {
   const [copy, setCopy] = useState("original");
   return (
     <div className="no-print flex items-center gap-2">
-      <Select aria-label="PDF copy" value={copy} onChange={(e) => setCopy(e.target.value)} className="h-10 w-auto">
-        <option value="original">Original for recipient</option>
-        <option value="duplicate">Duplicate copy</option>
-        <option value="triplicate">Triplicate — for supplier</option>
-      </Select>
+      <div className="w-56">
+        <Select aria-label="PDF copy" value={copy} onChange={(e) => setCopy(e.target.value)}>
+          <option value="original">Original for recipient</option>
+          <option value="duplicate">Duplicate copy</option>
+          <option value="triplicate">Triplicate — for supplier</option>
+        </Select>
+      </div>
       <a className={buttonClass("outline", "md", "whitespace-nowrap")} href={`/api/documents/${documentId}/pdf?${copy === "original" ? "" : `copy=${copy}`}`} target="_blank" rel="noopener noreferrer">
         <FileDown className="h-4 w-4" /> Open PDF
       </a>

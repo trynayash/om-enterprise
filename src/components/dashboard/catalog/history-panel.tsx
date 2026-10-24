@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { StatusBadge } from "@/components/ui/badge";
-import { Alert, Skeleton, td, th } from "@/components/ui/page";
+import { Alert, Skeleton } from "@/components/ui/page";
+import { tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 import { DateTime, Money } from "@/components/ui/money";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { formatINR } from "@/lib/money";
@@ -63,18 +64,18 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="mb-2 text-sm font-bold text-navy-900">Price history</h3>
+        <h3 className="label-mono mb-2.5 text-navy-600">Price history</h3>
         {data.prices.length === 0 ? (
           <p className="text-sm text-navy-500">No prices recorded yet.</p>
         ) : (
-          <div className="overflow-x-auto rounded-xl border border-navy-100">
+          <div className="overflow-x-auto rounded-lg border border-navy-100">
             <table className="w-full min-w-[760px]">
               <thead>
                 <tr>
                   <th className={th}>When</th>
                   <th className={th}>List</th>
-                  <th className={`${th} text-right`}>Old → new</th>
-                  {showMargins && <th className={`${th} text-right`}>Margin</th>}
+                  <th className={thNum}>Old → new</th>
+                  {showMargins && <th className={thNum}>Margin</th>}
                   <th className={th}>Status</th>
                   <th className={th}>By / decided by</th>
                   <th className={th}>Reason</th>
@@ -83,7 +84,7 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
               <tbody>
                 {data.prices.map((p) => (
                   <tr key={p.id}>
-                    <td className={td}>
+                    <td className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={p.createdAt} />
                       {new Date(p.effectiveFrom).getTime() - new Date(p.createdAt).getTime() > 120_000 && (
                         <div className="text-xs text-navy-500">
@@ -91,26 +92,26 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
                         </div>
                       )}
                     </td>
-                    <td className={td}>{p.listName}</td>
-                    <td className={`${td} whitespace-nowrap text-right tabular`}>
-                      <span className="text-navy-500">{p.previousPrice ? formatINR(p.previousPrice) : "—"}</span> → <b>{formatINR(p.price)}</b>
-                      <div className="text-[11px] text-navy-400">
+                    <td className={tdText}>{p.listName}</td>
+                    <td className={tdNum}>
+                      <span className="text-navy-400">{p.previousPrice ? formatINR(p.previousPrice) : "—"}</span> → <span className="font-semibold">{formatINR(p.price)}</span>
+                      <div className="mt-0.5 font-sans text-[11px] text-navy-500">
                         {p.priceIncludesTax ? "incl." : "excl."} GST{p.mrp ? ` · MRP ${formatINR(p.mrp)}` : ""}
                       </div>
                     </td>
                     {showMargins && (
-                      <td className={`${td} whitespace-nowrap text-right tabular`}>
+                      <td className={tdNum}>
                         {p.previousMarginPercent ? `${Number(p.previousMarginPercent).toFixed(1)}%` : "—"} → {p.marginPercentSnapshot ? `${Number(p.marginPercentSnapshot).toFixed(1)}%` : "—"}
                       </td>
                     )}
-                    <td className={td}>
+                    <td className={tdText}>
                       <StatusBadge status={p.status} />
                     </td>
-                    <td className={td}>
+                    <td className={tdText}>
                       {p.createdByName}
                       {p.decidedByName && p.decidedByName !== p.createdByName && <div className="text-xs text-navy-500">→ {p.decidedByName}</div>}
                     </td>
-                    <td className={`${td} max-w-xs text-navy-700`}>
+                    <td className={`${tdMuted} max-w-xs`}>
                       {p.reason}
                       {p.decisionNote && <div className="text-xs text-navy-500">Note: {p.decisionNote}</div>}
                     </td>
@@ -123,19 +124,19 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
       </section>
       {data.costs && (
         <section>
-          <h3 className="mb-2 text-sm font-bold text-navy-900">Cost history</h3>
+          <h3 className="label-mono mb-2.5 text-navy-600">Cost history</h3>
           {data.costs.length === 0 ? (
             <p className="text-sm text-navy-500">No costs recorded yet.</p>
           ) : (
-            <div className="overflow-x-auto rounded-xl border border-navy-100">
+            <div className="overflow-x-auto rounded-lg border border-navy-100">
               <table className="w-full min-w-[700px]">
                 <thead>
                   <tr>
                     <th className={th}>When</th>
-                    <th className={`${th} text-right`}>Purchase</th>
-                    <th className={`${th} text-right`}>GST</th>
-                    <th className={`${th} text-right`}>Freight + handling + other</th>
-                    <th className={`${th} text-right`}>Landed</th>
+                    <th className={thNum}>Purchase</th>
+                    <th className={thNum}>GST</th>
+                    <th className={thNum}>Freight + handling + other</th>
+                    <th className={thNum}>Landed</th>
                     <th className={th}>By</th>
                     <th className={th}>Source</th>
                   </tr>
@@ -143,21 +144,21 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
                 <tbody>
                   {data.costs.map((c) => (
                     <tr key={c.id}>
-                      <td className={td}>
+                      <td className={`${tdMuted} whitespace-nowrap`}>
                         <DateTime value={c.effectiveFrom} />
                       </td>
-                      <td className={`${td} text-right`}>
+                      <td className={tdNum}>
                         <Money value={c.purchaseCost} />
                       </td>
-                      <td className={`${td} text-right tabular`}>
-                        {Number(c.purchaseTaxRate)}%<div className="text-[11px] text-navy-400">{c.itcPolicy === "recoverable" ? "ITC claimed" : "in cost"}</div>
+                      <td className={tdNum}>
+                        {Number(c.purchaseTaxRate)}%<div className="mt-0.5 font-sans text-[11px] text-navy-500">{c.itcPolicy === "recoverable" ? "ITC claimed" : "in cost"}</div>
                       </td>
-                      <td className={`${td} text-right tabular`}>{formatINR(Number(c.freight) + Number(c.handling) + Number(c.otherCosts))}</td>
-                      <td className={`${td} text-right font-semibold`}>
+                      <td className={tdNum}>{formatINR(Number(c.freight) + Number(c.handling) + Number(c.otherCosts))}</td>
+                      <td className={`${tdNum} font-semibold`}>
                         <Money value={c.landedCost} />
                       </td>
-                      <td className={td}>{c.createdByName}</td>
-                      <td className={`${td} max-w-xs text-navy-700`}>
+                      <td className={tdText}>{c.createdByName}</td>
+                      <td className={`${tdMuted} max-w-xs`}>
                         {c.reason}
                         {c.sourceRef && <div className="text-xs text-navy-500">Ref {c.sourceRef}</div>}
                       </td>

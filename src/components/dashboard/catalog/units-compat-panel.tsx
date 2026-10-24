@@ -142,19 +142,19 @@ export function UnitsCompatPanel({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <section>
-        <h3 className="text-sm font-bold text-navy-900">Other selling units</h3>
-        <p className="mt-0.5 text-xs text-navy-500">
+        <h3 className="label-mono text-navy-600">Other selling units</h3>
+        <p className="mt-1.5 text-xs leading-relaxed text-navy-500">
           Base unit: <b>{baseUnit?.name ?? variant.unitCode}</b>. Only units listed here can be used at the counter — nothing is converted automatically.
         </p>
         {error && <Alert tone="danger" className="mt-3">{error}</Alert>}
-        <ul className="mt-3 space-y-2">
-          {myConversions.length === 0 && <li className="rounded-xl border border-dashed border-navy-200 px-3 py-3 text-sm text-navy-500">Sold only by {baseUnit?.name?.toLowerCase() ?? variant.unitCode}.</li>}
+        <ul className="mt-3 divide-y divide-navy-100 rounded-lg border border-navy-100 bg-white">
+          {myConversions.length === 0 && <li className="px-3 py-3 text-sm text-navy-500">Sold only by {baseUnit?.name?.toLowerCase() ?? variant.unitCode}.</li>}
           {myConversions.map((c) => {
             const u = units.find((x) => x.code === c.unitCode);
             return (
-              <li key={c.id} className="flex items-center justify-between rounded-xl border border-navy-100 bg-white px-3 py-2 text-sm">
+              <li key={c.id} className="flex items-center justify-between px-3 py-1.5 text-sm">
                 <span>
-                  1 <b>{u?.name ?? c.unitCode}</b> = <span className="tabular">{Number(c.factor)}</span> {baseUnit?.name ?? variant.unitCode}
+                  1 <b>{u?.name ?? c.unitCode}</b> = <span className="font-mono tabular">{Number(c.factor)}</span> {baseUnit?.name ?? variant.unitCode}
                 </span>
                 {canEdit && (
                   <Button size="sm" variant="ghost" aria-label="Remove unit" onClick={() => removeConversion(c.id)}>
@@ -180,7 +180,7 @@ export function UnitsCompatPanel({
               </Select>
             </Field>
             <Field label={`= how many ${baseUnit?.name ?? variant.unitCode}?`} htmlFor="cv-factor" className="w-40">
-              <Input id="cv-factor" inputMode="decimal" value={factor} onChange={(e) => setFactor(e.target.value)} placeholder="e.g. 10" required />
+              <Input id="cv-factor" className="font-mono" inputMode="decimal" value={factor} onChange={(e) => setFactor(e.target.value)} placeholder="e.g. 10" required />
             </Field>
             <Button type="submit" variant="outline" loading={busy === "conv"} disabled={!unitCode || !/^\d{1,8}(\.\d{1,6})?$/.test(factor.trim()) || Number(factor) <= 0} icon={<Plus className="h-4 w-4" />}>
               Add
@@ -190,12 +190,12 @@ export function UnitsCompatPanel({
       </section>
 
       <section>
-        <h3 className="text-sm font-bold text-navy-900">Compatible items</h3>
-        <p className="mt-0.5 text-xs text-navy-500">Link only items you know fit together (same system, size and class). Shown to staff and customers.</p>
-        <ul className="mt-3 space-y-2">
-          {links.length === 0 && <li className="rounded-xl border border-dashed border-navy-200 px-3 py-3 text-sm text-navy-500">No compatibility links.</li>}
+        <h3 className="label-mono text-navy-600">Compatible items</h3>
+        <p className="mt-1.5 text-xs leading-relaxed text-navy-500">Link only items you know fit together (same system, size and class). Shown to staff and customers.</p>
+        <ul className="mt-3 divide-y divide-navy-100 rounded-lg border border-navy-100 bg-white">
+          {links.length === 0 && <li className="px-3 py-3 text-sm text-navy-500">No compatibility links.</li>}
           {links.map((l) => (
-            <li key={l.otherId} className="flex items-center justify-between gap-2 rounded-xl border border-navy-100 bg-white px-3 py-2 text-sm">
+            <li key={l.otherId} className="flex items-center justify-between gap-2 px-3 py-2 text-sm">
               <span className="min-w-0">
                 <span className="flex items-center gap-1.5 font-medium">
                   <Link2 className="h-3.5 w-3.5 shrink-0 text-gold-600" />
@@ -208,7 +208,7 @@ export function UnitsCompatPanel({
                   )}
                 </span>
                 <span className="block text-xs text-navy-500">
-                  {l.sku}
+                  <span className="font-mono">{l.sku}</span>
                   {l.note ? ` · ${l.note}` : ""}
                 </span>
               </span>
@@ -223,20 +223,20 @@ export function UnitsCompatPanel({
         {canEdit && (
           <div className="mt-3 space-y-2">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
               <Input type="search" aria-label="Find an item to link" placeholder="Find item by name or SKU to link…" value={q} onChange={(e) => setQ(e.target.value)} className="pl-9" />
             </div>
             <Input aria-label="Compatibility note" placeholder='Note (optional), e.g. "Same nominal size ¾"' value={note} onChange={(e) => setNote(e.target.value)} maxLength={200} />
             {hits.length > 0 && (
-              <ul className="max-h-64 overflow-y-auto rounded-xl border border-navy-100 bg-white">
+              <ul className="max-h-64 overflow-y-auto rounded-lg border border-navy-200 bg-white shadow-card">
                 {hits.map((h) => (
-                  <li key={h.variantId} className="flex items-center justify-between gap-2 border-b border-navy-50 px-3 py-2 text-sm last:border-0">
+                  <li key={h.variantId} className="flex items-center justify-between gap-2 border-b border-navy-100 px-3 py-2 text-sm last:border-0">
                     <span className="min-w-0">
                       <span className="block truncate font-medium">
                         {h.productName} — {h.variantName} {h.isSample && <SampleBadge className="ml-1" label="Sample" />}
                       </span>
                       <span className="text-xs text-navy-500">
-                        {h.sku}
+                        <span className="font-mono">{h.sku}</span>
                         {h.brandName ? ` · ${h.brandName}` : ""}
                       </span>
                     </span>

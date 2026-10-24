@@ -1,18 +1,31 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOut, Menu, X, KeyRound, ShieldCheck } from "lucide-react";
 import type { NavGroup } from "@/lib/nav";
-import { Logo, LogoMark } from "@/components/ui/logo";
+import { Logo } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
 import { NavIcon } from "./nav-icon";
 import { apiFetch } from "@/lib/api-client";
+
+function initials(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+}
+
+const footerLink =
+  "flex h-7 w-full items-center gap-2.5 rounded-md px-2.5 text-[13px] text-navy-300 transition-colors duration-150 hover:bg-white/[0.05] hover:text-white";
 
 export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user: { name: string; role: string }; badges?: Record<string, number> }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isActive = (href: string) => (href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`));
+  const close = () => setOpen(false);
   const logout = async () => {
     await apiFetch("/api/auth/logout", { method: "POST", body: {} }).catch(() => {});
     // Full page load on sign-out so no client-side state of the previous user survives.
@@ -20,49 +33,72 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
     window.location.href = "/login";
   };
 
+  // The phone drawer closes with Escape, like any other overlay.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   const content = (
     <div className="flex h-full flex-col">
-      <div className="px-5 pb-4 pt-5">
-        <Link href="/dashboard" onClick={() => setOpen(false)}>
-          <Logo inverted size="sm" />
+      <div className="flex h-14 shrink-0 items-center border-b border-white/[0.08] px-5">
+        <Link href="/dashboard" onClick={close} className="rounded-md">
+          <Logo inverted compact size="sm" />
         </Link>
       </div>
-      <nav className="flex-1 overflow-y-auto px-3 pb-4" aria-label="Main">
+      <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 pt-2.5" aria-label="Main">
         {groups.map((g) => (
-          <div key={g.label} className="mb-4">
-            <div className="px-3 pb-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-navy-300">{g.label}</div>
-            {g.items.map((i) => (
-              <Link
-                key={i.href}
-                href={i.href}
-                onClick={() => setOpen(false)}
-                aria-current={isActive(i.href) ? "page" : undefined}
-                className={cn(
-                  "group flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors",
-                  isActive(i.href) ? "bg-white/10 text-white" : "text-navy-200 hover:bg-white/5 hover:text-white",
-                )}
-              >
-                <NavIcon name={i.icon} className={cn("h-4.5 w-4.5", isActive(i.href) ? "text-gold-400" : "text-navy-300 group-hover:text-gold-400")} />
-                <span className="flex-1">{i.label}</span>
-                {badges?.[i.href] ? <span className="rounded-full bg-gold-500 px-1.5 text-[10px] font-bold text-navy-950">{badges[i.href]}</span> : null}
-              </Link>
-            ))}
+          <div key={g.label} className="mt-3 first:mt-0">
+            <div className="label-mono px-2.5 pb-1 text-[10px] text-navy-400">{g.label}</div>
+            <ul>
+              {g.items.map((i) => {
+                const active = isActive(i.href);
+                const count = badges?.[i.href];
+                return (
+                  <li key={i.href}>
+                    <Link
+                      href={i.href}
+                      onClick={close}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "group relative flex h-[30px] items-center gap-2.5 rounded-md px-2.5 text-[13.5px] font-medium transition-colors duration-150",
+                        active ? "bg-white/[0.07] text-white" : "text-navy-200 hover:bg-white/[0.04] hover:text-white",
+                      )}
+                    >
+                      {active && <span aria-hidden className="absolute inset-y-1.5 left-0 w-[2px] rounded-full bg-gold-400" />}
+                      <NavIcon name={i.icon} className={cn("h-4 w-4 shrink-0 transition-colors duration-150", active ? "text-gold-400" : "text-navy-400 group-hover:text-navy-200")} />
+                      <span className="min-w-0 flex-1 truncate">{i.label}</span>
+                      {count ? (
+                        <span className="min-w-5 rounded-[3px] bg-gold-500 px-1 text-center font-mono text-[10.5px] font-semibold leading-[18px] text-navy-950 tabular">{count}</span>
+                      ) : null}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         ))}
       </nav>
-      <div className="border-t border-white/10 p-3">
-        <div className="px-3 pb-2">
-          <div className="truncate text-sm font-semibold text-white">{user.name}</div>
-          <div className="text-xs text-navy-300">{user.role}</div>
+      <div className="shrink-0 border-t border-white/[0.08] px-3 pb-2.5 pt-3">
+        <div className="mb-1.5 flex items-center gap-2.5 px-2.5">
+          <span aria-hidden className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-white/[0.07] font-mono text-[11px] font-semibold text-gold-300">
+            {initials(user.name)}
+          </span>
+          <div className="min-w-0">
+            <div className="truncate text-[13px] font-semibold leading-tight text-white">{user.name}</div>
+            <div className="label-mono mt-0.5 truncate text-[10px] text-navy-400">{user.role}</div>
+          </div>
         </div>
-        <Link href="/account/password" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
-          <KeyRound className="h-4 w-4" /> Change password
+        <Link href="/account/password" onClick={close} className={footerLink}>
+          <KeyRound className="h-4 w-4 shrink-0 text-navy-400" /> Change password
         </Link>
-        <Link href="/account/security" className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
-          <ShieldCheck className="h-4 w-4" /> Secret key
+        <Link href="/account/security" onClick={close} className={footerLink}>
+          <ShieldCheck className="h-4 w-4 shrink-0 text-navy-400" /> Secret key
         </Link>
-        <button type="button" onClick={logout} className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-navy-200 hover:bg-white/5 hover:text-white">
-          <LogOut className="h-4 w-4" /> Sign out
+        <button type="button" onClick={logout} className={footerLink}>
+          <LogOut className="h-4 w-4 shrink-0 text-navy-400" /> Sign out
         </button>
       </div>
     </div>
@@ -70,25 +106,30 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
 
   return (
     <>
-      <div className="no-print sticky top-0 z-30 flex h-14 items-center justify-between border-b border-navy-800 bg-navy-900 px-4 lg:hidden">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <LogoMark className="h-8 w-8" />
-          <span className="text-sm font-extrabold tracking-[0.12em] text-white">OM ENTERPRISE</span>
+      {/* Phones and tablets: a slim top bar with the menu. */}
+      <div className="no-print sticky top-0 z-30 flex h-14 shrink-0 items-center justify-between border-b border-navy-950 bg-navy-900 pl-4 pr-2 lg:hidden">
+        <Link href="/dashboard" className="rounded-md">
+          <Logo inverted compact size="sm" />
         </Link>
-        <button type="button" onClick={() => setOpen(true)} className="rounded-lg p-2 text-white hover:bg-white/10" aria-label="Open menu">
+        <button type="button" onClick={() => setOpen(true)} className="rounded-md p-2.5 text-white transition-colors hover:bg-white/10" aria-label="Open menu" aria-expanded={open}>
           <Menu className="h-5 w-5" />
         </button>
       </div>
-      <aside className="no-print sticky top-0 hidden h-screen w-64 shrink-0 bg-navy-900 lg:block">{content}</aside>
+
+      {/* Desktop: the column runs the full height of the page; its contents stay pinned to the viewport. */}
+      <aside className="no-print hidden w-60 shrink-0 border-r border-navy-950 bg-navy-900 lg:block">
+        <div className="sticky top-0 h-dvh">{content}</div>
+      </aside>
+
       {open && (
-        <div className="no-print fixed inset-0 z-50 lg:hidden">
-          <button type="button" className="absolute inset-0 bg-navy-950/60" aria-label="Close menu" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 animate-fade-in bg-navy-900 shadow-lift">
-            <button type="button" onClick={() => setOpen(false)} className="absolute right-3 top-4 rounded-lg p-1.5 text-white hover:bg-white/10" aria-label="Close menu">
+        <div className="no-print fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Menu">
+          <button type="button" className="absolute inset-0 animate-fade-in bg-navy-950/60" aria-label="Close menu" onClick={close} />
+          <div className="absolute inset-y-0 left-0 w-[min(18rem,86vw)] animate-fade-in bg-navy-900 shadow-lift">
+            <button type="button" onClick={close} className="absolute right-3 top-3.5 z-10 rounded-md p-1.5 text-navy-200 transition-colors hover:bg-white/10 hover:text-white" aria-label="Close menu">
               <X className="h-5 w-5" />
             </button>
             {content}
-          </aside>
+          </div>
         </div>
       )}
     </>

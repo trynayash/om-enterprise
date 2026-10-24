@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Dialog } from "@/components/ui/dialog";
 import { Checkbox, Field, Input, Select } from "@/components/ui/field";
-import { Alert, TableWrap, td, th } from "@/components/ui/page";
+import { Alert, TableWrap } from "@/components/ui/page";
+import { rowHover, tdMuted, tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { DateTime } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
@@ -87,35 +88,36 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
           }
         />
         <TableWrap className="rounded-none border-0 shadow-none">
-          <table className="w-full">
+          <table className="w-full min-w-[860px]">
             <thead>
               <tr>
                 <th className={th}>Name</th>
                 <th className={th}>Role</th>
                 <th className={th}>Status</th>
-                <th className={cn(th, "text-right")}>Discount limit</th>
-                <th className={cn(th, "text-right")}>Approval limit</th>
+                <th className={thNum}>Discount limit</th>
+                <th className={thNum}>Approval limit</th>
                 <th className={th}>Last sign-in</th>
-                <th className={cn(th, "text-right")}>Actions</th>
+                <th className={thNum}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {staff.map((s) => (
-                <tr key={s.id} className={cn(!s.isActive && "opacity-60")}>
-                  <td className={td}>
+                <tr key={s.id} className={cn(rowHover, !s.isActive && "opacity-60")}>
+                  <td className={tdText}>
                     <div className="font-semibold">
-                      {s.displayName} {s.id === me.id && <span className="text-xs text-navy-500">(you)</span>}
+                      {s.displayName} {s.id === me.id && <span className="text-xs font-normal text-navy-500">(you)</span>}
                     </div>
-                    <div className="text-xs text-navy-500">
+                    <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">
                       @{s.username}
                       {s.mobile ? ` · ${s.mobile}` : ""}
                     </div>
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
                     <Badge tone={s.roleKey === "super_admin" ? "gold" : s.roleKey === "admin" ? "navy" : "neutral"}>{s.roleName}</Badge>
                     {s.overrides.length > 0 && <div className="mt-1 text-xs text-navy-500">{s.overrides.length} individual permission change(s)</div>}
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
+                    <div className="flex flex-wrap items-center gap-1">
                     {!s.isActive ? (
                       <Badge tone="red">Deactivated</Badge>
                     ) : s.lockedUntil && new Date(s.lockedUntil) > new Date() ? (
@@ -128,22 +130,23 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                       <Badge tone="green">Active</Badge>
                     )}
                     {s.hasSecretKey && (
-                      <Badge tone="blue" className="ml-1">
+                      <Badge tone="blue">
                         <ShieldCheck className="h-3 w-3" /> Secret key
                       </Badge>
                     )}
+                    </div>
                   </td>
-                  <td className={cn(td, "text-right tabular")}>
-                    {s.roleKey === "super_admin" ? "No limit" : `${Number(s.discountLimitPercent ?? s.roleDiscountLimitPercent)}%`}
-                    {s.discountLimitPercent !== null && s.roleKey !== "super_admin" && <div className="text-[11px] text-navy-400">custom</div>}
+                  <td className={tdNum}>
+                    {s.roleKey === "super_admin" ? <span className="font-sans text-[13px] text-navy-500">No limit</span> : `${Number(s.discountLimitPercent ?? s.roleDiscountLimitPercent)}%`}
+                    {s.discountLimitPercent !== null && s.roleKey !== "super_admin" && <div className="font-sans text-[11px] text-navy-500">custom</div>}
                   </td>
-                  <td className={cn(td, "text-right tabular")}>
-                    {s.roleKey === "super_admin" ? "No limit" : `${Number(s.approvalLimitPercent ?? s.roleApprovalLimitPercent)}%`}
+                  <td className={tdNum}>
+                    {s.roleKey === "super_admin" ? <span className="font-sans text-[13px] text-navy-500">No limit</span> : `${Number(s.approvalLimitPercent ?? s.roleApprovalLimitPercent)}%`}
                   </td>
-                  <td className={td}>
+                  <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={s.lastLoginAt} />
                   </td>
-                  <td className={cn(td, "text-right")}>
+                  <td className={`${withPy(tdText, "py-1.5")} text-right`}>
                     {canManage(s) ? (
                       <div className="flex justify-end gap-1">
                         <Button size="sm" variant="ghost" title="Edit" onClick={() => setEditing(s)} icon={<Pencil className="h-4 w-4" />} />
@@ -163,7 +166,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                         />
                       </div>
                     ) : (
-                      <span className="text-xs text-navy-400">{s.id === me.id ? "Use “Change password”" : "Super Admin only"}</span>
+                      <span className="text-xs text-navy-500">{s.id === me.id ? "Use “Change password”" : "Super Admin only"}</span>
                     )}
                   </td>
                 </tr>
@@ -174,21 +177,21 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
       </Card>
 
       {me.isSuperAdmin && (
-        <Card>
+        <Card className="overflow-hidden">
           <CardHeader title="Roles" description="Default permissions and limits for each role. Individual staff can be adjusted with grant/deny overrides." />
-          <div className="grid gap-3 p-5 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-px bg-navy-100 md:grid-cols-2 xl:grid-cols-4">
             {roles.map((r) => (
-              <div key={r.key} className="rounded-xl border border-navy-100 p-4">
+              <div key={r.key} className="flex flex-col bg-white p-5">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="font-bold">{r.name}</div>
+                  <div className="font-semibold text-navy-950">{r.name}</div>
                   {r.key !== "super_admin" && (
                     <Button size="sm" variant="outline" onClick={() => setRoleEdit(r)}>
                       Edit
                     </Button>
                   )}
                 </div>
-                <p className="mt-1 text-xs text-navy-500">{r.description}</p>
-                <div className="mt-2 text-xs text-navy-600">
+                <p className="mt-1.5 flex-1 text-xs leading-relaxed text-navy-500">{r.description}</p>
+                <div className="mt-3 border-t border-dotted border-navy-200 pt-2.5 font-mono text-[11.5px] leading-relaxed text-navy-600">
                   {r.key === "super_admin" ? "All permissions, no limits" : `${r.permissions.length} permissions · discount ${Number(r.defaultDiscountLimitPercent)}% · approves up to ${Number(r.defaultApprovalLimitPercent)}%`}
                 </div>
               </div>
@@ -405,8 +408,8 @@ function PermissionsDialog({ staff, role, catalogue, onClose, onSaved }: { staff
       <div className="space-y-5">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-gold-700">{g.label}</div>
-            <div className="divide-y divide-navy-50 rounded-xl border border-navy-100">
+            <div className="label-mono mb-2 text-gold-700">{g.label}</div>
+            <div className="divide-y divide-navy-100 rounded-lg border border-navy-100">
               {g.permissions.map((p) => {
                 const v = state[p.key] ?? "default";
                 const effective = v === "grant" || (v === "default" && roleSet.has(p.key));
@@ -414,17 +417,19 @@ function PermissionsDialog({ staff, role, catalogue, onClose, onSaved }: { staff
                   <div key={p.key} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
                     <div className="min-w-0">
                       <div className="text-sm font-medium">{p.description}</div>
-                      <div className="font-mono text-[11px] text-navy-400">
+                      <div className="font-mono text-[11px] text-navy-500">
                         {p.key} · role default: {roleSet.has(p.key) ? "yes" : "no"}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge tone={effective ? "green" : "neutral"}>{effective ? "Allowed" : "Not allowed"}</Badge>
-                      <Select value={v} onChange={(e) => setState({ ...state, [p.key]: e.target.value as "default" | "grant" | "deny" })} className="h-8 w-36 text-xs">
-                        <option value="default">Role default</option>
-                        <option value="grant">Grant</option>
-                        <option value="deny">Deny</option>
-                      </Select>
+                      <div className="w-36">
+                        <Select value={v} onChange={(e) => setState({ ...state, [p.key]: e.target.value as "default" | "grant" | "deny" })} aria-label={`${p.key} override`}>
+                          <option value="default">Role default</option>
+                          <option value="grant">Grant</option>
+                          <option value="deny">Deny</option>
+                        </Select>
+                      </div>
                     </div>
                   </div>
                 );
@@ -487,7 +492,7 @@ function RoleDialog({ role, catalogue, onClose, onSaved }: { role: Role; catalog
       <div className="grid gap-5 md:grid-cols-2">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="mb-2 text-xs font-bold uppercase tracking-wider text-gold-700">{g.label}</div>
+            <div className="label-mono mb-2 text-gold-700">{g.label}</div>
             <div className="space-y-1.5">
               {g.permissions.map((p) => (
                 <Checkbox

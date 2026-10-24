@@ -39,11 +39,11 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
         e.preventDefault();
         apply({ q: q.trim() });
       }}
-      className="mb-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-[minmax(220px,2fr)_1fr_1fr_1fr_auto]"
+      className="mb-5 grid gap-2.5 rounded-xl border border-navy-100 bg-white p-3 shadow-card sm:grid-cols-2 lg:grid-cols-[minmax(220px,2fr)_1fr_1fr_1fr_auto]"
       aria-busy={pending}
     >
       <div className="relative">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
         <Input
           type="search"
           value={q}
@@ -79,9 +79,6 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
         ))}
       </Select>
       <div className="flex gap-2">
-        <Button type="submit" loading={pending} className="flex-1 sm:flex-none">
-          Search
-        </Button>
         {hasFilters && (
           <Button
             variant="ghost"
@@ -94,6 +91,9 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
             Clear
           </Button>
         )}
+        <Button type="submit" loading={pending} className="flex-1 sm:flex-none">
+          Search
+        </Button>
       </div>
     </form>
   );

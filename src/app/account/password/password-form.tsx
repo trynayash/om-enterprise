@@ -39,23 +39,24 @@ export function PasswordForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div>
-        <h1 className="text-xl font-extrabold text-navy-900">{required ? "Set your own password" : "Change password"}</h1>
-        <p className="mt-1 text-sm text-navy-500">
+        <h1 className="headline text-[2.25rem] font-bold text-navy-950">{required ? "Set your own password" : "Change password"}</h1>
+        <p className="mt-2 text-sm leading-relaxed text-navy-500">
           {required ? "You signed in with a temporary password. Choose a new one to continue." : "Other devices will be signed out."}
         </p>
       </div>
       {error && <Alert tone="danger">{error}</Alert>}
       {done && <Alert tone="success">Password changed. Taking you back…</Alert>}
+      <div aria-hidden className="h-px bg-navy-100" />
       <Field label="Current password" htmlFor="cur">
-        <Input id="cur" type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} required />
+        <Input id="cur" className="h-11" type="password" autoComplete="current-password" value={current} onChange={(e) => setCurrent(e.target.value)} required />
       </Field>
       <Field label="New password" htmlFor="new" hint="At least 10 characters (12 for the Super Admin), mixing letters with numbers or symbols. Don't include your username.">
-        <Input id="new" type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} required />
+        <Input id="new" className="h-11" type="password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} required />
       </Field>
       <Field label="Confirm new password" htmlFor="conf">
-        <Input id="conf" type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
+        <Input id="conf" className="h-11" type="password" autoComplete="new-password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required />
       </Field>
-      <Button type="submit" size="lg" className="w-full" loading={busy} disabled={!current || !next || !confirm || done}>
+      <Button type="submit" size="lg" className="mt-2 w-full" loading={busy} disabled={!current || !next || !confirm || done}>
         Save new password
       </Button>
     </form>

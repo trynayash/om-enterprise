@@ -38,23 +38,26 @@ async function DocumentLoader({ params }: { params: Promise<{ id: string }> }) {
   }
   const s = doc.snapshot;
   return (
-    <div className="space-y-4">
-      <div className="no-print flex flex-wrap items-center gap-3">
-        <Link href={`/pos/sale/${doc.saleId}`} className="inline-flex h-10 items-center gap-1.5 rounded-lg px-2 text-sm font-semibold text-navy-600 hover:bg-white">
+    <div className="mx-auto w-full max-w-[210mm] space-y-4 print:max-w-none">
+      <div className="no-print flex flex-wrap items-center gap-x-4 gap-y-2">
+        <Link href={`/pos/sale/${doc.saleId}`} className="inline-flex h-9 items-center gap-1.5 rounded-md pr-1 text-sm font-medium text-navy-500 transition-colors hover:text-navy-950">
           <ArrowLeft className="h-4 w-4" /> Sale {s.saleNumber}
         </Link>
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-lg font-extrabold text-navy-900">
-            {DOC_TYPE_LABEL[doc.docType]} <span className="font-mono">{doc.docNumber}</span>
+        <span aria-hidden className="hidden h-6 w-px bg-navy-200 sm:block" />
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <h1 className="flex flex-wrap items-baseline gap-x-2 text-lg font-semibold text-navy-950">
+            {DOC_TYPE_LABEL[doc.docType]} <span className="font-mono text-[17px]">{doc.docNumber}</span>
           </h1>
-          <StatusBadge status={doc.status} />
-          {doc.isTraining && <Badge tone="red">Training — not a valid bill</Badge>}
+          <div className="flex flex-wrap items-center gap-1.5">
+            <StatusBadge status={doc.status} />
+            {doc.isTraining && <Badge tone="red">Training — not a valid bill</Badge>}
+          </div>
         </div>
         <div className="ml-auto">
           <NewSaleButton variant="button" />
         </div>
       </div>
-      <div className="no-print rounded-2xl border border-navy-100 bg-white p-3 shadow-card">
+      <div className="no-print border-y border-navy-200 py-3">
         <DocumentActions
           documentId={doc.id}
           docNumber={doc.docNumber}
@@ -66,7 +69,7 @@ async function DocumentLoader({ params }: { params: Promise<{ id: string }> }) {
           canShare={can(actor, "documents.share")}
         />
       </div>
-      <div className="overflow-hidden rounded-2xl border border-navy-100 bg-white shadow-card print:rounded-none print:border-0 print:shadow-none">
+      <div className="animate-rise overflow-hidden rounded-md border border-navy-200 bg-white shadow-[0_1px_0_rgb(13_27_48/0.04),0_18px_40px_-24px_rgb(13_27_48/0.35)] print:animate-none print:rounded-none print:border-0 print:shadow-none">
         <DocumentView
           snapshot={s}
           status={doc.status}

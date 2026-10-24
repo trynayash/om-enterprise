@@ -2,12 +2,12 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { requirePageActor } from "@/server/auth/session";
 import { queryAudit } from "@/server/services/audit-log";
-import { PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
-import { Badge, type Tone } from "@/components/ui/badge";
+import { PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
+import type { Tone } from "@/components/ui/badge";
 import { DateTime } from "@/components/ui/money";
 import { AuditFilters } from "@/components/dashboard/admin/audit-filters";
-import { buttonClass } from "@/components/ui/button";
-import { cn } from "@/components/ui/cn";
+import { Pagination } from "@/components/dashboard/ops/pagination";
+import { rowHover, tdMuted, tdText, th } from "@/components/dashboard/table";
 
 export const metadata = { title: "Audit log" };
 
@@ -18,6 +18,18 @@ const ACTION_TONE: [RegExp, Tone][] = [
   [/^(user|role|settings)\./, "purple"],
   [/^document\./, "navy"],
 ];
+
+// The action code is set in mono with a coloured dot, not a badge on every row.
+const DOT: Record<Tone, string> = {
+  red: "bg-red-600",
+  gold: "bg-gold-500",
+  green: "bg-emerald-600",
+  purple: "bg-violet-600",
+  navy: "bg-navy-800",
+  neutral: "bg-navy-300",
+  amber: "bg-amber-500",
+  blue: "bg-sky-600",
+};
 
 function toneFor(action: string): Tone {
   return ACTION_TONE.find(([re]) => re.test(action))?.[1] ?? "neutral";
@@ -65,12 +77,6 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
     page,
     pageSize: 100,
   });
-  const pages = Math.max(1, Math.ceil(res.total / res.pageSize));
-  const pageHref = (p: number) => {
-    const n = new URLSearchParams(q);
-    n.set("page", String(p));
-    return `/dashboard/audit?${n.toString()}`;
-  };
   return (
     <div>
       <PageHeader
@@ -80,7 +86,7 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
       />
       <AuditFilters />
       <TableWrap>
-        <table className="w-full">
+        <table className="w-full min-w-[760px]">
           <thead>
             <tr>
               <th className={th}>When</th>
@@ -93,39 +99,44 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
             {res.items.map((a) => {
               const link = entityLink(a.entityType, a.entityId);
               return (
-                <tr key={a.id}>
-                  <td className={cn(td, "whitespace-nowrap text-xs")}>
+                <tr key={a.id} className={rowHover}>
+                  <td className={`${tdMuted} whitespace-nowrap text-xs`}>
                     <DateTime value={a.at} />
                   </td>
-                  <td className={cn(td, "text-xs")}>
+                  <td className={`${tdText} text-xs`}>
                     <div className="font-semibold">{a.actorLabel}</div>
-                    {a.ip && <div className="text-navy-400">{a.ip}</div>}
+                    {a.ip && <div className="mt-0.5 font-mono text-[11px] text-navy-400">{a.ip}</div>}
                   </td>
-                  <td className={td}>
-                    <Badge tone={toneFor(a.action)}>{a.action}</Badge>
+                  <td className={tdText}>
+                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[12px] text-navy-700">
+                      <span aria-hidden className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[toneFor(a.action)]}`} />
+                      {a.action}
+                    </span>
                   </td>
-                  <td className={td}>
-                    <div>{a.summary}</div>
-                    <div className="mt-0.5 flex flex-wrap gap-3 text-xs">
-                      {link && (
-                        <Link href={link} className="font-semibold text-navy-600 hover:underline">
-                          Open {a.entityType}
-                        </Link>
-                      )}
-                      {a.data != null && (
-                        <details className="w-full">
-                          <summary className="cursor-pointer text-navy-500">Details</summary>
-                          <pre className="mt-1 max-h-64 overflow-auto rounded-lg bg-navy-50 p-2 text-[11px] leading-snug text-navy-800">{JSON.stringify(a.data, null, 2)}</pre>
-                        </details>
-                      )}
-                    </div>
+                  <td className={tdText}>
+                    <div className="leading-snug">{a.summary}</div>
+                    {(link || a.data != null) && (
+                      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+                        {link && (
+                          <Link href={link} className="font-semibold text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
+                            Open {a.entityType}
+                          </Link>
+                        )}
+                        {a.data != null && (
+                          <details className="group w-full">
+                            <summary className="cursor-pointer text-navy-500 transition-colors hover:text-navy-900">Details</summary>
+                            <pre className="mt-1.5 max-h-64 overflow-auto rounded-md border border-rule bg-paper/70 p-2.5 font-mono text-[11px] leading-snug text-navy-800">{JSON.stringify(a.data, null, 2)}</pre>
+                          </details>
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
               );
             })}
             {!res.items.length && (
               <tr>
-                <td className={td} colSpan={4}>
+                <td className={tdMuted} colSpan={4}>
                   No audit entries match these filters.
                 </td>
               </tr>
@@ -133,23 +144,7 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
           </tbody>
         </table>
       </TableWrap>
-      <div className="mt-4 flex items-center justify-between text-sm text-navy-600">
-        <span>
-          {res.total.toLocaleString("en-IN")} entries · page {page} of {pages}
-        </span>
-        <div className="flex gap-2">
-          {page > 1 && (
-            <Link href={pageHref(page - 1)} className={buttonClass("outline", "sm")}>
-              Previous
-            </Link>
-          )}
-          {page < pages && (
-            <Link href={pageHref(page + 1)} className={buttonClass("outline", "sm")}>
-              Next
-            </Link>
-          )}
-        </div>
-      </div>
+      <Pagination total={res.total} page={page} pageSize={res.pageSize} sp={sp} basePath="/dashboard/audit" />
     </div>
   );
 }

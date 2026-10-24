@@ -26,11 +26,11 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
   const label = done.kind === "order_request" ? "order request" : "enquiry";
   const follow = whatsapp ? whatsappLink(whatsapp, `Hello OM ENTERPRISE, I just sent ${label} ${done.orderNumber} on your website. My name is ${done.name}.`) : null;
   return (
-    <div className="rounded-3xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 text-center shadow-card sm:p-10" role="status">
-      <CheckCircle2 className="mx-auto h-14 w-14 text-emerald-600" />
-      <h2 className="mt-4 text-2xl font-extrabold text-navy-900">Thank you, {done.name.split(" ")[0]}!</h2>
-      <p className="mt-2 text-base text-navy-600">
-        Your {label} <span className="font-extrabold text-navy-900">{done.orderNumber}</span> has been received.
+    <div className="animate-sheet-in rounded-xl border border-navy-200 border-t-[3px] border-t-emerald-600 bg-white p-6 text-center sm:p-10" role="status">
+      <CheckCircle2 className="mx-auto h-11 w-11 text-emerald-600" strokeWidth={1.5} />
+      <h2 className="headline mt-4 text-[2.25rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}!</h2>
+      <p className="mt-3 text-base text-navy-600">
+        Your {label} <span className="font-mono font-extrabold text-navy-950">{done.orderNumber}</span> has been received.
       </p>
       <p className="mt-1 text-sm text-navy-500">
         We&apos;ll contact you on <span className="font-semibold">{done.mobile}</span>
@@ -38,16 +38,16 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
       </p>
       {done.indicativeTotal && (
         <p className="mt-3 text-sm text-navy-600">
-          Indicative total at today&apos;s prices: <span className="font-bold tabular">{formatINR(done.indicativeTotal)}</span>
+          Indicative total at today&apos;s prices: <span className="font-mono font-medium tabular">{formatINR(done.indicativeTotal)}</span>
         </p>
       )}
-      <div className="mt-6 flex flex-wrap justify-center gap-3">
+      <div className="mt-7 flex flex-wrap justify-center gap-2.5">
         {follow && (
-          <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white hover:bg-emerald-700">
+          <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
             <MessageCircle className="h-4 w-4" /> Follow up on WhatsApp
           </a>
         )}
-        <Link href="/products" className="inline-flex h-11 items-center rounded-xl border border-navy-200 bg-white px-5 text-sm font-semibold text-navy-900 hover:bg-navy-50">
+        <Link href="/products" className="inline-flex h-11 items-center rounded-lg border border-navy-200 bg-white px-5 text-sm font-semibold text-navy-900 transition-colors hover:border-navy-900">
           Continue browsing
         </Link>
       </div>
@@ -130,7 +130,7 @@ export function EnquiryForm({
       {serverError && <Alert tone="danger">{serverError}</Alert>}
       {items.length > 0 && allowOrderRequest && (
         <fieldset>
-          <legend className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-navy-700">What would you like?</legend>
+          <legend className="label-mono mb-2 text-navy-600">What would you like?</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(
               [
@@ -141,13 +141,13 @@ export function EnquiryForm({
               <label
                 key={value}
                 className={cn(
-                  "flex cursor-pointer gap-3 rounded-xl border p-3 text-sm transition-colors",
-                  kind === value ? "border-navy-900 bg-navy-50 ring-1 ring-navy-900" : "border-navy-200 hover:border-navy-300",
+                  "flex cursor-pointer gap-3 rounded-lg border p-3 text-sm transition-colors",
+                  kind === value ? "border-navy-900 bg-paper/70 ring-1 ring-navy-900" : "border-navy-200 hover:border-navy-400",
                 )}
               >
                 <input type="radio" name="kind" value={value} checked={kind === value} onChange={() => setKind(value)} className="mt-1 accent-navy-900" />
                 <span>
-                  <span className="block font-bold text-navy-900">{title}</span>
+                  <span className="block font-semibold text-navy-950">{title}</span>
                   <span className="block text-xs text-navy-500">{hint}</span>
                 </span>
               </label>
@@ -183,8 +183,8 @@ export function EnquiryForm({
         />
       </Field>
       <fieldset>
-        <legend className="mb-2 text-xs font-bold uppercase tracking-[0.14em] text-navy-700">Preferred contact</legend>
-        <div className="flex flex-wrap gap-2">
+        <legend className="label-mono mb-2 text-navy-600">Preferred contact</legend>
+        <div className="flex flex-wrap gap-1.5">
           {(
             [
               ["whatsapp", "WhatsApp"],
@@ -195,8 +195,8 @@ export function EnquiryForm({
             <label
               key={v}
               className={cn(
-                "flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
-                form.preferredContact === v ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 text-navy-800 hover:border-navy-300",
+                "flex cursor-pointer items-center gap-2 rounded-md border px-3.5 py-2 text-sm font-medium transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold-600",
+                form.preferredContact === v ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 text-navy-800 hover:border-navy-900",
               )}
             >
               <input type="radio" name="preferredContact" value={v} checked={form.preferredContact === v} onChange={() => setForm((f) => ({ ...f, preferredContact: v }))} className="sr-only" />

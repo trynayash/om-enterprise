@@ -3,7 +3,7 @@ import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input, Select } from "@/components/ui/field";
+import { Input, Label, Select } from "@/components/ui/field";
 
 const ACTIONS = [
   { value: "", label: "All actions" },
@@ -38,26 +38,38 @@ export function AuditFilters() {
   };
   return (
     <form
-      className="mb-4 flex flex-wrap items-end gap-3"
+      className="mb-5 flex flex-wrap items-end gap-3 rounded-xl border border-navy-100 bg-white px-4 pb-4 pt-3.5 shadow-card"
       onSubmit={(e) => {
         e.preventDefault();
         apply({ q });
       }}
     >
-      <div className="relative min-w-60 flex-1">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
-        <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search summary, person or record id" className="pl-9" aria-label="Search audit log" />
+      <div className="min-w-60 flex-[2]">
+        <Label htmlFor="audit-q">Search</Label>
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
+          <Input id="audit-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search summary, person or record id" className="pl-9" aria-label="Search audit log" />
+        </div>
       </div>
-      <Select value={params.get("action") ?? ""} onChange={(e) => apply({ action: e.target.value })} className="w-56" aria-label="Action type">
-        {ACTIONS.map((a) => (
-          <option key={a.value} value={a.value}>
-            {a.label}
-          </option>
-        ))}
-      </Select>
-      <Input type="date" defaultValue={params.get("from") ?? ""} onChange={(e) => apply({ from: e.target.value })} className="w-40" aria-label="From date" />
-      <Input type="date" defaultValue={params.get("to") ?? ""} onChange={(e) => apply({ to: e.target.value })} className="w-40" aria-label="To date" />
-      <Button type="submit" variant="outline">
+      <div className="min-w-52 flex-1">
+        <Label htmlFor="audit-action">Action</Label>
+        <Select id="audit-action" value={params.get("action") ?? ""} onChange={(e) => apply({ action: e.target.value })} aria-label="Action type">
+          {ACTIONS.map((a) => (
+            <option key={a.value} value={a.value}>
+              {a.label}
+            </option>
+          ))}
+        </Select>
+      </div>
+      <div className="w-[152px]">
+        <Label htmlFor="audit-from">From</Label>
+        <Input id="audit-from" type="date" defaultValue={params.get("from") ?? ""} onChange={(e) => apply({ from: e.target.value })} className="font-mono text-[13px]" aria-label="From date" />
+      </div>
+      <div className="w-[152px]">
+        <Label htmlFor="audit-to">To</Label>
+        <Input id="audit-to" type="date" defaultValue={params.get("to") ?? ""} onChange={(e) => apply({ to: e.target.value })} className="font-mono text-[13px]" aria-label="To date" />
+      </div>
+      <Button type="submit" variant="outline" icon={<Search className="h-4 w-4" />}>
         Search
       </Button>
     </form>

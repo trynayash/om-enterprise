@@ -5,7 +5,7 @@ import { requirePageActor } from "@/server/auth/session";
 import { can, type Actor } from "@/server/auth/actor";
 import * as reports from "@/server/services/reports";
 import { periodFromQuery } from "@/server/route-helpers";
-import { PageHeader, PageSkeleton, TableWrap, td, th, Alert, EmptyState } from "@/components/ui/page";
+import { PageHeader, PageSkeleton, TableWrap, Alert, EmptyState } from "@/components/ui/page";
 import { Card, CardBody, CardHeader, Stat } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { DateTime, Money, Pct, Qty } from "@/components/ui/money";
@@ -14,6 +14,17 @@ import { cn } from "@/components/ui/cn";
 import { BarChart } from "@/components/dashboard/admin/bar-chart";
 import { PeriodFilter } from "@/components/dashboard/admin/period-filter";
 import { D, formatINR } from "@/lib/money";
+import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+
+/** Title bar for a table that sits directly in a TableWrap. */
+function TableTitle({ title, action }: { title: string; action?: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between gap-3 border-b border-navy-100 px-5 py-3.5">
+      <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-navy-900">{title}</h2>
+      {action}
+    </div>
+  );
+}
 
 export const metadata = { title: "Reports" };
 
@@ -62,13 +73,16 @@ async function Reports({ searchParams }: { searchParams: PageProps<"/dashboard/r
         description="Calculated only from saved bills, credit notes and verified payments. Training (sample) transactions are excluded."
       />
       <PeriodFilter from={from} to={to} />
-      <nav className="no-print mb-5 flex gap-1 overflow-x-auto rounded-xl border border-navy-100 bg-white p-1 shadow-card" aria-label="Report">
+      <nav className="no-print mb-6 flex gap-5 overflow-x-auto border-b border-navy-200" aria-label="Report">
         {tabs.map((t) => (
           <Link
             key={t.key}
             href={`/dashboard/reports?tab=${t.key}&${qs}`}
             aria-current={t.key === tab ? "page" : undefined}
-            className={cn("whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-semibold", t.key === tab ? "bg-navy-900 text-white" : "text-navy-600 hover:bg-navy-50")}
+            className={cn(
+              "-mb-px whitespace-nowrap border-b-2 px-0.5 pb-2.5 pt-1 text-sm font-semibold transition-colors duration-150",
+              t.key === tab ? "border-gold-500 text-navy-950" : "border-transparent text-navy-500 hover:border-navy-200 hover:text-navy-900",
+            )}
           >
             {t.label}
           </Link>
@@ -110,7 +124,7 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
   return (
     <div className="space-y-5">
       {empty && <Alert title="No sales recorded in this period">Figures will appear here as soon as bills are issued.</Alert>}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Stat label="Net sales (excl. GST)" value={formatINR(s.netRevenue)} hint={`${s.bills.count} bills · avg ${formatINR(s.averageBill)}`} />
         <Stat label="GST collected (net)" value={formatINR(s.netTax)} hint="Output tax on bills − credit notes" />
         <Stat label="Total billed" value={formatINR(s.netInvoiced)} hint="Including GST, after credit notes" />
@@ -129,32 +143,32 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
       </Card>
       <Card>
         <CardHeader title="Collections by payment method" actions={<Export name="summary" qs={qs} show={canExport} />} />
-        <CardBody>
+        <div className="overflow-x-auto">
           {s.collections.byMethod.length ? (
-            <table className="w-full text-sm tabular">
+            <table className="w-full">
               <thead>
                 <tr>
                   <th className={th}>Method</th>
                   <th className={th}>Direction</th>
-                  <th className={cn(th, "text-right")}>Payments</th>
-                  <th className={cn(th, "text-right")}>Amount</th>
+                  <th className={thNum}>Payments</th>
+                  <th className={thNum}>Amount</th>
                 </tr>
               </thead>
               <tbody>
                 {s.collections.byMethod.map((r) => (
-                  <tr key={`${r.method}-${r.direction}`}>
-                    <td className={td}>{r.method.toUpperCase()}</td>
-                    <td className={td}>{r.direction === "in" ? "Received" : <Badge tone="purple">Refund</Badge>}</td>
-                    <td className={cn(td, "text-right")}>{r.count}</td>
-                    <td className={cn(td, "text-right font-semibold")}>{formatINR(r.amount)}</td>
+                  <tr key={`${r.method}-${r.direction}`} className={rowHover}>
+                    <td className={tdText}>{r.method.toUpperCase()}</td>
+                    <td className={tdText}>{r.direction === "in" ? "Received" : <Badge tone="purple">Refund</Badge>}</td>
+                    <td className={tdNum}>{r.count}</td>
+                    <td className={`${tdNum} font-semibold`}>{formatINR(r.amount)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           ) : (
-            <p className="text-sm text-navy-500">No verified payments in this period.</p>
+            <p className="px-5 py-4 text-sm text-navy-500">No verified payments in this period.</p>
           )}
-        </CardBody>
+        </div>
       </Card>
     </div>
   );
@@ -165,30 +179,31 @@ function ProfitCard({ profit }: { profit: Awaited<ReturnType<typeof reports.gros
   return (
     <Card>
       <CardHeader title="Gross profit" description={profit.note} />
-      <CardBody className="grid gap-3 sm:grid-cols-4">
-        <div>
-          <div className="text-xs font-semibold uppercase text-navy-500">Gross profit</div>
-          <div className="text-2xl font-extrabold tabular text-emerald-700">{formatINR(profit.grossProfit)}</div>
-        </div>
-        <div>
-          <div className="text-xs font-semibold uppercase text-navy-500">Gross margin</div>
-          <div className="text-2xl font-extrabold tabular">{profit.grossMarginPercent ? `${profit.grossMarginPercent}%` : "—"}</div>
-        </div>
-        <div>
-          <div className="text-xs font-semibold uppercase text-navy-500">Cost of goods sold</div>
-          <div className="text-2xl font-extrabold tabular">{formatINR(profit.costOfGoodsSold)}</div>
-        </div>
-        <div>
-          <div className="text-xs font-semibold uppercase text-navy-500">Cost coverage</div>
-          <div className={cn("text-2xl font-extrabold tabular", partial ? "text-amber-700" : "")}>{profit.costCoveragePercent}%</div>
-        </div>
+      <CardBody className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Figure label="Gross profit" tone="text-emerald-700">
+          {formatINR(profit.grossProfit)}
+        </Figure>
+        <Figure label="Gross margin">{profit.grossMarginPercent ? `${profit.grossMarginPercent}%` : "—"}</Figure>
+        <Figure label="Cost of goods sold">{formatINR(profit.costOfGoodsSold)}</Figure>
+        <Figure label="Cost coverage" tone={partial ? "text-amber-700" : undefined}>
+          {profit.costCoveragePercent}%
+        </Figure>
         {partial && (
-          <Alert tone="warning" className="sm:col-span-4">
+          <Alert tone="warning" className="sm:col-span-2 lg:col-span-4">
             Profit is calculated on {formatINR(profit.revenueWithKnownCost)} of {formatINR(profit.itemRevenue)} item sales — {profit.linesWithoutCost} sold line(s) had no recorded cost and are excluded. Record purchase costs for a reliable figure.
           </Alert>
         )}
       </CardBody>
     </Card>
+  );
+}
+
+function Figure({ label, tone, children }: { label: string; tone?: string; children: React.ReactNode }) {
+  return (
+    <div className="lg:border-l lg:border-navy-100 lg:pl-5 lg:first:border-l-0 lg:first:pl-0">
+      <div className="label-mono text-navy-500">{label}</div>
+      <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone ?? "text-navy-950")}>{children}</div>
+    </div>
   );
 }
 
@@ -199,41 +214,41 @@ async function Products({ actor, period, showProfit, canExport, qs }: P & { show
       <CardHeader title="Product performance" description="Quantity, revenue and average selling price by SKU (after returns)" actions={<Export name="products" qs={qs} show={canExport} />} />
       {rows.length ? (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm tabular">
+          <table className="w-full">
             <thead>
               <tr>
                 <th className={th}>SKU</th>
                 <th className={th}>Product</th>
-                <th className={cn(th, "text-right")}>Qty</th>
-                <th className={cn(th, "text-right")}>Revenue</th>
-                <th className={cn(th, "text-right")}>Avg price</th>
-                <th className={cn(th, "text-right")}>Discount</th>
-                {showProfit && <th className={cn(th, "text-right")}>Gross profit</th>}
-                {showProfit && <th className={cn(th, "text-right")}>Margin</th>}
+                <th className={thNum}>Qty</th>
+                <th className={thNum}>Revenue</th>
+                <th className={thNum}>Avg price</th>
+                <th className={thNum}>Discount</th>
+                {showProfit && <th className={thNum}>Gross profit</th>}
+                {showProfit && <th className={thNum}>Margin</th>}
               </tr>
             </thead>
             <tbody>
               {rows.map((r) => (
-                <tr key={r.variantId}>
-                  <td className={cn(td, "font-mono text-xs")}>{r.sku}</td>
-                  <td className={td}>
+                <tr key={r.variantId} className={rowHover}>
+                  <td className={tdCode}>{r.sku}</td>
+                  <td className={tdText}>
                     {r.product}
-                    <div className="text-xs text-navy-500">{r.category}</div>
+                    <div className="mt-0.5 text-xs text-navy-500">{r.category}</div>
                   </td>
-                  <td className={cn(td, "text-right")}>
+                  <td className={tdNum}>
                     <Qty value={r.quantity} unit={r.unit} />
                   </td>
-                  <td className={cn(td, "text-right font-semibold")}>
+                  <td className={`${tdNum} font-semibold`}>
                     <Money value={r.revenue} />
                   </td>
-                  <td className={cn(td, "text-right")}>
+                  <td className={tdNum}>
                     <Money value={r.averageSellingPrice} />
                   </td>
-                  <td className={cn(td, "text-right")}>
+                  <td className={tdNum}>
                     <Pct value={r.discountPercent} />
                   </td>
-                  {showProfit && <td className={cn(td, "text-right")}>{r.costComplete ? <Money value={r.grossProfit} /> : <Badge tone="amber">cost unknown</Badge>}</td>}
-                  {showProfit && <td className={cn(td, "text-right")}>{r.costComplete ? <Pct value={r.grossMarginPercent} /> : "—"}</td>}
+                  {showProfit && <td className={tdNum}>{r.costComplete ? <Money value={r.grossProfit} /> : <span className="font-sans text-xs text-amber-700">cost unknown</span>}</td>}
+                  {showProfit && <td className={tdNum}>{r.costComplete ? <Pct value={r.grossMarginPercent} /> : "—"}</td>}
                 </tr>
               ))}
             </tbody>
@@ -257,18 +272,21 @@ async function Categories({ actor, period, canExport, qs }: P) {
       <CardBody>
         {rows.length ? (
           <ul className="space-y-3">
-            {rows.map((r) => {
+            {rows.map((r, i) => {
               const pct = total ? (Number(r.revenue) / total) * 100 : 0;
               return (
                 <li key={r.category}>
-                  <div className="flex justify-between gap-3 text-sm">
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
                     <span className="font-semibold">{r.category}</span>
-                    <span className="tabular">
-                      {formatINR(r.revenue)} <span className="text-navy-500">· {pct.toFixed(1)}% · {r.bills} bills</span>
+                    <span className="font-mono text-[13px] tabular">
+                      {formatINR(r.revenue)}{" "}
+                      <span className="text-navy-500">
+                        · {pct.toFixed(1)}% · {r.bills} bills
+                      </span>
                     </span>
                   </div>
-                  <div className="mt-1 h-2 rounded-full bg-navy-100" aria-hidden>
-                    <div className="h-2 rounded-full bg-navy-600" style={{ width: `${pct}%` }} />
+                  <div className="mt-1.5 h-1.5 bg-navy-100" aria-hidden>
+                    <div className={cn("h-1.5", i === 0 ? "bg-gold-500" : "bg-navy-800")} style={{ width: `${pct}%` }} />
                   </div>
                 </li>
               );
@@ -287,37 +305,34 @@ async function Staff({ actor, period, canExport, qs }: P) {
   const rows = await reports.staffSales(actor, period);
   return (
     <TableWrap>
-      <div className="flex items-center justify-between border-b border-navy-100 px-4 py-3">
-        <h2 className="font-bold">Sales by staff member</h2>
-        <Export name="staff" qs={qs} show={canExport} />
-      </div>
-      <table className="w-full text-sm tabular">
+      <TableTitle title="Sales by staff member" action={<Export name="staff" qs={qs} show={canExport} />} />
+      <table className="w-full">
         <thead>
           <tr>
             <th className={th}>Staff</th>
-            <th className={cn(th, "text-right")}>Bills</th>
-            <th className={cn(th, "text-right")}>Net sales</th>
-            <th className={cn(th, "text-right")}>Billed (incl. GST)</th>
-            <th className={cn(th, "text-right")}>Discounts</th>
-            <th className={cn(th, "text-right")}>Discount %</th>
-            <th className={cn(th, "text-right")}>Approved exceptions</th>
+            <th className={thNum}>Bills</th>
+            <th className={thNum}>Net sales</th>
+            <th className={thNum}>Billed (incl. GST)</th>
+            <th className={thNum}>Discounts</th>
+            <th className={thNum}>Discount %</th>
+            <th className={thNum}>Approved exceptions</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.staff}>
-              <td className={cn(td, "font-semibold")}>{r.staff}</td>
-              <td className={cn(td, "text-right")}>{r.bills}</td>
-              <td className={cn(td, "text-right")}>{formatINR(r.revenue)}</td>
-              <td className={cn(td, "text-right")}>{formatINR(r.total)}</td>
-              <td className={cn(td, "text-right")}>{formatINR(r.discount)}</td>
-              <td className={cn(td, "text-right")}>{Number(r.list_total) ? ((Number(r.discount) / Number(r.list_total)) * 100).toFixed(2) : "0.00"}%</td>
-              <td className={cn(td, "text-right")}>{r.approvals}</td>
+            <tr key={r.staff} className={rowHover}>
+              <td className={`${tdText} font-semibold`}>{r.staff}</td>
+              <td className={tdNum}>{r.bills}</td>
+              <td className={tdNum}>{formatINR(r.revenue)}</td>
+              <td className={tdNum}>{formatINR(r.total)}</td>
+              <td className={tdNum}>{formatINR(r.discount)}</td>
+              <td className={tdNum}>{Number(r.list_total) ? ((Number(r.discount) / Number(r.list_total)) * 100).toFixed(2) : "0.00"}%</td>
+              <td className={tdNum}>{r.approvals}</td>
             </tr>
           ))}
           {!rows.length && (
             <tr>
-              <td className={td} colSpan={7}>
+              <td className={tdMuted} colSpan={7}>
                 No bills in this period.
               </td>
             </tr>
@@ -332,49 +347,46 @@ async function Discounts({ actor, period, canExport, qs }: P) {
   const r = await reports.discountReport(actor, period);
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-3">
         <Stat label="Total discount" value={formatINR(r.totalDiscount)} tone="gold" />
         <Stat label="Discounted bills" value={String(r.discountedBills)} />
         <Stat label="Needed approval" value={String(r.approvedCount)} hint="Above the cashier's limit" />
       </div>
       <TableWrap>
-        <div className="flex items-center justify-between border-b border-navy-100 px-4 py-3">
-          <h2 className="font-bold">Discounted bills</h2>
-          <Export name="discounts" qs={qs} show={canExport} />
-        </div>
-        <table className="w-full text-sm tabular">
+        <TableTitle title="Discounted bills" action={<Export name="discounts" qs={qs} show={canExport} />} />
+        <table className="w-full">
           <thead>
             <tr>
               <th className={th}>Bill</th>
               <th className={th}>Date</th>
               <th className={th}>Staff</th>
-              <th className={cn(th, "text-right")}>List value</th>
-              <th className={cn(th, "text-right")}>Discount</th>
-              <th className={cn(th, "text-right")}>%</th>
+              <th className={thNum}>List value</th>
+              <th className={thNum}>Discount</th>
+              <th className={thNum}>%</th>
               <th className={th}>Approved by</th>
             </tr>
           </thead>
           <tbody>
             {r.bills.map((b) => (
-              <tr key={b.sale_id}>
-                <td className={td}>
-                  <Link className="font-semibold text-navy-700 hover:underline" href={`/dashboard/sales/${b.sale_id}`}>
+              <tr key={b.sale_id} className={rowHover}>
+                <td className={tdText}>
+                  <Link className={codeLink} href={`/dashboard/sales/${b.sale_id}`}>
                     {b.doc_number}
                   </Link>
                 </td>
-                <td className={td}>
+                <td className={`${tdMuted} whitespace-nowrap`}>
                   <DateTime value={b.issued_at} />
                 </td>
-                <td className={td}>{b.staff}</td>
-                <td className={cn(td, "text-right")}>{formatINR(b.list_total)}</td>
-                <td className={cn(td, "text-right font-semibold")}>{formatINR(b.discount)}</td>
-                <td className={cn(td, "text-right")}>{b.effective_percent}%</td>
-                <td className={td}>{b.approved_by ?? <span className="text-navy-400">within limit</span>}</td>
+                <td className={tdText}>{b.staff}</td>
+                <td className={tdNum}>{formatINR(b.list_total)}</td>
+                <td className={`${tdNum} font-semibold`}>{formatINR(b.discount)}</td>
+                <td className={tdNum}>{b.effective_percent}%</td>
+                <td className={tdText}>{b.approved_by ?? <span className="text-navy-400">within limit</span>}</td>
               </tr>
             ))}
             {!r.bills.length && (
               <tr>
-                <td className={td} colSpan={7}>
+                <td className={tdMuted} colSpan={7}>
                   No discounted bills in this period.
                 </td>
               </tr>
@@ -404,29 +416,29 @@ async function Payments({ actor, period, canExport, qs }: P) {
         </CardBody>
       </Card>
       <TableWrap>
-        <table className="w-full text-sm tabular">
+        <table className="w-full">
           <thead>
             <tr>
               <th className={th}>Method</th>
               <th className={th}>Verified by</th>
               <th className={th}>Direction</th>
-              <th className={cn(th, "text-right")}>Count</th>
-              <th className={cn(th, "text-right")}>Amount</th>
+              <th className={thNum}>Count</th>
+              <th className={thNum}>Amount</th>
             </tr>
           </thead>
           <tbody>
             {r.byMethod.map((m) => (
-              <tr key={`${m.method}-${m.verification_method}-${m.direction}`}>
-                <td className={td}>{m.method.toUpperCase()}</td>
-                <td className={td}>{(m.verification_method ?? "—").replace(/_/g, " ")}</td>
-                <td className={td}>{m.direction === "in" ? "Received" : "Refund"}</td>
-                <td className={cn(td, "text-right")}>{m.count}</td>
-                <td className={cn(td, "text-right font-semibold")}>{formatINR(m.amount)}</td>
+              <tr key={`${m.method}-${m.verification_method}-${m.direction}`} className={rowHover}>
+                <td className={tdText}>{m.method.toUpperCase()}</td>
+                <td className={tdText}>{(m.verification_method ?? "—").replace(/_/g, " ")}</td>
+                <td className={tdText}>{m.direction === "in" ? "Received" : "Refund"}</td>
+                <td className={tdNum}>{m.count}</td>
+                <td className={`${tdNum} font-semibold`}>{formatINR(m.amount)}</td>
               </tr>
             ))}
             {!r.byMethod.length && (
               <tr>
-                <td className={td} colSpan={5}>
+                <td className={tdMuted} colSpan={5}>
                   No verified payments in this period.
                 </td>
               </tr>
@@ -450,47 +462,46 @@ async function Profit({ actor, period, canExport, qs }: P) {
     <div className="space-y-4">
       <ProfitCard profit={profit} />
       <TableWrap>
-        <div className="flex items-center justify-between border-b border-navy-100 px-4 py-3">
-          <h2 className="font-bold">Sold below cost or below the margin floor</h2>
-          <Export name="below-cost" qs={qs} show={canExport} />
-        </div>
-        <table className="w-full text-sm tabular">
+        <TableTitle title="Sold below cost or below the margin floor" action={<Export name="below-cost" qs={qs} show={canExport} />} />
+        <table className="w-full">
           <thead>
             <tr>
               <th className={th}>Bill</th>
               <th className={th}>Item</th>
-              <th className={cn(th, "text-right")}>Qty</th>
-              <th className={cn(th, "text-right")}>Net sale</th>
-              <th className={cn(th, "text-right")}>Cost</th>
-              <th className={cn(th, "text-right")}>Gross profit</th>
+              <th className={thNum}>Qty</th>
+              <th className={thNum}>Net sale</th>
+              <th className={thNum}>Cost</th>
+              <th className={thNum}>Gross profit</th>
               <th className={th}>Staff</th>
             </tr>
           </thead>
           <tbody>
             {below.map((b, i) => (
-              <tr key={i}>
-                <td className={td}>
-                  <Link href={`/dashboard/sales/${b.sale_id}`} className="font-semibold text-navy-700 hover:underline">
+              <tr key={i} className={rowHover}>
+                <td className={tdText}>
+                  <Link href={`/dashboard/sales/${b.sale_id}`} className={codeLink}>
                     {b.doc_number}
                   </Link>
                   <div className="text-xs text-navy-500">
                     <DateTime value={b.issued_at} />
                   </div>
                 </td>
-                <td className={td}>
-                  {b.product} <span className="font-mono text-xs text-navy-500">{b.sku}</span>
-                  <div>{b.below_cost ? <Badge tone="red">below cost</Badge> : <Badge tone="amber">below margin floor</Badge>}</div>
+                <td className={tdText}>
+                  {b.product} <span className="font-mono text-[11.5px] text-navy-500">{b.sku}</span>
+                  <div className="mt-1">{b.below_cost ? <Badge tone="red">below cost</Badge> : <Badge tone="amber">below margin floor</Badge>}</div>
                 </td>
-                <td className={cn(td, "text-right")}>{Number(b.quantity)}</td>
-                <td className={cn(td, "text-right")}>{formatINR(b.taxable_value)}</td>
-                <td className={cn(td, "text-right")}>{formatINR(b.cost_total)}</td>
-                <td className={cn(td, "text-right font-semibold", Number(b.gross_profit) < 0 && "text-red-700")}>{formatINR(b.gross_profit)}</td>
-                <td className={td}>{b.staff}</td>
+                <td className={tdNum}>{Number(b.quantity)}</td>
+                <td className={tdNum}>{formatINR(b.taxable_value)}</td>
+                <td className={tdNum}>{formatINR(b.cost_total)}</td>
+                <td className={`${tdNum} font-semibold`}>
+                  <span className={Number(b.gross_profit) < 0 ? "text-red-700" : undefined}>{formatINR(b.gross_profit)}</span>
+                </td>
+                <td className={tdText}>{b.staff}</td>
               </tr>
             ))}
             {!below.length && (
               <tr>
-                <td className={td} colSpan={7}>
+                <td className={tdMuted} colSpan={7}>
                   No sales below cost or margin floor in this period.
                 </td>
               </tr>
@@ -507,19 +518,16 @@ async function PriceChanges({ actor, period, canExport, qs }: P) {
   const showMargin = can(actor, "costs.view");
   return (
     <TableWrap>
-      <div className="flex items-center justify-between border-b border-navy-100 px-4 py-3">
-        <h2 className="font-bold">Price changes</h2>
-        <Export name="price-changes" qs={qs} show={canExport} />
-      </div>
-      <table className="w-full text-sm tabular">
+      <TableTitle title="Price changes" action={<Export name="price-changes" qs={qs} show={canExport} />} />
+      <table className="w-full">
         <thead>
           <tr>
             <th className={th}>When</th>
             <th className={th}>Item</th>
             <th className={th}>List</th>
-            <th className={cn(th, "text-right")}>Old → new</th>
-            <th className={cn(th, "text-right")}>Change</th>
-            {showMargin && <th className={cn(th, "text-right")}>Margin before → after</th>}
+            <th className={thNum}>Old → new</th>
+            <th className={thNum}>Change</th>
+            {showMargin && <th className={thNum}>Margin before → after</th>}
             <th className={th}>Status</th>
             <th className={th}>By / approved by</th>
             <th className={th}>Reason</th>
@@ -527,37 +535,39 @@ async function PriceChanges({ actor, period, canExport, qs }: P) {
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.id}>
-              <td className={td}>
+            <tr key={r.id} className={rowHover}>
+              <td className={`${tdMuted} whitespace-nowrap`}>
                 <DateTime value={r.created_at} />
               </td>
-              <td className={td}>
+              <td className={tdText}>
                 {r.product}
-                <div className="font-mono text-xs text-navy-500">{r.sku}</div>
+                <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{r.sku}</div>
               </td>
-              <td className={td}>{r.list_name}</td>
-              <td className={cn(td, "text-right")}>
+              <td className={tdText}>{r.list_name}</td>
+              <td className={tdNum}>
                 {r.previous_price ? formatINR(r.previous_price) : "—"} → <span className="font-semibold">{formatINR(r.price)}</span>
               </td>
-              <td className={cn(td, "text-right")}>{r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${r.changePercent}%` : "new"}</td>
+              <td className={tdNum}>{r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${r.changePercent}%` : "new"}</td>
               {showMargin && (
-                <td className={cn(td, "text-right")}>
+                <td className={tdNum}>
                   {r.previous_margin ?? "—"}% → {r.new_margin ?? "—"}%
                 </td>
               )}
-              <td className={td}>
-                <Badge tone={r.status === "approved" ? "green" : r.status === "pending" ? "amber" : r.status === "rejected" ? "red" : "neutral"}>{r.status}</Badge>
+              <td className={tdText}>
+                <Badge tone={r.status === "approved" ? "green" : r.status === "pending" ? "amber" : r.status === "rejected" ? "red" : "neutral"} className="capitalize">
+                  {r.status}
+                </Badge>
               </td>
-              <td className={td}>
+              <td className={tdText}>
                 {r.created_by}
                 {r.decided_by && r.decided_by !== r.created_by && <div className="text-xs text-navy-500">✓ {r.decided_by}</div>}
               </td>
-              <td className={cn(td, "max-w-56 text-xs text-navy-600")}>{r.reason}</td>
+              <td className={`${tdMuted} max-w-56 text-xs`}>{r.reason}</td>
             </tr>
           ))}
           {!rows.length && (
             <tr>
-              <td className={td} colSpan={9}>
+              <td className={tdMuted} colSpan={9}>
                 No price changes in this period.
               </td>
             </tr>

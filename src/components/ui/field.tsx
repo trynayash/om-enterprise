@@ -2,7 +2,7 @@ import { forwardRef, type InputHTMLAttributes, type ReactNode, type SelectHTMLAt
 import { cn } from "./cn";
 
 const control =
-  "w-full rounded-lg border border-navy-200 bg-white px-3 text-sm text-navy-900 placeholder:text-navy-300 shadow-xs transition-colors focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-200 disabled:bg-navy-50 disabled:text-navy-500 aria-[invalid=true]:border-red-500";
+  "w-full rounded-lg border border-navy-200 bg-white px-3 text-sm text-navy-900 placeholder:text-navy-400 transition-[border-color,box-shadow] duration-150 hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45 disabled:bg-navy-50 disabled:text-navy-500 aria-[invalid=true]:border-red-600 aria-[invalid=true]:ring-red-200/60";
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function Input({ className, ...rest }, ref) {
   return <input ref={ref} className={cn(control, "h-10", className)} {...rest} />;
@@ -22,7 +22,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
 
 export function Label({ htmlFor, children, required, className }: { htmlFor?: string; children: ReactNode; required?: boolean; className?: string }) {
   return (
-    <label htmlFor={htmlFor} className={cn("mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700", className)}>
+    <label htmlFor={htmlFor} className={cn("label-mono mb-1.5 block text-navy-600", className)}>
       {children}
       {required && <span className="ml-0.5 text-red-600">*</span>}
     </label>
@@ -46,7 +46,7 @@ export function Field({
   children: ReactNode;
   className?: string;
 }) {
-  const help = error ? <p className="mt-1 text-xs text-red-700">{error}</p> : hint ? <p className="mt-1 text-xs text-navy-500">{hint}</p> : null;
+  const help = error ? <p className="mt-1.5 text-xs text-red-700">{error}</p> : hint ? <p className="mt-1.5 text-xs leading-snug text-navy-500">{hint}</p> : null;
   if (htmlFor) {
     return (
       <div className={className}>
@@ -62,7 +62,7 @@ export function Field({
   return (
     <div className={className}>
       <label className="block">
-        <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy-700">
+        <span className="label-mono mb-1.5 block text-navy-600">
           {label}
           {required && <span className="ml-0.5 text-red-600">*</span>}
         </span>
@@ -76,7 +76,7 @@ export function Field({
 export function Checkbox({ label, className, ...rest }: InputHTMLAttributes<HTMLInputElement> & { label: ReactNode }) {
   return (
     <label className={cn("inline-flex cursor-pointer items-start gap-2 text-sm text-navy-800", className)}>
-      <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-navy-300 accent-navy-900" {...rest} />
+      <input type="checkbox" className="mt-0.5 h-4 w-4 rounded-sm border-navy-300 accent-navy-900" {...rest} />
       <span>{label}</span>
     </label>
   );

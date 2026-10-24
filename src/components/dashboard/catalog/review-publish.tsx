@@ -61,24 +61,24 @@ export function ReviewPublish({
     <Card>
       <CardHeader title="Review & website" description="Nothing appears on the website until it has been reviewed and published." />
       <CardBody className="space-y-4">
-        <ol className="flex items-center gap-1" aria-label="Review progress">
-          {STEPS.map((s, i) => (
-            <li key={s.key} className="flex flex-1 items-center gap-1">
-              <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold ${
-                  i <= stepIndex ? "bg-navy-900 text-white" : "bg-navy-100 text-navy-500"
-                }`}
-              >
-                {i < stepIndex || (i === 2 && stepIndex === 2) ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
-              </span>
-              <span className={`text-xs font-semibold ${i === stepIndex ? "text-navy-900" : "text-navy-500"}`}>{s.label}</span>
-              {i < STEPS.length - 1 && <span className="mx-1 h-px flex-1 bg-navy-200" />}
-            </li>
-          ))}
+        <ol className="grid grid-cols-3 gap-1.5" aria-label="Review progress">
+          {STEPS.map((s, i) => {
+            const done = i < stepIndex || (i === 2 && stepIndex === 2);
+            const current = i === stepIndex;
+            return (
+              <li key={s.key} aria-current={current ? "step" : undefined}>
+                <span aria-hidden className={`block h-[3px] rounded-full ${i <= stepIndex ? (i === 2 ? "bg-emerald-600" : "bg-navy-900") : "bg-navy-100"}`} />
+                <span className={`mt-1.5 flex items-center gap-1 text-[11.5px] font-semibold leading-tight ${current ? "text-navy-900" : i < stepIndex ? "text-navy-600" : "text-navy-400"}`}>
+                  {done ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden /> : <span className="font-mono text-[10.5px] font-medium">{i + 1}</span>}
+                  {s.label}
+                </span>
+              </li>
+            );
+          })}
         </ol>
 
-        <div className="flex items-center justify-between rounded-xl bg-navy-50/70 px-3 py-2.5">
-          <span className="text-sm font-medium text-navy-700">Website</span>
+        <div className="flex items-center justify-between border-y border-navy-100 py-2.5">
+          <span className="label-mono text-navy-500">Website</span>
           {isPublished ? <Badge tone="green">Published</Badge> : <Badge>Not published</Badge>}
         </div>
 
@@ -117,7 +117,7 @@ export function ReviewPublish({
             ))}
           {!isPublished && canPublish && publishBlocker && <p className="text-xs text-navy-500">{publishBlocker}</p>}
           {isPublished && (
-            <a href={`/products/${slug}`} target="_blank" rel="noopener noreferrer" className="text-center text-sm font-semibold text-gold-700 hover:underline">
+            <a href={`/products/${slug}`} target="_blank" rel="noopener noreferrer" className="mt-1 text-center text-[13px] font-semibold text-gold-700 underline-offset-[3px] hover:underline">
               View on website ↗
             </a>
           )}

@@ -5,7 +5,7 @@ import { can } from "@/server/auth/actor";
 import { listPayments, pendingPayments } from "@/server/services/payments";
 import { D, formatINR, m } from "@/lib/money";
 import { Stat } from "@/components/ui/card";
-import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
+import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime, Money } from "@/components/ui/money";
 import { cn } from "@/components/ui/cn";
@@ -14,6 +14,7 @@ import { Pagination } from "@/components/dashboard/ops/pagination";
 import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
 import { dayRange, num, str, type SearchParams } from "@/components/dashboard/ops/params";
 import { METHOD_LABEL, VERIFICATION_LABEL } from "@/components/dashboard/ops/guard";
+import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 
 export const metadata = { title: "Payments" };
 
@@ -27,9 +28,12 @@ export default function PaymentsPage({ searchParams }: PageProps<"/dashboard/pay
 
 function Tabs({ view }: { view: "history" | "pending" }) {
   const tab = (active: boolean) =>
-    cn("rounded-lg px-4 py-2 text-sm font-semibold transition-colors", active ? "bg-navy-900 text-white" : "text-navy-700 hover:bg-navy-100");
+    cn(
+      "-mb-px border-b-2 px-1 pb-2.5 pt-1 text-sm font-semibold transition-colors duration-150",
+      active ? "border-gold-500 text-navy-950" : "border-transparent text-navy-500 hover:border-navy-200 hover:text-navy-900",
+    );
   return (
-    <div className="no-print mb-4 inline-flex gap-1 rounded-xl border border-navy-100 bg-white p-1 shadow-card" role="tablist">
+    <div className="no-print mb-5 flex gap-6 border-b border-navy-200" role="tablist">
       <Link href="/dashboard/payments" className={tab(view === "history")} role="tab" aria-selected={view === "history"}>
         Payment history
       </Link>
@@ -50,9 +54,9 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
     const outstanding = rows.reduce((a, r) => a.plus(D(r.grandTotal).minus(D(r.amountPaid))), D(0));
     return (
       <div>
-        <PageHeader title="Payments" description="Finalised sales where the agreed amount has not been fully received yet (training sales excluded)." />
+        <PageHeader eyebrow="Sales" title="Payments" description="Finalised sales where the agreed amount has not been fully received yet (training sales excluded)." />
         <Tabs view="pending" />
-        <div className="mb-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Stat label="Sales awaiting payment" value={rows.length.toLocaleString("en-IN")} />
           <Stat label="Outstanding" value={formatINR(m(outstanding))} tone={rows.length ? "gold" : "navy"} hint="Agreed totals less money received" />
         </div>
@@ -66,32 +70,34 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                   <th className={th}>Sale</th>
                   <th className={th}>Finalised</th>
                   <th className={th}>Customer</th>
-                  <th className={`${th} text-right`}>Agreed total</th>
-                  <th className={`${th} text-right`}>Received</th>
-                  <th className={`${th} text-right`}>Outstanding</th>
+                  <th className={thNum}>Agreed total</th>
+                  <th className={thNum}>Received</th>
+                  <th className={thNum}>Outstanding</th>
                   <th className={th}>Status</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.id} className="hover:bg-navy-50/50">
-                    <td className={td}>
-                      <Link href={`/dashboard/sales/${r.id}`} className="font-semibold hover:underline">
+                  <tr key={r.id} className={rowHover}>
+                    <td className={tdText}>
+                      <Link href={`/dashboard/sales/${r.id}`} className={codeLink}>
                         {r.saleNumber}
                       </Link>
                     </td>
-                    <td className={`${td} text-navy-600`}>
+                    <td className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={r.finalizedAt} />
                     </td>
-                    <td className={td}>{r.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdText}>{r.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
+                    <td className={tdNum}>
                       <Money value={r.grandTotal} />
                     </td>
-                    <td className={`${td} text-right`}>
+                    <td className={tdNum}>
                       <Money value={r.amountPaid} muted={r.amountPaid === "0.00"} />
                     </td>
-                    <td className={`${td} text-right font-semibold text-amber-700`}>{formatINR(m(D(r.grandTotal).minus(D(r.amountPaid))))}</td>
-                    <td className={td}>
+                    <td className={`${tdNum} font-semibold`}>
+                      <span className="text-amber-700">{formatINR(m(D(r.grandTotal).minus(D(r.amountPaid))))}</span>
+                    </td>
+                    <td className={tdText}>
                       <StatusBadge status={r.status === "completed" ? "partially_paid" : D(r.amountPaid).isZero() ? "unpaid" : "partially_paid"} />
                       {r.status === "completed" && <div className="mt-1 text-xs text-navy-500">Billed on credit</div>}
                     </td>
@@ -179,13 +185,14 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
   return (
     <div>
       <PageHeader
+        eyebrow="Sales"
         title="Payments"
         description="Every payment request and verification. Money counts as received only after staff verify it (or the gateway confirms it)."
         actions={can(actor, "reports.export") ? <CsvExportButton rows={csvRows} filename={`om-payments-page-${page}.csv`} label="Export page (CSV)" /> : null}
       />
       <Tabs view="history" />
       <FilterBar fields={fields} values={Object.fromEntries(["q", "status", "method", "direction", "from", "to", "training"].map((k) => [k, str(sp, k)]))} />
-      <div className="mb-4 grid gap-4 sm:grid-cols-3">
+      <div className="mb-5 grid gap-4 sm:grid-cols-3">
         <Stat label="Verified received (shown)" value={formatINR(m(received))} tone="green" />
         <Stat label="Refunded (shown)" value={formatINR(m(refunded))} tone={refunded.isZero() ? "navy" : "red"} />
         <Stat label="Unverified QR requests (shown)" value={unverified.length.toLocaleString("en-IN")} tone={unverified.length ? "gold" : "navy"} hint="Not money received" />
@@ -204,39 +211,45 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                 <th className={th}>Reference</th>
                 <th className={th}>Verification</th>
                 <th className={th}>Status</th>
-                <th className={`${th} text-right`}>Amount</th>
+                <th className={thNum}>Amount</th>
               </tr>
             </thead>
             <tbody>
               {data.items.map((p) => (
-                <tr key={p.id} className="align-top hover:bg-navy-50/50">
-                  <td className={`${td} text-navy-600`}>
+                <tr key={p.id} className={rowHover}>
+                  <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={p.verifiedAt ?? p.createdAt} />
                   </td>
-                  <td className={td}>
-                    <Link href={`/dashboard/sales/${p.saleId}`} className="font-semibold hover:underline">
-                      {p.saleNumber}
-                    </Link>
-                    {p.isTraining && <SampleBadge label="Training" className="ml-1.5" />}
+                  <td className={tdText}>
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      <Link href={`/dashboard/sales/${p.saleId}`} className={codeLink}>
+                        {p.saleNumber}
+                      </Link>
+                      {p.isTraining && <SampleBadge label="Training" />}
+                    </span>
                   </td>
-                  <td className={td}>{p.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
-                  <td className={td}>
-                    {p.direction === "refund" && <Badge tone="purple" className="mr-1">Refund</Badge>}
-                    {METHOD_LABEL[p.method] ?? p.method}
-                    {p.provider === "razorpay" && <div className="text-xs text-navy-400">Razorpay</div>}
+                  <td className={tdText}>{p.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
+                  <td className={tdText}>
+                    <span className="flex flex-wrap items-center gap-1.5">
+                      {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
+                      {METHOD_LABEL[p.method] ?? p.method}
+                    </span>
+                    {p.provider === "razorpay" && <div className="text-xs text-navy-500">Razorpay</div>}
                   </td>
-                  <td className={`${td} tabular`}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
-                  <td className={`${td} text-xs text-navy-600`}>
+                  <td className={tdCode}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
+                  <td className={`${tdMuted} text-xs`}>
                     {p.verificationMethod ? VERIFICATION_LABEL[p.verificationMethod] ?? p.verificationMethod : <span className="text-amber-700">Not verified</span>}
                     {p.verifiedByName && <div>by {p.verifiedByName}</div>}
                     {p.status === "reversed" && p.reversalReason && <div className="text-red-700">Reversed: {p.reversalReason}</div>}
                   </td>
-                  <td className={td}>
+                  <td className={tdText}>
                     <StatusBadge status={p.status} />
                   </td>
-                  <td className={cn(td, "text-right font-semibold", p.direction === "refund" && "text-violet-700", p.status !== "successful" && "text-navy-400")}>
-                    {p.direction === "refund" ? "− " : ""}
-                    <Money value={p.amount} />
+                  <td className={`${tdNum} font-semibold`}>
+                    <span className={cn(p.direction === "refund" && "text-violet-700", p.status !== "successful" && "text-navy-400")}>
+                      {p.direction === "refund" ? "− " : ""}
+                      <Money value={p.amount} />
+                    </span>
                   </td>
                 </tr>
               ))}

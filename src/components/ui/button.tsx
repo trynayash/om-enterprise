@@ -5,25 +5,26 @@ import { cn } from "./cn";
 type Variant = "primary" | "gold" | "outline" | "ghost" | "danger" | "success" | "white";
 type Size = "sm" | "md" | "lg" | "xl";
 
+// Flat fills with a hairline bottom edge; outline buttons firm up their border on hover.
 const variants: Record<Variant, string> = {
-  primary: "bg-navy-900 text-white hover:bg-navy-800 active:bg-navy-950 shadow-sm",
-  gold: "bg-gold-500 text-navy-950 hover:bg-gold-400 active:bg-gold-600 shadow-sm",
-  outline: "border border-navy-200 bg-white text-navy-900 hover:bg-navy-50 hover:border-navy-300",
-  ghost: "text-navy-800 hover:bg-navy-50",
-  danger: "bg-red-700 text-white hover:bg-red-800 shadow-sm",
-  success: "bg-emerald-700 text-white hover:bg-emerald-800 shadow-sm",
-  white: "bg-white text-navy-900 hover:bg-navy-50 shadow-sm",
+  primary: "bg-navy-900 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)] hover:bg-navy-800 active:bg-navy-950",
+  gold: "bg-gold-500 text-navy-950 shadow-[inset_0_-1px_0_rgb(0_0_0/0.18)] hover:bg-gold-400 active:bg-gold-600",
+  outline: "border border-navy-200 bg-white text-navy-900 hover:border-navy-900",
+  ghost: "text-navy-800 hover:bg-navy-50 active:bg-navy-100",
+  danger: "bg-red-700 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.3)] hover:bg-red-800",
+  success: "bg-emerald-700 text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.3)] hover:bg-emerald-800",
+  white: "bg-white text-navy-900 shadow-[inset_0_-1px_0_rgb(13_27_48/0.12)] hover:bg-paper",
 };
 const sizes: Record<Size, string> = {
-  sm: "h-8 px-3 text-sm gap-1.5 rounded-lg",
+  sm: "h-8 px-3 text-[13px] gap-1.5 rounded-md",
   md: "h-10 px-4 text-sm gap-2 rounded-lg",
-  lg: "h-12 px-5 text-base gap-2 rounded-xl",
-  xl: "h-16 px-6 text-lg gap-3 rounded-2xl",
+  lg: "h-12 px-5 text-[15px] gap-2 rounded-lg",
+  xl: "h-16 px-6 text-lg gap-3 rounded-xl",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra?: string) {
   return cn(
-    "inline-flex select-none items-center justify-center font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50",
+    "inline-flex select-none items-center justify-center font-semibold tracking-[-0.005em] transition-[background-color,border-color,color,transform] duration-150 ease-out active:translate-y-px disabled:cursor-not-allowed disabled:opacity-45 disabled:active:translate-y-0",
     variants[variant],
     sizes[size],
     extra,

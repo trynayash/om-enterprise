@@ -36,9 +36,10 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
     start(() => router.push(`${pathname}${q.toString() ? `?${q}` : ""}`));
   };
 
+  const toggles = fields.filter((f) => f.kind === "toggle");
   return (
     <form
-      className={cn("no-print mb-4 rounded-2xl border border-navy-100 bg-white p-3 shadow-card", className)}
+      className={cn("no-print mb-5 rounded-xl border border-navy-100 bg-white px-4 pb-4 pt-3.5 shadow-card", className)}
       onSubmit={(e) => {
         e.preventDefault();
         submit(e.currentTarget);
@@ -53,7 +54,7 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
               <div key={f.name} className="min-w-[220px] flex-[2]">
                 <Label htmlFor={id}>{f.label ?? "Search"}</Label>
                 <div className="relative">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-300" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy-400" />
                   <Input id={id} name={f.name} defaultValue={values[f.name] ?? ""} placeholder={f.placeholder} className="pl-9" type="search" />
                 </div>
               </div>
@@ -61,7 +62,7 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
           }
           if (f.kind === "select") {
             return (
-              <div key={f.name} className="min-w-[150px] flex-1">
+              <div key={f.name} className="min-w-[140px] flex-1">
                 <Label htmlFor={id}>{f.label}</Label>
                 <Select
                   id={id}
@@ -80,31 +81,35 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
           }
           if (f.kind === "date") {
             return (
-              <div key={f.name} className="w-[150px]">
+              <div key={f.name} className="w-[148px]">
                 <Label htmlFor={id}>{f.label}</Label>
-                <Input id={id} name={f.name} type="date" defaultValue={values[f.name] ?? ""} />
+                <Input id={id} name={f.name} type="date" defaultValue={values[f.name] ?? ""} className="font-mono text-[13px]" />
               </div>
             );
           }
-          return (
+          return null;
+        })}
+        {/* Toggles and the actions sit together at the end of the row (and on the right when it wraps). */}
+        <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2">
+          {toggles.map((f) => (
             <div key={f.name} className="flex h-10 items-center">
               <Checkbox name={f.name} label={f.label} defaultChecked={values[f.name] === "1"} onChange={(e) => submit(e.currentTarget.form!)} />
             </div>
-          );
-        })}
-        <div className="flex gap-2">
-          <Button type="submit" loading={pending} icon={<Search className="h-4 w-4" />}>
-            Apply
-          </Button>
-          {active && (
-            <Button
-              variant="ghost"
-              icon={<X className="h-4 w-4" />}
-              onClick={() => start(() => router.push(values.view ? `${pathname}?view=${values.view}` : pathname))}
-            >
-              Clear
+          ))}
+          <div className="flex gap-2">
+            {active && (
+              <Button
+                variant="ghost"
+                icon={<X className="h-4 w-4" />}
+                onClick={() => start(() => router.push(values.view ? `${pathname}?view=${values.view}` : pathname))}
+              >
+                Clear
+              </Button>
+            )}
+            <Button type="submit" loading={pending} icon={<Search className="h-4 w-4" />}>
+              Apply
             </Button>
-          )}
+          </div>
         </div>
       </div>
     </form>
