@@ -7,18 +7,18 @@ import { users } from "@/server/db/schema";
 import { requirePageActor } from "@/server/auth/session";
 import { landingPath } from "@/lib/nav";
 import { Skeleton } from "@/components/ui/page";
-import { AuthSheet, SheetStamp } from "@/app/login/auth-sheet";
+import { PaperSheet, SheetStamp } from "@/components/ui/paper-sheet";
 import { SecretKeyForm } from "./secret-key-form";
 
 export const metadata = { title: "Secret key", robots: { index: false } };
 
 export default function SecurityPage(props: PageProps<"/account/security">) {
   return (
-    <AuthSheet stamp={<SheetStamp>Account</SheetStamp>}>
+    <PaperSheet stamp={<SheetStamp>Account</SheetStamp>}>
       <Suspense fallback={<FormSkeleton />}>
         <Security searchParams={props.searchParams} />
       </Suspense>
-    </AuthSheet>
+    </PaperSheet>
   );
 }
 

@@ -1,12 +1,12 @@
 import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import { LoginForm } from "./login-form";
-import { AuthSheet, SheetStamp } from "./auth-sheet";
+import { PaperSheet, SheetStamp } from "@/components/ui/paper-sheet";
 
 /** Shared sign-in screen for /login (staff) and /admin (owner & administrators). */
 export function SignInCard({ title, description, badge }: { title: string; description: string; badge?: ReactNode }) {
   return (
-    <AuthSheet
+    <PaperSheet
       stamp={badge ?? <SheetStamp>Staff</SheetStamp>}
       footer={
         <>
@@ -22,6 +22,6 @@ export function SignInCard({ title, description, badge }: { title: string; descr
       <Suspense>
         <LoginForm />
       </Suspense>
-    </AuthSheet>
+    </PaperSheet>
   );
 }

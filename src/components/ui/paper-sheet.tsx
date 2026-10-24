@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
-import { Logo } from "@/components/ui/logo";
+import { Logo } from "./logo";
 
 /**
- * Quiet frame for sign-in and account pages: one white sheet on engineering paper, the logo in a
- * ruled header, a mono stamp saying who the page is for, and an optional paper footer strip.
+ * Quiet frame for sign-in, account and error pages: one white sheet on engineering paper, the logo
+ * in a ruled header, a mono stamp saying what the page is, and an optional paper footer strip.
  */
-export function AuthSheet({ stamp, children, footer }: { stamp?: ReactNode; children: ReactNode; footer?: ReactNode }) {
+export function PaperSheet({ stamp, children, footer }: { stamp?: ReactNode; children: ReactNode; footer?: ReactNode }) {
   return (
     <div className="blueprint flex min-h-screen w-full flex-1 flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-[27rem] animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-lift">
