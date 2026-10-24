@@ -5,6 +5,7 @@ import { cn } from "@/components/ui/cn";
 import { PriceTag } from "./price";
 import { TechnicalDrawing, drawingKind } from "./technical-drawing";
 import { CardFigureTransition, ProductLink } from "./figure-transition";
+import { KeepCodes } from "./keep-codes";
 
 /** The product's figure: its photo, or a technical drawing. Morphs into the product page. */
 export function ProductFigure({ p, className }: { p: Pick<PublicProductCard, "slug" | "name" | "image" | "categoryIcon">; className?: string }) {
@@ -36,7 +37,9 @@ export function ProductCard({ p, index = 0 }: { p: PublicProductCard; index?: nu
       {p.isSample && <SampleBadge className="absolute left-3 top-3" />}
       <div className="flex flex-1 flex-col px-3 pb-3.5 pt-3 sm:px-4 sm:pb-4 sm:pt-3.5">
         <div className="label-mono truncate text-gold-700">{p.brand ?? p.category}</div>
-        <h3 className="mt-1.5 line-clamp-3 text-[14px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[15px]">{p.name}</h3>
+        <h3 className="mt-1.5 line-clamp-3 text-[14px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[15px]">
+          <KeepCodes text={p.name} />
+        </h3>
         {p.brand && <div className="mt-1 truncate text-xs text-navy-500">{p.category}</div>}
         <div className="mt-auto flex items-start justify-between gap-2 pt-4 sm:pt-5">
           <div className="min-w-0">

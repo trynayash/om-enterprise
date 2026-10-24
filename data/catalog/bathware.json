@@ -11,7 +11,7 @@
     "Plumber: identified as Plumber Bathware by Aqua Plumbings Pvt. Ltd. Evidence: the official site plumberbathware.com ('Bathroom Fitting Manufacturers and Suppliers in Mathura, Delhi NCR') and its company presentation PDF titled 'AQUA PLUMBINGS PVT. LTD.'. Its lifetime-warranty page names Aqua Plumbings Private Limited (APPL). The manufacturing unit is at Gaur Udyog Kendra, Delhi–Mathura Bypass, Mathura 281001 (UP), and the corporate office is in Sector 65, Gurgaon. Spengler is a sister brand. This is not the generic word 'plumber'.",
     "Plumber prices: the newest official faucet price list found is 'Plumber Faucets Price List' w.e.f. 2 April 2022 (plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf), with MRP and HSN 84818020 for cocks. No 2023–2026 list was found, so these MRPs are probably out of date. MRPs on the website's product pages match the older April 2021 list (e.g. EC-5111 shows 5835 on the site against 6805 in the 2022 list), so the 2022 list is used where it covers the item. Items found only on product pages (EC-0209, U-0507, UBP-0450) use the product-page MRP and are marked as probably outdated.",
     "Plumber warranty: plumberbathware.com/life-time-warranty describes a 'Lifetime Performance Warranty'. It covers residential use, needs a certificate generated within 30 days of purchase (otherwise the standard 10-year warranty applies) and is 5 years for commercial use. It was not confirmed that Economy and Universal items carry the lifetime certificate, so the warranty field is null.",
-    "Aris: NOT identified with confidence, so no products are included. No official website or manufacturer could be found. Results showed only unrelated traders using the name in Gujarat and elsewhere (IndiaMART/TradeIndia: Raj Tiles Vadodara, Home Sanitary Ahmedabad, Supro Sanitary Wares Morbi, Ajit Trading Mehsana, an 'Aris Bath Fittings' retailer in Rajkot, Zorba Constro Pune, D K Bath Shoppy Hyderabad). Their warranty claims (5, 7 and 10 years) and model codes (PAC-2501, WP210, NJ-020, 912, Mini Florentine) don't match each other. Similar names belong to other things: ARK Bath Fittings (Panchkula), 'Aris' as a product name at Artize, Prestige and Caisson, and an 'Aries' series in AGL's own faucet price list. The shop should check the manufacturer name and address printed on an Aris box or invoice.",
+    "Aris: identified as Aris Bathware Fittings of Rajkot, Gujarat, from the official site aris.co.in (given by the shop owner on 24 Oct 2026). The site gives the address 177/1, Nr. Balaji Casting, Padavla-Veraval Road, Rajkot, claims 3000+ showrooms and a 7-year warranty on its products, and lists about 30 tap series (Florentine, Mini Florentine, Star 1-5, Star Motivate, Kubic, Shinia, Lagoon, Ornamix and others) plus a PVD collection, showers, bathroom accessories and sanitaryware. The legal company name was not found. aris.co.in did not open from the research environment, so codes and names were read from search-engine extracts of its product pages. The Mini Florentine range is included because dealers sell it and each code ties to an official page; MFLT-103, MFLT-107 and MFLT-115 were seen only as related products on the MFLT-140 page. The product pages show a placeholder price of ₹1, so there is no list price or MRP: check the MRP printed on the box. No images were collected.",
     "Bottle traps were found (Plumber UN-1730 Bottle Trap 32mm, MRP 1395 on its product page; Plumber Bottle Trap 'Slim', MRP 1630; Blues BT-01 Bottle Trap Primex SS pipe 5\"x12\", no price). They were left out because the body material, and so the HSN code, is not stated. Plumber's price list lists health faucets (Ultima, Curvy, Bellezza, Italian Square) and an overhead shower (ITP-2031, 1975 in the 2022 list), but their details could not be confirmed, so they are not included.",
     "HSN: 84818020 is taken from Plumber's own price list for its cocks. Other taps and mixers use 8481, and the PVC connection hose uses 3917 (plastic tubes and hoses). The 18% GST rate is believed correct, but the shop's accountant must confirm all HSN codes and GST rates.",
     "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
@@ -1120,6 +1120,488 @@
           "priceSource": "plumberbathware.com product page UBP-0450, MRP shown; read via search index on 23 Oct 2026. Site prices appear to date from the Apr 2021 list - probably outdated",
           "marketPrice": "155.00",
           "marketPriceSource": "Apr 2022 list MRP 195 (165 Apr 2021, 175 Oct 2021). Current MRP estimated at ~220 (+13-15%, in line with Yoobuy's sister SS hose UBC-0450 at 250); market = 30% off, rounded to 155. (researched 24 Oct 2026, medium confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Bib Cock with Wall Flange MFLT-101 (Mini Florentine)",
+      "model": "MFLT-101",
+      "description": "A wall-mounted bib cock from the Aris Mini Florentine range, with a wall flange that covers the pipe opening. It is the everyday single-outlet tap for bathrooms, wash areas and utility walls.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Bib cock" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/bib-cock-with-wall-flange-19/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "ARS-MFLT101-BIB",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "850.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists the Mini Florentine bib cock with wall flange at 1315 (1490 for the long-body version); market = 35% off 1315. (researched 24 Oct 2026, medium confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Pillar Cock MFLT-103 (Mini Florentine)",
+      "model": "MFLT-103",
+      "description": "A deck-mounted pillar cock from the Aris Mini Florentine range. It fits the single tap hole of a wash basin and runs from one water supply.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Pillar cock" },
+        { "label": "Mounting", "value": "Deck mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT103-PILLAR",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "880.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: no Mini Florentine listing found; Zorba lists an Aris short-neck pillar cock at 1395 and Sanitary World sells Aris pillar cocks at 833-854; market set just above the bib cock. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Pillar Cock with Extension Body MFLT-104 (Mini Florentine)",
+      "model": "MFLT-104",
+      "description": "A pillar cock with an extended body from the Aris Mini Florentine range. The taller body raises the spout, which suits table-top and counter basins.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Pillar cock (extended body)" },
+        { "label": "Mounting", "value": "Deck mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/pillar-cock-with-extension-body-16/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT104-PILLAR",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1110.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists an Aris long-neck pillar cock at 1715 and Sanitary World an extended pillar cock at 1418; market = 35% off 1715. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Angular Stop Cock with Wall Flange MFLT-105 (Mini Florentine)",
+      "model": "MFLT-105",
+      "description": "An angle cock with a wall flange from the Aris Mini Florentine range. It sits between the wall pipe and the connection hose of a basin, cistern or geyser, so the supply can be shut off for repairs.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Angle cock" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/angular-stop-cock-with-wall-flange-16/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT105-ANGLE",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "770.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists the Aris Shinia angle cock (a higher series) at 1380 and a Bhopal seller an unnamed Aris angle cock at 497; estimated at 90% of the Mini Florentine bib cock, then 35% off. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris 2-Way Angular Stop Cock with Wall Flange MFLT-106 (Mini Florentine)",
+      "model": "MFLT-106",
+      "description": "A two-way angle cock with a wall flange from the Aris Mini Florentine range. One wall point feeds two outlets, such as a basin connection hose and a health faucet.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Angle cock (2-way)" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/2-way-angular-stop-cock-with-wall-flange-8/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT106-ANGLE2",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1040.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: no listing found; estimated at 1.35 times the Mini Florentine angle cock, the usual gap between one-way and two-way angle cocks. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Concealed Stop Cock with Adjustable Wall Flange MFLT-107 (Mini Florentine)",
+      "model": "MFLT-107",
+      "description": "A concealed stop cock from the Aris Mini Florentine range. The valve body goes inside the wall to control the supply to a bathroom line, and the adjustable wall flange allows for different plaster depths.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Concealed stop cock" },
+        { "label": "Mounting", "value": "Concealed (in wall)" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT107-CSC",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1030.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists the Florentine concealed stop cock at 1760 and Sanitary World sells Aris concealed stop cocks at 802-1775; estimated at 90% of the Florentine price, then 35% off. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Sink Cock with Extended Swinging Spout MFLT-113 (Mini Florentine)",
+      "model": "MFLT-113",
+      "description": "A wall-mounted sink cock with an extended swinging spout from the Aris Mini Florentine range. The long spout swings across the sink, which suits kitchen sinks and double bowls.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Sink cock (extended swinging spout)" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/sink-cock-with-extended-swinging-spout-wall-mounted-10/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT113-SINK",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1920.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists the Florentine wall-mounted sink cock with regular swinging spout at 2960 (Fortuner 2975); market = 35% off 2960. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Sink Cock with Regular Swinging Spout MFLT-115 (Mini Florentine)",
+      "model": "MFLT-115",
+      "description": "A table-mounted sink cock with a regular swinging spout from the Aris Mini Florentine range. It mounts on the sink or counter, and the spout swings to either side of the bowl.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Sink cock (regular swinging spout)" },
+        { "label": "Mounting", "value": "Table mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT115-SINK",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1730.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: no listing found; estimated at 90% of the Florentine wall-mounted sink cock (2960), then 35% off. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Wall Mixer Non-Telephonic Shower System MFLT-125 (Mini Florentine)",
+      "model": "MFLT-125",
+      "description": "A wall mixer from the Aris Mini Florentine range that blends hot and cold water and sends it to the spout or to an overhead shower. This is the non-telephonic version, without a hand-shower outlet.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Wall mixer (non-telephonic)" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/wall-mixer-non-telephonic-shower-system-wall-mounted-4/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT125-MIXER",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "3190.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists the Florentine non-telephonic wall mixer at 5460; estimated at 90% of that for Mini Florentine, then 35% off. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Wall Mixer Telephonic with Crutch MFLT-128 (Mini Florentine)",
+      "model": "MFLT-128",
+      "description": "A wall mixer from the Aris Mini Florentine range that blends hot and cold water for the spout and a hand (telephonic) shower, with a crutch to hold the hand shower.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Wall mixer (telephonic)" },
+        { "label": "Mounting", "value": "Wall mounted" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/wall-mixer-telephonic-with-crutch-13/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT128-MIXER",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "3510.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: no listing found; estimated at 1.1 times the Mini Florentine non-telephonic wall mixer, the usual gap between the two. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Flush Cock with Adjustable Wall Flange MFLT-140 (Mini Florentine)",
+      "model": "MFLT-140",
+      "description": "A 25 mm flush cock from the Aris Mini Florentine range, used to flush a WC pan straight from the water line instead of a cistern. The adjustable wall flange allows for different wall finishes.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Series", "value": "Mini Florentine" },
+        { "label": "Type", "value": "Flush cock" },
+        { "label": "Mounting", "value": "Concealed (in wall)" },
+        { "label": "Size", "value": "25 mm" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/flush-cock-with-adjustable-wall-flange-13/",
+        "https://aris.co.in/product-category/faucets/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": false,
+      "variants": [
+        {
+          "sku": "ARS-MFLT140-FLUSH",
+          "name": "25 mm",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "1340.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Sanitary World sells an Aris high-flow flush cock at 1323; estimated at 1.3 times the Mini Florentine concealed stop cock. (researched 24 Oct 2026, low confidence)"
+        }
+      ]
+    },
+    {
+      "category": "bathware-sanitary",
+      "brand": "Aris",
+      "manufacturer": "Aris Bathware Fittings, Rajkot",
+      "name": "Aris Health Faucet with 1 m Tube & Hook HF-01",
+      "model": "HF-01",
+      "description": "A health faucet with a 1-metre flexible tube and a wall hook. The tube end swivels through 360°, so the faucet is easy to use and to hang back on the hook.",
+      "unit": "pcs",
+      "hsn": "8481",
+      "gstRate": "18",
+      "warranty": "7-year warranty from Aris; terms as per the Aris warranty card",
+      "specifications": [
+        { "label": "Type", "value": "Health faucet" },
+        { "label": "Tube length", "value": "1 m" },
+        { "label": "Rotation", "value": "360°" },
+        { "label": "Includes", "value": "Wall hook" }
+      ],
+      "variantAttributes": [],
+      "images": [],
+      "sourceUrls": [
+        "https://aris.co.in/product/health-faucet-with-1mtr-tube-360-hook/",
+        "https://aris.co.in/product-category/bathroom-accessories/",
+        "https://aris.co.in/about-us/"
+      ],
+      "altUnit": null,
+      "featured": true,
+      "variants": [
+        {
+          "sku": "ARS-HF01-HEALTH",
+          "name": "Standard",
+          "attributes": {},
+          "barcode": null,
+          "listPrice": null,
+          "listPriceIncludesTax": true,
+          "mrp": null,
+          "priceSource": "aris.co.in product page shows a placeholder price of ₹1 (read via search index on 24 Oct 2026); Aris publishes no MRP online",
+          "marketPrice": "690.00",
+          "marketPriceSource": "Aris's site shows no prices. Pune dealer Zorba Constro lists Aris taps at near-MRP retail (Mini Florentine bib cock with wall flange 1315; Florentine concealed stop cock 1760, sink cock 2960, non-telephonic wall mixer 5460); Bhopal dealer Sanitary World sells Aris bib cocks at 725-959 and pillar cocks at 833-854, about 35% lower. This item: Zorba lists an Aris hand shower (health faucet) with 1 m tube and wall hook at 1250 without saying which version; Aris also sells a brass and a full-white health faucet, so HF-01 is taken as the basic one at 45% off. (researched 24 Oct 2026, low confidence)"
         }
       ]
     }
