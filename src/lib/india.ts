@@ -98,6 +98,12 @@ export function normalizeMobile(input: string | null | undefined): string | null
   return /^[6-9]\d{9}$/.test(digits) ? digits : null;
 }
 
+/** Display form of a phone number: "+91 76219 34414" for an Indian mobile, otherwise as entered. */
+export function formatPhone(input: string): string {
+  const mobile = normalizeMobile(input);
+  return mobile ? `+91 ${mobile.slice(0, 5)} ${mobile.slice(5)}` : input;
+}
+
 export function isValidPincode(pin: string): boolean {
   return /^[1-9][0-9]{5}$/.test(pin);
 }

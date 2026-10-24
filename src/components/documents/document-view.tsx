@@ -7,6 +7,7 @@
  */
 import type { DocSnapshot } from "@/lib/document-types";
 import { formatINR, formatQty } from "@/lib/money";
+import { formatPhone } from "@/lib/india";
 import { LogoMark } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
 
@@ -66,7 +67,7 @@ export function DocumentView({
                 <div key={l}>{l}</div>
               ))}
               <div>
-                Phone/WhatsApp: <span className="font-mono text-[11.5px]">{s.seller.phone}</span>
+                Phone/WhatsApp: <span className="font-mono text-[11.5px]">{formatPhone(s.seller.phone)}</span>
                 {s.seller.email ? ` · ${s.seller.email}` : ""}
               </div>
               {s.seller.gstin && (
@@ -142,8 +143,42 @@ export function DocumentView({
         {s.reason && <div className="mt-1.5 text-xs text-navy-600">Reason: {s.reason}</div>}
       </section>
 
-      {/* Lines */}
-      <div className="mt-5 overflow-x-auto">
+      {/* Lines: a stacked list on phones (the table needs ~600px), the table everywhere else and in print. */}
+      <ol className="mt-5 border-y-[1.5px] border-navy-950 sm:hidden print:hidden">
+        {s.lines.map((l) => (
+          <li key={l.sl} className="border-b border-navy-200 py-3 last:border-b-0">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="text-[13px] font-medium leading-snug text-navy-950">
+                  <span className="mr-1.5 font-mono text-[11px] text-navy-400">{l.sl}</span>
+                  {l.description}
+                  {l.isSample && (
+                    <span className="ml-1.5 inline-block border border-red-600 px-1 align-[1px] font-mono text-[8.5px] font-semibold leading-[1.35] tracking-[0.08em] text-red-700">SAMPLE</span>
+                  )}
+                </div>
+                <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">{[l.hsn ? `HSN ${l.hsn}` : null, l.sku].filter(Boolean).join(" · ")}</div>
+              </div>
+              <div className="shrink-0 font-mono text-[13px] font-semibold tabular text-navy-950">{formatINR(l.total)}</div>
+            </div>
+            <div className="mt-1.5 font-mono text-[11.5px] tabular text-navy-600">
+              {formatQty(l.quantity)} <span className="font-sans">{l.unit}</span> × {formatINR(l.unitPrice)}
+              {s.showTax && <span className="font-sans text-navy-500"> {l.priceIncludesTax ? "incl. GST" : "excl. GST"}</span>}
+              {Number(l.discount) ? <> · disc. {formatINR(l.discount)}</> : null}
+            </div>
+            {s.showTax && (
+              <div className="mt-0.5 font-mono text-[11px] tabular text-navy-500">
+                Taxable {formatINR(l.taxableValue)} ·{" "}
+                {Number(l.gstRate) === 0
+                  ? "Exempt"
+                  : inter
+                    ? `IGST ${l.igstRate}% ${formatINR(l.igstAmount)}`
+                    : `CGST ${l.cgstRate}% ${formatINR(l.cgstAmount)} · SGST ${l.sgstRate}% ${formatINR(l.sgstAmount)}`}
+              </div>
+            )}
+          </li>
+        ))}
+      </ol>
+      <div className="mt-5 hidden overflow-x-auto sm:block print:block">
         <table className="w-full min-w-[600px] border-collapse text-xs">
           <thead>
             <tr className="border-y-[1.5px] border-navy-950 text-left font-mono text-[10px] uppercase tracking-[0.08em] text-navy-700">
@@ -314,8 +349,10 @@ export function DocumentView({
           {status === "cancelled" && cancelReason && <div className="font-semibold text-red-700">Cancelled: {cancelReason}</div>}
         </div>
         <div className="self-end text-right">
-          <div className="mb-1.5 h-12 w-48 border-b border-navy-400 sm:ml-auto" />
-          <div className="font-semibold text-navy-950">{s.signatoryLabel}</div>
+          {/* The signing rule spans the signatory label, whatever its length. */}
+          <div className="inline-block min-w-48 pt-12">
+            <div className="border-t border-navy-400 pt-1.5 font-semibold text-navy-950">{s.signatoryLabel}</div>
+          </div>
         </div>
       </footer>
       {s.footerNote && <p className="mt-6 text-center text-xs font-medium text-gold-700">{s.footerNote}</p>}

@@ -6,11 +6,7 @@ import { cn } from "@/components/ui/cn";
 import { catalogueHref, type CatalogueQuery } from "./catalogue-query";
 
 const selectCls =
-  "h-11 w-full appearance-none rounded-lg border border-navy-200 bg-white bg-[length:10px] bg-[right_0.85rem_center] bg-no-repeat pl-3 pr-8 text-sm text-navy-900 transition-[border-color,box-shadow] hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45";
-const chevron = {
-  backgroundImage:
-    "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%235d697e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
-};
+  "select-chevron h-11 w-full rounded-lg border border-navy-200 bg-white pl-3 pr-8 text-sm text-navy-900 transition-[border-color,box-shadow] hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45";
 
 export function CatalogueFilters({
   query,
@@ -66,7 +62,7 @@ export function CatalogueFilters({
             <label htmlFor="cat-category" className="sr-only">
               Category
             </label>
-            <select id="cat-category" className={selectCls} style={chevron} value={query.category} onChange={(e) => go({ category: e.target.value })}>
+            <select id="cat-category" className={selectCls} value={query.category} onChange={(e) => go({ category: e.target.value })}>
               <option value="">All categories</option>
               {categories.map((c) => (
                 <option key={c.slug} value={c.slug}>
@@ -80,7 +76,7 @@ export function CatalogueFilters({
           <label htmlFor="cat-brand" className="sr-only">
             Brand
           </label>
-          <select id="cat-brand" className={selectCls} style={chevron} value={query.brand} onChange={(e) => go({ brand: e.target.value })}>
+          <select id="cat-brand" className={selectCls} value={query.brand} onChange={(e) => go({ brand: e.target.value })}>
             <option value="">All brands</option>
             {brands.map((b) => (
               <option key={b.slug} value={b.slug}>
@@ -93,7 +89,7 @@ export function CatalogueFilters({
           <label htmlFor="cat-sort" className="sr-only">
             Sort
           </label>
-          <select id="cat-sort" className={selectCls} style={chevron} value={query.sort || "name"} onChange={(e) => go({ sort: e.target.value })}>
+          <select id="cat-sort" className={selectCls} value={query.sort || "name"} onChange={(e) => go({ sort: e.target.value })}>
             <option value="name">Sort: name A–Z</option>
             <option value="price_asc">Price: low to high</option>
             <option value="price_desc">Price: high to low</option>

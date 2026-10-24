@@ -234,7 +234,7 @@ export const SETTINGS_DEFAULTS: Settings = {
     enquiriesEnabled: true,
     heroTitle: "Everything you need to build, in one place.",
     heroSubtitle:
-      "Paints, water tanks, bathware, CPVC / PVC / UPVC / SWR pipes & fittings and plumbing essentials — trusted brands, fair prices, expert advice in Naswadi.",
+      "Paints, water tanks, bathware, CPVC / PVC / UPVC / SWR pipes & fittings and plumbing essentials in Naswadi. Prices are listed online; we confirm stock on WhatsApp.",
   },
   inventory: {
     enabled: false,

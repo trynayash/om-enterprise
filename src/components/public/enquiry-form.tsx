@@ -55,8 +55,8 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
         </dl>
         <div className="mt-6 flex flex-wrap gap-2.5">
           {follow && (
-            <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
-              <MessageCircle className="h-4 w-4" /> Follow up on WhatsApp
+            <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-lg bg-navy-900 px-5 text-sm font-semibold text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)] transition-colors hover:bg-navy-800">
+              <MessageCircle className="h-4 w-4 text-emerald-400" /> Follow up on WhatsApp
             </a>
           )}
           <Link href="/products" className="inline-flex h-11 items-center rounded-lg border border-navy-200 bg-white px-5 text-sm font-semibold text-navy-900 transition-colors hover:border-navy-900">

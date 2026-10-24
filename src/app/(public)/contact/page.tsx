@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ArrowUpRight, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Skeleton } from "@/components/ui/page";
-import { whatsappLink } from "@/lib/india";
+import { formatPhone, whatsappLink } from "@/lib/india";
 import { EnquiryForm } from "@/components/public/enquiry-form";
 import { Container, PageIntro } from "@/components/public/section";
 import { addressLines, getSiteData, mapsHref, telHref } from "@/components/public/site-data";
@@ -19,7 +19,7 @@ export default function ContactPage() {
         crumbs={[{ href: "/", label: "Home" }, { label: "Contact" }]}
         eyebrow="Contact"
         title="Contact us"
-        description="Visit the shop, call, or send us a message — we'll get back to you quickly."
+        description="Visit the shop, call, or send us a message and we'll reply by phone or WhatsApp."
       />
       <Container className="py-10 sm:py-14">
         <Suspense
@@ -41,8 +41,8 @@ async function ContactContent() {
   const { business, website } = await getSiteData();
   const wa = business.whatsapp ? whatsappLink(business.whatsapp, "Hello OM ENTERPRISE, I have an enquiry.") : null;
   const lines = [
-    business.whatsapp && wa ? { icon: MessageCircle, title: "WhatsApp", value: business.whatsapp, href: wa, external: true, mono: true } : null,
-    business.phone ? { icon: Phone, title: "Call", value: business.phone, href: telHref(business.phone), external: false, mono: true } : null,
+    business.whatsapp && wa ? { icon: MessageCircle, title: "WhatsApp", value: formatPhone(business.whatsapp), href: wa, external: true, mono: true } : null,
+    business.phone ? { icon: Phone, title: "Call", value: formatPhone(business.phone), href: telHref(business.phone), external: false, mono: true } : null,
     business.email ? { icon: Mail, title: "Email", value: business.email, href: `mailto:${business.email}`, external: false, mono: false } : null,
   ].filter((c): c is NonNullable<typeof c> => !!c);
 
@@ -79,7 +79,7 @@ async function ContactContent() {
             ))}
           </address>
           <a href={mapsHref(business)} target="_blank" rel="noopener noreferrer" className="group mt-3 inline-flex items-center gap-1 text-sm font-semibold text-navy-950">
-            <span className="link-draw">Get directions</span> <ArrowUpRight className="h-3.5 w-3.5 text-gold-600" />
+            <span className="link-draw">Open in Maps</span> <ArrowUpRight className="h-3.5 w-3.5 text-gold-600" />
           </a>
           {business.openingHours && (
             <div className="mt-4 flex gap-3 border-t border-rule pt-4">

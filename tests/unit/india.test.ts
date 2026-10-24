@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildUpiUri,
   financialYear,
+  formatPhone,
   formatDocNumber,
   fyShort,
   gstinCheckChar,
@@ -79,6 +80,11 @@ describe("contact helpers", () => {
     expect(normalizeMobile("07621934414")).toBe("7621934414");
     expect(normalizeMobile("12345")).toBeNull();
     expect(normalizeMobile("5621934414")).toBeNull();
+  });
+  it("formats phone numbers for display", () => {
+    expect(formatPhone("7621934414")).toBe("+91 76219 34414");
+    expect(formatPhone("+91-76219-34414")).toBe("+91 76219 34414");
+    expect(formatPhone("02669 233445")).toBe("02669 233445");
   });
   it("builds WhatsApp links with the country code", () => {
     expect(whatsappLink("7621934414", "Hi")).toBe("https://wa.me/917621934414?text=Hi");

@@ -30,7 +30,7 @@
       "warranty": null,
       "specifications": [
         { "label": "Type", "value": "Pillar cock (deck mounted)" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -70,7 +70,7 @@
       "specifications": [
         { "label": "Type", "value": "Bib cock (wall mounted)" },
         { "label": "Wall flange", "value": "Included" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -107,7 +107,7 @@
       "specifications": [
         { "label": "Type", "value": "2-way bib cock (wall mounted)" },
         { "label": "Wall flange", "value": "Included" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -144,7 +144,7 @@
       "specifications": [
         { "label": "Type", "value": "Angle cock" },
         { "label": "Wall flange", "value": "Included" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -181,7 +181,7 @@
       "specifications": [
         { "label": "Type", "value": "Wall mixer 3-in-1" },
         { "label": "Shower provision", "value": "Telephonic shower and overhead shower" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -217,7 +217,7 @@
       "warranty": null,
       "specifications": [
         { "label": "Type", "value": "Wall mixer, non-telephonic" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],
@@ -253,7 +253,7 @@
       "warranty": null,
       "specifications": [
         { "label": "Type", "value": "Single lever basin mixer" },
-        { "label": "Code family", "value": "291 (series name not given in source)" },
+        { "label": "Code family", "value": "291" },
         { "label": "Finish code", "value": "CP" }
       ],
       "variantAttributes": ["Finish"],

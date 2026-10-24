@@ -73,7 +73,7 @@ export function LoginForm() {
         <Field label="Secret key" htmlFor="secret-key">
           <Input id="secret-key" type="password" autoComplete="off" value={secretKey} onChange={(e) => setSecretKey(e.target.value)} className="h-12 text-base" required autoFocus />
         </Field>
-        <Button type="submit" size="lg" className="w-full" loading={busy} disabled={!secretKey}>
+        <Button type="submit" size="lg" className="w-full" loading={busy}>
           Verify and sign in
         </Button>
         <div className="flex flex-col items-center gap-2 pt-1">
@@ -103,7 +103,7 @@ export function LoginForm() {
       <Field label="Password" htmlFor="password">
         <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 text-base" required />
       </Field>
-      <Button type="submit" size="lg" className="mt-2 w-full" loading={busy} disabled={!username || !password}>
+      <Button type="submit" size="lg" className="mt-2 w-full" loading={busy}>
         Sign in
       </Button>
       <p className="text-center text-xs text-navy-500">Forgot your password? Ask the Super Admin to reset it.</p>

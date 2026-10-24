@@ -12,7 +12,7 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await check(page, "Address shown", () => expect(page.getByText("Opp. Shardha Dhaba 2, Bodeli Road").filter({ visible: true }).first()).toBeVisible());
 
   await say(page, "Shop by category: every category the shop sells.");
-  await page.getByRole("heading", { name: "Everything for your build, under one roof" }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Shop by category" }).scrollIntoViewIfNeeded();
   await pause(page, 1500);
   await tap(page.getByRole("link", { name: /Berger Paints Interior/ }));
   await page.waitForURL(/\/category\/berger-paints/);

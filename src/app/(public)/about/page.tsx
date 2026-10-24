@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 const PRACTICES = [
   { title: "Branded products", text: "Pipes, fittings, tanks, paints and bath fittings from the manufacturers listed in our catalogue." },
-  { title: "One price list", text: "The counter and this website read the same price list, so the price you see is the price you're billed." },
+  { title: "One price list", text: "The counter and this website read the same price list. We confirm the price when we bill you." },
   { title: "A bill for every sale", text: "Every purchase is billed, with a printed copy or a link you can open on your phone." },
   { title: "Help choosing", text: "Tell us the job and we'll help you pick the right size, pressure class and quantity." },
 ];
@@ -30,16 +30,15 @@ export default function AboutPage() {
 
       <section className="py-14 sm:py-20">
         <Container>
-          <SectionHeading index="01" eyebrow="How we work" title="What you can expect at the counter" />
-          <ol className="grid border-t border-navy-900 sm:grid-cols-2 lg:grid-cols-4">
-            {PRACTICES.map((p, i) => (
-              <li key={p.title} className="border-b border-navy-100 py-6 sm:pr-6 lg:border-b-0 lg:border-r lg:px-6 lg:first:pl-0 lg:last:border-r-0">
-                <span className="font-mono text-[12px] text-gold-700">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-2 text-[17px] font-semibold tracking-[-0.01em] text-navy-950">{p.title}</h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-navy-500">{p.text}</p>
-              </li>
+          <SectionHeading index="01" eyebrow="How we work" title="At the counter" />
+          <dl className="max-w-3xl border-t border-navy-900">
+            {PRACTICES.map((p) => (
+              <div key={p.title} className="grid gap-1 border-b border-navy-100 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6">
+                <dt className="text-[15px] font-semibold text-navy-950">{p.title}</dt>
+                <dd className="text-sm leading-relaxed text-navy-600">{p.text}</dd>
+              </div>
             ))}
-          </ol>
+          </dl>
         </Container>
       </section>
 

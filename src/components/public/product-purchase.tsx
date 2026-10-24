@@ -239,9 +239,9 @@ export function ProductPurchase({
               href={whatsappLink(whatsapp, waText)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 text-[15px] font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-navy-200 bg-white px-5 text-[15px] font-semibold text-navy-950 transition-colors hover:border-navy-900"
             >
-              <MessageCircle className="h-[18px] w-[18px]" /> Ask on WhatsApp
+              <MessageCircle className="h-[18px] w-[18px] text-emerald-600" /> Ask on WhatsApp
             </a>
           </div>
         )}

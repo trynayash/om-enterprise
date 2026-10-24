@@ -142,6 +142,22 @@
   }
 }
 
+/* Native select with the house chevron instead of the browser's own arrow. */
+@utility select-chevron {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%235d697e' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.85rem center;
+  background-size: 10px;
+}
+
+/* A row that scrolls sideways (tabs, chips): the far edge fades so it reads as "more this way".
+   The end padding lets the last item scroll clear of the fade. */
+@utility scroll-fade-x {
+  mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+  padding-inline-end: 2.5rem;
+}
+
 /* One-time entrance for the children of a list; set style={{ "--i": index }} on each child. */
 @utility stagger {
   & > * {

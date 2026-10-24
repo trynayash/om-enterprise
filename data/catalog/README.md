@@ -21,6 +21,10 @@ safe to run on every deploy. Nothing here is sample data.
   `--apply-market-prices`, which makes it the selling price of any variant that has **no approved
   price yet** (a pending list-price proposal is replaced). Once the owner approves or sets a price,
   the import never changes it again.
+- Descriptions, specifications and warranty text are customer-facing: write them for a customer,
+  not as research notes (no "per the listing", "source says", conflicting readings). The deploy
+  build also runs `--refresh-content`, so a corrected text reaches products already imported, unless
+  someone has edited that product in the dashboard; the shop's own text always wins.
 - `images` must be direct links to image files (`.jpg`, `.png`, `.webp`) on the manufacturer's own
   site or CDN. They are downloaded on the server during import, re-encoded to WebP and stored in the
   database. A link that fails is reported and skipped.
