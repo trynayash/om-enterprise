@@ -13,6 +13,7 @@ import { ProductPurchase } from "@/components/public/product-purchase";
 import { ProductSelection } from "@/components/public/product-selection";
 import { PageFigureTransition } from "@/components/public/figure-transition";
 import { drawingKind } from "@/components/public/technical-drawing";
+import { KeepCodes } from "@/components/public/keep-codes";
 import { getSiteData, telHref } from "@/components/public/site-data";
 import { formatPhone } from "@/lib/india";
 
@@ -128,7 +129,9 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
               {p.category}
             </Link>
           </div>
-          <h1 className="headline mt-3 animate-rise text-[2.5rem] font-bold text-navy-950 sm:text-[3.25rem]">{p.name}</h1>
+          <h1 className="headline mt-3 animate-rise text-[2.5rem] font-bold text-navy-950 sm:text-[3.25rem]">
+            <KeepCodes text={p.name} />
+          </h1>
           {p.description && <p className="mt-5 whitespace-pre-line text-[15px] leading-relaxed text-navy-600">{p.description}</p>}
 
           <div className="mt-8">

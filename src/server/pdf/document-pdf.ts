@@ -7,6 +7,7 @@ import path from "node:path";
 import PDFDocument from "pdfkit";
 import type { DocSnapshot } from "@/lib/document-types";
 import { formatINR, formatQty } from "@/lib/money";
+import { formatPhone } from "@/lib/india";
 
 const NAVY = "#0D1B30";
 const GOLD = "#9E7518";
@@ -73,7 +74,7 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     doc.text(line, L + 56, hy, { width: 270 });
     hy += 10;
   }
-  doc.text(`Phone/WhatsApp: ${snap.seller.phone}${snap.seller.email ? `  ·  ${snap.seller.email}` : ""}`, L + 56, hy, { width: 300 });
+  doc.text(`Phone/WhatsApp: ${formatPhone(snap.seller.phone)}${snap.seller.email ? `  ·  ${snap.seller.email}` : ""}`, L + 56, hy, { width: 300 });
   hy += 10;
   if (snap.seller.gstin) {
     doc.font("B").fillColor(NAVY).text(`GSTIN: ${snap.seller.gstin}`, L + 56, hy);

@@ -29,8 +29,8 @@ export function drawingKind(name: string, icon: string | null | undefined): Draw
   if (icon === "tank" || /\btank\b/.test(n)) return "tank";
   if (/solvent|cement/.test(n)) return "tin";
   if (/hose|connection pipe/.test(n)) return "hose";
-  if (/valve/.test(n) && !/angle/.test(n)) return "valve";
-  if (/angle (cock|valve)/.test(n)) return "angle";
+  if (/valve/.test(n) && !/angle|angular/.test(n)) return "valve";
+  if (/(angle|angular)( stop)? (cock|valve)/.test(n)) return "angle";
   if (/pillar|deck|basin mixer|single lever/.test(n)) return "pillar";
   if (/mixer/.test(n)) return "mixer";
   if (/cock|faucet|\btap\b|spout|shower/.test(n)) return "tap";
