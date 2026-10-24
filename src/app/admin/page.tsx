@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { getCurrentActor } from "@/server/auth/session";
 import { landingPath } from "@/lib/nav";
 import { SignInCard } from "../login/sign-in-card";
-import { SheetStamp } from "../login/auth-sheet";
+import { SheetStamp } from "@/components/ui/paper-sheet";
 
 export const metadata = { title: "Admin sign in", robots: { index: false, follow: false } };
 
