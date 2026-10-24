@@ -143,6 +143,40 @@ export async function searchPublicProducts(s: PublicSearch): Promise<{ items: Pu
 
   const pageSize = Math.min(s.pageSize ?? 24, 60);
   const page = Math.max(1, s.page ?? 1);
+  const { regType, showPrices } = await priceDisplay();
+  const list = await getDefaultPriceList();
+
+  // Sorting happens in the database so it holds across pages. By price: each product's lowest
+  // current price incl. tax. With a search and the default sort: products whose name (3) or
+  // size/option (2) contains more of the words come first.
+  const fromPrice = sql`(select min(case when vp.price_includes_tax then vp.price else vp.price * (1 + coalesce(vt.gst_rate, pt.gst_rate, 0) / 100) end)
+    from product_variants pv
+    left join tax_classes vt on vt.id = pv.tax_class_id
+    left join tax_classes pt on pt.id = ${products.taxClassId}
+    cross join lateral (select x.price, x.price_includes_tax from variant_prices x
+      where x.variant_id = pv.id and x.price_list_id = ${list.id} and x.status = 'approved' and x.effective_from <= now()
+      order by x.effective_from desc, x.created_at desc limit 1) vp
+    where pv.product_id = ${products.id} and pv.is_active)`;
+  const words = s.q?.trim() ? s.q.trim().split(/\s+/).slice(0, 6) : [];
+  const relevance = words.length
+    ? sql.join(
+        words.map(
+          (t) =>
+            sql`(case when ${products.name} ilike ${`%${t}%`} then 3 else 0 end) + (case when exists (select 1 from product_variants rv where rv.product_id = ${products.id} and rv.is_active and rv.name ilike ${`%${t}%`}) then 2 else 0 end)`,
+        ),
+        sql` + `,
+      )
+    : null;
+  const order: SQL[] = s.featured
+    ? [sql`${products.updatedAt} desc`]
+    : showPrices && s.sort === "price_asc"
+      ? [sql`${fromPrice} asc nulls last`, asc(products.name)]
+      : showPrices && s.sort === "price_desc"
+        ? [sql`${fromPrice} desc nulls last`, asc(products.name)]
+        : relevance
+          ? [sql`${relevance} desc`, asc(products.name)]
+          : [asc(products.name)];
+
   const rows = await db
     .select({
       id: products.id,
@@ -159,7 +193,7 @@ export async function searchPublicProducts(s: PublicSearch): Promise<{ items: Pu
     .innerJoin(categories, eq(categories.id, products.categoryId))
     .leftJoin(brands, eq(brands.id, products.brandId))
     .where(and(...where))
-    .orderBy(s.featured ? sql`${products.updatedAt} desc` : asc(products.name))
+    .orderBy(...order)
     .limit(pageSize)
     .offset((page - 1) * pageSize);
 
@@ -177,8 +211,6 @@ export async function searchPublicProducts(s: PublicSearch): Promise<{ items: Pu
         .where(inArray(productImages.productId, productIds))
         .orderBy(productImages.productId, asc(productImages.sortOrder))
     : [];
-  const { regType, showPrices } = await priceDisplay();
-  const list = await getDefaultPriceList();
   const vIds = variants.map((v) => v.id);
   const prices = showPrices ? await getActivePrices(vIds, list.id) : new Map();
   const ctx = showPrices ? await getVariantPricingContext(vIds) : new Map();
@@ -205,14 +237,6 @@ export async function searchPublicProducts(s: PublicSearch): Promise<{ items: Pu
       isSample: r.isSample,
     };
   });
-  if (s.sort === "price_asc" || s.sort === "price_desc") {
-    const dir = s.sort === "price_asc" ? 1 : -1;
-    items.sort((a, b) => {
-      if (!a.priceFrom) return 1;
-      if (!b.priceFrom) return -1;
-      return dir * D(a.priceFrom.amount).comparedTo(D(b.priceFrom.amount));
-    });
-  }
   return { items, total: rows[0]?.total ?? 0, page, pageSize };
 }
 

@@ -644,7 +644,13 @@ export async function searchSellable(
         )!,
       );
     }
-    exactRank = sql`case when upper(${productVariants.sku}) = upper(${q}) or ${productVariants.barcode} = ${q} then 2 when ${products.name} ilike ${like} then 1 else 0 end`;
+    // Exact SKU/barcode first, then the whole phrase in the product name, then by how many words hit
+    // the product name (3) or the size/option (2): "pipe 20" ranks "CPVC Pipe — 20 mm" above
+    // "Coupler — 20 mm", which only matches "pipe" through its category.
+    const wordHits = tokens.map(
+      (t) => sql`(case when ${products.name} ilike ${`%${t}%`} then 3 else 0 end) + (case when ${productVariants.name} ilike ${`%${t}%`} then 2 else 0 end)`,
+    );
+    exactRank = sql`(case when upper(${productVariants.sku}) = upper(${q}) or ${productVariants.barcode} = ${q} then 100 when ${products.name} ilike ${like} then 10 else 0 end) + ${sql.join(wordHits, sql` + `)}`;
   }
   if (opts.categoryId) where.push(eq(products.categoryId, opts.categoryId));
   if (opts.variantIds?.length) where.push(inArray(productVariants.id, opts.variantIds));
