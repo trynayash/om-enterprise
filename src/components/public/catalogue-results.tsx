@@ -73,7 +73,7 @@ export async function CatalogueResults({
             </>
           )}
         </p>
-        {website.showPrices && result.total > 0 && <span className="text-xs text-navy-500">Prices shown are current selling prices.</span>}
+        {website.showPrices && result.total > 0 && <span className="text-xs text-navy-500">Prices are current selling prices and include any taxes.</span>}
       </div>
       {result.items.length ? (
         <ProductGrid items={result.items} />

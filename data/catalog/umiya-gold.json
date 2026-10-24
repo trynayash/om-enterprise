@@ -13,7 +13,8 @@
     "WARRANTY: The manufacturer's 5-layer listing says these tanks 'come with a 10-year warranty'. This was found on one page only, with no terms, so the warranty field is left null. The Super Admin can add it after the supplier confirms it in writing.",
     "IMAGES: None were added. WebFetch failed with a DNS error for every host during this research, so no page could be opened to read its real image-file URLs. Image URLs were not guessed. The maker's own product photos are on its pvcwatertank.in / TradeIndia pages (hosted on tiimg.tistatic.com) and on umiyagold.com. A follow-up with working page fetch, or photos the shop takes itself, is needed.",
     "HSN/GST for the accountant: All variants in this file are 500 L or larger, so HSN 3925 (3925 10 00: plastic reservoirs, tanks, vats, capacity over 300 L) at 18% GST is used. If the shop adds tanks of 300 L or less (for example 200 L or loft tanks of 175–300 L), those may fall under 3923 or 3924 instead. Please confirm.",
-    "Research was done with WebSearch result snippets only; no page was opened directly. Every figure was seen in search snippets from the URLs listed in each product's sourceUrls. Re-verify against the live pages before publishing."
+    "Research was done with WebSearch result snippets only; no page was opened directly. Every figure was seen in search snippets from the URLs listed in each product's sourceUrls. Re-verify against the live pages before publishing.",
+    "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
   ],
   "products": [
     {
@@ -58,7 +59,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "2700.00",
+          "marketPriceSource": "Lowest Umiya Gold 3-layer prices: maker Rs 2,360/piece (pvcwatertank.in) and Plumbingmart 'from Rs 2,250', size unstated but the line starts at 500 L; plus 18% GST gives about Rs 2,700 (Rs 5.4/L). seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "UMG-3L-1500",
@@ -68,7 +71,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "7100.00",
+          "marketPriceSource": "A Surat dealer (Avrest Marketing, IndiaMART) lists a white Umiya Gold 1500 L tank at Rs 6,000/piece excl. taxes; plus 18% GST is Rs 7,080 (Rs 4.7/L), rounded up. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "UMG-3L-5000",
@@ -78,7 +83,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "24000.00",
+          "marketPriceSource": "No Umiya Gold 5000 L price found. Scaled from the 1500 L dealer price (Rs 4/L ex-GST) with a slight uplift for the thicker wall; Gujarat 3-layer comparables run Rs 4.5-6/L ex-GST (Ahmedabad 750 L Rs 4.47/L, 10,000 L Rs 6/L). Gives Rs 4.8/L incl. GST. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -120,7 +127,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "4500.00",
+          "marketPriceSource": "No size-wise Umiya Gold 5-layer price found. Scaled from the 1000 L estimate (Rs 8.2/L incl. GST; maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L)) at Rs 9.0/L, smaller tanks dearer per litre. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-5L-1000",
@@ -130,7 +139,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "8200.00",
+          "marketPriceSource": "Anchored on the maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L). Rs 7,000 + 18% GST = Rs 8,260; set Rs 8,200 (Rs 8.2/L). seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "UMG-5L-1500",
@@ -140,7 +151,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "11900.00",
+          "marketPriceSource": "No size-wise Umiya Gold 5-layer price found. Scaled from the 1000 L estimate (Rs 8.2/L incl. GST; maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L)) at Rs 7.9/L, smaller tanks dearer per litre. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-5L-2000",
@@ -150,7 +163,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "15600.00",
+          "marketPriceSource": "No size-wise Umiya Gold 5-layer price found. Scaled from the 1000 L estimate (Rs 8.2/L incl. GST; maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L)) at Rs 7.8/L, smaller tanks dearer per litre. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-5L-3000",
@@ -160,7 +175,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "23000.00",
+          "marketPriceSource": "No size-wise Umiya Gold 5-layer price found. Scaled from the 1000 L estimate (Rs 8.2/L incl. GST; maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L)) at Rs 7.7/L, smaller tanks dearer per litre. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-5L-5000",
@@ -170,7 +187,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "37500.00",
+          "marketPriceSource": "No size-wise Umiya Gold 5-layer price found. Scaled from the 1000 L estimate (Rs 8.2/L incl. GST; maker's 5-layer listing Rs 7,000 ex-GST (size unstated; its spec shows the 1000 L tank) and a Vadodara dealer's 5-layer Umiyagold Rs 8,500/piece; Gujarat 5-layer comparables Rs 6.2-7.5/L ex-GST (Ahmedabad 1000 L, Gondal 500 L, Rajkot 5000 L Rs 7.25/L)) at Rs 7.5/L, smaller tanks dearer per litre. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -212,7 +231,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "3600.00",
+          "marketPriceSource": "The maker lists the black 2-layer 1000 L tank at Rs 3,000 and its black tanks at Rs 1,728-3,540 (Rs 3,540 = Rs 3,000 + 18% GST); rounded up slightly for a dealer counter sale (Rs 3.6/L). seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -253,7 +274,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "3200.00",
+          "marketPriceSource": "No Umiya Gold 500 L 4-layer price found. Scaled from the 1000 L estimate at Rs 6.4/L (small tanks dearer per litre); an Ahmedabad dealer lists 4-layer 500-1000 L at Rs 5.50/L ex-GST (Rs 6.5/L incl.). seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-4L-1000",
@@ -263,7 +286,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "5400.00",
+          "marketPriceSource": "The maker lists the 4-layer white tank at about Rs 4,000 for 1000 L (ex-GST); plus 18% GST is Rs 4,720, plus a dealer margin. Ahmedabad comparable: 4-layer 1000 L Rs 5,000 (TradeIndia). Gives Rs 5.4/L. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "UMG-4L-2000",
@@ -273,7 +298,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "10400.00",
+          "marketPriceSource": "No Umiya Gold 2000 L 4-layer price found. Scaled from the 1000 L estimate at Rs 5.2/L; a Rajkot 4-layer 1500 L lists at Rs 6/L ex-GST. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -313,7 +340,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "9400.00",
+          "marketPriceSource": "No 7-layer price or litre capacity is published. Capacity estimated as about 1000 L from the diameter (Umiya's 3-layer range runs 861 mm at 500 L to 2339 mm at 5000 L; standard tank geometry), then priced about 15% above the 5-layer rate per litre. Confirm capacity and price from the supplier invoice. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-7L-D54",
@@ -323,7 +352,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "15500.00",
+          "marketPriceSource": "No 7-layer price or litre capacity is published. Capacity estimated as about 1500-2000 L from the diameter (Umiya's 3-layer range runs 861 mm at 500 L to 2339 mm at 5000 L; standard tank geometry), then priced about 15% above the 5-layer rate per litre. Confirm capacity and price from the supplier invoice. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "UMG-7L-D82",
@@ -333,7 +364,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "39000.00",
+          "marketPriceSource": "No 7-layer price or litre capacity is published. Capacity estimated as about 4000-5000 L from the diameter (Umiya's 3-layer range runs 861 mm at 500 L to 2339 mm at 5000 L; standard tank geometry), then priced about 15% above the 5-layer rate per litre. Confirm capacity and price from the supplier invoice. seen 24 Oct 2026 in web-search extracts (listings undated). (researched 24 Oct 2026, low confidence)"
         }
       ]
     }

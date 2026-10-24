@@ -16,6 +16,11 @@ safe to run on every deploy. Nothing here is sample data.
 - Prices are imported as **proposals waiting for the Super Admin's approval** (Dashboard → Price
   review). The website shows "Price on request" until a price is approved. List prices are what the
   manufacturer publishes; the shop's own selling price may be lower.
+- `marketPrice` is a researched price a local dealer charges today (incl. GST), with
+  `marketPriceSource` saying what it is based on. The deploy build runs the import with
+  `--apply-market-prices`, which makes it the selling price of any variant that has **no approved
+  price yet** (a pending list-price proposal is replaced). Once the owner approves or sets a price,
+  the import never changes it again.
 - `images` must be direct links to image files (`.jpg`, `.png`, `.webp`) on the manufacturer's own
   site or CDN. They are downloaded on the server during import, re-encoded to WebP and stored in the
   database. A link that fails is reported and skipped.
@@ -54,7 +59,9 @@ safe to run on every deploy. Nothing here is sample data.
           "listPrice": "820.00",       // manufacturer's published price for ONE selling unit, or null
           "listPriceIncludesTax": true,
           "mrp": "820.00",             // MRP (incl. tax) if published, else null
-          "priceSource": "Berger website product page, MRP shown on 23 Oct 2026"
+          "priceSource": "Berger website product page, MRP shown on 23 Oct 2026",
+          "marketPrice": "790.00",     // researched dealer price incl. GST, or null
+          "marketPriceSource": "What it is based on, where and when"
         }
       ]
     }

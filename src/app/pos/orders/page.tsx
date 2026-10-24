@@ -12,6 +12,7 @@ import { EmptyState, PageHeader, PageSkeleton } from "@/components/ui/page";
 import { cn } from "@/components/ui/cn";
 import { buttonClass } from "@/components/ui/button";
 import { whatsappLink } from "@/lib/india";
+import { optionLabel } from "@/lib/line-description";
 
 export const metadata = { title: "Customer orders" };
 
@@ -106,7 +107,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                       <li key={l.id} className="flex justify-between gap-3 px-3 py-2.5">
                         <span className="min-w-0">
                           <span className="font-medium text-navy-950">{l.productName}</span>
-                          {l.variantName && <span className="text-navy-500"> · {l.variantName}</span>}
+                          {optionLabel(l.variantName) && <span className="text-navy-500"> · {l.variantName}</span>}
                           <span className="mt-0.5 block font-mono text-xs text-navy-500">{l.sku}</span>
                         </span>
                         <span className="shrink-0 text-right font-mono">

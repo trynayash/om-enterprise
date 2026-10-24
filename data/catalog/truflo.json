@@ -12,7 +12,8 @@
     "Brass Elbow 90°: 15×15, 20×15, 20×20, 25×25 and 32×32 were seen in two separate reads. 25×15 and 25×20 were seen in only one read of the product page (item codes CF24025015 and CF24025020). Verify these two before selling.",
     "Pressure ratings: Hindware's CPVC page labels the low-temperature column 27 °C in one table and 23 °C in another. 27 °C is used here.",
     "Truflo item codes were seen on the official pages and can be used to match a future price list. Pipes: CP11<len><size>, e.g. CP1103015 = SDR 11 3 m 15 mm. CP13<len><size> = SDR 13.5. Fittings: Coupler CF01, Elbow 90 CF02, Bend 45 CF03, Tee CF05, Reducer Tee CF06, End Cap CF08, Union CF14, Reducer CF15, Brass Elbow CF24, Brass Tee CF25, MABT CF26, FABT CF27 (+ size digits, e.g. CF02000015). Ball valve CEBV0100<size>. Concealed valves CECVQTT020 / CECVQTR020 / CECVFTT020 / CECVFTT025. UPVC MABT UF22000015–UF22000050. Note: the Elbow 90 product page shows the CF01 codes by mistake. CF01 is the coupler.",
-    "Manufacturer legal entity not confirmed from an official source in this run. \"Truflo by Hindware\" is the brand, and Truflo's 2023 corporate brochure calls itself part of the Somany Impresa Group."
+    "Manufacturer legal entity not confirmed from an official source in this run. \"Truflo by Hindware\" is the brand, and Truflo's 2023 corporate brochure calls itself part of the Somany Impresa Group.",
+    "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
   ],
   "products": [
     {
@@ -88,8 +89,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "363.00",
+          "priceSource": null,
+          "marketPrice": "200.00",
+          "marketPriceSource": "Truflo MRP Rs 363 per 3 m length for CP1103015 (newer of two undated MRP blocks on truflopipes.com, older block Rs 310; 2021 list Rs 251). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P11-20-3M",
@@ -101,8 +104,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "486.00",
+          "priceSource": null,
+          "marketPrice": "265.00",
+          "marketPriceSource": "Truflo MRP Rs 486 per 3 m length for CP1103020 (newer of two undated MRP blocks on truflopipes.com, older block Rs 443; 2021 list Rs 394). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "TRF-CPVC-P11-25-3M",
@@ -114,8 +119,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "760.00",
+          "priceSource": null,
+          "marketPrice": "420.00",
+          "marketPriceSource": "Truflo MRP Rs 760 per 3 m length for CP1103025 (newer of two undated MRP blocks on truflopipes.com, older block Rs 707; 2021 list Rs 634). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "TRF-CPVC-P11-32-3M",
@@ -127,8 +134,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1281.00",
+          "priceSource": null,
+          "marketPrice": "705.00",
+          "marketPriceSource": "Truflo MRP Rs 1281 per 3 m length for CP1103032 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1150; 2021 list Rs 978). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P11-40-3M",
@@ -140,8 +149,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1755.00",
+          "priceSource": null,
+          "marketPrice": "965.00",
+          "marketPriceSource": "Truflo MRP Rs 1755 per 3 m length for CP1103040 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1580; 2021 list Rs 1337). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "TRF-CPVC-P11-50-3M",
@@ -153,8 +164,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "3042.00",
+          "priceSource": null,
+          "marketPrice": "1670.00",
+          "marketPriceSource": "Truflo MRP Rs 3042 per 3 m length for CP1103050 (newer of two undated MRP blocks on truflopipes.com, older block Rs 2720; 2021 list Rs 2270). Sold at about 45% below this MRP, in line with Truflo SDR 11 street prices seen in 2023-25 (Bulbird 3/4\" Rs 245 and 1\" Rs 390, TradeIndia 3/4\" Rs 248 incl. GST, IndiaMART 1\" Rs 310-420, L&T SuFin 40 mm Rs 963, Matemart 15 mm Rs 207 incl. GST). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -232,8 +245,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "313.00",
+          "priceSource": null,
+          "marketPrice": "170.00",
+          "marketPriceSource": "Truflo MRP Rs 313 per 3 m length for CP1303015 (newer of two undated MRP blocks on truflopipes.com, older block Rs 280). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-20-3M",
@@ -245,8 +260,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "458.00",
+          "priceSource": null,
+          "marketPrice": "250.00",
+          "marketPriceSource": "Truflo MRP Rs 458 per 3 m length for CP1303020 (newer of two undated MRP blocks on truflopipes.com, older block Rs 402). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-25-3M",
@@ -258,8 +275,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "670.00",
+          "priceSource": null,
+          "marketPrice": "370.00",
+          "marketPriceSource": "Truflo MRP Rs 670 per 3 m length for CP1303025 (newer of two undated MRP blocks on truflopipes.com, older block Rs 611). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-32-3M",
@@ -271,8 +290,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1107.00",
+          "priceSource": null,
+          "marketPrice": "610.00",
+          "marketPriceSource": "Truflo MRP Rs 1107 per 3 m length for CP1303032 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1010). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-40-3M",
@@ -284,8 +305,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1537.00",
+          "priceSource": null,
+          "marketPrice": "845.00",
+          "marketPriceSource": "Truflo MRP Rs 1537 per 3 m length for CP1303040 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1390). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-50-3M",
@@ -297,8 +320,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2595.00",
+          "priceSource": null,
+          "marketPrice": "1430.00",
+          "marketPriceSource": "Truflo MRP Rs 2595 per 3 m length for CP1303050 (newer of two undated MRP blocks on truflopipes.com, older block Rs 2370). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-15-5M",
@@ -310,8 +335,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "518.00",
+          "priceSource": null,
+          "marketPrice": "285.00",
+          "marketPriceSource": "Truflo MRP Rs 518 per 5 m length for CP1305015 (newer of two undated MRP blocks on truflopipes.com, older block Rs 460). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-20-5M",
@@ -323,8 +350,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "777.00",
+          "priceSource": null,
+          "marketPrice": "425.00",
+          "marketPriceSource": "Truflo MRP Rs 777 per 5 m length for CP1305020 (newer of two undated MRP blocks on truflopipes.com, older block Rs 710). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-25-5M",
@@ -336,8 +365,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1134.00",
+          "priceSource": null,
+          "marketPrice": "625.00",
+          "marketPriceSource": "Truflo MRP Rs 1134 per 5 m length for CP1305025 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1035). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-32-5M",
@@ -349,8 +380,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1843.00",
+          "priceSource": null,
+          "marketPrice": "1010.00",
+          "marketPriceSource": "Truflo MRP Rs 1843 per 5 m length for CP1305032 (newer of two undated MRP blocks on truflopipes.com, older block Rs 1690). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-40-5M",
@@ -362,8 +395,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2540.00",
+          "priceSource": null,
+          "marketPrice": "1400.00",
+          "marketPriceSource": "Truflo MRP Rs 2540 per 5 m length for CP1305040 (newer of two undated MRP blocks on truflopipes.com, older block Rs 2330). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-P135-50-5M",
@@ -375,8 +410,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "4355.00",
+          "priceSource": null,
+          "marketPrice": "2400.00",
+          "marketPriceSource": "Truflo MRP Rs 4355 per 5 m length for CP1305050 (newer of two undated MRP blocks on truflopipes.com, older block Rs 3990). Priced about 45% below MRP, the same discount seen on Truflo SDR 11 pipes in retail listings (no SDR 13.5 street price found). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -433,8 +470,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "22.00",
+          "priceSource": null,
+          "marketPrice": "14.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 22 (CF01000015, newer of two undated MRP blocks on truflopipes.com; older block Rs 20). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CPL-20",
@@ -445,8 +484,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "21.00",
+          "priceSource": null,
+          "marketPrice": "15.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 21 (CF01000020, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 21x1.09 like the other plain fittings). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CPL-25",
@@ -457,8 +498,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "32.00",
+          "priceSource": null,
+          "marketPrice": "23.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 32 (CF01000025, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 32x1.09 like the other plain fittings). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CPL-32",
@@ -469,8 +512,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "71.00",
+          "priceSource": null,
+          "marketPrice": "50.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 71 (CF01000032, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 71x1.09 like the other plain fittings). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CPL-40",
@@ -481,8 +526,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "153.00",
+          "priceSource": null,
+          "marketPrice": "99.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 153 (CF01000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 140). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CPL-50",
@@ -493,8 +540,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "306.00",
+          "priceSource": null,
+          "marketPrice": "200.00",
+          "marketPriceSource": "Truflo coupler MRP Rs 306 (CF01000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 280). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -551,8 +600,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "22.00",
+          "priceSource": null,
+          "marketPrice": "14.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 22 (CF02000015, newer of two undated MRP blocks on truflopipes.com; older block Rs 20). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL90-20",
@@ -563,8 +614,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "31.00",
+          "priceSource": null,
+          "marketPrice": "20.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 31 (CF02000020, newer of two undated MRP blocks on truflopipes.com; older block Rs 28). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL90-25",
@@ -575,8 +628,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "58.00",
+          "priceSource": null,
+          "marketPrice": "38.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 58 (CF02000025, newer of two undated MRP blocks on truflopipes.com; older block Rs 53). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL90-32",
@@ -587,8 +642,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "131.00",
+          "priceSource": null,
+          "marketPrice": "85.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 131 (CF02000032, newer of two undated MRP blocks on truflopipes.com; older block Rs 120). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL90-40",
@@ -599,8 +656,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "251.00",
+          "priceSource": null,
+          "marketPrice": "165.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 251 (CF02000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 230). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL90-50",
@@ -611,8 +670,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "491.00",
+          "priceSource": null,
+          "marketPrice": "320.00",
+          "marketPriceSource": "Truflo elbow 90 MRP Rs 491 (CF02000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 450). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -669,8 +730,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "33.00",
+          "priceSource": null,
+          "marketPrice": "21.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 33 (CF03000015, newer of two undated MRP blocks on truflopipes.com; older block Rs 30). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL45-20",
@@ -681,8 +744,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "44.00",
+          "priceSource": null,
+          "marketPrice": "29.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 44 (CF03000020, newer of two undated MRP blocks on truflopipes.com; older block Rs 40). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL45-25",
@@ -693,8 +758,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "76.00",
+          "priceSource": null,
+          "marketPrice": "49.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 76 (CF03000025, newer of two undated MRP blocks on truflopipes.com; older block Rs 70). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL45-32",
@@ -705,8 +772,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "150.00",
+          "priceSource": null,
+          "marketPrice": "105.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 150 (CF03000032, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 150x1.09 like the other plain fittings). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL45-40",
@@ -717,8 +786,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "254.00",
+          "priceSource": null,
+          "marketPrice": "165.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 254 (CF03000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 233). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-EL45-50",
@@ -729,8 +800,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "507.00",
+          "priceSource": null,
+          "marketPrice": "330.00",
+          "marketPriceSource": "Truflo bend 45 MRP Rs 507 (CF03000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 465). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -787,8 +860,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "30.00",
+          "priceSource": null,
+          "marketPrice": "21.00",
+          "marketPriceSource": "Truflo tee MRP Rs 30 (CF05000015, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 30x1.09 like the other plain fittings). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-TEE-20",
@@ -799,8 +874,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "44.00",
+          "priceSource": null,
+          "marketPrice": "29.00",
+          "marketPriceSource": "Truflo tee MRP Rs 44 (CF05000020, newer of two undated MRP blocks on truflopipes.com; older block Rs 40). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-TEE-25",
@@ -811,8 +888,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "74.00",
+          "priceSource": null,
+          "marketPrice": "48.00",
+          "marketPriceSource": "Truflo tee MRP Rs 74 (CF05000025, newer of two undated MRP blocks on truflopipes.com; older block Rs 68). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-TEE-32",
@@ -823,8 +902,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "164.00",
+          "priceSource": null,
+          "marketPrice": "105.00",
+          "marketPriceSource": "Truflo tee MRP Rs 164 (CF05000032, newer of two undated MRP blocks on truflopipes.com; older block Rs 150). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-TEE-40",
@@ -835,8 +916,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "295.00",
+          "priceSource": null,
+          "marketPrice": "190.00",
+          "marketPriceSource": "Truflo tee MRP Rs 295 (CF05000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 270). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-TEE-50",
@@ -847,8 +930,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "616.00",
+          "priceSource": null,
+          "marketPrice": "400.00",
+          "marketPriceSource": "Truflo tee MRP Rs 616 (CF05000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 565). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -909,8 +994,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "76.00",
+          "priceSource": null,
+          "marketPrice": "49.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 76 (CF06020015, newer of two undated MRP blocks on truflopipes.com; older block Rs 70). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-25X15",
@@ -921,8 +1008,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "120.00",
+          "priceSource": null,
+          "marketPrice": "78.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 120 (CF06025015, newer of two undated MRP blocks on truflopipes.com; older block Rs 110). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-25X20",
@@ -933,8 +1022,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "131.00",
+          "priceSource": null,
+          "marketPrice": "85.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 131 (CF06025020, newer of two undated MRP blocks on truflopipes.com; older block Rs 120). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-32X15",
@@ -945,8 +1036,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "218.00",
+          "priceSource": null,
+          "marketPrice": "140.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 218 (CF06032015, newer of two undated MRP blocks on truflopipes.com; older block Rs 200). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-32X20",
@@ -957,8 +1050,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "251.00",
+          "priceSource": null,
+          "marketPrice": "150.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 251 (CF06032020, newer of two undated MRP blocks on truflopipes.com; older block Rs 230). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 234). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-32X25",
@@ -969,8 +1064,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "218.00",
+          "priceSource": null,
+          "marketPrice": "150.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 218 (CF06032025, newer of two undated MRP blocks on truflopipes.com; older block Rs 200). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 234). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-40X15",
@@ -981,8 +1078,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "360.00",
+          "priceSource": null,
+          "marketPrice": "225.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 360 (CF06040015, newer of two undated MRP blocks on truflopipes.com; older block Rs 330). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 349). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-40X20",
@@ -993,8 +1092,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "360.00",
+          "priceSource": null,
+          "marketPrice": "225.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 360 (CF06040020, newer of two undated MRP blocks on truflopipes.com; older block Rs 330). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 349). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-40X25",
@@ -1005,8 +1106,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "310.00",
+          "priceSource": null,
+          "marketPrice": "225.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 310 (CF06040025, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 310x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 349). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-40X32",
@@ -1017,8 +1120,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "310.00",
+          "priceSource": null,
+          "marketPrice": "225.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 310 (CF06040032, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 310x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 349). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-50X15",
@@ -1029,8 +1134,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "580.00",
+          "priceSource": null,
+          "marketPrice": "410.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 580 (CF06050015, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 580x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-50X20",
@@ -1041,8 +1148,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "640.00",
+          "priceSource": null,
+          "marketPrice": "445.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 640 (CF06050020, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 640x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 682). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-50X25",
@@ -1053,8 +1162,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "620.00",
+          "priceSource": null,
+          "marketPrice": "445.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 620 (CF06050025, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 620x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 682). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-50X32",
@@ -1065,8 +1176,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "631.00",
+          "priceSource": null,
+          "marketPrice": "445.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 631 (CF06050032, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 631x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 682). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RTEE-50X40",
@@ -1077,8 +1190,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "610.00",
+          "priceSource": null,
+          "marketPrice": "445.00",
+          "marketPriceSource": "Truflo reducer tee MRP Rs 610 (CF06050040, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 610x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 682). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1139,8 +1254,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "33.00",
+          "priceSource": null,
+          "marketPrice": "21.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 33 (CF15020015, newer of two undated MRP blocks on truflopipes.com; older block Rs 30). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-25X15",
@@ -1151,8 +1268,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "53.00",
+          "priceSource": null,
+          "marketPrice": "34.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 53 (CF15025015, newer of two undated MRP blocks on truflopipes.com; older block Rs 49). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-25X20",
@@ -1163,8 +1282,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "56.00",
+          "priceSource": null,
+          "marketPrice": "36.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 56 (CF15025020, newer of two undated MRP blocks on truflopipes.com; older block Rs 51). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-32X15",
@@ -1175,8 +1296,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "122.00",
+          "priceSource": null,
+          "marketPrice": "75.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 122 (CF15032015, newer of two undated MRP blocks on truflopipes.com; older block Rs 112). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 116). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-32X20",
@@ -1187,8 +1310,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "109.00",
+          "priceSource": null,
+          "marketPrice": "75.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 109 (CF15032020, newer of two undated MRP blocks on truflopipes.com; older block Rs 100). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 116). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-32X25",
@@ -1199,8 +1324,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "120.00",
+          "priceSource": null,
+          "marketPrice": "78.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 120 (CF15032025, newer of two undated MRP blocks on truflopipes.com; older block Rs 110). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-40X15",
@@ -1211,8 +1338,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "175.00",
+          "priceSource": null,
+          "marketPrice": "115.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 175 (CF15040015, newer of two undated MRP blocks on truflopipes.com; older block Rs 161). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 174). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-40X20",
@@ -1223,8 +1352,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "174.00",
+          "priceSource": null,
+          "marketPrice": "115.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 174 (CF15040020, newer of two undated MRP blocks on truflopipes.com; older block Rs 160). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 174). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-40X25",
@@ -1235,8 +1366,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "174.00",
+          "priceSource": null,
+          "marketPrice": "115.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 174 (CF15040025, newer of two undated MRP blocks on truflopipes.com; older block Rs 160). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 174). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-40X32",
@@ -1247,8 +1380,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "174.00",
+          "priceSource": null,
+          "marketPrice": "115.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 174 (CF15040032, newer of two undated MRP blocks on truflopipes.com; older block Rs 160). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 174). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-50X15",
@@ -1259,8 +1394,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "338.00",
+          "priceSource": null,
+          "marketPrice": "220.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 338 (CF15050015, newer of two undated MRP blocks on truflopipes.com; older block Rs 310). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-50X20",
@@ -1271,8 +1408,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "382.00",
+          "priceSource": null,
+          "marketPrice": "220.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 382 (CF15050020, newer of two undated MRP blocks on truflopipes.com; older block Rs 350). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 342). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-50X25",
@@ -1283,8 +1422,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "317.00",
+          "priceSource": null,
+          "marketPrice": "220.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 317 (CF15050025, newer of two undated MRP blocks on truflopipes.com; older block Rs 290). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 342). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-50X32",
@@ -1295,8 +1436,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "327.00",
+          "priceSource": null,
+          "marketPrice": "220.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 327 (CF15050032, newer of two undated MRP blocks on truflopipes.com; older block Rs 300). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. Truflo's list prices some smaller branches above larger ones in this run, so the run was smoothed to keep sizes in order (this SKU priced as if MRP were Rs 342). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-RED-50X40",
@@ -1307,8 +1450,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "380.00",
+          "priceSource": null,
+          "marketPrice": "270.00",
+          "marketPriceSource": "Truflo reducer MRP Rs 380 (CF15050040, older undated MRP block on truflopipes.com; newer block not retrieved, taken as Rs 380x1.09). Priced about 35% below MRP, the usual dealer discount on CPVC fittings. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1365,8 +1510,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "11.00",
+          "priceSource": null,
+          "marketPrice": "7.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 11 (CF08000015, newer of two undated MRP blocks on truflopipes.com; older block Rs 10). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CAP-20",
@@ -1377,8 +1524,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "22.00",
+          "priceSource": null,
+          "marketPrice": "14.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 22 (CF08000020, newer of two undated MRP blocks on truflopipes.com; older block Rs 20). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CAP-25",
@@ -1389,8 +1538,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "33.00",
+          "priceSource": null,
+          "marketPrice": "21.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 33 (CF08000025, newer of two undated MRP blocks on truflopipes.com; older block Rs 30). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CAP-32",
@@ -1401,8 +1552,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "76.00",
+          "priceSource": null,
+          "marketPrice": "49.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 76 (CF08000032, newer of two undated MRP blocks on truflopipes.com; older block Rs 70). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CAP-40",
@@ -1413,8 +1566,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "109.00",
+          "priceSource": null,
+          "marketPrice": "71.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 109 (CF08000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 100). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CAP-50",
@@ -1425,8 +1580,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "229.00",
+          "priceSource": null,
+          "marketPrice": "150.00",
+          "marketPriceSource": "Truflo end cap MRP Rs 229 (CF08000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 210). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1483,8 +1640,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "86.00",
+          "priceSource": null,
+          "marketPrice": "56.00",
+          "marketPriceSource": "Truflo union MRP Rs 86 (CF14000015, newer of two undated MRP blocks on truflopipes.com; older block Rs 79). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-UNI-20",
@@ -1495,8 +1654,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "142.00",
+          "priceSource": null,
+          "marketPrice": "92.00",
+          "marketPriceSource": "Truflo union MRP Rs 142 (CF14000020, newer of two undated MRP blocks on truflopipes.com; older block Rs 130). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-UNI-25",
@@ -1507,8 +1668,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "177.00",
+          "priceSource": null,
+          "marketPrice": "115.00",
+          "marketPriceSource": "Truflo union MRP Rs 177 (CF14000025, newer of two undated MRP blocks on truflopipes.com; older block Rs 162). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-UNI-32",
@@ -1519,8 +1682,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "275.00",
+          "priceSource": null,
+          "marketPrice": "180.00",
+          "marketPriceSource": "Truflo union MRP Rs 275 (CF14000032, newer of two undated MRP blocks on truflopipes.com; older block Rs 252). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-UNI-40",
@@ -1531,8 +1696,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "453.00",
+          "priceSource": null,
+          "marketPrice": "295.00",
+          "marketPriceSource": "Truflo union MRP Rs 453 (CF14000040, newer of two undated MRP blocks on truflopipes.com; older block Rs 415). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-UNI-50",
@@ -1543,8 +1710,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "809.00",
+          "priceSource": null,
+          "marketPrice": "525.00",
+          "marketPriceSource": "Truflo union MRP Rs 809 (CF14000050, newer of two undated MRP blocks on truflopipes.com; older block Rs 742). Priced about 35% below current MRP, the middle of the usual dealer discount on CPVC fittings (Matemart sells Truflo 20 mm elbows about 44% below MRP; Bulbird sells Truflo tees/couplers near MRP). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1606,8 +1775,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "220.00",
+          "priceSource": null,
+          "marketPrice": "165.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 220 (CF27000015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 220x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-FABT-20",
@@ -1618,8 +1789,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "300.00",
+          "priceSource": null,
+          "marketPrice": "225.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 300 (CF27000020, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 300x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-FABT-25",
@@ -1630,8 +1803,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "460.00",
+          "priceSource": null,
+          "marketPrice": "340.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 460 (CF27000025, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 460x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-FABT-32",
@@ -1642,8 +1817,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "990.00",
+          "priceSource": null,
+          "marketPrice": "735.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 990 (CF27000032, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 990x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-FABT-40",
@@ -1654,8 +1831,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1100.00",
+          "priceSource": null,
+          "marketPrice": "820.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 1100 (CF27000040, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 1100x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-FABT-50",
@@ -1666,8 +1845,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2030.00",
+          "priceSource": null,
+          "marketPrice": "1510.00",
+          "marketPriceSource": "Truflo CPVC FABT MRP Rs 2030 (CF27000050, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 2030x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1729,8 +1910,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "230.00",
+          "priceSource": null,
+          "marketPrice": "170.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 230 (CF26000015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 230x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-MABT-20",
@@ -1741,8 +1924,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "281.00",
+          "priceSource": null,
+          "marketPrice": "210.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 281 (CF26000020, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 281x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-MABT-25",
@@ -1753,8 +1938,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "450.00",
+          "priceSource": null,
+          "marketPrice": "335.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 450 (CF26000025, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 450x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-MABT-32",
@@ -1765,8 +1952,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "940.00",
+          "priceSource": null,
+          "marketPrice": "700.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 940 (CF26000032, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 940x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-MABT-40",
@@ -1777,8 +1966,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1170.00",
+          "priceSource": null,
+          "marketPrice": "870.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 1170 (CF26000040, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 1170x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-MABT-50",
@@ -1789,8 +1980,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2215.00",
+          "priceSource": null,
+          "marketPrice": "1650.00",
+          "marketPriceSource": "Truflo CPVC MABT MRP Rs 2215 (CF26000050, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 2215x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1856,8 +2049,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "124.00",
+          "priceSource": null,
+          "marketPrice": "74.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 124 (CF24015015, newer of two undated MRP blocks on truflopipes.com; older block Rs 100). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-20X15",
@@ -1868,8 +2063,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "124.00",
+          "priceSource": null,
+          "marketPrice": "74.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 124 (CF24020015, newer of two undated MRP blocks on truflopipes.com; older block Rs 100). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-20X20",
@@ -1880,8 +2077,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "186.00",
+          "priceSource": null,
+          "marketPrice": "110.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 186 (CF24020020, newer of two undated MRP blocks on truflopipes.com; older block Rs 150). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-25X15",
@@ -1892,8 +2091,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "223.00",
+          "priceSource": null,
+          "marketPrice": "135.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 223 (CF24025015, newer of two undated MRP blocks on truflopipes.com; older block Rs 180). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-25X20",
@@ -1904,8 +2105,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "359.00",
+          "priceSource": null,
+          "marketPrice": "215.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 359 (CF24025020, newer of two undated MRP blocks on truflopipes.com; older block Rs 290). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-25X25",
@@ -1916,8 +2119,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "699.00",
+          "priceSource": null,
+          "marketPrice": "420.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 699 (CF24025025, newer of two undated MRP blocks on truflopipes.com; older block Rs 565). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BEL90-32X32",
@@ -1928,8 +2133,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "890.00",
+          "priceSource": null,
+          "marketPrice": "535.00",
+          "marketPriceSource": "Truflo brass elbow 90 MRP Rs 890 (CF24032032, newer of two undated MRP blocks on truflopipes.com; older block Rs 720). Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1995,8 +2202,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "120.00",
+          "priceSource": null,
+          "marketPrice": "89.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 120 (CF25015015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 120x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-20X15",
@@ -2007,8 +2216,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "121.00",
+          "priceSource": null,
+          "marketPrice": "90.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 121 (CF25020015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 121x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-20X20",
@@ -2019,8 +2230,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "190.00",
+          "priceSource": null,
+          "marketPrice": "140.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 190 (CF25020020, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 190x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-25X15",
@@ -2031,8 +2244,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "210.00",
+          "priceSource": null,
+          "marketPrice": "155.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 210 (CF25025015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 210x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-25X20",
@@ -2043,8 +2258,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "320.00",
+          "priceSource": null,
+          "marketPrice": "240.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 320 (CF25025020, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 320x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-25X25",
@@ -2055,8 +2272,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "380.00",
+          "priceSource": null,
+          "marketPrice": "285.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 380 (CF25025025, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 380x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BTEE-32X15",
@@ -2067,8 +2286,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "380.00",
+          "priceSource": null,
+          "marketPrice": "285.00",
+          "marketPriceSource": "Truflo brass tee MRP Rs 380 (CF25032015, older undated MRP block on truflopipes.com). Newer block not retrieved, taken as Rs 380x1.24, the uplift Truflo applied to every brass elbow. Priced about 40% below current MRP; Bulbird sells Truflo brass MABT about 34% below the older MRP (3/4\" Rs 188, 1\" Rs 300), and brass prices have risen since. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -2129,8 +2350,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "156.00",
+          "priceSource": null,
+          "marketPrice": "94.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 156 (CEBV010015, ERP block with HSN on truflopipes.com). Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BV-20",
@@ -2141,8 +2364,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "274.00",
+          "priceSource": null,
+          "marketPrice": "165.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 274 (CEBV010020, ERP block with HSN on truflopipes.com). Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BV-25",
@@ -2153,8 +2378,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "513.00",
+          "priceSource": null,
+          "marketPrice": "310.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 513 (CEBV010025, ERP block with HSN on truflopipes.com). Spacemantra shows the older MRP Rs 468. Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BV-32",
@@ -2165,8 +2392,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "776.00",
+          "priceSource": null,
+          "marketPrice": "465.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 776 (CEBV010032, ERP block with HSN on truflopipes.com). Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BV-40",
@@ -2177,8 +2406,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1426.00",
+          "priceSource": null,
+          "marketPrice": "855.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 1426 (CEBV010040, ERP block with HSN on truflopipes.com). Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-BV-50",
@@ -2189,8 +2420,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2474.00",
+          "priceSource": null,
+          "marketPrice": "1480.00",
+          "marketPriceSource": "Truflo CPVC ball valve MRP Rs 2474 (CEBV010050, ERP block with HSN on truflopipes.com). Priced about 40% below MRP, matching IndiaMART's Rs 140 + GST for the Truflo 20 mm valve. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -2236,8 +2469,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1536.00",
+          "priceSource": null,
+          "marketPrice": "920.00",
+          "marketPriceSource": "Truflo MRP Rs 1536 (CECVQTT020) on truflopipes.com; Jain Impex (Mysuru) shows the same Rs 1,536-2,167 MRP range. Priced about 40% below MRP; a Supreme 20 mm quarter-turn concealed valve sells at Rs 705 + GST on IndiaMART. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CVQTR-20",
@@ -2249,8 +2484,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1536.00",
+          "priceSource": null,
+          "marketPrice": "920.00",
+          "marketPriceSource": "Truflo MRP Rs 1536 (CECVQTR020) on truflopipes.com; Jain Impex (Mysuru) shows the same Rs 1,536-2,167 MRP range. Priced about 40% below MRP; a Supreme 20 mm quarter-turn concealed valve sells at Rs 705 + GST on IndiaMART. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CVFTT-20",
@@ -2262,8 +2499,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "1415.00",
+          "priceSource": null,
+          "marketPrice": "850.00",
+          "marketPriceSource": "Truflo MRP Rs 1415 (CECVFTT020) on truflopipes.com; Jain Impex (Mysuru) shows the same Rs 1,536-2,167 MRP range. Priced about 40% below MRP; a Supreme 20 mm quarter-turn concealed valve sells at Rs 705 + GST on IndiaMART. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "TRF-CPVC-CVFTT-25",
@@ -2275,8 +2514,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": null
+          "mrp": "2167.00",
+          "priceSource": null,
+          "marketPrice": "1300.00",
+          "marketPriceSource": "Truflo MRP Rs 2167 (CECVFTT025) on truflopipes.com; Jain Impex (Mysuru) shows the same Rs 1,536-2,167 MRP range. Priced about 40% below MRP; a Supreme 20 mm quarter-turn concealed valve sells at Rs 705 + GST on IndiaMART. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -2326,7 +2567,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "145.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000015) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 170): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "TRF-UPVC-MABT-20",
@@ -2338,7 +2581,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "180.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000020) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 210): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "TRF-UPVC-MABT-25",
@@ -2350,7 +2595,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "285.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000025) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 335): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "TRF-UPVC-MABT-32",
@@ -2362,7 +2609,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "595.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000032) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 700): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "TRF-UPVC-MABT-40",
@@ -2374,7 +2623,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "740.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000040) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 870): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "TRF-UPVC-MABT-50",
@@ -2386,7 +2637,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": null
+          "priceSource": null,
+          "marketPrice": "1400.00",
+          "marketPriceSource": "No Truflo UPVC MABT (UF22000050) price was found. Set about 15% below this shop's Truflo CPVC MABT price (Rs 1650): same brass insert, cheaper UPVC body. Verify with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     }

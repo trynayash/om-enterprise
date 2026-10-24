@@ -32,6 +32,7 @@ import {
 } from "@/server/services/pricing";
 import { calculateSale, type DiscountInput, type EngineLineInput, type TaxMode } from "@/lib/pricing/engine";
 import { D, m, r4 } from "@/lib/money";
+import { lineDescription } from "@/lib/line-description";
 
 export type Sale = typeof sales.$inferSelect;
 export type SaleLine = typeof saleLines.$inferSelect;
@@ -814,7 +815,7 @@ async function approvalDetails(tx: Tx, saleId: string) {
     anyBelowMarginFloor: items.some((l) => l.belowMarginFloor),
     lines: items.map((l, i) => ({
       sku: l.sku,
-      name: `${l.productName}${l.variantName ? ` — ${l.variantName}` : ""}`,
+      name: lineDescription(null, l.productName, l.variantName),
       quantity: l.quantity,
       unit: l.unitCode,
       listUnitPrice: l.priceListUnitPrice,

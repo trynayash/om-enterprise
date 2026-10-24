@@ -18,7 +18,8 @@
     "Primers: Walmasta Exterior Interior Primer https://www.bergerpaints.com/products/primers/walmasta-exterior-interior-primer; BP White Primer (WT) https://www.bergerpaints.com/products/primers/bp-white-primer; BP Exterior Cement Primer https://www.bergerpaints.com/products/primers/bp-exterior-cement-primer; BP Cement Primer (ST), an alkyd/solvent product, so HSN 3208: https://www.bergerpaints.com/products/undercoats/31/interior-primers/31/bp-cement-primer-st",
     "Putty (HSN 3214): Bison Wall Putty, a cement powder for interior and exterior: https://www.bergerpaints.com/products/putty-and-cement-paint/bison-wall-putty; Happy Walls Acrylic Putty (water-based paste): https://www.bergerpaints.com/products/undercoats/30/putty/36/happy-wall-acrylic-putty; also Bison Flex Putty and Bison Levelling Putty.",
     "Enamels (solvent-based, HSN 3208): Luxol Hi-Gloss https://www.bergerpaints.com/products/enamels/luxol-hi-gloss; Luxol Satin Enamel https://www.bergerpaints.com/products/enamels/luxol-satin-enamel; Luxol PU Enamel https://www.bergerpaints.com/products/enamels/luxol-pu-enamel; Butterfly GP Enamel (interior only) https://www.bergerpaints.com/products/enamels/butterfly-gp-enamel; Butterfly AC Metal Primer RO (lead/chromium free) https://www.bergerpaints.com/upload/product/Butterfly_AC_Metal_Primer.pdf",
-    "Waterproofing: Dampstop Advanced https://www.bergerpaints.com/products/waterproofing/dampstop-advanced; HomeShield Dampstop Duo (warranty 7 yrs exterior / 2 yrs interior) https://www.bergerpaints.com/products/waterproofing/homeshield-dampstop-duo; HomeShield Advanced Latex Plus (repairs cracks up to 5 mm) https://www.bergerpaints.com/upload/product/DataSheet-25072016045701.pdf; HomeShield PU Roofkoat (350% elongation) https://www.bergerpaints.com/upload/product/DataSheet-27082021071331.pdf"
+    "Waterproofing: Dampstop Advanced https://www.bergerpaints.com/products/waterproofing/dampstop-advanced; HomeShield Dampstop Duo (warranty 7 yrs exterior / 2 yrs interior) https://www.bergerpaints.com/products/waterproofing/homeshield-dampstop-duo; HomeShield Advanced Latex Plus (repairs cracks up to 5 mm) https://www.bergerpaints.com/upload/product/DataSheet-25072016045701.pdf; HomeShield PU Roofkoat (350% elongation) https://www.bergerpaints.com/upload/product/DataSheet-27082021071331.pdf",
+    "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
   ],
   "products": [
     {
@@ -62,7 +63,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "650.00",
+          "marketPriceSource": "1 L listings range Rs 497-690 at dealers (IndiaMART Bengaluru/Kolkata) to Rs 849-930 on Amazon (Silk Glamor White 1 L, labelled MRP Rs 1,320, variant not confirmed as High Sheen); Builders9 2022 price Rs 768. Set mid-range, about 5.5% of the 20 L price as on Berger's pack ladder; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "BRG-SILKGLAMHS-4L",
@@ -72,7 +75,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "2500.00",
+          "marketPriceSource": "4 L seen at Rs 2,112-2,195 on older lists/retailers (ColourDrive, Flipkart, You Construct) and Rs 2,350 + GST at a Howrah dealer (IndiaMART); set about 21% of the 20 L price, matching Berger's 4 L/20 L ratio; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "BRG-SILKGLAMHS-20L",
@@ -82,7 +87,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "11800.00",
+          "marketPriceSource": "TheBuildMall sells High Sheen White 20 L at Rs 10,778 incl. GST; IndiaMART dealers (Ludhiana, Kamptee, Surat, Karamsad) quote Rs 10,236-11,250, several 'excl. taxes'; Builders9 (c. 2022) shows Rs 14,900-15,800. Set between the GST-inclusive dealer level and the old MRP; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -122,7 +129,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "630.00",
+          "marketPriceSource": "No live Soft Sheen 1 L price found. NoBroker's Berger list puts Soft Sheen about 3% below High Sheen (20 L: Rs 10,226 vs 10,506); Builders9 listed Silk Glamor 1 L (Soft Sheen PO base) at Rs 768 c. 2022. Set just below the High Sheen 1 L estimate; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -162,7 +171,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "4800.00",
+          "marketPriceSource": "Amazon (Berger listing) sells 10 L at Rs 5,100, new offers from Rs 4,599, against M.R.P. Rs 5,399; hhysinframart Rs 3,440 (MRP Rs 5,960); Industrybuying Rs 6,725 incl. GST; buypaint.in shows MRP Rs 7,054. MRPs conflict, so mrp left null; price set near the Amazon street price; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "BRG-EASYCLEAN-20L",
@@ -172,7 +183,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "8900.00",
+          "marketPriceSource": "Amazon sold 20 L at Rs 7,999 vs M.R.P. Rs 9,999 (older snapshot, now unavailable); Gujarat dealers on IndiaMART quote Rs 6,000 (Ahmedabad) to about Rs 430/L (~Rs 8,600, excl. tax), Kadapa Rs 7,377; buypaint.in MRP Rs 13,814. Set 1.85x the 10 L price, as on Amazon's MRP ladder; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -211,7 +224,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "580.00",
+          "marketPriceSource": "Easy Clean Fresh White 1 L: Builders9 Rs 598 (c. 2022), Amazon about Rs 739; Raipur dealer Rs 415/L + GST (~Rs 490); plain Easy Clean 1 L sells Rs 410-465 against MRP Rs 623. Set between dealer and online prices; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "BRG-ECFRESH-4L",
@@ -221,7 +236,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "2250.00",
+          "marketPriceSource": "Easy Clean Fresh White 4 L: Builders9 Rs 2,380 (c. 2022), Amazon about Rs 2,760; plain Easy Clean 4 L sells Rs 2,204-2,350 on Amazon (MRP Rs 2,470-2,500). Set about 3.9x the 1 L price, in line with these; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "BRG-ECFRESH-10L",
@@ -231,7 +248,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "5200.00",
+          "marketPriceSource": "Easy Clean Fresh White 10 L: Amazon about Rs 5,899, Builders9 Rs 5,880 (c. 2022); plain Easy Clean 10 L sells about Rs 4,600-5,100. Set a little under the online Fresh price, for a walk-in counter sale; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "BRG-ECFRESH-20L",
@@ -241,7 +260,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "9800.00",
+          "marketPriceSource": "Easy Clean Fresh 20 L: BuildersMART Rs 10,550 incl. taxes; Raipur dealer Rs 415/L + GST (~Rs 9,800); Mumbai trader Rs 10,000; Chhatarpur Rs 8,200; hhysinframart Rs 6,850 against original Rs 11,560. Set at the middle of the GST-inclusive dealer prices; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -282,7 +303,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "90.00",
+          "marketPriceSource": "Only aggregator figures found: NoBroker's 2026 guide gives Rs 80-90 for Bison 1 kg; Yes Painter's older list Rs 74. Set at the top of the NoBroker range (above the 5 kg per-kg rate); seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "BRG-BISONDIST-5KG",
@@ -292,7 +315,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "420.00",
+          "marketPriceSource": "5 kg white: Anandita Rs 415, IndiaMART Rs 429/bucket, Builders9 Rs 346 (orig. Rs 408) and Constructionkart Rs 350 (orig. Rs 400), the last two about 4 years old; MRPs have since risen ~17% (20 kg Rs 1,380 to Rs 1,620). Set at the current-looking level; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "BRG-BISONDIST-20KG",
@@ -301,8 +326,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "mrp": "1620.00",
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "1400.00",
+          "marketPriceSource": "Amazon sells Bison Acrylic Distemper white 20 kg at Rs 1,500 against M.R.P. Rs 1,620 incl. taxes; NoBroker 2026 guide Rs 1,200-1,500; Builders9 Rs 1,169-1,580 by shade. Set a little under Amazon for a counter sale; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, high confidence)"
         }
       ]
     },
@@ -340,7 +367,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "3850.00",
+          "marketPriceSource": "Amazon WeatherCoat Anti Dustt White 10 L: Rs 4,099 against M.R.P. Rs 4,999; pricehistory.app records Rs 3,900 on 04/06/2026, average Rs 3,611, MRP Rs 4,800 (MRPs differ, so mrp null); Builders9 Rs 3,636. Set just under the 2026 Amazon price; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, high confidence)"
         }
       ]
     },
@@ -381,8 +410,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)"
+          "mrp": "8500.00",
+          "priceSource": "No trustworthy current price found (bergerpaints.com shows no MRP; checked 23 Oct 2026)",
+          "marketPrice": "5600.00",
+          "marketPriceSource": "Long Life 10 White 10 L: Amazon Rs 5,169 (another snapshot Rs 6,499) against M.R.P. Rs 8,500; TheBuildMall Rs 5,067 incl. GST; White Blue Builders Rs 5,989 (orig. Rs 7,200); Newmarketkart Rs 6,380. Set near the middle of these; verify MRP on the pack; seen 24 Oct 2026 in web-search extracts (pages could not be opened). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     }

@@ -2,6 +2,7 @@ import "server-only";
 import { randomBytes } from "node:crypto";
 import { and, asc, desc, eq, gte, ilike, inArray, lte, or, sql, type SQL } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
+import { lineDescription } from "@/lib/line-description";
 import {
   customers,
   documents,
@@ -140,7 +141,7 @@ function lineSnapshot(l: SaleLine, i: number, unitNames: Map<string, string>): D
   return {
     sl: i + 1,
     kind: l.lineType,
-    description: l.lineType === "charge" ? l.productName : `${l.brandName ? `${l.brandName} ` : ""}${l.productName}${l.variantName ? ` — ${l.variantName}` : ""}`,
+    description: l.lineType === "charge" ? l.productName : lineDescription(l.brandName, l.productName, l.variantName),
     sku: l.sku,
     hsn: l.hsnCode,
     quantity: D(l.quantity).toString(),

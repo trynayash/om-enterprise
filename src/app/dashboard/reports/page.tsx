@@ -186,7 +186,7 @@ function ProfitCard({ profit }: { profit: Awaited<ReturnType<typeof reports.gros
         <Figure label="Gross margin">{profit.grossMarginPercent ? `${profit.grossMarginPercent}%` : "—"}</Figure>
         <Figure label="Cost of goods sold">{formatINR(profit.costOfGoodsSold)}</Figure>
         <Figure label="Cost coverage" tone={partial ? "text-amber-700" : undefined}>
-          {profit.costCoveragePercent}%
+          {Number(profit.itemRevenue) > 0 ? `${profit.costCoveragePercent}%` : "—"}
         </Figure>
         {partial && (
           <Alert tone="warning" className="sm:col-span-2 lg:col-span-4">

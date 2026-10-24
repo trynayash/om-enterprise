@@ -11,6 +11,7 @@ import { Alert } from "@/components/ui/page";
 import { cn } from "@/components/ui/cn";
 import { DiscountDialog } from "./discount-dialog";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData, type SaleLineJson } from "./types";
+import { optionLabel } from "@/lib/line-description";
 
 type Run = (fn: () => Promise<unknown>, success?: string) => Promise<boolean>;
 
@@ -86,7 +87,7 @@ export function Cart({
         <DiscountDialog
           open
           onClose={() => setDiscountFor(null)}
-          title={`Discount — ${discountFor.productName}${discountFor.variantName ? ` · ${discountFor.variantName}` : ""}`}
+          title={`Discount — ${discountFor.productName}${optionLabel(discountFor.variantName) ? ` · ${discountFor.variantName}` : ""}`}
           baseAmount={discountFor.grossAmount}
           current={discountFor.lineDiscountType ? { type: discountFor.lineDiscountType, value: discountFor.lineDiscountValue ?? "0" } : null}
           currentReason={discountFor.lineDiscountReason}
@@ -164,7 +165,7 @@ function CartLine({
             <span className="font-semibold text-navy-950">{l.productName}</span>
             {l.isSample && <SampleBadge label="Sample" />}
           </div>
-          {l.variantName && <div className="text-sm text-navy-700">{l.variantName}</div>}
+          {optionLabel(l.variantName) && <div className="text-sm text-navy-700">{l.variantName}</div>}
           <div className="mt-0.5 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
             <span>{l.sku}</span>
             {l.hsnCode && <span>HSN {l.hsnCode}</span>}
@@ -331,7 +332,7 @@ function OverrideDialog({ line, saleId, onClose, run }: { line: SaleLineJson; sa
       open
       onClose={onClose}
       title="Change unit price"
-      description={`${line.productName}${line.variantName ? ` · ${line.variantName}` : ""} — list price ${formatINR(line.priceListUnitPrice)}`}
+      description={`${line.productName}${optionLabel(line.variantName) ? ` · ${line.variantName}` : ""} — list price ${formatINR(line.priceListUnitPrice)}`}
       footer={
         <>
           {overridden && (

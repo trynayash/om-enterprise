@@ -7,7 +7,7 @@ import { Field, Input, Textarea } from "@/components/ui/field";
 import { Alert } from "@/components/ui/page";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, errorMessage } from "@/lib/api-client";
-import { formatINR } from "@/lib/money";
+import { formatPrice } from "@/lib/money";
 import { normalizeMobile, whatsappLink } from "@/lib/india";
 
 interface SubmitResult {
@@ -25,31 +25,44 @@ export interface EnquiryDone extends SubmitResult {
 export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp: string | null }) {
   const label = done.kind === "order_request" ? "order request" : "enquiry";
   const follow = whatsapp ? whatsappLink(whatsapp, `Hello OM ENTERPRISE, I just sent ${label} ${done.orderNumber} on your website. My name is ${done.name}.`) : null;
+  const via = done.preferredContact === "whatsapp" ? "WhatsApp" : done.preferredContact === "email" ? "Email" : "Phone call";
   return (
-    <div className="animate-sheet-in rounded-xl border border-navy-200 border-t-[3px] border-t-emerald-600 bg-white p-6 text-center sm:p-10" role="status">
-      <CheckCircle2 className="mx-auto h-11 w-11 text-emerald-600" strokeWidth={1.5} />
-      <h2 className="headline mt-4 text-[2.25rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}!</h2>
-      <p className="mt-3 text-base text-navy-600">
-        Your {label} <span className="font-mono font-extrabold text-navy-950">{done.orderNumber}</span> has been received.
-      </p>
-      <p className="mt-1 text-sm text-navy-500">
-        We&apos;ll contact you on <span className="font-semibold">{done.mobile}</span>
-        {done.preferredContact === "whatsapp" ? " via WhatsApp" : done.preferredContact === "email" ? " by email" : " by phone"} to confirm availability and the final amount.
-      </p>
-      {done.indicativeTotal && (
-        <p className="mt-3 text-sm text-navy-600">
-          Indicative total at today&apos;s prices: <span className="font-mono font-medium tabular">{formatINR(done.indicativeTotal)}</span>
+    <div className="mx-auto max-w-xl animate-sheet-in overflow-hidden rounded-xl border border-navy-200 bg-white" role="status">
+      <div className="flex items-center gap-2 border-b border-navy-100 bg-paper/70 px-6 py-3 sm:px-8">
+        <CheckCircle2 className="h-4 w-4 text-emerald-600" strokeWidth={2} />
+        <span className="label-mono text-emerald-800">{label === "enquiry" ? "Enquiry" : "Order request"} received</span>
+      </div>
+      <div className="px-6 py-7 sm:px-8">
+        <h2 className="headline text-[2.25rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}.</h2>
+        <p className="mt-2 text-[15px] leading-relaxed text-navy-600">
+          Your {label} <span className="font-mono font-extrabold text-navy-950">{done.orderNumber}</span> has been received.
         </p>
-      )}
-      <div className="mt-7 flex flex-wrap justify-center gap-2.5">
-        {follow && (
-          <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
-            <MessageCircle className="h-4 w-4" /> Follow up on WhatsApp
-          </a>
-        )}
-        <Link href="/products" className="inline-flex h-11 items-center rounded-lg border border-navy-200 bg-white px-5 text-sm font-semibold text-navy-900 transition-colors hover:border-navy-900">
-          Continue browsing
-        </Link>
+        <dl className="mt-6 grid grid-cols-[auto_1fr] border-t border-navy-900 text-sm">
+          <dt className="label-mono border-b border-navy-100 py-3 pr-6 text-navy-500">Contact</dt>
+          <dd className="border-b border-navy-100 py-3 text-navy-900">
+            <span className="font-mono tabular">{done.mobile}</span> · {via}
+          </dd>
+          {done.indicativeTotal && (
+            <>
+              <dt className="label-mono border-b border-navy-100 py-3 pr-6 text-navy-500">Indicative</dt>
+              <dd className="border-b border-navy-100 py-3 text-navy-900">
+                <span className="font-mono font-semibold tabular">{formatPrice(done.indicativeTotal)}</span> <span className="text-navy-500">at today&apos;s prices</span>
+              </dd>
+            </>
+          )}
+          <dt className="label-mono py-3 pr-6 text-navy-500">Next</dt>
+          <dd className="py-3 text-navy-700">We&apos;ll confirm availability and the final amount, then arrange pickup or delivery.</dd>
+        </dl>
+        <div className="mt-6 flex flex-wrap gap-2.5">
+          {follow && (
+            <a href={follow} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-2 rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
+              <MessageCircle className="h-4 w-4" /> Follow up on WhatsApp
+            </a>
+          )}
+          <Link href="/products" className="inline-flex h-11 items-center rounded-lg border border-navy-200 bg-white px-5 text-sm font-semibold text-navy-900 transition-colors hover:border-navy-900">
+            Continue browsing
+          </Link>
+        </div>
       </div>
     </div>
   );

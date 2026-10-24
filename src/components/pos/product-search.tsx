@@ -7,6 +7,7 @@ import { Button, Spinner } from "@/components/ui/button";
 import { SampleBadge } from "@/components/ui/badge";
 import { cn } from "@/components/ui/cn";
 import type { PosUnit, SearchResult } from "./types";
+import { lineDescription, optionLabel } from "@/lib/line-description";
 
 interface Props {
   saleId: string;
@@ -90,7 +91,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
       try {
         await apiFetch(`/api/sales/${saleId}/lines`, { method: "POST", body: { variantId: r.variantId, quantity, unitCode } });
         const unitName = units.find((u) => u.code === unitCode)?.name ?? unitCode;
-        await onAdded(`Added ${formatQty(quantity)} ${unitName} · ${r.productName} — ${r.variantName}`);
+        await onAdded(`Added ${formatQty(quantity)} ${unitName} · ${lineDescription(null, r.productName, r.variantName)}`);
         reset();
       } catch (err) {
         onError(errorMessage(err));
@@ -222,7 +223,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
                     <span className="font-semibold text-navy-950">{r.productName}</span>
                     {r.isSample && <SampleBadge label="Sample" />}
                   </span>
-                  <span className="block text-sm text-navy-700">{r.variantName}</span>
+                  {optionLabel(r.variantName) && <span className="block text-sm text-navy-700">{r.variantName}</span>}
                   <span className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-navy-500">
                     <span className="font-mono text-navy-700">{r.sku}</span>
                     {[r.brandName, r.categoryName].filter(Boolean).map((t) => (
@@ -326,7 +327,7 @@ function AddPanel({
             {r.productName}
             {r.isSample && <SampleBadge label="Sample" />}
           </div>
-          <div className="text-sm text-navy-700">{r.variantName}</div>
+          {optionLabel(r.variantName) && <div className="text-sm text-navy-700">{r.variantName}</div>}
           <div className="mt-1 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
             <span className="text-navy-700">{r.sku}</span>
             {r.hsnCode && <span>HSN {r.hsnCode}</span>}
