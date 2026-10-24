@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "vercel-build": "npm run db:migrate && npm run create-super-admin -- --if-missing && npm run import:products -- --publish && next build",
+    "vercel-build": "npm run db:migrate && npm run create-super-admin -- --if-missing && npm run import:products -- --publish --apply-market-prices --refresh-content && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",

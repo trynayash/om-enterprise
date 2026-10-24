@@ -20,7 +20,7 @@ test.describe("public website", () => {
   test("product page shows server prices and a clear demonstration warning", async ({ page }) => {
     await page.goto("/products/sample-interior-emulsion");
     await expect(page.getByText("Demonstration product — not real product information.")).toBeVisible();
-    await expect(page.getByText("₹350.00").first()).toBeVisible();
+    await expect(page.getByText("₹350", { exact: true }).first()).toBeVisible();
     await expectNoHorizontalScroll(page);
   });
 

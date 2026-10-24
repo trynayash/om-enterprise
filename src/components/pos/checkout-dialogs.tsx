@@ -9,6 +9,7 @@ import { Dialog } from "@/components/ui/dialog";
 import { Field, Input } from "@/components/ui/field";
 import { Alert } from "@/components/ui/page";
 import type { SaleData } from "./types";
+import { optionLabel } from "@/lib/line-description";
 
 type Run = (fn: () => Promise<unknown>, success?: string) => Promise<boolean>;
 
@@ -66,7 +67,7 @@ export function FinalizeDialog({ data, onClose, run }: { data: SaleData; onClose
             <li key={l.id} className="flex justify-between gap-3 px-3 py-2.5">
               <span className="min-w-0">
                 <span className="font-medium text-navy-950">{l.productName}</span>
-                {l.variantName && <span className="text-navy-500"> · {l.variantName}</span>}
+                {optionLabel(l.variantName) && <span className="text-navy-500"> · {l.variantName}</span>}
                 <span className="mt-0.5 block font-mono text-xs text-navy-500">
                   {formatQty(l.quantity)} × {formatINR(l.unitPrice)}
                 </span>

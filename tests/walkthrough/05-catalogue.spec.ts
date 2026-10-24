@@ -98,6 +98,6 @@ test("05 · Catalogue: brand, product, variant, units, price, cost, review, publ
   await say(page, "The public website now shows the product with its price — no SAMPLE warning, because it isn't sample data.");
   await page.goto("/products/test-pressure-pipe-not-a-real-product");
   await check(page, "Public product page shows the new product", () => expect(page.getByRole("heading", { name: TEST_ITEM.product })).toBeVisible());
-  await check(page, "Public price ₹420.00", () => expect(page.getByText("₹420.00").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "Public price ₹420", () => expect(page.getByText("₹420", { exact: true }).filter({ visible: true }).first()).toBeVisible());
   await finish(page);
 });

@@ -12,6 +12,8 @@ import { EmptyState, PageHeader, PageSkeleton } from "@/components/ui/page";
 import { cn } from "@/components/ui/cn";
 import { buttonClass } from "@/components/ui/button";
 import { whatsappLink } from "@/lib/india";
+import { optionLabel } from "@/lib/line-description";
+import { preferredContactLabel } from "@/components/staff/labels";
 
 export const metadata = { title: "Customer orders" };
 
@@ -48,7 +50,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
         title="Customer orders"
         description="Enquiries and order requests from the website. Website prices are indicative — starting a sale applies today's prices."
       />
-      <nav className="flex gap-1 overflow-x-auto shadow-[inset_0_-1px_0_var(--color-navy-200)]" aria-label="Order status">
+      <nav className="flex gap-1 overflow-x-auto max-sm:scroll-fade-x shadow-[inset_0_-1px_0_var(--color-navy-200)]" aria-label="Order status">
         {TABS.map((t) => (
           <Link
             key={t.key}
@@ -82,7 +84,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                   <div className="min-w-0">
                     <div className="text-base font-semibold text-navy-950">{o.customerName}</div>
                     <div className="text-sm text-navy-600">{[o.city, o.address].filter(Boolean).join(" · ") || "No address given"}</div>
-                    {o.preferredContact && <div className="mt-0.5 text-xs text-navy-500">Prefers: {o.preferredContact}</div>}
+                    {o.preferredContact && <div className="mt-0.5 text-xs text-navy-500">{preferredContactLabel(o.preferredContact)}</div>}
                   </div>
                   <div className="flex gap-2">
                     <a href={`tel:+91${o.mobile}`} className={buttonClass("outline", "md", "font-mono font-medium")}>
@@ -106,7 +108,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                       <li key={l.id} className="flex justify-between gap-3 px-3 py-2.5">
                         <span className="min-w-0">
                           <span className="font-medium text-navy-950">{l.productName}</span>
-                          {l.variantName && <span className="text-navy-500"> · {l.variantName}</span>}
+                          {optionLabel(l.variantName) && <span className="text-navy-500"> · {l.variantName}</span>}
                           <span className="mt-0.5 block font-mono text-xs text-navy-500">{l.sku}</span>
                         </span>
                         <span className="shrink-0 text-right font-mono">

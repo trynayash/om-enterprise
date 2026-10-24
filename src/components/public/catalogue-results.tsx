@@ -73,7 +73,7 @@ export async function CatalogueResults({
             </>
           )}
         </p>
-        {website.showPrices && result.total > 0 && <span className="text-xs text-navy-500">Prices shown are current selling prices.</span>}
+        {website.showPrices && result.total > 0 && <span className="text-xs text-navy-500">Prices are current selling prices and include any taxes.</span>}
       </div>
       {result.items.length ? (
         <ProductGrid items={result.items} />
@@ -82,7 +82,7 @@ export async function CatalogueResults({
           <TechnicalDrawing kind="box" className="h-24 w-32 text-navy-400" />
           <h2 className="mt-4 text-lg font-semibold text-navy-950">We couldn&apos;t find a match</h2>
           <p className="mt-1 max-w-md text-sm leading-relaxed text-navy-500">
-            Try a different word or size, or browse all products. Can&apos;t see what you need? Ask us — we stock much more than what&apos;s listed online.
+            Try a different word or size, or browse all products. Can&apos;t see what you need? Ask us — not everything we sell is listed online yet.
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-2.5">
             <LinkButton href="/products">Browse all products</LinkButton>

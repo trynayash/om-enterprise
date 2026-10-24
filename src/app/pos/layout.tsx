@@ -7,7 +7,7 @@ export const metadata = { title: { default: "Point of Sale", template: "%s · PO
 export default function PosLayout({ children }: LayoutProps<"/pos">) {
   return (
     <ToastProvider>
-      <div className="flex min-h-screen flex-col bg-navy-50/70 print:bg-white">
+      <div className="flex min-h-screen flex-col bg-paper/50 print:bg-white">
         <Suspense fallback={<PosTopBarSkeleton />}>
           <PosTopBar />
         </Suspense>

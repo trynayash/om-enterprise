@@ -4,11 +4,20 @@
  *   npm run import:products                 # create missing products as unpublished drafts
  *   npm run import:products -- --publish    # also mark new products reviewed and publish them
  *   npm run import:products -- --check      # validate the files only; write nothing
+ *   npm run import:products -- --apply-market-prices
+ *                                           # set researched market prices as the selling price
+ *   npm run import:products -- --refresh-content
+ *                                           # update description/specs/warranty of products nobody has edited
  *
  * Idempotent by SKU: missing variants are added; an existing variant only gains a price if it has
  * never had one (so prices found later can be added by re-running). Every file is
  * validated before anything is written. List prices become PENDING proposals for the Super Admin
- * (Dashboard → Price review); the website shows "Price on request" until one is approved. Images are
+ * (Dashboard → Price review); the website shows "Price on request" until one is approved.
+ * With --apply-market-prices, a variant that has no approved price gets its researched market price
+ * as its selling price straight away (replacing any pending proposal); a price someone has approved
+ * is never touched. With --refresh-content, an existing product's description, specifications and
+ * warranty follow the files, unless a person has ever edited the product (a "product.update" in the
+ * audit log), in which case the shop's own text is kept. Images are
  * downloaded, re-encoded by the normal upload service and stored; a failed image is reported and
  * retried on the next run for products that still have none. Actions are audited under the first
  * active Super Admin; with no Super Admin yet the import is skipped.
@@ -40,6 +49,9 @@ const variantSchema = z.object({
     .transform((v) => v ?? true),
   mrp: money.nullish(),
   priceSource: z.string().nullish(),
+  /** Researched price a local dealer charges (incl. GST), used with --apply-market-prices. */
+  marketPrice: money.nullish(),
+  marketPriceSource: z.string().nullish(),
 });
 
 const productSchema = z.object({
@@ -116,6 +128,8 @@ async function download(url: string): Promise<Buffer | string> {
 async function main() {
   const checkOnly = process.argv.includes("--check");
   const publish = process.argv.includes("--publish");
+  const applyMarketPrices = process.argv.includes("--apply-market-prices");
+  const refreshContent = process.argv.includes("--refresh-content");
   const items = await loadFiles();
 
   const { getDb, getPool } = await import("../src/server/db/client");
@@ -144,6 +158,10 @@ async function main() {
       if (v.listPrice && v.mrp && v.listPriceIncludesTax && Number(v.listPrice) > Number(v.mrp)) {
         problems.push(`${at}: ${v.sku} list price ₹${v.listPrice} is above its MRP ₹${v.mrp}`);
       }
+      if (v.marketPrice && v.mrp && Number(v.marketPrice) > Number(v.mrp)) {
+        problems.push(`${at}: ${v.sku} market price ₹${v.marketPrice} is above its MRP ₹${v.mrp}`);
+      }
+      if (v.marketPrice && !v.marketPriceSource) problems.push(`${at}: ${v.sku} market price has no marketPriceSource`);
     }
   }
   if (problems.length) throw new Error(`Catalogue check failed:\n  ${problems.join("\n  ")}`);
@@ -154,7 +172,8 @@ async function main() {
     return;
   }
 
-  const { loadActor } = await import("../src/server/auth/actor");
+  const { auditActorOf, loadActor } = await import("../src/server/auth/actor");
+  const { audit } = await import("../src/server/audit");
   const catalog = await import("../src/server/services/catalog");
   const pricing = await import("../src/server/services/pricing");
   const { uploadProductImage } = await import("../src/server/services/uploads");
@@ -176,9 +195,10 @@ async function main() {
   // Everything a re-run needs to know, in three queries, so unchanged products cost no round trips.
   const known = new Map(
     (
-      await db.execute<{ sku: string; variant_id: string; product_id: string; priced: boolean }>(
+      await db.execute<{ sku: string; variant_id: string; product_id: string; priced: boolean; approved: boolean }>(
         sql`select upper(v.sku) as sku, v.id as variant_id, v.product_id,
-                   exists(select 1 from variant_prices p where p.variant_id = v.id) as priced
+                   exists(select 1 from variant_prices p where p.variant_id = v.id) as priced,
+                   exists(select 1 from variant_prices p where p.variant_id = v.id and p.status = 'approved') as approved
             from product_variants v`,
       )
     ).rows.map((r) => [r.sku, r]),
@@ -188,6 +208,22 @@ async function main() {
   );
   const isNew = ({ product: p }: Loaded) => !p.variants.some((v) => known.has(v.sku));
 
+  // For --refresh-content: the current text of every product, and the products a person has edited.
+  const content = new Map(
+    refreshContent
+      ? (
+          await db
+            .select({ id: schema.products.id, description: schema.products.description, specifications: schema.products.specifications, warrantyInfo: schema.products.warrantyInfo })
+            .from(schema.products)
+        ).map((r) => [r.id, r])
+      : [],
+  );
+  const editedByStaff = new Set(
+    refreshContent
+      ? (await db.selectDistinct({ id: schema.auditLogs.entityId }).from(schema.auditLogs).where(eq(schema.auditLogs.action, "product.update"))).map((r) => r.id)
+      : [],
+  );
+
   // Brands first, one at a time, so parallel product imports never race to create the same brand.
   for (const item of items.filter(isNew)) {
     const brand = item.product.brand;
@@ -196,7 +232,7 @@ async function main() {
     }
   }
 
-  const stats = { products: 0, variants: 0, prices: 0, images: 0, imageFailures: 0, published: 0 };
+  const stats = { products: 0, variants: 0, prices: 0, marketPrices: 0, refreshed: 0, images: 0, imageFailures: 0, published: 0 };
   const failures: string[] = [];
 
   async function importOne({ file, researchedOn, product: p }: Loaded) {
@@ -230,12 +266,39 @@ async function main() {
         stats.products++;
       }
 
+      const current = content.get(productId);
+      if (refreshContent && !created && current && !editedByStaff.has(productId)) {
+        // Normalise the file's text exactly as the app stores it, so unchanged text compares equal.
+        const next = {
+          description: productInput.shape.description.parse(p.description ?? null) ?? null,
+          specifications: productInput.shape.specifications.parse(p.specifications.filter((s) => s.label.trim() && s.value.trim()).slice(0, 60)) ?? [],
+          warrantyInfo: productInput.shape.warrantyInfo.parse(p.warranty ?? null) ?? null,
+        };
+        const same =
+          current.description === next.description &&
+          current.warrantyInfo === next.warrantyInfo &&
+          JSON.stringify(current.specifications) === JSON.stringify(next.specifications);
+        if (!same) {
+          await db.transaction(async (tx) => {
+            await tx.update(schema.products).set({ ...next, updatedAt: new Date() }).where(eq(schema.products.id, productId));
+            await audit(tx, auditActorOf(actor), {
+              action: "product.catalog_refresh",
+              entityType: "product",
+              entityId: productId,
+              summary: `Catalogue text refreshed from the data files: "${p.name}"`,
+            });
+          });
+          stats.refreshed++;
+        }
+      }
+
       for (const [i, v] of p.variants.entries()) {
         const prior = known.get(v.sku);
         let variantId = prior?.variant_id;
+        const useMarketPrice = applyMarketPrices && !!v.marketPrice && !prior?.approved;
         if (prior) {
           // A price found after the first import fills a variant that has never had one.
-          if (prior.priced || !v.listPrice) continue;
+          if (!useMarketPrice && (prior.priced || !v.listPrice)) continue;
         } else {
           const variant = await catalog.createVariant(
             actor,
@@ -246,7 +309,17 @@ async function main() {
           stats.variants++;
           if (p.altUnit) await catalog.addUnitConversion(actor, variant.id, p.altUnit.unit, p.altUnit.factor);
         }
-        if (v.listPrice) {
+        if (useMarketPrice) {
+          const reason = `Market price (researched): ${v.marketPriceSource}`;
+          await pricing.proposePrice(actor, {
+            variantId: variantId!,
+            price: v.marketPrice!,
+            priceIncludesTax: true,
+            mrp: v.mrp ?? null,
+            reason: reason.length > 300 ? `${reason.slice(0, 299)}…` : reason,
+          });
+          stats.marketPrices++;
+        } else if (v.listPrice) {
           const reason = `Manufacturer list price: ${v.priceSource ?? "see product sources"}`;
           await pricing.proposePrice(actor, {
             variantId: variantId!,
@@ -310,6 +383,7 @@ async function main() {
 
   console.log(
     `Imported ${stats.products} new products and ${stats.variants} variants; ${stats.prices} prices await approval; ` +
+      `${stats.marketPrices} market prices applied; ${stats.refreshed} products' text refreshed; ` +
       `${stats.images} images stored (${stats.imageFailures} skipped); ${stats.published} published.`,
   );
   if (failures.length) console.log(`Products with errors (fix the data and run again):\n  ${failures.join("\n  ")}`);

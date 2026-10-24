@@ -5,7 +5,7 @@ import { loadPosConfig, loadPosUnits } from "@/components/pos/config";
 import { PriceLookup } from "@/components/pos/price-lookup";
 import { PageHeader, PageSkeleton } from "@/components/ui/page";
 
-export const metadata = { title: "Search products" };
+export const metadata = { title: "Price list" };
 
 export default function ProductsPage() {
   return (
@@ -21,7 +21,7 @@ async function Products() {
   const [config, units] = [await loadPosConfig(), await loadPosUnits()];
   return (
     <div className="space-y-4">
-      <PageHeader eyebrow="Point of sale" title="Search products" description="Current selling prices for every active product and variant." />
+      <PageHeader eyebrow="Point of sale" title="Price list" description="Current selling prices for every active product and variant." />
       <PriceLookup categories={categories} units={units} taxCharged={config.registrationType !== "composition" && config.registrationType !== "unregistered"} />
     </div>
   );

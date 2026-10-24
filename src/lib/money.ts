@@ -62,6 +62,15 @@ export function formatINR(v: DecInput | null | undefined): string {
   return inrFormatter.format(r2(v).toFixed(2) as unknown as number);
 }
 
+const inrWholeFormatter = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 });
+
+/** Catalogue prices: ₹1,290 for whole rupees, ₹170.50 otherwise. Bills keep formatINR. */
+export function formatPrice(v: DecInput | null | undefined): string {
+  if (v === null || v === undefined || v === "") return "—";
+  const d = r2(v);
+  return d.isInteger() ? inrWholeFormatter.format(d.toFixed(0) as unknown as number) : formatINR(d);
+}
+
 const numFormatter = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 3 });
 export function formatQty(v: DecInput): string {
   return numFormatter.format(D(v).toFixed(3) as unknown as number);

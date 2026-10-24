@@ -15,6 +15,12 @@ import { BarChart } from "@/components/dashboard/admin/bar-chart";
 import { PeriodFilter } from "@/components/dashboard/admin/period-filter";
 import { D, formatINR } from "@/lib/money";
 import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { METHOD_LABEL, VERIFICATION_LABEL } from "@/components/dashboard/ops/guard";
+import { plural } from "@/components/staff/labels";
+import { TabStrip } from "@/components/staff/tab-strip";
+import { PriceChangesTable } from "@/components/dashboard/price-changes-table";
+import { Pagination } from "@/components/dashboard/ops/pagination";
+import { num } from "@/components/dashboard/ops/params";
 
 /** Title bar for a table that sits directly in a TableWrap. */
 function TableTitle({ title, action }: { title: string; action?: React.ReactNode }) {
@@ -73,7 +79,7 @@ async function Reports({ searchParams }: { searchParams: PageProps<"/dashboard/r
         description="Calculated only from saved bills, credit notes and verified payments. Training (sample) transactions are excluded."
       />
       <PeriodFilter from={from} to={to} />
-      <nav className="no-print mb-6 flex gap-5 overflow-x-auto border-b border-navy-200" aria-label="Report">
+      <TabStrip className="no-print relative mb-6 flex gap-5 overflow-x-auto border-b border-navy-200 max-lg:scroll-fade-x" label="Report">
         {tabs.map((t) => (
           <Link
             key={t.key}
@@ -87,7 +93,7 @@ async function Reports({ searchParams }: { searchParams: PageProps<"/dashboard/r
             {t.label}
           </Link>
         ))}
-      </nav>
+      </TabStrip>
       {tab === "overview" && <Overview actor={actor} period={period} showProfit={showProfit} canExport={canExport} qs={qs} />}
       {tab === "products" && <Products actor={actor} period={period} showProfit={showProfit} canExport={canExport} qs={qs} />}
       {tab === "categories" && <Categories actor={actor} period={period} canExport={canExport} qs={qs} />}
@@ -95,7 +101,7 @@ async function Reports({ searchParams }: { searchParams: PageProps<"/dashboard/r
       {tab === "discounts" && <Discounts actor={actor} period={period} canExport={canExport} qs={qs} />}
       {tab === "payments" && <Payments actor={actor} period={period} canExport={canExport} qs={qs} />}
       {tab === "profit" && showProfit && <Profit actor={actor} period={period} canExport={canExport} qs={qs} />}
-      {tab === "price-changes" && <PriceChanges actor={actor} period={period} canExport={canExport} qs={qs} />}
+      {tab === "price-changes" && <PriceChanges actor={actor} period={period} canExport={canExport} qs={qs} sp={sp} />}
     </div>
   );
 }
@@ -157,7 +163,7 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
               <tbody>
                 {s.collections.byMethod.map((r) => (
                   <tr key={`${r.method}-${r.direction}`} className={rowHover}>
-                    <td className={tdText}>{r.method.toUpperCase()}</td>
+                    <td className={tdText}>{METHOD_LABEL[r.method] ?? r.method}</td>
                     <td className={tdText}>{r.direction === "in" ? "Received" : <Badge tone="purple">Refund</Badge>}</td>
                     <td className={tdNum}>{r.count}</td>
                     <td className={`${tdNum} font-semibold`}>{formatINR(r.amount)}</td>
@@ -176,21 +182,26 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
 
 function ProfitCard({ profit }: { profit: Awaited<ReturnType<typeof reports.grossProfit>> }) {
   const partial = Number(profit.costCoveragePercent) < 100;
+  // No sold line has a recorded cost: profit is unknown, not zero.
+  const known = profit.grossMarginPercent !== null;
+  const none = <span className="text-navy-400">—</span>;
   return (
     <Card>
       <CardHeader title="Gross profit" description={profit.note} />
-      <CardBody className="grid gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Figure label="Gross profit" tone="text-emerald-700">
-          {formatINR(profit.grossProfit)}
+      <CardBody className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Figure label="Gross profit" tone={known ? "text-emerald-700" : undefined}>
+          {known ? formatINR(profit.grossProfit) : none}
         </Figure>
-        <Figure label="Gross margin">{profit.grossMarginPercent ? `${profit.grossMarginPercent}%` : "—"}</Figure>
-        <Figure label="Cost of goods sold">{formatINR(profit.costOfGoodsSold)}</Figure>
+        <Figure label="Gross margin">{known ? `${profit.grossMarginPercent}%` : none}</Figure>
+        <Figure label="Cost of goods sold">{known ? formatINR(profit.costOfGoodsSold) : none}</Figure>
         <Figure label="Cost coverage" tone={partial ? "text-amber-700" : undefined}>
-          {profit.costCoveragePercent}%
+          {Number(profit.itemRevenue) > 0 ? `${profit.costCoveragePercent}%` : none}
         </Figure>
         {partial && (
           <Alert tone="warning" className="sm:col-span-2 lg:col-span-4">
-            Profit is calculated on {formatINR(profit.revenueWithKnownCost)} of {formatINR(profit.itemRevenue)} item sales — {profit.linesWithoutCost} sold line(s) had no recorded cost and are excluded. Record purchase costs for a reliable figure.
+            {known
+              ? `Profit is calculated on ${formatINR(profit.revenueWithKnownCost)} of ${formatINR(profit.itemRevenue)} item sales — ${plural(profit.linesWithoutCost, "sold line")} had no recorded cost and ${profit.linesWithoutCost === 1 ? "is" : "are"} excluded. Record purchase costs for a reliable figure.`
+              : `None of the ${plural(profit.linesWithoutCost, "sold line")} in this period ${profit.linesWithoutCost === 1 ? "has" : "have"} a recorded cost, so gross profit can't be worked out yet. Record purchase costs to see it.`}
           </Alert>
         )}
       </CardBody>
@@ -429,8 +440,8 @@ async function Payments({ actor, period, canExport, qs }: P) {
           <tbody>
             {r.byMethod.map((m) => (
               <tr key={`${m.method}-${m.verification_method}-${m.direction}`} className={rowHover}>
-                <td className={tdText}>{m.method.toUpperCase()}</td>
-                <td className={tdText}>{(m.verification_method ?? "—").replace(/_/g, " ")}</td>
+                <td className={tdText}>{METHOD_LABEL[m.method] ?? m.method}</td>
+                <td className={tdText}>{m.verification_method ? (VERIFICATION_LABEL[m.verification_method] ?? m.verification_method.replace(/_/g, " ")) : <span className="text-navy-400">—</span>}</td>
                 <td className={tdText}>{m.direction === "in" ? "Received" : "Refund"}</td>
                 <td className={tdNum}>{m.count}</td>
                 <td className={`${tdNum} font-semibold`}>{formatINR(m.amount)}</td>
@@ -448,7 +459,7 @@ async function Payments({ actor, period, canExport, qs }: P) {
       </TableWrap>
       {Number(r.reversed?.count) > 0 && (
         <Alert tone="warning">
-          {r.reversed.count} payment confirmation(s) worth {formatINR(r.reversed.amount)} were reversed in this period. Review them in Payments.
+          {plural(r.reversed.count, "payment confirmation")} worth {formatINR(r.reversed.amount)} {Number(r.reversed.count) === 1 ? "was" : "were"} reversed in this period. Review them in Payments.
         </Alert>
       )}
     </div>
@@ -513,67 +524,21 @@ async function Profit({ actor, period, canExport, qs }: P) {
   );
 }
 
-async function PriceChanges({ actor, period, canExport, qs }: P) {
-  const rows = await reports.priceChangeReport(actor, period);
+const CHANGES_PAGE = 50;
+
+async function PriceChanges({ actor, period, canExport, qs, sp }: P & { sp: Record<string, string | string[] | undefined> }) {
+  const all = await reports.priceChangeReport(actor, period);
   const showMargin = can(actor, "costs.view");
+  const pages = Math.max(1, Math.ceil(all.length / CHANGES_PAGE));
+  const page = Math.min(num(sp, "page", 1), pages);
+  const rows = all.slice((page - 1) * CHANGES_PAGE, page * CHANGES_PAGE);
   return (
-    <TableWrap>
-      <TableTitle title="Price changes" action={<Export name="price-changes" qs={qs} show={canExport} />} />
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className={th}>When</th>
-            <th className={th}>Item</th>
-            <th className={th}>List</th>
-            <th className={thNum}>Old → new</th>
-            <th className={thNum}>Change</th>
-            {showMargin && <th className={thNum}>Margin before → after</th>}
-            <th className={th}>Status</th>
-            <th className={th}>By / approved by</th>
-            <th className={th}>Reason</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className={rowHover}>
-              <td className={`${tdMuted} whitespace-nowrap`}>
-                <DateTime value={r.created_at} />
-              </td>
-              <td className={tdText}>
-                {r.product}
-                <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{r.sku}</div>
-              </td>
-              <td className={tdText}>{r.list_name}</td>
-              <td className={tdNum}>
-                {r.previous_price ? formatINR(r.previous_price) : "—"} → <span className="font-semibold">{formatINR(r.price)}</span>
-              </td>
-              <td className={tdNum}>{r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${r.changePercent}%` : "new"}</td>
-              {showMargin && (
-                <td className={tdNum}>
-                  {r.previous_margin ?? "—"}% → {r.new_margin ?? "—"}%
-                </td>
-              )}
-              <td className={tdText}>
-                <Badge tone={r.status === "approved" ? "green" : r.status === "pending" ? "amber" : r.status === "rejected" ? "red" : "neutral"} className="capitalize">
-                  {r.status}
-                </Badge>
-              </td>
-              <td className={tdText}>
-                {r.created_by}
-                {r.decided_by && r.decided_by !== r.created_by && <div className="text-xs text-navy-500">✓ {r.decided_by}</div>}
-              </td>
-              <td className={`${tdMuted} max-w-56 text-xs`}>{r.reason}</td>
-            </tr>
-          ))}
-          {!rows.length && (
-            <tr>
-              <td className={tdMuted} colSpan={9}>
-                No price changes in this period.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </TableWrap>
+    <>
+      <TableWrap>
+        <TableTitle title="Price changes" action={<Export name="price-changes" qs={qs} show={canExport} />} />
+        {rows.length ? <PriceChangesTable rows={rows} showCost={showMargin} /> : <p className="px-5 py-4 text-sm text-navy-500">No price changes in this period.</p>}
+      </TableWrap>
+      <Pagination total={all.length} page={page} pageSize={CHANGES_PAGE} sp={sp} basePath="/dashboard/reports" />
+    </>
   );
 }

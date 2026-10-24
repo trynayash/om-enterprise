@@ -10,6 +10,7 @@ import { SampleBadge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import type { CompatDTO, CompatVariantDTO, ConversionDTO, UnitOption, VariantRow } from "./types";
+import { lineDescription } from "@/lib/line-description";
 
 interface SearchHit {
   variantId: string;
@@ -60,7 +61,7 @@ export function UnitsCompatPanel({
       return {
         otherId,
         note: c.note,
-        label: sib ? `${productName} — ${sib.name}` : other ? `${other.productName} — ${other.name}` : otherId,
+        label: sib ? lineDescription(null, productName, sib.name) : other ? lineDescription(null, other.productName, other.name) : otherId,
         sku: sib?.sku ?? other?.sku ?? "",
         productId: sib ? productId : (other?.productId ?? null),
       };
@@ -233,7 +234,7 @@ export function UnitsCompatPanel({
                   <li key={h.variantId} className="flex items-center justify-between gap-2 border-b border-navy-100 px-3 py-2 text-sm last:border-0">
                     <span className="min-w-0">
                       <span className="block truncate font-medium">
-                        {h.productName} — {h.variantName} {h.isSample && <SampleBadge className="ml-1" label="Sample" />}
+                        {lineDescription(null, h.productName, h.variantName)} {h.isSample && <SampleBadge className="ml-1" label="Sample" />}
                       </span>
                       <span className="text-xs text-navy-500">
                         <span className="font-mono">{h.sku}</span>

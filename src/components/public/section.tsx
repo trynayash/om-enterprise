@@ -90,11 +90,6 @@ export function Breadcrumbs({ items }: { items: { href?: string; label: string }
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[12px] text-navy-500">
         {items.map((it, i) => (
           <li key={`${it.label}-${i}`} className="flex items-center gap-2">
-            {i > 0 && (
-              <span aria-hidden className="text-navy-300">
-                /
-              </span>
-            )}
             {it.href ? (
               <Link href={it.href} className="link-draw hover:text-navy-950">
                 {it.label}
@@ -102,6 +97,12 @@ export function Breadcrumbs({ items }: { items: { href?: string; label: string }
             ) : (
               <span aria-current="page" className="text-navy-900">
                 {it.label}
+              </span>
+            )}
+            {/* After the item, so a wrapped line ends with the separator instead of starting with it. */}
+            {i < items.length - 1 && (
+              <span aria-hidden className="text-navy-300">
+                /
               </span>
             )}
           </li>

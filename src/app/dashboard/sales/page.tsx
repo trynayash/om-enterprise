@@ -8,7 +8,8 @@ import { listStaffOptions } from "@/components/dashboard/ops/staff-options";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Money, DateTime } from "@/components/ui/money";
-import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { Badge, StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-bar";
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
@@ -146,14 +147,14 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                       <Link href={`/dashboard/sales/${s.id}`} className={codeLink}>
                         {s.saleNumber}
                       </Link>
-                      {s.isTraining && <SampleBadge label="Training" />}
+                      {s.isTraining && <TrainingBadge />}
                     </span>
                   </td>
                   <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={s.createdAt} />
                   </td>
                   <td className={tdText}>
-                    <div className="max-w-[200px] truncate">{s.customerName ?? <span className="text-navy-400">Walk-in</span>}</div>
+                    <div className="max-w-[200px] truncate">{s.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</div>
                     {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
                   </td>
                   <td className={tdNum}>{s.itemCount}</td>

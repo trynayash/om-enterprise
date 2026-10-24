@@ -11,6 +11,7 @@ import { rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashbo
 import { DateTime, Qty } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
+import { lineDescription } from "@/lib/line-description";
 
 export interface StockItem {
   variantId: string;
@@ -218,7 +219,7 @@ function MovementForm() {
             {picked ? (
               <div className="flex h-10 items-center justify-between gap-2 rounded-lg border border-navy-200 bg-paper px-3 text-sm">
                 <span className="truncate">
-                  {picked.productName} — {picked.variantName} <span className="font-mono text-xs text-navy-500">{picked.sku}</span>
+                  {lineDescription(null, picked.productName, picked.variantName)} <span className="font-mono text-xs text-navy-500">{picked.sku}</span>
                 </span>
                 <button type="button" className="text-xs font-semibold text-gold-700" onClick={() => setPicked(null)}>
                   Change
@@ -232,7 +233,7 @@ function MovementForm() {
                     {hits.map((h) => (
                       <li key={h.variantId}>
                         <button type="button" className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-paper" onClick={() => setPicked(h)}>
-                          {h.productName} — {h.variantName} <span className="font-mono text-xs text-navy-500">{h.sku}</span>
+                          {lineDescription(null, h.productName, h.variantName)} <span className="font-mono text-xs text-navy-500">{h.sku}</span>
                         </button>
                       </li>
                     ))}

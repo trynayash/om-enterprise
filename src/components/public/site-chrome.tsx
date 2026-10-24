@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { whatsappLink } from "@/lib/india";
+import { formatPhone, whatsappLink } from "@/lib/india";
 import { HeaderClient } from "./header-client";
+import { FloatGate } from "./float-gate";
 import { addressLines, addressShort, getSiteData, mapsHref, telHref } from "./site-data";
 
 /* ------------------------------------------------------------------ */
@@ -46,15 +47,15 @@ async function FooterWithData() {
         <div className="grid gap-10 border-b border-white/10 py-14 md:grid-cols-2 lg:grid-cols-[1.35fr_1fr_0.8fr_1.15fr]">
           <div>
             <Logo inverted />
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-300">{business.about}</p>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-navy-300">Building materials, {addressShort(business)}.</p>
             {wa && (
               <a
                 href={wa}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg bg-gold-500 px-5 text-sm font-semibold text-navy-950 transition-colors hover:bg-gold-400"
+                className="mt-6 inline-flex h-11 items-center gap-2 rounded-lg border border-white/25 px-5 text-sm font-semibold text-white transition-colors hover:border-white"
               >
-                <MessageCircle className="h-4 w-4" /> Chat on WhatsApp
+                <MessageCircle className="h-4 w-4 text-emerald-400" /> Chat on WhatsApp
               </a>
             )}
           </div>
@@ -108,7 +109,7 @@ async function FooterWithData() {
                 <div className="flex gap-3">
                   <dt className="w-16 shrink-0 text-navy-500">Phone</dt>
                   <dd>
-                    <a href={telHref(business.phone)} className={footLink}>{business.phone}</a>
+                    <a href={telHref(business.phone)} className={footLink}>{formatPhone(business.phone)}</a>
                   </dd>
                 </div>
               )}
@@ -116,7 +117,7 @@ async function FooterWithData() {
                 <div className="flex gap-3">
                   <dt className="w-16 shrink-0 text-navy-500">WhatsApp</dt>
                   <dd>
-                    <a href={wa ?? "#"} target="_blank" rel="noopener noreferrer" className={footLink}>{business.whatsapp}</a>
+                    <a href={wa ?? "#"} target="_blank" rel="noopener noreferrer" className={footLink}>{formatPhone(business.whatsapp)}</a>
                   </dd>
                 </div>
               )}
@@ -166,16 +167,19 @@ export function SiteFooter() {
 async function WhatsAppFloatWithData() {
   const { business } = await getSiteData();
   if (!business.whatsapp) return null;
+  // Phones and tablets only: on desktop the header carries WhatsApp.
   return (
+    <FloatGate>
     <a
       href={whatsappLink(business.whatsapp, "Hello OM ENTERPRISE, I have an enquiry.")}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with OM ENTERPRISE on WhatsApp"
-      className="fixed bottom-5 right-5 z-30 flex h-13 w-13 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lift transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-emerald-700 sm:bottom-6 sm:right-6"
+      className="fixed bottom-5 right-5 z-30 flex h-13 w-13 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lift transition-[transform,background-color] duration-200 hover:-translate-y-0.5 hover:bg-emerald-700 sm:bottom-6 sm:right-6 lg:hidden"
     >
       <MessageCircle className="h-6 w-6" />
     </a>
+    </FloatGate>
   );
 }
 

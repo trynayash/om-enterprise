@@ -12,7 +12,7 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await check(page, "Address shown", () => expect(page.getByText("Opp. Shardha Dhaba 2, Bodeli Road").filter({ visible: true }).first()).toBeVisible());
 
   await say(page, "Shop by category: every category the shop sells.");
-  await page.getByRole("heading", { name: "Everything for your build, under one roof" }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Shop by category" }).scrollIntoViewIfNeeded();
   await pause(page, 1500);
   await tap(page.getByRole("link", { name: /Berger Paints Interior/ }));
   await page.waitForURL(/\/category\/berger-paints/);
@@ -37,9 +37,9 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await say(page, "A product page: variants (pack sizes), server-side prices and a clear demonstration warning.");
   await page.goto("/products/sample-interior-emulsion");
   await check(page, "Demonstration warning shown", () => expect(page.getByText("Demonstration product — not real product information.")).toBeVisible());
-  await check(page, "1 L price ₹350.00", () => expect(page.getByText("₹350.00").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "1 L price ₹350", () => expect(page.getByText("₹350", { exact: true }).filter({ visible: true }).first()).toBeVisible());
   await tap(page.getByRole("button", { name: "4 L", exact: true }));
-  await check(page, "Choosing 4 L shows its own price ₹1,290.00", () => expect(page.getByText("₹1,290.00").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "Choosing 4 L shows its own price ₹1,290", () => expect(page.getByText("₹1,290", { exact: true }).filter({ visible: true }).first()).toBeVisible());
 
   await say(page, "Add two of them to the enquiry list.");
   await tap(page.getByRole("button", { name: "Increase quantity" }));
@@ -60,7 +60,7 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await check(page, "About page", () => expect(page.getByRole("heading", { level: 1 })).toBeVisible());
   await pause(page, 1200);
   await page.goto("/contact");
-  await check(page, "Contact page shows the phone number", () => expect(page.getByText("7621934414").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "Contact page shows the phone number", () => expect(page.getByText("+91 76219 34414").filter({ visible: true }).first()).toBeVisible());
   await pause(page, 1200);
 
   await say(page, "Unknown addresses get a friendly 'not listed' page.");

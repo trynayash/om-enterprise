@@ -211,7 +211,7 @@ export function VariantsManager(props: VariantsManagerProps) {
             description="Pricing, cost and history for the selected variant. Click another row above to switch."
           />
           <div className="border-b border-navy-100 px-3 sm:px-5">
-            <div className="-mb-px flex gap-5 overflow-x-auto" role="tablist">
+            <div className="-mb-px flex gap-5 overflow-x-auto max-md:scroll-fade-x" role="tablist">
               {tabs
                 .filter((t) => t.show)
                 .map((t) => (

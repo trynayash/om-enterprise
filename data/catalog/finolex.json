@@ -17,7 +17,8 @@
     "Column pipe: the size/type rows come from a table extract without column headers. Lengths (1.5 m or 3 m) differ by size and type. The variants listed are rows seen in the extract. Confirm length and the relevant standard with the distributor before selling.",
     "SWR: only the Selfit (solvent-joint) pipe is included. A Ringfit (integrated rubber-ring) pipe range exists, but its lengths are given in feet with single- and double-socket options that could not be read reliably. Bend 45°, plain tee and single Y are listed on Finolex pages in more than one series; the joint type (Selfit/Ringfit) should be confirmed when stocking. P-trap was left out because the only page found was an old one.",
     "SWR standards: Finolex states pipes conform to IS 13592 and fittings to IS 14735.",
-    "GST 18% is believed correct for all items (plastic pipes/fittings 3917, valves 8481, solvent cement 3506) but must be confirmed by the shop's accountant."
+    "GST 18% is believed correct for all items (plastic pipes/fittings 3917, valves 8481, solvent cement 3506) but must be confirmed by the shop's accountant.",
+    "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
   ],
   "products": [
     {
@@ -87,7 +88,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "51.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 15 mm 3 m list/MRP ₹271 (₹90.33/m), selling at ₹245 online; Kumaranco (Finolex dealer) sells it at ₹138.97 incl. GST (₹46.3/m). Applied ~44% dealer discount to list → ₹51/m (indexed 2025–26). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P11-20",
@@ -99,7 +102,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "77.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 20 mm 3 m list/MRP ₹415 (₹138.33/m), selling at ₹381 online; Kumaranco (Finolex dealer) sells it at ₹212.68 incl. GST (₹70.9/m). Applied ~44% dealer discount to list → ₹77/m (indexed 2025–26). Vadodara IndiaMART dealers quote ₹195–250 per ¾\" length. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P11-25",
@@ -111,7 +116,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "125.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 25 mm 3 m list/MRP ₹657 (₹219.00/m), selling at ₹593 online; Kumaranco (Finolex dealer) sells it at ₹337.23 incl. GST (₹112.4/m). Applied ~44% dealer discount to list → ₹125/m (indexed 2025–26). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P11-32",
@@ -123,7 +130,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "190.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 32 mm 3 m list/MRP ₹1010 (₹336.67/m), selling at ₹928 online; Kumaranco (Finolex dealer) sells it at ₹491.99 incl. GST (₹164.0/m). Applied ~44% dealer discount to list → ₹190/m (indexed 2025–26). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P11-40",
@@ -135,7 +144,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "260.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 40 mm 3 m list/MRP ₹1383 (₹461.00/m), selling at ₹1250 online; Kumaranco (Finolex dealer) sells it at ₹710.08 incl. GST (₹236.7/m). Applied ~44% dealer discount to list → ₹260/m (indexed 2025–26). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P11-50",
@@ -147,7 +158,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "435.00",
+          "marketPriceSource": "mykit.in (online retailer) shows Finolex CPVC SDR 11 50 mm 3 m list/MRP ₹2320 (₹773.33/m), selling at ₹2133 online; Applied ~44% dealer discount to list → ₹435/m (indexed 2025–26). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -217,7 +230,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "43.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 15 mm 3 m list ₹231 (₹77.00/m); applied the same ~44% dealer discount used for SDR 11 (Kumaranco dealer prices run ~49% below list) → ₹43/m. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-P135-20",
@@ -229,7 +244,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "71.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 20 mm 3 m list ₹380 (₹126.67/m); applied the same ~44% dealer discount used for SDR 11 (Kumaranco dealer prices run ~49% below list) → ₹71/m. Cross-check: a Pudukkottai IndiaMART dealer lists the 20 mm SDR 13.5 length at ₹145 (≈₹48/m, likely ex-GST). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P135-25",
@@ -241,7 +258,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "105.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 25 mm 3 m list ₹553 (₹184.33/m); applied the same ~44% dealer discount used for SDR 11 (Kumaranco dealer prices run ~49% below list) → ₹105/m. Cross-check: sintextank dealer site sells the 25 mm length at ₹290.55 (₹97/m). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-P135-32",
@@ -253,7 +272,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "175.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 32 mm 3 m at ₹851 after an 8% discount, implying list ≈ ₹925 (₹308/m); applied ~44% dealer discount → ₹175/m. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-P135-40",
@@ -265,7 +286,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "220.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 40 mm 3 m list ₹1168 (₹389.33/m); applied the same ~44% dealer discount used for SDR 11 (Kumaranco dealer prices run ~49% below list) → ₹220/m. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-P135-50",
@@ -277,7 +300,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "365.00",
+          "marketPriceSource": "mykit.in shows Finolex CPVC SDR 13.5 50 mm 3 m list ₹1960 (₹653.33/m); applied the same ~44% dealer discount used for SDR 11 (Kumaranco dealer prices run ~49% below list) → ₹365/m. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -327,7 +352,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "12.00",
+          "marketPriceSource": "IndustryBuying lists Finolex ½\" plain elbow (code 6007) at ₹340 + GST per pack (≈₹20/pc if the pack is 20, which reproduces mykit's ₹22 for ¾\"); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹12. matemart.in sells it at ₹11.04 + 18% GST (₹13.0). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-E90-20",
@@ -338,8 +365,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "22.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC elbow 90° 20 mm at list ₹22; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹14. matemart.in sells it at ₹11.97 + 18% GST (₹14.1). Kumaranco (dealer) sells the ¾\" elbow at ₹13.56 incl. GST. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-E90-25",
@@ -350,8 +379,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "45.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "28.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC elbow 90° 25 mm at list ₹45; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹28. matemart.in sells it at ₹25.16 + 18% GST (₹29.7). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-E90-32",
@@ -362,8 +393,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "98.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "61.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC elbow 90° 32 mm at list ₹98; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹61. matemart.in sells it at ₹54.61 + 18% GST (₹64.4). (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-E90-40",
@@ -374,8 +407,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "184.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC elbow 90° 40 mm at list ₹184; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹115. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-E90-50",
@@ -387,7 +422,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "225.00",
+          "marketPriceSource": "matemart.in lists Finolex CPVC elbow 50 mm at ₹327.50 (older list); current lists run ~10% higher (≈₹360); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹225. matemart.in sells it at ₹200.95 + 18% GST (₹237.1). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -437,7 +474,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "13.00",
+          "marketPriceSource": "ESTIMATE: no Finolex 45° elbow price found for 15 mm; list taken as ~5% above Finolex's 90° elbow (₹20), since the found 32/50 mm 45° prices sit at 0.99–1.13× the 90°; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹13. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-E45-20",
@@ -449,7 +488,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "ESTIMATE: no Finolex 45° elbow price found for 20 mm; list taken as ~5% above Finolex's 90° elbow (₹22), since the found 32/50 mm 45° prices sit at 0.99–1.13× the 90°; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹14. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-E45-25",
@@ -461,7 +502,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "29.00",
+          "marketPriceSource": "ESTIMATE: no Finolex 45° elbow price found for 25 mm; list taken as ~5% above Finolex's 90° elbow (₹45), since the found 32/50 mm 45° prices sit at 0.99–1.13× the 90°; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹29. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-E45-32",
@@ -473,7 +516,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "69.00",
+          "marketPriceSource": "aqua-agro.com sells Finolex CPVC 45° elbow 32 mm at ₹102.30 (its usual 8% off, so regular ≈ ₹111); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹69. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-E45-40",
@@ -485,7 +530,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "120.00",
+          "marketPriceSource": "ESTIMATE: no Finolex 45° elbow price found for 40 mm; list taken as ~5% above Finolex's 90° elbow (₹184), since the found 32/50 mm 45° prices sit at 0.99–1.13× the 90°; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹120. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-E45-50",
@@ -496,8 +543,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "355.89",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "220.00",
+          "marketPriceSource": "aqua-agro.com lists Finolex CPVC 45° elbow 50 mm SDR 11 at regular ₹355.89 (sale ₹327.55); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹220. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -551,7 +600,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "16.00",
+          "marketPriceSource": "ESTIMATE: no Finolex ½\" tee price found; list taken as ~1.25× Finolex's ½\" elbow (the tee/elbow ratio in Finolex's 25–50 mm lists) ≈ ₹26; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹16. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEE-20",
@@ -563,7 +614,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "22.00",
+          "marketPriceSource": "devijitrading sells Finolex SDR 11 tee 20 mm at ₹24.75 (25% off a ₹33 older list; current list ≈ ₹36); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹22. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-TEE-25",
@@ -574,8 +627,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "56.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "35.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC tee 25 mm at ₹56 (aqua-agro regular ₹55.59); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹35. matemart sells at ₹31.29 + GST (₹36.9). devijitrading sells at ₹38.25. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-TEE-32",
@@ -587,7 +642,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "76.00",
+          "marketPriceSource": "matemart.in lists Finolex CPVC tee 32 mm at ₹112.00 (older list; current ≈ ₹123); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹76. matemart sells at ₹68.72 + GST (₹81.1). devijitrading sells at ₹84.0. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-TEE-40",
@@ -599,7 +656,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "140.00",
+          "marketPriceSource": "matemart.in lists Finolex CPVC tee 40 mm at ₹202.50 (older list; current ≈ ₹222); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹140. matemart sells at ₹124.25 + GST (₹146.6). (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-TEE-50",
@@ -611,7 +670,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "280.00",
+          "marketPriceSource": "matemart.in lists Finolex CPVC tee 50 mm at ₹410.50 (older list; current ≈ ₹451); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹280. matemart sells at ₹251.88 + GST (₹297.2). (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -661,7 +722,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "8.00",
+          "marketPriceSource": "ESTIMATE: no Finolex coupler price found for 15 mm; list scaled from Finolex's 25 mm coupler (₹29.98) using the size steps of Finolex's own elbow and tee lists (≈₹13); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹8. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-CPL-20",
@@ -673,7 +736,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "11.00",
+          "marketPriceSource": "ESTIMATE: no Finolex coupler price found for 20 mm; list scaled from Finolex's 25 mm coupler (₹29.98) using the size steps of Finolex's own elbow and tee lists (≈₹17); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹11. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-CPL-25",
@@ -684,8 +749,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "29.98",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "19.00",
+          "marketPriceSource": "aqua-agro.com lists Finolex CPVC coupler 25 mm SDR 11 at regular ₹29.98 (sale ₹27.58); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹19. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-CPL-32",
@@ -697,7 +764,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "40.00",
+          "marketPriceSource": "ESTIMATE: no Finolex coupler price found for 32 mm; list scaled from Finolex's 25 mm coupler (₹29.98) using the size steps of Finolex's own elbow and tee lists (≈₹65); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹40. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-CPL-40",
@@ -708,8 +777,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "110.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "68.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC coupler 40 mm SDR 11 at list ₹110 (sells ₹88); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹68. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-CPL-50",
@@ -720,8 +791,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "216.37",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "135.00",
+          "marketPriceSource": "aqua-agro.com lists Finolex CPVC coupler 50 mm SDR 11 at regular ₹216.37 (sale ₹199.14); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹135. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -774,8 +847,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "13.08",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "8.00",
+          "marketPriceSource": "aqua-agro.com lists Finolex CPVC reducer bush 20×15 mm SDR 11 at regular ₹13.08 (sale ₹11.99); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹8. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-25X15",
@@ -787,7 +862,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 25×15 mm reducer; list taken as ~0.77–0.85× Finolex's 25 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹23; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹14. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-25X20",
@@ -799,7 +876,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "16.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 25×20 mm reducer; list taken as ~0.77–0.85× Finolex's 25 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹25; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹16. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-32X15",
@@ -811,7 +890,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "31.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 32×15 mm reducer; list taken as ~0.77–0.85× Finolex's 32 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹50; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹31. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-32X20",
@@ -823,7 +904,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "32.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 32×20 mm reducer; list taken as ~0.77–0.85× Finolex's 32 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹52; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹32. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-32X25",
@@ -835,7 +918,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "34.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 32×25 mm reducer; list taken as ~0.77–0.85× Finolex's 32 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹55; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹34. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-40X20",
@@ -847,7 +932,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "53.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 40×20 mm reducer; list taken as ~0.77–0.85× Finolex's 40 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹85; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹53. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-40X25",
@@ -859,7 +946,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "56.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 40×25 mm reducer; list taken as ~0.77–0.85× Finolex's 40 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹90; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹56. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-RED-50X25",
@@ -871,7 +960,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "105.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found for the 50×25 mm reducer; list taken as ~0.77–0.85× Finolex's 50 mm coupler (the ratio of the found 20×15 reducer ₹13.08 to the 20 mm coupler) ≈ ₹167; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹105. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -921,7 +1012,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "7.00",
+          "marketPriceSource": "ESTIMATE: no Finolex end cap price found for 15 mm; list interpolated between Finolex's found end cap prices (20 mm ≈₹16, 25 mm ≈₹25, 40 mm ₹74) ≈ ₹12; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹7. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-CAP-20",
@@ -933,7 +1026,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "10.00",
+          "marketPriceSource": "devijitrading sells Finolex CPVC end cap 20 mm at ₹10.88 (regular ₹14.50, older list; current ≈ ₹16); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹10. Kumaranco (dealer) sells the ¾\" end cap at ₹10.09 incl. GST. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-CAP-25",
@@ -945,7 +1040,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "16.00",
+          "marketPriceSource": "devijitrading sells Finolex CPVC end cap 25 mm at ₹17.25 (regular ₹23.00, older list; current ≈ ₹25); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹16. (researched 24 Oct 2026, high confidence)"
         },
         {
           "sku": "FNX-CPVC-CAP-32",
@@ -957,7 +1054,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "29.00",
+          "marketPriceSource": "ESTIMATE: no Finolex end cap price found for 32 mm; list interpolated between Finolex's found end cap prices (20 mm ≈₹16, 25 mm ≈₹25, 40 mm ₹74) ≈ ₹46; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹29. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-CAP-40",
@@ -968,8 +1067,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "74.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "46.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC end cap 40 mm at list ₹74 (sells ₹58); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹46. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-CAP-50",
@@ -980,8 +1081,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "150.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "93.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC end cap 50 mm at list ₹150 (sells ₹120); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹93. (researched 24 Oct 2026, medium confidence)"
         }
       ]
     },
@@ -1039,7 +1142,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 15 mm 90° elbow (₹20), the usual relationship in CPVC lists (≈₹22); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹14. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTA-20",
@@ -1051,7 +1156,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "15.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 20 mm 90° elbow (₹22), the usual relationship in CPVC lists (≈₹24); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹15. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTA-25",
@@ -1063,7 +1170,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "31.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 25 mm 90° elbow (₹45), the usual relationship in CPVC lists (≈₹50); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹31. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTA-32",
@@ -1075,7 +1184,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "67.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 32 mm 90° elbow (₹98), the usual relationship in CPVC lists (≈₹108); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹67. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTA-40",
@@ -1087,7 +1198,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "125.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 40 mm 90° elbow (₹184), the usual relationship in CPVC lists (≈₹202); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹125. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTA-50",
@@ -1099,7 +1212,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "245.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC FTA price found; list taken as ~1.1× Finolex's 50 mm 90° elbow (₹360), the usual relationship in CPVC lists (≈₹396); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹245. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1157,7 +1272,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "12.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 15 mm 90° elbow (₹20) (≈₹20); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹12. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTA-20",
@@ -1169,7 +1286,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 20 mm 90° elbow (₹22) (≈₹22); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹14. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTA-25",
@@ -1181,7 +1300,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "28.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 25 mm 90° elbow (₹45) (≈₹45); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹28. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTA-32",
@@ -1193,7 +1314,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "61.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 32 mm 90° elbow (₹98) (≈₹98); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹61. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTA-40",
@@ -1205,7 +1328,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 40 mm 90° elbow (₹184) (≈₹184); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹115. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTA-50",
@@ -1217,7 +1342,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "225.00",
+          "marketPriceSource": "ESTIMATE: no Finolex plain CPVC MTA price found; list taken as about equal to Finolex's 50 mm 90° elbow (₹360) (≈₹360); applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹225. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1275,7 +1402,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "48.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹80; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹48. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTAB-20",
@@ -1287,7 +1416,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "71.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹119; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹71. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTAB-25",
@@ -1299,7 +1430,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹192; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹115. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTAB-32",
@@ -1311,7 +1444,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "195.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹327; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹195. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTAB-40",
@@ -1323,7 +1458,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "305.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹506; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹305. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-MTAB-50",
@@ -1335,7 +1472,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "510.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass MTA price found; list taken as ~10% above the estimated brass FTA (male inserts carry more brass) ≈ ₹854; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹510. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1393,7 +1532,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "44.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 15 mm coupler (≈₹13) + brass-insert premium (≈₹60, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹73; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹44. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTAB-20",
@@ -1405,7 +1546,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "65.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 20 mm coupler (≈₹17) + brass-insert premium (≈₹91, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹108; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹65. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTAB-25",
@@ -1417,7 +1560,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "105.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 25 mm coupler (≈₹30) + brass-insert premium (≈₹145, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹175; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹105. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTAB-32",
@@ -1429,7 +1574,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "180.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 32 mm coupler (≈₹65) + brass-insert premium (≈₹232, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹297; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹180. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTAB-40",
@@ -1441,7 +1588,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "275.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 40 mm coupler (≈₹110) + brass-insert premium (≈₹350, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹460; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹275. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-FTAB-50",
@@ -1453,7 +1602,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "465.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass FTA price found; list = Finolex 50 mm coupler (≈₹216) + brass-insert premium (≈₹560, from Finolex's brass vs plain elbow prices, extrapolated above ¾\") ≈ ₹776; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹465. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1510,8 +1661,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "80.00",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "48.00",
+          "marketPriceSource": "mykit.in lists Finolex CPVC elbow 90° brass insert 15 mm at MRP ₹80 (sells ₹64); applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹48. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-E90B-20",
@@ -1523,7 +1676,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "68.00",
+          "marketPriceSource": "IndustryBuying lists Finolex ¾\" brass elbow (code 6014) at ₹1,916 + GST per pack (≈₹113/pc for a pack of 20, the pack size that matches mykit's ½\" ₹80); applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹68. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-E90B-25",
@@ -1535,7 +1690,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found; list = Finolex plain 25 mm elbow (₹45) + brass-insert premium extrapolated from the ½\"/¾\" brass vs plain elbow gap (≈₹190); applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹115. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-E90B-32",
@@ -1547,7 +1704,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "200.00",
+          "marketPriceSource": "ESTIMATE: no Finolex price found; list = Finolex plain 32 mm elbow (₹98) + brass-insert premium extrapolated from the ½\"/¾\" brass vs plain elbow gap (≈₹330); applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹200. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1605,7 +1764,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "52.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 15 mm tee (≈₹26) + 15 mm brass-insert premium (≈₹60, from Finolex brass vs plain elbow prices) ≈ ₹86; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹52. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-20",
@@ -1617,7 +1778,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "76.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 20 mm tee (≈₹36) + 20 mm brass-insert premium (≈₹91, from Finolex brass vs plain elbow prices) ≈ ₹127; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹76. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-25",
@@ -1629,7 +1792,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "120.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 25 mm tee (≈₹56) + 25 mm brass-insert premium (≈₹145, from Finolex brass vs plain elbow prices) ≈ ₹201; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹120. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-32",
@@ -1641,7 +1806,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "215.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 32 mm tee (≈₹123) + 32 mm brass-insert premium (≈₹232, from Finolex brass vs plain elbow prices) ≈ ₹355; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹215. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-20X15",
@@ -1653,7 +1820,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "58.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 20 mm tee (≈₹36) + 15 mm brass-insert premium (≈₹60, from Finolex brass vs plain elbow prices) ≈ ₹96; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹58. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-25X15",
@@ -1665,7 +1834,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "70.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 25 mm tee (≈₹56) + 15 mm brass-insert premium (≈₹60, from Finolex brass vs plain elbow prices) ≈ ₹116; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹70. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-25X20",
@@ -1677,7 +1848,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "88.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 25 mm tee (≈₹56) + 20 mm brass-insert premium (≈₹91, from Finolex brass vs plain elbow prices) ≈ ₹147; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹88. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-TEEB-32X15",
@@ -1689,7 +1862,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "110.00",
+          "marketPriceSource": "ESTIMATE: no Finolex brass tee price found; list = Finolex plain 32 mm tee (≈₹123) + 15 mm brass-insert premium (≈₹60, from Finolex brass vs plain elbow prices) ≈ ₹183; applied ~40% dealer discount (Kumaranco sells Finolex's ¾\"×½\" brass elbow at ₹47.25 incl. GST) → ₹110. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1743,7 +1918,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "43.00",
+          "marketPriceSource": "ESTIMATE: only Finolex's 25 mm union price (₹124.81) was found; list scaled with typical CPVC union size steps (½\" ≈0.55×, ¾\" ≈0.7×, 1¼\" ≈1.7×, 1½\" ≈2.3×, 2\" ≈3.5× of 1\") ≈ ₹69; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹43. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-UNI-20",
@@ -1755,7 +1932,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "54.00",
+          "marketPriceSource": "ESTIMATE: only Finolex's 25 mm union price (₹124.81) was found; list scaled with typical CPVC union size steps (½\" ≈0.55×, ¾\" ≈0.7×, 1¼\" ≈1.7×, 1½\" ≈2.3×, 2\" ≈3.5× of 1\") ≈ ₹87; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹54. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-UNI-25",
@@ -1766,8 +1945,10 @@
           "barcode": null,
           "listPrice": null,
           "listPriceIncludesTax": true,
-          "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "mrp": "124.81",
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "77.00",
+          "marketPriceSource": "aqua-agro.com lists Finolex CPVC union 25 mm SDR 11 at regular ₹124.81; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹77. (researched 24 Oct 2026, medium confidence)"
         },
         {
           "sku": "FNX-CPVC-UNI-32",
@@ -1779,7 +1960,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "130.00",
+          "marketPriceSource": "ESTIMATE: only Finolex's 25 mm union price (₹124.81) was found; list scaled with typical CPVC union size steps (½\" ≈0.55×, ¾\" ≈0.7×, 1¼\" ≈1.7×, 1½\" ≈2.3×, 2\" ≈3.5× of 1\") ≈ ₹212; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹130. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-UNI-40",
@@ -1791,7 +1974,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "180.00",
+          "marketPriceSource": "ESTIMATE: only Finolex's 25 mm union price (₹124.81) was found; list scaled with typical CPVC union size steps (½\" ≈0.55×, ¾\" ≈0.7×, 1¼\" ≈1.7×, 1½\" ≈2.3×, 2\" ≈3.5× of 1\") ≈ ₹287; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹180. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-UNI-50",
@@ -1803,7 +1988,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "270.00",
+          "marketPriceSource": "ESTIMATE: only Finolex's 25 mm union price (₹124.81) was found; list scaled with typical CPVC union size steps (½\" ≈0.55×, ¾\" ≈0.7×, 1¼\" ≈1.7×, 1½\" ≈2.3×, 2\" ≈3.5× of 1\") ≈ ₹437; applied ~38% dealer discount (Kumaranco's Finolex ¾\" elbow ₹13.56 and ¾\" end cap ₹10.09 incl. GST sit ~37–38% below list) → ₹270. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1858,7 +2045,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹190, a typical level for branded CPVC ball valves, less ~40% → ₹115. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-BV-20",
@@ -1870,7 +2059,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "150.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹250, a typical level for branded CPVC ball valves, less ~40% → ₹150. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-BV-25",
@@ -1882,7 +2073,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "230.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹380, a typical level for branded CPVC ball valves, less ~40% → ₹230. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-BV-32",
@@ -1894,7 +2087,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "385.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹640, a typical level for branded CPVC ball valves, less ~40% → ₹385. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-BV-40",
@@ -1906,7 +2101,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "510.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹850, a typical level for branded CPVC ball valves, less ~40% → ₹510. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-CPVC-BV-50",
@@ -1918,7 +2115,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "840.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex CPVC ball valve price could be found (search budget ran out); assumed list ≈ ₹1400, a typical level for branded CPVC ball valves, less ~40% → ₹840. Confirm with the Finolex distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -1985,7 +2184,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "44.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 ½\" weighs ≈0.226 kg/m (OD 21.34 mm, wall 2.77 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹44/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S40-20",
@@ -1997,7 +2198,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "59.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 ¾\" weighs ≈0.300 kg/m (OD 26.67 mm, wall 2.87 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹59/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S40-25",
@@ -2009,7 +2212,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "87.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 1\" weighs ≈0.446 kg/m (OD 33.4 mm, wall 3.38 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹87/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S40-32",
@@ -2021,7 +2226,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "120.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 1¼\" weighs ≈0.604 kg/m (OD 42.16 mm, wall 3.56 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹120/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S40-40",
@@ -2033,7 +2240,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "140.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 1½\" weighs ≈0.722 kg/m (OD 48.26 mm, wall 3.68 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹140/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S40-50",
@@ -2045,7 +2254,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "190.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 40 2\" weighs ≈0.970 kg/m (OD 60.32 mm, wall 3.91 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹190/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2112,7 +2323,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "56.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 ½\" weighs ≈0.289 kg/m (OD 21.34 mm, wall 3.73 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹56/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S80-20",
@@ -2124,7 +2337,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "76.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 ¾\" weighs ≈0.391 kg/m (OD 26.67 mm, wall 3.91 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹76/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S80-25",
@@ -2136,7 +2351,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 1\" weighs ≈0.577 kg/m (OD 33.4 mm, wall 4.55 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹115/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S80-32",
@@ -2148,7 +2365,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "155.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 1¼\" weighs ≈0.796 kg/m (OD 42.16 mm, wall 4.85 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹155/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S80-40",
@@ -2160,7 +2379,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "190.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 1½\" weighs ≈0.965 kg/m (OD 48.26 mm, wall 5.08 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹190/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-S80-50",
@@ -2172,7 +2393,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "260.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM pipe price found; ASTM D1785 Sch 80 2\" weighs ≈1.335 kg/m (OD 60.32 mm, wall 5.54 mm), priced at an assumed ~₹195/kg incl. GST for branded ASTM plumbing pipe → ₹260/m. Confirm with distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2228,7 +2451,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "14.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 15 mm CPVC 90° elbow (₹20) for the larger IPS Sch 80 plain elbow (≈₹23), less ~38% → ₹14. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-15-T",
@@ -2241,7 +2466,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "16.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 15 mm CPVC 90° elbow (₹20) for the larger IPS Sch 80 threaded elbow (≈₹26), less ~38% → ₹16. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-20-P",
@@ -2254,7 +2481,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "16.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 20 mm CPVC 90° elbow (₹22) for the larger IPS Sch 80 plain elbow (≈₹25), less ~38% → ₹16. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-20-T",
@@ -2267,7 +2496,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "18.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 20 mm CPVC 90° elbow (₹22) for the larger IPS Sch 80 threaded elbow (≈₹29), less ~38% → ₹18. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-25-P",
@@ -2280,7 +2511,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "32.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 25 mm CPVC 90° elbow (₹45) for the larger IPS Sch 80 plain elbow (≈₹52), less ~38% → ₹32. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-25-T",
@@ -2293,7 +2526,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "36.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 25 mm CPVC 90° elbow (₹45) for the larger IPS Sch 80 threaded elbow (≈₹58), less ~38% → ₹36. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-32-P",
@@ -2306,7 +2541,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "70.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 32 mm CPVC 90° elbow (₹98) for the larger IPS Sch 80 plain elbow (≈₹113), less ~38% → ₹70. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-32-T",
@@ -2319,7 +2556,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "79.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 32 mm CPVC 90° elbow (₹98) for the larger IPS Sch 80 threaded elbow (≈₹127), less ~38% → ₹79. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-40-P",
@@ -2332,7 +2571,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "130.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 40 mm CPVC 90° elbow (₹184) for the larger IPS Sch 80 plain elbow (≈₹212), less ~38% → ₹130. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-40-T",
@@ -2345,7 +2586,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "150.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 40 mm CPVC 90° elbow (₹184) for the larger IPS Sch 80 threaded elbow (≈₹239), less ~38% → ₹150. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-50-P",
@@ -2358,7 +2601,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "255.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 50 mm CPVC 90° elbow (₹360) for the larger IPS Sch 80 plain elbow (≈₹414), less ~38% → ₹255. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-E90-50-T",
@@ -2371,7 +2616,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "290.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 50 mm CPVC 90° elbow (₹360) for the larger IPS Sch 80 threaded elbow (≈₹468), less ~38% → ₹290. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2427,7 +2674,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "19.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 15 mm CPVC tee (≈₹26) for the IPS Sch 80 plain tee (≈₹30), less ~38% → ₹19. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-15-T",
@@ -2440,7 +2689,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "21.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 15 mm CPVC tee (≈₹26) for the IPS Sch 80 threaded tee (≈₹34), less ~38% → ₹21. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-20-P",
@@ -2453,7 +2704,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "26.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 20 mm CPVC tee (≈₹36) for the IPS Sch 80 plain tee (≈₹41), less ~38% → ₹26. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-20-T",
@@ -2466,7 +2719,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "29.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 20 mm CPVC tee (≈₹36) for the IPS Sch 80 threaded tee (≈₹47), less ~38% → ₹29. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-25-P",
@@ -2479,7 +2734,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "40.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 25 mm CPVC tee (≈₹56) for the IPS Sch 80 plain tee (≈₹64), less ~38% → ₹40. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-25-T",
@@ -2492,7 +2749,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "45.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 25 mm CPVC tee (≈₹56) for the IPS Sch 80 threaded tee (≈₹73), less ~38% → ₹45. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-32-P",
@@ -2505,7 +2764,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "88.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 32 mm CPVC tee (≈₹123) for the IPS Sch 80 plain tee (≈₹141), less ~38% → ₹88. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-32-T",
@@ -2518,7 +2779,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "99.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 32 mm CPVC tee (≈₹123) for the IPS Sch 80 threaded tee (≈₹160), less ~38% → ₹99. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-40-P",
@@ -2531,7 +2794,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "160.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 40 mm CPVC tee (≈₹222) for the IPS Sch 80 plain tee (≈₹255), less ~38% → ₹160. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-40-T",
@@ -2544,7 +2809,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "180.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 40 mm CPVC tee (≈₹222) for the IPS Sch 80 threaded tee (≈₹289), less ~38% → ₹180. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-50-P",
@@ -2557,7 +2824,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "320.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.15× Finolex's 50 mm CPVC tee (≈₹451) for the IPS Sch 80 plain tee (≈₹519), less ~38% → ₹320. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-TEE-50-T",
@@ -2570,7 +2839,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "365.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM fitting price found; list taken as ~1.3× Finolex's 50 mm CPVC tee (≈₹451) for the IPS Sch 80 threaded tee (≈₹586), less ~38% → ₹365. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2624,7 +2895,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "9.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 15 mm CPVC coupler (≈₹13) (≈₹15), less ~38% → ₹9. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-CPL-20",
@@ -2636,7 +2909,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "12.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 20 mm CPVC coupler (≈₹17) (≈₹20), less ~38% → ₹12. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-CPL-25",
@@ -2648,7 +2923,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "21.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 25 mm CPVC coupler (≈₹30) (≈₹34), less ~38% → ₹21. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-CPL-32",
@@ -2660,7 +2937,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "46.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 32 mm CPVC coupler (≈₹65) (≈₹75), less ~38% → ₹46. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-CPL-40",
@@ -2672,7 +2951,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "78.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 40 mm CPVC coupler (≈₹110) (≈₹126), less ~38% → ₹78. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-UPVC-CPL-50",
@@ -2684,7 +2965,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "155.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex ASTM coupler price found; list taken as ~1.15× Finolex's 50 mm CPVC coupler (≈₹216) (≈₹249), less ~38% → ₹155. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2752,7 +3035,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "86.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 63 mm 4 kg/cm² (mean wall ≈2.1 mm) weighs ≈0.57 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹86/m (≈₹516 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-63-6KG",
@@ -2765,7 +3050,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 63 mm 6 kg/cm² (mean wall ≈2.9 mm) weighs ≈0.78 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹115/m (≈₹690 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-75-4KG",
@@ -2778,7 +3065,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 75 mm 4 kg/cm² (mean wall ≈2.4 mm) weighs ≈0.78 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹115/m (≈₹690 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-75-6KG",
@@ -2791,7 +3080,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "165.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 75 mm 6 kg/cm² (mean wall ≈3.45 mm) weighs ≈1.11 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹165/m (≈₹990 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-90-4KG",
@@ -2804,7 +3095,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "170.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 90 mm 4 kg/cm² (mean wall ≈2.9 mm) weighs ≈1.13 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹170/m (≈₹1020 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-90-6KG",
@@ -2817,7 +3110,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "240.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 90 mm 6 kg/cm² (mean wall ≈4.15 mm) weighs ≈1.60 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹240/m (≈₹1440 per 6 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-110-4KG",
@@ -2830,7 +3125,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "250.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 110 mm 4 kg/cm² (mean wall ≈3.45 mm) weighs ≈1.65 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹250/m (≈₹1500 per 6 m length). Cross-check: an IndiaMART dealer lists a Finolex 4\" 6 m pipe at ₹2,500 per length. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-AGRI-SF-110-6KG",
@@ -2843,7 +3140,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "355.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex agri pipe price found; IS 4985 110 mm 6 kg/cm² (mean wall ≈5.0 mm) weighs ≈2.36 kg/m, priced at an assumed ~₹150/kg incl. GST → ₹355/m (≈₹2130 per 6 m length). Cross-check: an IndiaMART dealer lists a Finolex 4\" 6 m pipe at ₹2,500 per length. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -2903,7 +3202,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "950.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹950 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-32-HVY",
@@ -2916,7 +3217,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1150.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1150 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-40-STD",
@@ -2929,7 +3232,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1200.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1200 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-40-SHVY",
@@ -2942,7 +3247,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1650.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1650 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-50-MED",
@@ -2955,7 +3262,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1350.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1350 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-50-STD",
@@ -2968,7 +3277,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1550.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1550 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-50-HVY",
@@ -2981,7 +3292,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1850.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹1850 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-COL-50-SHVY",
@@ -2994,7 +3307,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "2200.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex column pipe price could be found; ₹2200 per length assumes a 3 m length at a typical retail level for branded PVC-U column pipe of this size/type. Length (1.5 m or 3 m) and price must be confirmed with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3055,7 +3370,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "110.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type A 75 mm (mean wall ≈1.98 mm) weighs ≈0.65 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹110/m (≈₹330 per 3 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SF-75-B",
@@ -3068,7 +3385,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "190.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type B 75 mm (mean wall ≈3.52 mm) weighs ≈1.13 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹190/m (≈₹570 per 3 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SF-90-A",
@@ -3081,7 +3400,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "140.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type A 90 mm (mean wall ≈2.09 mm) weighs ≈0.83 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹140/m (≈₹420 per 3 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SF-90-B",
@@ -3094,7 +3415,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "230.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type B 90 mm (mean wall ≈3.52 mm) weighs ≈1.37 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹230/m (≈₹690 per 3 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SF-110-A",
@@ -3107,7 +3430,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "200.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type A 110 mm (mean wall ≈2.42 mm) weighs ≈1.17 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹200/m (≈₹600 per 3 m length). (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SF-110-B",
@@ -3120,7 +3445,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "285.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR pipe price found; IS 13592 Type B 110 mm (mean wall ≈3.52 mm) weighs ≈1.68 kg/m, priced at an assumed ~₹170/kg incl. GST → ₹285/m (≈₹855 per 3 m length). (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3174,7 +3501,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "62.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹62 is a typical 2024–25 retail level for a branded 75 mm SWR Bend 87.5° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-B875-90",
@@ -3186,7 +3515,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "92.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹92 is a typical 2024–25 retail level for a branded 90 mm SWR Bend 87.5° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-B875-110",
@@ -3198,7 +3529,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "125.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹125 is a typical 2024–25 retail level for a branded 110 mm SWR Bend 87.5° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3249,7 +3582,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "55.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹55 is a typical 2024–25 retail level for a branded 75 mm SWR Bend 45° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-B45-90",
@@ -3261,7 +3596,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "82.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹82 is a typical 2024–25 retail level for a branded 90 mm SWR Bend 45° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-B45-110",
@@ -3273,7 +3610,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "110.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹110 is a typical 2024–25 retail level for a branded 110 mm SWR Bend 45° (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3323,7 +3662,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "90.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹90 is a typical 2024–25 retail level for a branded 75 mm SWR plain tee (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-TEE-90",
@@ -3335,7 +3676,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "130.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹130 is a typical 2024–25 retail level for a branded 90 mm SWR plain tee (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-TEE-110",
@@ -3347,7 +3690,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "170.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹170 is a typical 2024–25 retail level for a branded 110 mm SWR plain tee (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3398,7 +3743,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "105.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹105 is a typical 2024–25 retail level for a branded 75 mm SWR single Y (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SY-90",
@@ -3410,7 +3757,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "155.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹155 is a typical 2024–25 retail level for a branded 90 mm SWR single Y (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-SY-110",
@@ -3422,7 +3771,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "210.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹210 is a typical 2024–25 retail level for a branded 110 mm SWR single Y (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3476,7 +3827,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "37.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹37 is a typical 2024–25 retail level for a branded 75 mm SWR Selfit coupler (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-CPL-90",
@@ -3488,7 +3841,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "53.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹53 is a typical 2024–25 retail level for a branded 90 mm SWR Selfit coupler (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-CPL-110",
@@ -3500,7 +3855,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "75.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex SWR fitting price could be found; ₹75 is a typical 2024–25 retail level for a branded 110 mm SWR Selfit coupler (list less ~40–45%). Confirm with the distributor before use. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3551,7 +3908,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "240.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex nahani trap price could be found; ₹240 is a typical retail level for a branded 110 mm short nahani trap without jali. Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-NTS-110X90",
@@ -3563,7 +3922,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "255.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex nahani trap price could be found; ₹255 is a typical retail level for a branded 110 mm short nahani trap without jali. Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SWR-NTS-110X110",
@@ -3575,7 +3936,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "275.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex nahani trap price could be found; ₹275 is a typical retail level for a branded 110 mm short nahani trap without jali. Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3633,7 +3996,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "75.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹75 is a typical retail level for a branded 59 gm CPVC medium-bodied solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-CPVC-MB-118",
@@ -3645,7 +4010,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "130.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹130 is a typical retail level for a branded 118 gm CPVC medium-bodied solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-CPVC-MB-237",
@@ -3657,7 +4024,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "235.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹235 is a typical retail level for a branded 237 gm CPVC medium-bodied solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-CPVC-MB-473",
@@ -3669,7 +4038,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "420.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹420 is a typical retail level for a branded 473 gm CPVC medium-bodied solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-CPVC-MB-946",
@@ -3681,7 +4052,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "780.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹780 is a typical retail level for a branded 946 gm CPVC medium-bodied solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3731,7 +4104,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "95.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹95 is a typical retail level for a branded 118 ml medium-duty PVC-U solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-UPVC-MD-237",
@@ -3743,7 +4118,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "170.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹170 is a typical retail level for a branded 237 ml medium-duty PVC-U solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-UPVC-MD-473",
@@ -3755,7 +4132,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "300.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹300 is a typical retail level for a branded 473 ml medium-duty PVC-U solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3808,7 +4187,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "55.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹55 is a typical retail level for a branded 100 ml PVC-U agri solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-AGRI-250",
@@ -3820,7 +4201,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "115.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹115 is a typical retail level for a branded 250 ml PVC-U agri solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-AGRI-500",
@@ -3832,7 +4215,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "200.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹200 is a typical retail level for a branded 500 ml PVC-U agri solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-AGRI-1000",
@@ -3844,7 +4229,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "370.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹370 is a typical retail level for a branded 1000 ml PVC-U agri solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-AGRI-5000",
@@ -3856,7 +4243,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "1700.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹1700 is a typical retail level for a branded 5000 ml PVC-U agri solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     },
@@ -3905,7 +4294,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "60.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹60 is a typical retail level for a branded 100 ml PVC-U SWR solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-SWR-250",
@@ -3917,7 +4308,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "125.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹125 is a typical retail level for a branded 250 ml PVC-U SWR solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-SWR-500",
@@ -3929,7 +4322,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "215.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹215 is a typical retail level for a branded 500 ml PVC-U SWR solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         },
         {
           "sku": "FNX-SC-SWR-1000",
@@ -3941,7 +4336,9 @@
           "listPrice": null,
           "listPriceIncludesTax": true,
           "mrp": null,
-          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty"
+          "priceSource": "No official current Finolex price list could be found/opened (searched 23 Oct 2026); price left empty",
+          "marketPrice": "390.00",
+          "marketPriceSource": "UNVERIFIED ESTIMATE: no Finolex solvent cement price could be found; ₹390 is a typical retail level for a branded 1000 ml PVC-U SWR solvent cement (MRP less ~25–30%). Confirm with the distributor. (researched 24 Oct 2026, low confidence)"
         }
       ]
     }

@@ -14,6 +14,7 @@ import { ProductSelection } from "@/components/public/product-selection";
 import { PageFigureTransition } from "@/components/public/figure-transition";
 import { drawingKind } from "@/components/public/technical-drawing";
 import { getSiteData, telHref } from "@/components/public/site-data";
+import { formatPhone } from "@/lib/india";
 
 async function loadProduct(slug: string) {
   await connection();
@@ -151,7 +152,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
             <section className="mt-12">
               <div className="flex items-baseline justify-between border-b border-navy-900 pb-2">
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Specifications</h2>
-                <span className="label-mono text-navy-400">{String(specs.length).padStart(2, "0")} items</span>
+                <span className="label-mono text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
               </div>
               <dl>
                 {specs.map((s, i) => (
@@ -206,14 +207,14 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
           {business.phone && (
             <div className="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl bg-navy-950 px-6 py-5 text-white">
               <div>
-                <div className="font-semibold">Not sure which size or class you need?</div>
+                <div className="font-semibold">Not sure which one you need?</div>
                 <div className="mt-0.5 text-sm text-navy-300">Call the shop — we&apos;ll help you choose.</div>
               </div>
               <a
                 href={telHref(business.phone)}
-                className="inline-flex h-11 items-center gap-2 rounded-lg bg-gold-500 px-4 font-mono text-sm font-medium text-navy-950 transition-colors hover:bg-gold-400"
+                className="inline-flex h-11 items-center gap-2 rounded-lg bg-white px-4 font-mono text-sm font-medium text-navy-950 transition-colors hover:bg-paper"
               >
-                <Phone className="h-4 w-4" /> {business.phone}
+                <Phone className="h-4 w-4" /> {formatPhone(business.phone)}
               </a>
             </div>
           )}

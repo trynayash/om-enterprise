@@ -86,7 +86,7 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   let ty = y + 20;
   if (snap.subtitle) {
     doc.font("R").fontSize(7.5).fillColor(GREY).text(snap.subtitle, tx, ty, { width: 200, align: "right" });
-    ty += 11;
+    ty = doc.y + 3; // the subtitle may wrap
   }
   const meta: [string, string][] = [
     ["No.", snap.number],
@@ -323,6 +323,9 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   const range = doc.bufferedPageRange();
   for (let i = range.start; i < range.start + range.count; i++) {
     doc.switchToPage(i);
+    // The page number sits inside the bottom margin; without this pdfkit starts a blank page for it.
+    const bottomMargin = doc.page.margins.bottom;
+    doc.page.margins.bottom = 0;
     const marks: [string, string][] = [];
     if (snap.watermark) marks.push([snap.watermark, "#C0392B"]);
     if (opts.status === "cancelled") marks.push(["CANCELLED", "#C0392B"]);
@@ -337,6 +340,7 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     if (opts.status === "cancelled" && opts.cancelReason) {
       doc.font("B").fontSize(7).fillColor("#C0392B").text(`Cancelled: ${opts.cancelReason}`, L, doc.page.height - 26, { width: W / 2, lineBreak: false });
     }
+    doc.page.margins.bottom = bottomMargin;
   }
   doc.end();
   return done;

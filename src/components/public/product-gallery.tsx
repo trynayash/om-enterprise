@@ -40,7 +40,7 @@ export function ProductGallery({
       <figure>
         <PageFigureTransition>
           <div className="blueprint relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-navy-200">
-            <TechnicalDrawing kind={kind} animate title={`${name} — line drawing`} className="absolute inset-x-0 top-[6%] mx-auto h-[70%] w-[78%]" />
+            <TechnicalDrawing kind={kind} animate title={`${name} — line drawing`} className="absolute inset-x-0 top-[5%] mx-auto h-[60%] w-[78%] sm:top-[6%] sm:h-[70%]" />
             <dl className="absolute bottom-3 right-3 grid w-[min(19rem,calc(100%-1.5rem))] grid-cols-[auto_1fr] border border-navy-800 bg-white/95 font-mono text-[10.5px] leading-tight text-navy-900">
               <dt className="border-b border-r border-navy-800 px-2 py-1.5 uppercase text-navy-500">Part</dt>
               <dd className="truncate border-b border-navy-800 px-2 py-1.5">{name}</dd>

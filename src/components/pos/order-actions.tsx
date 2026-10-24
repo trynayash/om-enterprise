@@ -38,7 +38,7 @@ export function OrderActions({ id, status, canConvert }: { id: string; status: s
   return (
     <div className="flex flex-wrap gap-2">
       {canConvert && (
-        <Button variant="gold" loading={busy === "convert"} disabled={!!busy} onClick={convert} icon={<ShoppingCart className="h-4 w-4" />}>
+        <Button loading={busy === "convert"} disabled={!!busy} onClick={convert} icon={<ShoppingCart className="h-4 w-4" />}>
           Start sale from this order
         </Button>
       )}

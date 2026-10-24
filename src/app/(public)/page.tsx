@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowRight, ArrowUpRight, MessageCircle, Phone, Search } from "lucide-react";
 import { getPublicBrands, searchPublicProducts } from "@/server/services/public-catalog";
-import { whatsappLink } from "@/lib/india";
+import { formatPhone, whatsappLink } from "@/lib/india";
 import { LinkButton } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/page";
 import { ProductGrid, ProductGridSkeleton } from "@/components/public/product-card";
@@ -183,7 +183,7 @@ function CategoriesSection() {
         <SectionHeading
           index="01"
           eyebrow="Catalogue"
-          title="Everything for your build, under one roof"
+          title="Shop by category"
           description="From the first length of pipe to the last coat of paint. Choose a category to see every size we list."
           action={
             <Link href="/products" className="group inline-flex items-center gap-1.5 text-sm font-semibold text-navy-950">
@@ -230,7 +230,7 @@ async function CategoryGrid() {
             <TechnicalDrawing kind={CATEGORY_DRAWING[c.icon ?? ""] ?? "box"} className="h-[86%] w-[86%] transition-transform duration-500 ease-out group-hover:scale-[1.05]" />
           </div>
           <h3 className="text-[15px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[17px]">{c.name}</h3>
-          {c.description && <p className="mt-1.5 line-clamp-2 text-[12.5px] leading-relaxed text-navy-500 sm:text-[13px]">{c.description}</p>}
+          {c.description && <p className="mt-1.5 hidden text-[13px] leading-relaxed text-navy-500 sm:line-clamp-2">{c.description}</p>}
           <ArrowRight aria-hidden className="absolute bottom-5 right-5 h-4 w-4 -translate-x-1 text-navy-300 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:text-navy-900 group-hover:opacity-100" />
         </Link>
       ))}
@@ -362,7 +362,7 @@ async function ShopContent() {
               <dt className="label-mono text-navy-500">Phone</dt>
               <dd>
                 <a href={telHref(business.phone)} className="link-draw font-mono text-[15px] text-navy-950">
-                  {business.phone}
+                  {formatPhone(business.phone)}
                 </a>
               </dd>
             </div>
@@ -370,7 +370,7 @@ async function ShopContent() {
           {business.whatsapp && (
             <div className="flex items-center justify-between gap-4 py-3.5">
               <dt className="label-mono text-navy-500">WhatsApp</dt>
-              <dd className="font-mono text-[15px] text-navy-950">{business.whatsapp}</dd>
+              <dd className="font-mono text-[15px] text-navy-950">{formatPhone(business.whatsapp)}</dd>
             </div>
           )}
           {business.email && (
@@ -393,8 +393,8 @@ async function ShopContent() {
             </a>
           )}
           {wa && (
-            <a href={wa} target="_blank" rel="noopener noreferrer" className="flex h-11 items-center justify-center gap-2 rounded-lg bg-emerald-600 text-sm font-semibold text-white transition-colors hover:bg-emerald-700">
-              <MessageCircle className="h-4 w-4" /> WhatsApp
+            <a href={wa} target="_blank" rel="noopener noreferrer" className="flex h-11 items-center justify-center gap-2 rounded-lg border border-navy-200 text-sm font-semibold text-navy-950 transition-colors hover:border-navy-900">
+              <MessageCircle className="h-4 w-4 text-emerald-600" /> WhatsApp
             </a>
           )}
         </div>

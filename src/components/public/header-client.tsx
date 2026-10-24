@@ -5,7 +5,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, ClipboardList, MapPin, Menu, MessageCircle, Phone, Search, X } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
-import { whatsappLink } from "@/lib/india";
+import { formatPhone, whatsappLink } from "@/lib/india";
 import { useEnquiryList } from "./cart-store";
 
 export interface HeaderCategory {
@@ -166,7 +166,7 @@ function SearchBox({ className, autoFocus, onSubmit }: { className?: string; aut
         id={autoFocus ? "site-search-m" : "site-search"}
         name="q"
         type="search"
-        placeholder="Search pipes, tanks, paints…"
+        placeholder="Search products"
         autoFocus={autoFocus}
         className="h-10 w-full rounded-lg border border-navy-200 bg-paper/60 pl-9 pr-3 text-sm text-navy-900 placeholder:text-navy-400 transition-[border-color,box-shadow,background-color] hover:border-navy-300 focus:border-navy-800 focus:bg-white focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
       />
@@ -209,7 +209,7 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
           <span className="flex shrink-0 items-center gap-5">
             {phone && (
               <a href={`tel:+91${phone.replace(/\D/g, "").slice(-10)}`} className="flex items-center gap-1.5 transition-colors hover:text-white">
-                <Phone className="h-3.5 w-3.5 text-gold-400" strokeWidth={1.75} /> {phone}
+                <Phone className="h-3.5 w-3.5 text-gold-400" strokeWidth={1.75} /> {formatPhone(phone)}
               </a>
             )}
             {wa && (

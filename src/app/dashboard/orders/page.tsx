@@ -10,6 +10,7 @@ import { FilterBar } from "@/components/dashboard/ops/filter-bar";
 import { str, type SearchParams } from "@/components/dashboard/ops/params";
 import { whatsappLink } from "@/lib/india";
 import { codeLink, rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { preferredContactLabel } from "@/components/staff/labels";
 
 export const metadata = { title: "Website orders" };
 
@@ -102,7 +103,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
                         <MessageCircle className="h-4 w-4" />
                       </a>
                     </div>
-                    {o.preferredContact && <div className="text-xs text-navy-500">Prefers {o.preferredContact}</div>}
+                    {o.preferredContact && <div className="text-xs text-navy-500">{preferredContactLabel(o.preferredContact)}</div>}
                   </td>
                   <td className={tdNum}>{o.itemCount}</td>
                   <td className={tdNum}>{o.indicativeTotal ? <Money value={o.indicativeTotal} /> : <span className="text-navy-300">—</span>}</td>

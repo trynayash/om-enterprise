@@ -16,6 +16,8 @@ import { loadOr404 } from "@/components/dashboard/ops/guard";
 import { BackLink } from "@/components/dashboard/back-link";
 import { TitleStamps } from "@/components/dashboard/title-stamps";
 import { tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { preferredContactLabel } from "@/components/staff/labels";
+import { optionLabel } from "@/lib/line-description";
 
 export const metadata = { title: "Website order" };
 
@@ -33,7 +35,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
   const { order: o, lines } = await loadOr404(getWebsiteOrder(actor, id));
   const business = await getSettings("business");
   const canManage = can(actor, "orders.manage");
-  const itemsText = lines.map((l) => `• ${l.productName}${l.variantName ? ` (${l.variantName})` : ""} × ${formatQty(l.quantity)}`).join("\n");
+  const itemsText = lines.map((l) => `• ${l.productName}${optionLabel(l.variantName) ? ` (${l.variantName})` : ""} × ${formatQty(l.quantity)}`).join("\n");
   const reply = `Namaste ${o.customerName}, thank you for your ${o.kind === "order_request" ? "order request" : "enquiry"} ${o.orderNumber} at ${business.name}.${
     itemsText ? `\n${itemsText}\n` : " "
   }We will confirm availability and the final price shortly.`;
@@ -60,7 +62,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="min-w-0 space-y-6 xl:col-span-2">
           <Card>
-            <CardHeader title={o.customerName} description={[o.city, o.preferredContact ? `prefers ${o.preferredContact}` : null].filter(Boolean).join(" · ")} />
+            <CardHeader title={o.customerName} description={[o.city, preferredContactLabel(o.preferredContact)].filter(Boolean).join(" · ")} />
             <CardBody className="space-y-4">
               <div className="flex flex-wrap gap-2">
                 <a href={`tel:+91${o.mobile}`} className={buttonClass("outline")}>
@@ -108,7 +110,8 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
                         <td className={tdText}>
                           <div className="font-medium">{l.productName}</div>
                           <div className="mt-0.5 text-xs text-navy-500">
-                            {l.variantName} · <span className="font-mono">{l.sku}</span>
+                            {optionLabel(l.variantName) && <>{l.variantName} · </>}
+                            <span className="font-mono">{l.sku}</span>
                           </div>
                         </td>
                         <td className={tdNum}>{formatQty(l.quantity)}</td>

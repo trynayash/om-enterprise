@@ -36,12 +36,11 @@ export function ProductCard({ p, index = 0 }: { p: PublicProductCard; index?: nu
       {p.isSample && <SampleBadge className="absolute left-3 top-3" />}
       <div className="flex flex-1 flex-col px-3 pb-3.5 pt-3 sm:px-4 sm:pb-4 sm:pt-3.5">
         <div className="label-mono truncate text-gold-700">{p.brand ?? p.category}</div>
-        <h3 className="mt-1.5 line-clamp-2 text-[14px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[15px]">{p.name}</h3>
+        <h3 className="mt-1.5 line-clamp-3 text-[14px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[15px]">{p.name}</h3>
         {p.brand && <div className="mt-1 truncate text-xs text-navy-500">{p.category}</div>}
-        <div className="mt-auto flex items-end justify-between gap-2 pt-4 sm:pt-5">
+        <div className="mt-auto flex items-start justify-between gap-2 pt-4 sm:pt-5">
           <div className="min-w-0">
-            <PriceTag price={p.priceFrom} from={p.variantCount > 1} />
-            {p.variantCount > 1 && <div className="mt-1 font-mono text-[11px] text-navy-500">{p.variantCount} sizes / options</div>}
+            <PriceTag price={p.priceFrom} from={p.variantCount > 1} note={p.variantCount > 1 ? `${p.variantCount} sizes` : undefined} />
           </div>
           <ArrowRight aria-hidden className="mb-0.5 h-4 w-4 shrink-0 -translate-x-1 text-navy-300 transition-[transform,color] duration-200 group-hover:translate-x-0 group-hover:text-navy-900" />
         </div>

@@ -10,6 +10,7 @@ import { NewSaleButton } from "@/components/pos/new-sale-button";
 import { TaxBanner } from "@/components/pos/tax-banner";
 import { PageSkeleton } from "@/components/ui/page";
 import { Badge } from "@/components/ui/badge";
+import { TrainingBadge } from "@/components/staff/labels";
 import { SaleStatusBadge } from "@/components/pos/sale-status";
 import { DateTime, Money } from "@/components/ui/money";
 import { istParts } from "@/lib/india";
@@ -31,7 +32,8 @@ async function PosHome() {
   const actor = await requirePageActor("sales.create");
   const cfg = await loadPosConfig();
   const [drafts, awaiting] = [
-    await listSales(actor, { status: "draft", staffId: actor.id, includeTraining: true, pageSize: 8 }),
+    // A draft with nothing in it is an abandoned "New sale" tap, not open work: leave it out.
+    await listSales(actor, { status: "draft", staffId: actor.id, includeTraining: true, hasItems: true, pageSize: 8 }),
     await listSales(actor, { status: "finalized", staffId: actor.id, includeTraining: true, pageSize: 8 }),
   ];
   const ordersCount = can(actor, "orders.view") ? await newOrderCount() : 0;
@@ -55,7 +57,7 @@ async function PosHome() {
       <div className="grid gap-4 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <NewSaleButton className="lg:min-h-full" />
         <ul className="divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
-          <Shortcut href="/pos/products" icon={<Search />} title="Search products" text="Look up any item, variant and price" />
+          <Shortcut href="/pos/products" icon={<Search />} title="Price list" text="Look up any item, variant and price" />
           <Shortcut href="/pos/bills" icon={<Receipt />} title="Recent bills" text="Find, reprint and share bills" />
           <Shortcut href="/pos/payments" icon={<Wallet />} title="Payment history" text="Verified, pending and refunded payments" />
           {can(actor, "orders.view") && (
@@ -92,7 +94,7 @@ async function PosHome() {
                   <Money value={s.grandTotal} className="text-right font-mono text-[15px] font-semibold text-navy-950 sm:order-4" />
                   <span className="col-span-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:order-2">
                     <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
-                    {s.isTraining && <Badge tone="red">Training</Badge>}
+                    {s.isTraining && <TrainingBadge />}
                     {s.approvalStatus === "pending" && <Badge tone="amber">Approval pending</Badge>}
                     <span className="ml-1.5 text-sm text-navy-500">
                       {s.itemCount} item{s.itemCount === 1 ? "" : "s"}

@@ -11,6 +11,7 @@ import { cn } from "@/components/ui/cn";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
 import { STATES } from "@/lib/india";
 import type { Settings } from "@/lib/settings-schema";
+import { TabStrip } from "@/components/staff/tab-strip";
 
 export type SectionKey = keyof Settings;
 
@@ -182,9 +183,9 @@ export function SettingsEditor({
   if (!sections.length) return <Alert>You cannot edit any settings.</Alert>;
   return (
     <div className="grid gap-6 lg:grid-cols-[208px_minmax(0,1fr)] lg:items-start">
-      <nav
-        className="-mx-4 flex gap-5 overflow-x-auto border-b border-navy-200 px-4 sm:mx-0 sm:px-0 lg:sticky lg:top-8 lg:flex-col lg:gap-0 lg:border-b-0 lg:border-l lg:px-0"
-        aria-label="Settings sections"
+      <TabStrip
+        className="-mx-4 flex gap-5 overflow-x-auto border-b border-navy-200 px-4 max-lg:relative max-lg:scroll-fade-x sm:mx-0 sm:pl-0 lg:sticky lg:top-8 lg:flex-col lg:gap-0 lg:border-b-0 lg:border-l lg:px-0"
+        label="Settings sections"
       >
         {sections.map((k) => (
           <button
@@ -200,7 +201,7 @@ export function SettingsEditor({
             {SECTIONS[k].title}
           </button>
         ))}
-      </nav>
+      </TabStrip>
       <div className="min-w-0 space-y-6">
         {active === "tax" && <RegistrationCard current={settings.tax.registrationType} gstin={settings.business.gstin} all={settings.tax} />}
         <SectionForm key={active} section={active} value={settings[active] as unknown as Record<string, unknown>} razorpayConfigured={razorpayConfigured} />

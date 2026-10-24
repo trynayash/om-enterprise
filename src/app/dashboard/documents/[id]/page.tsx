@@ -6,7 +6,8 @@ import { getDocument } from "@/server/services/documents";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
 import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
-import { SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/badge";
+import { TrainingBadge } from "@/components/staff/labels";
 import { DateTime } from "@/components/ui/money";
 import { PdfCopySelector } from "@/components/dashboard/ops/pdf-copy";
 import { ClientOnly } from "@/components/dashboard/ops/client-only";
@@ -49,7 +50,7 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
                 <span className="font-mono text-[0.72em] font-semibold tracking-tight">{doc.docNumber}</span>
                 <TitleStamps>
                   <StatusBadge status={doc.status} />
-                  {doc.isTraining && <SampleBadge label="Training" />}
+                  {doc.isTraining && <TrainingBadge />}
                 </TitleStamps>
               </span>
             }
@@ -67,10 +68,13 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
                 )}
               </>
             }
-            actions={<PdfCopySelector documentId={doc.id} />}
           />
         </div>
-        <div className="-mt-3 border-b border-navy-200 pb-3">
+        {/*
+          One row of actions. The shared actions' own "PDF" download is left out here: the copy selector's
+          "Open PDF" does the same job and also lets the duplicate / triplicate copy be chosen.
+        */}
+        <div className="-mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-navy-200 pb-3">
           <ClientOnly fallback={<div className="h-10" />}>
             <DocumentActions
               documentId={doc.id}
@@ -81,8 +85,10 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
               customerMobile={s.buyer?.mobile}
               businessName={s.seller.name}
               canShare={can(actor, "documents.share")}
+              showPdf={false}
             />
           </ClientOnly>
+          <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />
         </div>
         {doc.status === "cancelled" && (
           <Alert tone="danger" title="This document has been cancelled">
@@ -116,7 +122,8 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
           snapshot={s}
           status={doc.status}
           cancelReason={doc.cancelReason}
-          copyLabel={doc.printCount > 0 ? "Reprint" : null}
+          // Matches what the PDF stamps (and the POS bill page): the original until it has been printed once.
+          copyLabel={doc.docType === "quotation" ? null : doc.printCount > 0 ? "Reprint" : "Original for recipient"}
         />
       </div>
     </div>

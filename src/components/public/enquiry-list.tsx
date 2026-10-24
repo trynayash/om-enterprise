@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, ClipboardList, Minus, Plus, Trash2 } from "lucide-react";
 import { SampleBadge } from "@/components/ui/badge";
 import { apiFetch } from "@/lib/api-client";
-import { formatINR } from "@/lib/money";
+import { formatPrice } from "@/lib/money";
 import { useEnquiryList } from "./cart-store";
 import { EnquiryForm, EnquirySuccess, type EnquiryDone } from "./enquiry-form";
 
@@ -122,7 +122,7 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
                       <div className="mt-1 font-mono text-[13px] tabular text-navy-700">
                         {line?.unitPrice ? (
                           <>
-                            {formatINR(line.unitPrice)} <span className="text-navy-400">/ {item.unit.toLowerCase()}</span>
+                            {formatPrice(line.unitPrice)} <span className="text-navy-400">/ {item.unit.toLowerCase()}</span>
                           </>
                         ) : priced && !line ? (
                           <span className="text-red-700">No longer available online</span>
@@ -151,7 +151,7 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
                           <Plus className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                      <div className="w-28 text-right font-mono text-sm font-semibold tabular text-navy-950">{line?.lineTotal ? formatINR(line.lineTotal) : "—"}</div>
+                      <div className="w-28 text-right font-mono text-sm font-semibold tabular text-navy-950">{line?.lineTotal ? formatPrice(line.lineTotal) : "—"}</div>
                       <button type="button" onClick={() => list.remove(item.variantId)} className="rounded-md p-2 text-navy-400 transition-colors hover:bg-red-50 hover:text-red-700" aria-label={`Remove ${item.productName}`}>
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -171,7 +171,7 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
             <div className="mt-2 rounded-xl bg-navy-950 p-5 text-white">
               <div className="flex items-baseline justify-between gap-4">
                 <span className="label-mono text-navy-300">Indicative total</span>
-                <span className="font-mono text-2xl font-semibold tabular tracking-[-0.02em]">{loading && !priced ? "…" : priced ? formatINR(priced.total) : "—"}</span>
+                <span className="font-mono text-2xl font-semibold tabular tracking-[-0.02em]">{loading && !priced ? "…" : priced ? formatPrice(priced.total) : "—"}</span>
               </div>
               <p className="mt-2 text-xs leading-relaxed text-navy-300">
                 {priced && !priced.allPriced ? "Some items are priced on request and are not included. " : ""}

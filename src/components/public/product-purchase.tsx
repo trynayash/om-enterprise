@@ -5,7 +5,8 @@ import { Check, ClipboardList, MessageCircle, Minus, Plus } from "lucide-react";
 import type { PublicVariant } from "@/server/services/public-catalog";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
-import { formatINR } from "@/lib/money";
+import { D, formatPrice, formatQty } from "@/lib/money";
+import { lineDescription } from "@/lib/line-description";
 import { whatsappLink } from "@/lib/india";
 import { PriceTag } from "./price";
 import { useEnquiryList } from "./cart-store";
@@ -52,6 +53,9 @@ export function ProductPurchase({
 
   const decimals = selected.unitDecimals;
   const qty = clampQty(qtyText, decimals);
+  // The price the quantity qualifies for (the highest quantity break reached), and the line total.
+  let unitAmount = selected.price && qty ? selected.price.amount : null;
+  for (const t of selected.price && qty ? selected.price.tiers : []) if (D(qty).greaterThanOrEqualTo(D(t.minQty))) unitAmount = t.amount;
   const step = (dir: 1 | -1) => {
     const n = Math.max(decimals ? 10 ** -decimals : 1, (Number(qty ?? "1") || 1) + dir);
     setQtyText(String(Math.round(n * 10 ** decimals) / 10 ** decimals));
@@ -66,7 +70,7 @@ export function ProductPurchase({
   };
 
   const inList = list.items.some((i) => i.variantId === selected.id);
-  const waText = `Hello OM ENTERPRISE, I'm interested in:\n${productName} — ${selected.name} (SKU ${selected.sku})\nQuantity: ${qty ?? qtyText} ${selected.unit}\nPlease share availability and price.`;
+  const waText = `Hello OM ENTERPRISE, I'm interested in:\n${lineDescription(null, productName, selected.name)} (SKU ${selected.sku})\nQuantity: ${qty ?? qtyText} ${selected.unit}\nPlease share availability and price.`;
 
   const add = () => {
     if (!qty) {
@@ -153,7 +157,7 @@ export function ProductPurchase({
                   )}
                 >
                   <span className="font-medium">{v.name}</span>
-                  {v.price && <span className={cn("font-mono text-[13px] tabular", active ? "text-gold-300" : "text-navy-500")}>{formatINR(v.price.amount)}</span>}
+                  {v.price && <span className={cn("font-mono text-[13px] tabular", active ? "text-gold-300" : "text-navy-500")}>{formatPrice(v.price.amount)}</span>}
                 </button>
               );
             })}
@@ -178,7 +182,7 @@ export function ProductPurchase({
               <li key={t.minQty} className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-emerald-600" />
                 <span>
-                  <span className="font-mono font-medium tabular">{formatINR(t.amount)}</span> each for {Number(t.minQty)}+ {selected.unit.toLowerCase()}
+                  <span className="font-mono font-medium tabular">{formatPrice(t.amount)}</span> each for {Number(t.minQty)}+ {selected.unit.toLowerCase()}
                 </span>
               </li>
             ))}
@@ -188,7 +192,7 @@ export function ProductPurchase({
         <div className="mt-6 flex flex-wrap items-end gap-3">
           <div>
             <label htmlFor="qty" className="label-mono block text-navy-500">
-              Quantity ({selected.unit.toLowerCase()})
+              Quantity · {selected.unit.toLowerCase()}
             </label>
             <div className="mt-1.5 flex h-12 items-center overflow-hidden rounded-lg border border-navy-200 bg-white transition-[border-color,box-shadow] focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">
               <button type="button" onClick={() => step(-1)} className="flex h-full w-11 items-center justify-center text-navy-700 transition-colors hover:bg-navy-50" aria-label="Decrease quantity">
@@ -211,13 +215,23 @@ export function ProductPurchase({
             <button
               type="button"
               onClick={add}
-              className="inline-flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-navy-900 px-5 text-[15px] font-semibold text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)] transition-[background-color,transform] hover:bg-navy-800 active:translate-y-px"
+              className="inline-flex h-12 min-w-[13rem] flex-1 items-center justify-center gap-2 rounded-lg bg-navy-900 px-5 text-[15px] font-semibold text-white shadow-[inset_0_-1px_0_rgb(0_0_0/0.35)] transition-[background-color,transform] hover:bg-navy-800 active:translate-y-px"
             >
               <ClipboardList className="h-[18px] w-[18px]" /> {inList ? "Add more to list" : "Add to enquiry list"}
             </button>
           )}
         </div>
         {!qty && <p className="mt-2 text-xs text-red-700">{decimals ? `Up to ${decimals} decimal places allowed.` : "Whole numbers only."}</p>}
+        {qty && unitAmount && Number(qty) !== 1 && (
+          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-dashed border-navy-200 pt-3 font-mono text-[13px] tabular text-navy-500">
+            <span>
+              {formatQty(qty)} {selected.unit.toLowerCase()} × {formatPrice(unitAmount)}
+            </span>
+            <span key={`${qty}-${unitAmount}`} className="animate-fade-in text-[15px] font-semibold text-navy-950">
+              {formatPrice(D(qty).times(D(unitAmount)).toFixed(2))}
+            </span>
+          </p>
+        )}
         </div>
         {whatsapp && (
           <div className="mt-5 border-t border-navy-100 p-3">
@@ -225,9 +239,9 @@ export function ProductPurchase({
               href={whatsappLink(whatsapp, waText)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-5 text-[15px] font-semibold text-white transition-colors hover:bg-emerald-700"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-navy-200 bg-white px-5 text-[15px] font-semibold text-navy-950 transition-colors hover:border-navy-900"
             >
-              <MessageCircle className="h-[18px] w-[18px]" /> Ask on WhatsApp
+              <MessageCircle className="h-[18px] w-[18px] text-emerald-600" /> Ask on WhatsApp
             </a>
           </div>
         )}
