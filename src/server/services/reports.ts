@@ -18,6 +18,7 @@ import { can, requirePermission, type Actor } from "@/server/auth/actor";
 import { forbidden } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { D, m } from "@/lib/money";
+import { lineDescription } from "@/lib/line-description";
 
 export interface Period {
   from: Date;
@@ -204,7 +205,7 @@ export async function productPerformance(actor: Actor, p: Period) {
     return {
       variantId: r.variant_id,
       sku: r.sku,
-      product: `${r.product_name}${r.variant_name ? ` — ${r.variant_name}` : ""}`,
+      product: lineDescription(null, r.product_name, r.variant_name),
       category: r.category,
       unit: r.unit_code,
       bills: r.bills,
@@ -273,13 +274,14 @@ export async function discountReport(actor: Actor, p: Period) {
 
 export async function belowCostSales(actor: Actor, p: Period) {
   requireProfit(actor);
-  return q<{ doc_number: string; sale_id: string; issued_at: string; sku: string; product: string; quantity: string; taxable_value: string; cost_total: string; gross_profit: string; below_cost: boolean; staff: string }>(sql`
-    select d.doc_number, s.id as sale_id, d.issued_at::text, l.sku, l.product_name || coalesce(' — ' || l.variant_name, '') as product,
+  const rows = await q<{ doc_number: string; sale_id: string; issued_at: string; sku: string; product: string; variant: string | null; quantity: string; taxable_value: string; cost_total: string; gross_profit: string; below_cost: boolean; staff: string }>(sql`
+    select d.doc_number, s.id as sale_id, d.issued_at::text, l.sku, l.product_name as product, l.variant_name as variant,
       l.quantity::text, l.taxable_value::text, l.cost_total::text, l.gross_profit::text, l.below_cost, u.display_name as staff
     from sale_lines l join sales s on s.id = l.sale_id join users u on u.id = s.created_by
     join documents d on d.sale_id = l.sale_id and d.doc_type in ${BILL_TYPES} and d.status = 'issued'
     where (l.below_cost or l.below_margin_floor) and not d.is_training and d.issued_at >= ${p.from} and d.issued_at < ${p.to}
     order by l.gross_profit asc nulls last limit 500`);
+  return rows.map(({ variant, ...r }) => ({ ...r, product: lineDescription(null, r.product, variant) }));
 }
 
 export async function paymentSummary(actor: Actor, p: Period) {
@@ -313,6 +315,7 @@ export async function priceChangeReport(actor: Actor, p: Period) {
     created_at: string;
     sku: string;
     product: string;
+    variant: string;
     list_name: string;
     previous_price: string | null;
     price: string;
@@ -324,15 +327,16 @@ export async function priceChangeReport(actor: Actor, p: Period) {
     previous_margin: string | null;
     new_margin: string | null;
   }>(sql`
-    select vp.id, vp.created_at::text, v.sku, pr.name || ' — ' || v.name as product, pl.name as list_name, vp.previous_price::text, vp.price::text,
+    select vp.id, vp.created_at::text, v.sku, pr.name as product, v.name as variant, pl.name as list_name, vp.previous_price::text, vp.price::text,
       vp.status, vp.reason, uc.display_name as created_by, ud.display_name as decided_by, vp.effective_from::text,
       vp.previous_margin_percent::text as previous_margin, vp.margin_percent_snapshot::text as new_margin
     from variant_prices vp join product_variants v on v.id = vp.variant_id join products pr on pr.id = v.product_id
     join price_lists pl on pl.id = vp.price_list_id join users uc on uc.id = vp.created_by left join users ud on ud.id = vp.decided_by
     where vp.created_at >= ${p.from} and vp.created_at < ${p.to}
     order by vp.created_at desc limit 1000`);
-  return rows.map((r) => ({
+  return rows.map(({ variant, ...r }) => ({
     ...r,
+    product: lineDescription(null, r.product, variant),
     changePercent: r.previous_price && D(r.previous_price).greaterThan(0) ? D(r.price).minus(D(r.previous_price)).div(D(r.previous_price)).times(100).toFixed(2) : null,
     previous_margin: showCost ? r.previous_margin : null,
     new_margin: showCost ? r.new_margin : null,
@@ -351,6 +355,7 @@ export async function productsNeedingReview(actor: Actor) {
     product_id: string;
     sku: string;
     product: string;
+    variant: string;
     is_sample: boolean;
     price: string | null;
     price_includes_tax: boolean | null;
@@ -360,7 +365,7 @@ export async function productsNeedingReview(actor: Actor) {
     min_margin: string | null;
     pending: number;
   }>(sql`
-    select v.id as variant_id, pr.id as product_id, v.sku, pr.name || ' — ' || v.name as product, pr.is_sample,
+    select v.id as variant_id, pr.id as product_id, v.sku, pr.name as product, v.name as variant, pr.is_sample,
       cp.price::text, cp.price_includes_tax, cp.effective_from::text as price_since, cc.landed_cost::text,
       coalesce(vt.gst_rate, pt.gst_rate, 0)::text as gst_rate,
       coalesce(v.min_margin_percent, c.min_margin_percent)::text as min_margin,
@@ -400,7 +405,7 @@ export async function productsNeedingReview(actor: Actor) {
         variantId: r.variant_id,
         productId: r.product_id,
         sku: r.sku,
-        product: r.product,
+        product: lineDescription(null, r.product, r.variant),
         isSample: r.is_sample,
         price: r.price,
         landedCost: showCost ? r.landed_cost : null,

@@ -10,6 +10,8 @@ import { stateName } from "@/lib/india";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
+import { lineDescription, optionLabel } from "@/lib/line-description";
 import { DateTime, Money, Qty } from "@/components/ui/money";
 import { SaleActions, ReversePaymentButton, type ReturnableLine } from "@/components/dashboard/ops/sale-actions";
 import { displayNames, returnSummary, unitMap } from "@/components/dashboard/ops/sale-extras";
@@ -45,7 +47,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
 
   const returnable: ReturnableLine[] = items.map((l) => ({
     id: l.id,
-    description: `${l.productName}${l.variantName ? ` — ${l.variantName}` : ""}`,
+    description: lineDescription(null, l.productName, l.variantName),
     sku: l.sku,
     unit: units.get(l.unitCode)?.name ?? l.unitCode,
     sold: l.quantity,
@@ -70,7 +72,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
             <TitleStamps>
               <StatusBadge status={sale.status} />
               {sale.status !== "draft" && sale.status !== "cancelled" && <StatusBadge status={sale.paymentStatus} />}
-              {sale.isTraining && <SampleBadge label="Training sale" />}
+              {sale.isTraining && <TrainingBadge label="Training sale" />}
             </TitleStamps>
           </span>
         }
@@ -132,7 +134,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                         {l.lineType === "charge" ? l.productName : `${l.brandName ? `${l.brandName} ` : ""}${l.productName}`}
                         {l.isSample && <SampleBadge label="Sample" className="ml-1.5" />}
                       </div>
-                      {l.variantName && <div className="text-xs text-navy-600">{l.variantName}</div>}
+                      {optionLabel(l.variantName) && <div className="text-xs text-navy-600">{l.variantName}</div>}
                       <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">
                         {[l.sku, l.hsnCode ? `HSN ${l.hsnCode}` : null].filter(Boolean).join(" · ")}
                       </div>
@@ -375,7 +377,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                   {(customer.billingAddress || customer.city) && <div className="text-navy-500">{[customer.billingAddress, customer.city, stateName(customer.stateCode)].filter(Boolean).join(", ")}</div>}
                 </div>
               ) : (
-                <p className="text-navy-500">Walk-in customer (no details recorded)</p>
+                <p className="text-navy-500">{CASH_SALE} — no customer details recorded</p>
               )}
             </CardBody>
           </Card>

@@ -10,8 +10,11 @@ import { nameLink, rowHover, tdNum, tdText, th, thNum } from "@/components/dashb
 import { DateTime } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
+import { ClampText } from "@/components/dashboard/clamp-text";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { formatINR } from "@/lib/money";
+import { lineDescription } from "@/lib/line-description";
+import { plural } from "@/components/staff/labels";
 
 export interface ReviewItem {
   variantId: string;
@@ -56,26 +59,68 @@ const ISSUE_DOT: Record<Tone, string> = {
   green: "bg-emerald-600",
 };
 
-export function NeedsReviewList({ items, showCost }: { items: ReviewItem[]; showCost: boolean }) {
+const COST_UNKNOWN = "Cost unknown";
+const PAGE = 50;
+
+export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewItem[]; showCost: boolean; canImport?: boolean }) {
   const [filter, setFilter] = useState<string>("all");
   const [includeSample, setIncludeSample] = useState(true);
+  const [shown, setShown] = useState(PAGE);
+  // A missing cost is a gap in the records, not something to fix variant by variant: it is summed up
+  // in one line, and the list keeps only what someone can act on (no price, thin margin, stale price…).
+  const costUnknown = useMemo(() => items.filter((i) => i.issues.some((x) => issueKind(x).key === COST_UNKNOWN)).length, [items]);
+  const actionable = useMemo(
+    () => items.map((i) => ({ ...i, issues: i.issues.filter((x) => issueKind(x).key !== COST_UNKNOWN) })).filter((i) => i.issues.length > 0),
+    [items],
+  );
   const counts = useMemo(() => {
     const m = new Map<string, number>();
-    for (const i of items) for (const k of new Set(i.issues.map((x) => issueKind(x).key))) m.set(k, (m.get(k) ?? 0) + 1);
+    for (const i of actionable) for (const k of new Set(i.issues.map((x) => issueKind(x).key))) m.set(k, (m.get(k) ?? 0) + 1);
     return [...m.entries()].sort((a, b) => b[1] - a[1]);
-  }, [items]);
-  const visible = items.filter((i) => (includeSample || !i.isSample) && (filter === "all" || i.issues.some((x) => issueKind(x).key === filter)));
+  }, [actionable]);
+  const visible = actionable.filter((i) => (includeSample || !i.isSample) && (filter === "all" || i.issues.some((x) => issueKind(x).key === filter)));
+  const pick = (f: string) => {
+    setFilter(f);
+    setShown(PAGE);
+  };
 
-  if (!items.length) return <EmptyState title="Nothing needs attention" description="Every active variant has a price, a known cost and a healthy margin." />;
+  const costLine = costUnknown > 0 && (
+    <p className="mb-4 flex items-baseline gap-2 border-l-[3px] border-navy-200 py-0.5 pl-3 text-sm leading-relaxed text-navy-700">
+      <span>
+        <span className="font-semibold text-navy-950">{plural(costUnknown, "variant")}</span> {costUnknown === 1 ? "has" : "have"} no recorded cost — margins can&apos;t be
+        checked until purchase costs are entered. Record them on each product page{canImport ? (
+          <>
+            {" "}
+            or in bulk with{" "}
+            <Link href="/dashboard/import" className="font-semibold text-navy-900 underline underline-offset-[3px]">
+              Import
+            </Link>
+          </>
+        ) : null}
+        .
+      </span>
+    </p>
+  );
+
+  if (!actionable.length) {
+    if (!costUnknown) return <EmptyState title="Nothing needs attention" description="Every active variant has a price, a known cost and a healthy margin." />;
+    return (
+      <div>
+        {costLine}
+        <p className="text-sm text-navy-500">Nothing else needs attention: every active variant has a current selling price, and none is waiting for approval or overdue for review.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
+      {costLine}
       <div className="mb-3 flex flex-wrap items-center gap-1.5">
-        <Chip active={filter === "all"} onClick={() => setFilter("all")}>
-          All <span className="font-mono text-[11.5px] tabular opacity-70">{items.length}</span>
+        <Chip active={filter === "all"} onClick={() => pick("all")}>
+          All <span className="font-mono text-[11.5px] tabular opacity-70">{actionable.length}</span>
         </Chip>
         {counts.map(([k, n]) => (
-          <Chip key={k} active={filter === k} onClick={() => setFilter(k)}>
+          <Chip key={k} active={filter === k} onClick={() => pick(k)}>
             {k} <span className="font-mono text-[11.5px] tabular opacity-70">{n}</span>
           </Chip>
         ))}
@@ -95,7 +140,7 @@ export function NeedsReviewList({ items, showCost }: { items: ReviewItem[]; show
             </tr>
           </thead>
           <tbody>
-            {visible.map((i) => (
+            {visible.slice(0, shown).map((i) => (
               <tr key={i.variantId} className={rowHover}>
                 <td className={tdText}>
                   <Link href={`/dashboard/products/${i.productId}`} className={nameLink}>
@@ -129,6 +174,16 @@ export function NeedsReviewList({ items, showCost }: { items: ReviewItem[]; show
           </tbody>
         </table>
       </div>
+      {visible.length > shown && (
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <span className="font-mono text-xs tabular text-navy-500">
+            Showing {shown.toLocaleString("en-IN")} of {visible.length.toLocaleString("en-IN")}
+          </span>
+          <Button size="sm" variant="outline" onClick={() => setShown((n) => n + PAGE)}>
+            Show {Math.min(PAGE, visible.length - shown)} more
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
@@ -195,7 +250,7 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
             <div className="min-w-0 flex-1 text-sm">
               <div className="flex flex-wrap items-baseline gap-x-2">
                 <Link href={`/dashboard/products/${c.productId}`} className={nameLink}>
-                  {c.productName} — {c.variantName}
+                  {lineDescription(null, c.productName, c.variantName)}
                 </Link>
                 <span className="font-mono text-[11.5px] text-navy-500">{c.sku}</span>
               </div>
@@ -221,8 +276,11 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
                   </span>
                 )}
               </div>
-              <div className="mt-1 text-xs leading-relaxed text-navy-500">
-                “{c.reason}” — {c.requestedBy}, <DateTime value={c.createdAt} />
+              <div className="mt-1 max-w-3xl text-xs leading-relaxed text-navy-500">
+                <ClampText text={`“${c.reason}”`} />
+                <div className="mt-0.5">
+                  {c.requestedBy}, <DateTime value={c.createdAt} />
+                </div>
               </div>
             </div>
             {canApprove && (

@@ -19,7 +19,7 @@ import {
   updateLine,
 } from "@/server/services/sales";
 import { setPermissionOverrides, updateStaff } from "@/server/services/users";
-import { client, dbErrorMessage, makeItem, makeUser, rejects, reload, setRegistration, TEST_PASSWORD } from "./helpers";
+import { client, dbErrorMessage, firstCategoryId, makeItem, makeUser, rejects, reload, setRegistration, TEST_PASSWORD } from "./helpers";
 
 beforeAll(async () => {
   await setRegistration("regular");
@@ -114,6 +114,14 @@ describe("centralised prices & protection", () => {
     expect(res[0].variantId).toBe(item.variantId);
     expect(res[0].price).toBe("2450.00");
     expect(Object.keys(res[0])).not.toContain("unitCost");
+  });
+
+  it("POS can browse a category with no search text", async () => {
+    const kishan = await makeUser("super_admin");
+    const item = await makeItem(kishan, { price: "100" });
+    const res = await searchSellable(kishan, { categoryId: await firstCategoryId(), limit: 200 });
+    expect(res.length).toBeGreaterThan(0);
+    expect(res.map((r) => r.variantId)).toContain(item.variantId);
   });
 });
 

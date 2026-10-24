@@ -13,6 +13,7 @@ import { invalid, notFound, precondition } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { validateGstin, normalizeMobile } from "@/lib/india";
 import { D } from "@/lib/money";
+import { lineDescription } from "@/lib/line-description";
 
 export async function listSuppliers(actor: Actor) {
   requirePermission(actor, ["inventory.view", "inventory.manage", "costs.edit"]);
@@ -88,7 +89,8 @@ export async function stockLevels(actor: Actor) {
     .select({
       variantId: productVariants.id,
       sku: productVariants.sku,
-      name: sql<string>`${products.name} || ' — ' || ${productVariants.name}`,
+      productName: products.name,
+      variantName: productVariants.name,
       reorderLevel: productVariants.reorderLevel,
       onHand: sql<string>`coalesce((select sum(m.quantity_change) from stock_movements m where m.variant_id = ${productVariants.id}), 0)::text`,
       movements: sql<number>`(select count(*)::int from stock_movements m where m.variant_id = "product_variants"."id")`,
@@ -97,7 +99,14 @@ export async function stockLevels(actor: Actor) {
     .innerJoin(products, eq(products.id, productVariants.productId))
     .where(eq(productVariants.isActive, true))
     .orderBy(asc(products.name));
-  return { enabled: true as const, items: items.map((i) => ({ ...i, low: i.reorderLevel !== null && D(i.onHand).lessThanOrEqualTo(D(i.reorderLevel)) })) };
+  return {
+    enabled: true as const,
+    items: items.map(({ productName, variantName, ...i }) => ({
+      ...i,
+      name: lineDescription(null, productName, variantName),
+      low: i.reorderLevel !== null && D(i.onHand).lessThanOrEqualTo(D(i.reorderLevel)),
+    })),
+  };
 }
 
 export async function recentMovements(actor: Actor) {

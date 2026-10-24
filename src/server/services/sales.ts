@@ -1114,6 +1114,8 @@ export interface SaleFilter {
   to?: Date;
   staffId?: string;
   includeTraining?: boolean;
+  /** Only sales with at least one item line (leaves out empty drafts). */
+  hasItems?: boolean;
   page?: number;
   pageSize?: number;
 }
@@ -1129,6 +1131,7 @@ export async function listSales(actor: Actor, f: SaleFilter) {
   if (f.from) where.push(gte(sales.createdAt, f.from));
   if (f.to) where.push(lte(sales.createdAt, f.to));
   if (!f.includeTraining) where.push(eq(sales.isTraining, false));
+  if (f.hasItems) where.push(sql`exists (select 1 from sale_lines l where l.sale_id = ${sales.id} and l.line_type = 'item')`);
   const q = f.q?.trim();
   if (q) {
     const like = `%${q}%`;

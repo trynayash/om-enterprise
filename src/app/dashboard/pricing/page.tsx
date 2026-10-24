@@ -7,26 +7,28 @@ import { priceChangeReport, productsNeedingReview } from "@/server/services/repo
 import { getSettings } from "@/server/settings";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { PageHeader, PageSkeleton } from "@/components/ui/page";
-import { StatusBadge } from "@/components/ui/badge";
-import { DateTime } from "@/components/ui/money";
-import { cn } from "@/components/ui/cn";
-import { formatINR } from "@/lib/money";
 import { istStartOfDay } from "@/lib/india";
 import { NeedsReviewList, PendingPriceChanges } from "@/components/dashboard/catalog/pricing-review";
-import { rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { Pagination } from "@/components/dashboard/ops/pagination";
+import { num, type SearchParams } from "@/components/dashboard/ops/params";
+import { PriceChangesTable } from "@/components/dashboard/price-changes-table";
 
 export const metadata = { title: "Price review" };
 
-export default function PricingPage() {
+/** Price changes shown per page; the research notes behind a price can run to a paragraph each. */
+const CHANGES_PAGE = 50;
+
+export default function PricingPage({ searchParams }: PageProps<"/dashboard/pricing">) {
   return (
     <Suspense fallback={<PageSkeleton />}>
-      <PricingContent />
+      <PricingContent searchParams={searchParams} />
     </Suspense>
   );
 }
 
-async function PricingContent() {
+async function PricingContent({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const actor = await requirePageActor(["prices.edit", "prices.approve", "costs.view"]);
+  const sp = await searchParams;
   const showCost = can(actor, "costs.view");
   const pricing = await getSettings("pricing");
   const review = canAny(actor, ["catalog.view", "prices.edit", "reports.view"]) ? await productsNeedingReview(actor) : [];
@@ -36,6 +38,9 @@ async function PricingContent() {
   const to = new Date(istStartOfDay(new Date()).getTime() + 86400_000);
   const from = new Date(to.getTime() - 30 * 86400_000);
   const recent = canAny(actor, ["reports.view", "prices.edit"]) ? await priceChangeReport(actor, { from, to }) : [];
+  const pages = Math.max(1, Math.ceil(recent.length / CHANGES_PAGE));
+  const page = Math.min(num(sp, "page", 1), pages);
+  const shown = recent.slice((page - 1) * CHANGES_PAGE, page * CHANGES_PAGE);
 
   return (
     <div className="space-y-6">
@@ -75,71 +80,30 @@ async function PricingContent() {
       <Card>
         <CardHeader title="Needs attention" description="Active variants with a missing price or cost, a thin or negative margin, or a stale price." />
         <CardBody>
-          <NeedsReviewList items={review} showCost={showCost} />
+          <NeedsReviewList items={review} showCost={showCost} canImport={can(actor, "catalog.import")} />
         </CardBody>
       </Card>
 
       <Card>
-        <CardHeader title="Price changes — last 30 days" description="Every proposed, approved, rejected or cancelled price version." />
+        <div id="price-changes" className="scroll-mt-6">
+          <CardHeader
+            title="Price changes — last 30 days"
+            description={`Every proposed, approved, rejected or cancelled price version, newest first${recent.length ? ` · ${recent.length.toLocaleString("en-IN")} in all` : ""}.`}
+          />
+        </div>
         {recent.length === 0 ? (
           <CardBody>
             <p className="text-sm text-navy-500">No price changes in the last 30 days.</p>
           </CardBody>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[1080px]">
-              <thead>
-                <tr>
-                  <th className={th}>When</th>
-                  <th className={th}>Variant</th>
-                  <th className={th}>List</th>
-                  <th className={thNum}>Old → new</th>
-                  <th className={thNum}>Change</th>
-                  {showCost && <th className={thNum}>Margin</th>}
-                  <th className={th}>Status</th>
-                  <th className={th}>By</th>
-                  <th className={th}>Reason</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recent.map((r) => (
-                  <tr key={r.id} className={rowHover}>
-                    <td className={`${tdMuted} whitespace-nowrap`}>
-                      <DateTime value={r.created_at} />
-                    </td>
-                    <td className={`${tdText} min-w-56`}>
-                      <div className="font-medium">{r.product}</div>
-                      <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{r.sku}</div>
-                    </td>
-                    <td className={tdMuted}>{r.list_name}</td>
-                    <td className={tdNum}>
-                      <span className="text-navy-400">{r.previous_price ? formatINR(r.previous_price) : "—"}</span> → <span className="font-semibold">{formatINR(r.price)}</span>
-                    </td>
-                    <td className={`${tdNum} font-semibold`}>
-                      <span className={cn(r.changePercent ? (Number(r.changePercent) < 0 ? "text-red-700" : "text-emerald-700") : "font-normal text-navy-400")}>
-                        {r.changePercent ? `${Number(r.changePercent) > 0 ? "+" : ""}${Number(r.changePercent).toFixed(1)}%` : "new"}
-                      </span>
-                    </td>
-                    {showCost && (
-                      <td className={tdNum}>
-                        {r.previous_margin || r.new_margin
-                          ? `${r.previous_margin ? `${Number(r.previous_margin).toFixed(1)}%` : "—"} → ${r.new_margin ? `${Number(r.new_margin).toFixed(1)}%` : "—"}`
-                          : "—"}
-                      </td>
-                    )}
-                    <td className={tdText}>
-                      <StatusBadge status={r.status} />
-                    </td>
-                    <td className={`${tdText} whitespace-nowrap`}>
-                      {r.created_by}
-                      {r.decided_by && r.decided_by !== r.created_by && <div className="text-xs text-navy-500">→ {r.decided_by}</div>}
-                    </td>
-                    <td className={`${tdMuted} max-w-xs`}>{r.reason}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <>
+            <div className="overflow-x-auto">
+              <PriceChangesTable rows={shown} showCost={showCost} />
+            </div>
+            <div className="px-5 pb-4">
+              <Pagination total={recent.length} page={page} pageSize={CHANGES_PAGE} sp={sp} basePath="/dashboard/pricing" anchor="price-changes" />
+            </div>
+          </>
         )}
       </Card>
       <p className="text-xs leading-relaxed text-navy-500">

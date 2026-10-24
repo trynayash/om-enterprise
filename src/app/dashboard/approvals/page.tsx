@@ -13,6 +13,7 @@ import { DateTime, Money, Qty } from "@/components/ui/money";
 import { DecisionButtons } from "@/components/dashboard/ops/decision-buttons";
 import { TitleStamps } from "@/components/dashboard/title-stamps";
 import { tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
+import { lineDescription } from "@/lib/line-description";
 
 function SectionHeading({ id, title, count }: { id: string; title: string; count: number }) {
   return (
@@ -235,7 +236,7 @@ async function Approvals() {
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0">
                         <Link href={`/dashboard/products/${p.productId}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
-                          {p.productName} — {p.variantName}
+                          {lineDescription(null, p.productName, p.variantName)}
                         </Link>
                         <div className="mt-0.5 text-xs text-navy-500">
                           <span className="font-mono text-[11.5px] text-navy-600">{p.sku}</span> · {p.listName} list · proposed by {p.requestedBy} · <DateTime value={v.createdAt} />

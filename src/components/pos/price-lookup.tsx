@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR, formatQty } from "@/lib/money";
 import { SampleBadge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/page";
 import { cn } from "@/components/ui/cn";
+import { optionLabel } from "@/lib/line-description";
 import type { PosUnit, SearchResult } from "./types";
 
 /** Price lookup for the counter (selling prices only — never cost). */
@@ -62,10 +63,8 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
           />
           {loading && <Spinner className="absolute right-4 top-1/2 -translate-y-1/2 text-navy-400" />}
         </div>
-        <div className="mt-3 flex flex-wrap gap-1.5">
-          <Chip active={!categoryId} onClick={() => setCategoryId("")}>
-            All
-          </Chip>
+        {/* No chip is pressed until one is chosen: the list starts empty, so an "All" that looked selected would mislead. */}
+        <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label="Category">
           {categories.map((c) => (
             <Chip key={c.id} active={categoryId === c.id} onClick={() => setCategoryId(categoryId === c.id ? "" : c.id)}>
               {c.name}
@@ -76,7 +75,7 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
 
       {error && <p className="text-sm text-red-700">{error}</p>}
       {!active ? (
-        <EmptyState title="Look up any price" description="Search or pick a category. Prices shown are the current selling prices — the same ones the bill will use." />
+        <EmptyState title="Look up any price" description="Search by name, brand, size or SKU, or pick a category above. Prices shown are the current selling prices — the same ones the bill will use." />
       ) : groups.length === 0 && !loading ? (
         <EmptyState title="No products found" description="Try a brand, size or SKU." />
       ) : (
@@ -102,7 +101,12 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
                   {vs.map((v) => (
                     <li key={v.variantId} className="px-4 py-2.5">
                       <div className="flex items-baseline">
-                        <span className="min-w-0 text-sm font-medium text-navy-900">{v.variantName}</span>
+                        {/* A product sold in one form has a "Standard" placeholder option: its SKU names the row instead. */}
+                        {optionLabel(v.variantName) ? (
+                          <span className="min-w-0 text-sm font-medium text-navy-900">{v.variantName}</span>
+                        ) : (
+                          <span className="min-w-0 font-mono text-[13px] text-navy-700">{v.sku}</span>
+                        )}
                         <span aria-hidden className="leader" />
                         {v.price ? (
                           <span className="shrink-0 font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(v.price)}</span>
@@ -111,7 +115,7 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
                         )}
                       </div>
                       <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 text-[11px]">
-                        <span className="font-mono text-navy-500">{v.sku}</span>
+                        <span className="font-mono text-navy-500">{optionLabel(v.variantName) ? v.sku : ""}</span>
                         {v.price && (
                           <span className="text-navy-500">
                             per {v.unitName}
@@ -145,6 +149,7 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
   );
 }
 
+/** A category filter; the chosen one shows a cross, and tapping it again clears the filter. */
 function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
@@ -152,11 +157,12 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "h-8 rounded-md border px-2.5 text-[13px] font-medium transition-colors duration-150",
-        active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-700 hover:border-navy-400 hover:text-navy-950",
+        "inline-flex h-8 items-center gap-1 rounded-md border px-2.5 text-[13px] font-medium transition-colors duration-150",
+        active ? "border-navy-900 bg-navy-900 pr-2 text-white" : "border-navy-200 bg-white text-navy-700 hover:border-navy-400 hover:text-navy-950",
       )}
     >
       {children}
+      {active && <X className="h-3.5 w-3.5 opacity-70" aria-hidden />}
     </button>
   );
 }

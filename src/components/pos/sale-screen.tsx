@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowLeft, Ban, Check, CheckCircle2, LockOpen, Printer, Save } from "lucide-react";
+import { ArrowDown, ArrowLeft, Ban, Check, CheckCircle2, Lock, LockOpen, Printer, Save } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { D, formatINR } from "@/lib/money";
 import { Badge, StatusBadge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import { ReasonDialog } from "./reason-dialog";
 import { TaxBanner, TrainingBanner } from "./tax-banner";
 import { NewSaleButton } from "./new-sale-button";
 import { SaleStatusBadge } from "./sale-status";
+import { TrainingBadge } from "@/components/staff/labels";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData } from "./types";
 
 const STEPS = ["Cart", "Agree amount", "Payment", "Customer & bill"] as const;
@@ -130,7 +131,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
           <div className="flex flex-wrap items-center gap-1.5">
             <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
             {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
-            {s.isTraining && <Badge tone="red">Training</Badge>}
+            {s.isTraining && <TrainingBadge />}
             {s.source === "website_order" && <Badge tone="blue">From website order</Badge>}
           </div>
         </div>
@@ -181,7 +182,8 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         </ol>
       )}
 
-      {s.isTraining ? <TrainingBanner /> : <TaxBanner registrationType={config.registrationType} />}
+      {/* The GST notice is about issuing a bill, so it only matters while the sale is being built or paid. */}
+      {s.isTraining ? <TrainingBanner /> : (draft || finalized) && <TaxBanner registrationType={config.registrationType} />}
 
       {s.status === "cancelled" && (
         <Alert tone="danger" title="This sale was cancelled" className="mb-4">
@@ -239,16 +241,23 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                   variant="gold"
                   size="xl"
                   className="tabular"
-                  disabled={!items.length || approvalBlocks || missing.length > 0}
+                  // A real sale can't be finalised until GST registration is confirmed (the server refuses it too); training sales can.
+                  disabled={!items.length || approvalBlocks || missing.length > 0 || blockedByTax}
                   onClick={() => setDialog("finalize")}
                   icon={<CheckCircle2 className="h-6 w-6" />}
                   data-testid="finalize"
+                  aria-describedby={blockedByTax ? "finalize-blocked" : undefined}
                 >
                   Finalise {items.length ? formatINR(s.grandTotal) : "amount"}
                 </Button>
               </div>
-              {blockedByTax && items.length > 0 && (
-                <p className="text-xs leading-relaxed text-amber-800">This is a real (non-sample) sale: it can only be finalised once the Super Admin confirms the GST registration in Settings → Tax.</p>
+              {blockedByTax && (
+                <p id="finalize-blocked" className="flex items-start gap-2 text-[13px] leading-relaxed text-amber-900">
+                  <Lock className="mt-[3px] h-3.5 w-3.5 shrink-0 text-amber-600" aria-hidden />
+                  <span>
+                    Finalising is locked: real (non-sample) sales need the GST registration confirmed in Settings → Tax first. You can still save a quotation.
+                  </span>
+                </p>
               )}
             </>
           )}

@@ -14,7 +14,8 @@ import { Card, CardBody, CardHeader, Stat } from "@/components/ui/card";
 import { Alert, EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Money, DateTime, Qty } from "@/components/ui/money";
-import { SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge, plural } from "@/components/staff/labels";
 import { SalesChart, type DayPoint } from "@/components/dashboard/ops/sales-chart";
 import { istDateKey } from "@/components/dashboard/ops/params";
 import { rowHover, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
@@ -92,7 +93,7 @@ async function Overview() {
       />
 
       {(tax.registrationType === null || (!payments.upiEnabled && payments.gatewayProvider === "none")) && (
-        <div className="grid gap-3 xl:grid-cols-2">
+        <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
           {tax.registrationType === null && (
             <Alert tone="warning" title="GST registration not confirmed">
               Real bills are blocked until GST registration is confirmed in Settings → Tax. Only training (sample) sales can be completed.
@@ -121,7 +122,7 @@ async function Overview() {
               Today
               <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(today.netRevenue)} hint={`${today.bills.count} bill${today.bills.count === 1 ? "" : "s"} · GST ${formatINR(today.netTax)}`} />
               <Stat
                 label="Collections (cash flow)"
@@ -144,30 +145,31 @@ async function Overview() {
               This month
               <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(month.netRevenue)} hint={`Invoiced ${formatINR(month.netInvoiced)} incl. GST`} />
-              <Stat label="Bills issued" value={month.bills.count.toLocaleString("en-IN")} hint={`Average bill ${formatINR(month.averageBill)}${month.creditNotes.count ? ` · ${month.creditNotes.count} credit note(s)` : ""}`} />
+              <Stat label="Bills issued" value={month.bills.count.toLocaleString("en-IN")} hint={`Average bill ${formatINR(month.averageBill)}${month.creditNotes.count ? ` · ${plural(month.creditNotes.count, "credit note")}` : ""}`} />
               <Stat label="GST collected" value={formatINR(month.netTax)} hint="Output tax on bills, less credit notes" />
               {canProfit && month.profit ? (
-                <Stat
-                  label="Gross profit — not net profit"
-                  value={formatINR(month.profit.grossProfit)}
-                  tone="green"
-                  hint={
-                    month.profit.grossMarginPercent === null
-                      ? "No sales with known cost yet"
-                      : `Margin ${month.profit.grossMarginPercent}%${
-                          Number(month.profit.costCoveragePercent) < 100 ? ` · based on ${month.profit.costCoveragePercent}% of sales with known cost` : ""
-                        }`
-                  }
-                />
+                month.profit.grossMarginPercent === null ? (
+                  // Nothing sold this month has a recorded cost: there is no profit figure to show, not a zero.
+                  <Stat label="Gross profit — not net profit" value={<span className="text-navy-400">—</span>} hint="No sales with a recorded cost yet" />
+                ) : (
+                  <Stat
+                    label="Gross profit — not net profit"
+                    value={formatINR(month.profit.grossProfit)}
+                    tone="green"
+                    hint={`Margin ${month.profit.grossMarginPercent}%${
+                      Number(month.profit.costCoveragePercent) < 100 ? ` · based on ${month.profit.costCoveragePercent}% of sales with known cost` : ""
+                    }`}
+                  />
+                )
               ) : (
                 <Stat label="Collections (cash flow)" value={formatINR(month.collections.net)} tone="green" hint="Money received less refunds" />
               )}
             </div>
           </section>
 
-          <div className="grid gap-6 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
             <Card className="xl:col-span-2">
               <CardHeader title="Net sales — last 30 days" description={`Excluding GST · total ${formatINR(thirtyDayTotal.toFixed(2))}`} />
               <CardBody>
@@ -185,7 +187,7 @@ async function Overview() {
         <ActionItems pendingDiscounts={pendingDiscounts} pendingPrices={pendingPrices} newOrders={newOrders} pendingPayments={null} showOrders={can(actor, "orders.view")} showApprovals={can(actor, "discounts.approve") || can(actor, "prices.approve")} />
       )}
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
         {canReports && (
           <Card>
             <CardHeader title="Best sellers this month" description="By net sales (excl. GST), after returns" />
@@ -244,10 +246,10 @@ async function Overview() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 font-mono text-[13px] font-medium">
                           {s.saleNumber}
-                          {s.isTraining && <SampleBadge label="Training" />}
+                          {s.isTraining && <TrainingBadge />}
                         </div>
                         <div className="truncate text-xs text-navy-500">
-                          {s.customerName ?? "Walk-in customer"} · <DateTime value={s.createdAt} /> · {s.createdByName}
+                          {s.customerName ?? CASH_SALE} · <DateTime value={s.createdAt} /> · {s.createdByName}
                         </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">
@@ -260,7 +262,7 @@ async function Overview() {
               </ul>
             ) : (
               <CardBody>
-                <EmptyState title="No sales recorded yet" description={hiddenTraining > 0 ? `${hiddenTraining} training sale(s) are hidden — open Sales and tick “Include training” to see them.` : "Start one from the Point of Sale."} />
+                <EmptyState title="No sales recorded yet" description={hiddenTraining > 0 ? `${plural(hiddenTraining, "training sale")} ${hiddenTraining === 1 ? "is" : "are"} hidden — open Sales and tick “Include training” to see ${hiddenTraining === 1 ? "it" : "them"}.` : "Start one from the Point of Sale."} />
               </CardBody>
             )}
           </Card>

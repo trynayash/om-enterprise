@@ -7,6 +7,7 @@ import { listSales } from "@/server/services/sales";
 import { ListFilters } from "@/components/pos/list-filters";
 import { istRange, Pager, str, type SP } from "@/components/pos/list-utils";
 import { Badge, StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { SaleStatusBadge } from "@/components/pos/sale-status";
 import { DateTime, Money } from "@/components/ui/money";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
@@ -82,10 +83,10 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
                     {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
-                    {s.isTraining && <Badge tone="red">Training</Badge>}
+                    {s.isTraining && <TrainingBadge />}
                   </div>
                   <div className="mt-1.5 text-xs text-navy-500">
-                    <DateTime value={s.createdAt} /> · {s.customerName ?? "Cash sale"} · {s.itemCount} item{s.itemCount === 1 ? "" : "s"}
+                    <DateTime value={s.createdAt} /> · {s.customerName ?? CASH_SALE} · {s.itemCount} item{s.itemCount === 1 ? "" : "s"}
                   </div>
                 </Link>
               </li>
@@ -115,7 +116,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                         <Link href={`/pos/sale/${s.id}`} className="link-draw font-mono font-semibold text-navy-950">
                           {s.saleNumber}
                         </Link>
-                        {s.isTraining && <Badge tone="red">Training</Badge>}
+                        {s.isTraining && <TrainingBadge />}
                       </span>
                     </td>
                     <td className={td}>
@@ -132,7 +133,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                       <DateTime value={s.createdAt} />
                     </td>
                     <td className={td}>
-                      {s.customerName ?? <span className="text-navy-400">Cash sale</span>}
+                      {s.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}
                       {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
                     </td>
                     <td className={`${td} text-right font-mono tabular`}>{s.itemCount}</td>

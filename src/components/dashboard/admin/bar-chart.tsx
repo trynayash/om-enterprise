@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { formatINR } from "@/lib/money";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -10,23 +10,36 @@ function dayLabel(label: string) {
   return m ? `${Number(m[2])} ${MONTHS[Number(m[1]) - 1]}` : label;
 }
 
+/** Today's IST date as YYYY-MM-DD, the key the day labels use. */
+function istToday() {
+  return new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+}
+
 /**
  * Single-series column chart (one hue, no legend — the title names the series).
- * Navy columns on a hairline grid; the hovered or focused column turns brass and shows its value.
- * Fills the width of its card, scrolls sideways only for very long ranges, and has a table view so
- * no value is reachable only by hovering.
+ * Navy columns on a hairline grid; today's column is brass, as on the Overview chart, and the
+ * hovered or focused column lightens and shows its value. Fills the width of its card (a month fits
+ * on a phone); only very long ranges scroll sideways, and those open at the latest day. A table view
+ * means no value is reachable only by hovering.
  */
 export function BarChart({ data, title, height = 220 }: { data: { label: string; value: number }[]; title: string; height?: number }) {
   const [hover, setHover] = useState<number | null>(null);
   const [asTable, setAsTable] = useState(false);
   const [box, setBox] = useState(760);
+  const scroller = useRef<HTMLDivElement | null>(null);
   // Measure the chart's container so the columns fill the card at any width.
   const wrap = useCallback((el: HTMLDivElement | null) => {
+    scroller.current = el;
     if (!el) return;
     const ro = new ResizeObserver(([e]) => setBox(Math.floor(e.contentRect.width)));
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
+  // A range too long for the card scrolls; start at the right-hand end, where the latest days are.
+  useEffect(() => {
+    const el = scroller.current;
+    if (el && el.scrollWidth > el.clientWidth) el.scrollLeft = el.scrollWidth;
+  }, [box, data.length, asTable]);
 
   if (!data.length || data.every((d) => d.value === 0)) {
     return (
@@ -44,13 +57,17 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
   const padR = 4;
   const padT = 10;
   const padB = 26;
-  const slot = Math.max(10, Math.min(56, (box - padL - padR) / data.length));
-  const barW = Math.max(4, Math.min(28, Math.round(slot * 0.64)));
+  const slot = Math.max(6, Math.min(56, (box - padL - padR) / data.length));
+  const barW = Math.max(3, Math.min(28, Math.round(slot * 0.64)));
   const width = Math.max(box, padL + slot * data.length + padR);
+  const today = istToday();
   const plotH = height - padB - padT;
   const base = padT + plotH;
   const y = (v: number) => base - (niceMax ? (v / niceMax) * plotH : 0);
   const labelEvery = Math.max(1, Math.ceil((data.length * 58) / (width - padL)));
+  const todayIndex = data.findIndex((d) => d.label === today);
+  // Every few columns gets a date; today always does, and a date that would crowd it is skipped.
+  const labelled = (i: number) => i === todayIndex || (i % labelEvery === 0 && (todayIndex < 0 || Math.abs(i - todayIndex) >= labelEvery));
 
   return (
     <figure>
@@ -89,12 +106,13 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
               const top = y(d.value);
               const h = Math.max(0, base - top);
               const on = hover === i;
+              const isToday = d.label === today;
               return (
                 <g
                   key={d.label}
                   tabIndex={0}
                   role="listitem"
-                  aria-label={`${d.label}: ${formatINR(String(d.value))}`}
+                  aria-label={`${isToday ? "Today" : d.label}: ${formatINR(String(d.value))}`}
                   onPointerEnter={() => setHover(i)}
                   onPointerLeave={() => setHover(null)}
                   onFocus={() => setHover(i)}
@@ -102,12 +120,12 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
                   className="outline-none"
                 >
                   <rect x={padL + i * slot} y={padT} width={slot} height={plotH} fill="transparent" />
-                  {h > 0 && <rect x={x} y={top} width={barW} height={h} className={on ? "fill-gold-500" : "fill-navy-800"} shapeRendering="crispEdges" />}
-                  {i % labelEvery === 0 && (
+                  {h > 0 && <rect x={x} y={top} width={barW} height={h} className={isToday ? (on ? "fill-gold-600" : "fill-gold-500") : on ? "fill-navy-500" : "fill-navy-800"} shapeRendering="crispEdges" />}
+                  {labelled(i) && (
                     <>
                       <line x1={x + barW / 2} x2={x + barW / 2} y1={base} y2={base + 4} className="stroke-navy-400" strokeWidth={1} shapeRendering="crispEdges" />
-                      <text x={x + barW / 2} y={height - 6} textAnchor="middle" className="fill-navy-500 font-mono text-[10px]">
-                        {dayLabel(d.label)}
+                      <text x={x + barW / 2} y={height - 6} textAnchor={i === data.length - 1 ? "end" : "middle"} className={isToday ? "fill-gold-700 font-mono text-[10px] font-medium" : "fill-navy-500 font-mono text-[10px]"}>
+                        {isToday ? "Today" : dayLabel(d.label)}
                       </text>
                     </>
                   )}
@@ -120,7 +138,7 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
               className="pointer-events-none absolute top-0 z-10 rounded-md bg-navy-950 px-2.5 py-1.5 text-xs text-white shadow-lift"
               style={{ left: Math.max(0, Math.min(padL + hover * slot, width - 150)) }}
             >
-              <div className="font-mono text-[11px] text-navy-300">{dayLabel(data[hover].label)}</div>
+              <div className="font-mono text-[11px] text-navy-300">{data[hover].label === today ? "Today" : dayLabel(data[hover].label)}</div>
               <div className="font-mono font-semibold tabular">{formatINR(String(data[hover].value))}</div>
             </div>
           )}

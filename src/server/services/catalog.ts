@@ -663,7 +663,8 @@ export async function searchSellable(
     .innerJoin(units, eq(units.code, productVariants.unitCode))
     .leftJoin(brands, eq(brands.id, products.brandId))
     .where(and(...where))
-    .orderBy(desc(exactRank), asc(products.name), asc(productVariants.sortOrder), asc(productVariants.name))
+    // Rank only when there is search text: a bare `order by 0` is read by Postgres as a column position and fails.
+    .orderBy(...(q ? [desc(exactRank)] : []), asc(products.name), asc(productVariants.sortOrder), asc(productVariants.name))
     .limit(Math.min(opts.limit ?? 40, 200));
 
   const ids = rows.map((r) => r.v.id);

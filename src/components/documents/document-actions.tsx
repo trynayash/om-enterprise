@@ -17,6 +17,7 @@ export function DocumentActions({
   customerMobile,
   businessName = "OM ENTERPRISE",
   canShare = true,
+  showPdf = true,
 }: {
   documentId: string;
   docNumber: string;
@@ -26,6 +27,8 @@ export function DocumentActions({
   customerMobile?: string | null;
   businessName?: string;
   canShare?: boolean;
+  /** Off where the page has its own PDF control (the dashboard's copy selector). */
+  showPdf?: boolean;
 }) {
   const toast = useToast();
   const [printing, setPrinting] = useState(false);
@@ -56,9 +59,11 @@ export function DocumentActions({
       <Button onClick={print} loading={printing} icon={<Printer className="h-4 w-4" />}>
         Print
       </Button>
-      <a className={buttonClass("outline")} href={`/api/documents/${documentId}/pdf?download=1`}>
-        <Download className="h-4 w-4" /> PDF
-      </a>
+      {showPdf && (
+        <a className={buttonClass("outline")} href={`/api/documents/${documentId}/pdf?download=1`}>
+          <Download className="h-4 w-4" /> PDF
+        </a>
+      )}
       {canShare && shareUrl && (
         <>
           <span aria-hidden className="mx-1 hidden h-6 w-px bg-navy-200 sm:block" />

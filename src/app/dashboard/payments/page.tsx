@@ -6,7 +6,8 @@ import { listPayments, pendingPayments } from "@/server/services/payments";
 import { D, formatINR, m } from "@/lib/money";
 import { Stat } from "@/components/ui/card";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
-import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { Badge, StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { DateTime, Money } from "@/components/ui/money";
 import { cn } from "@/components/ui/cn";
 import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-bar";
@@ -29,7 +30,7 @@ export default function PaymentsPage({ searchParams }: PageProps<"/dashboard/pay
 function Tabs({ view }: { view: "history" | "pending" }) {
   const tab = (active: boolean) =>
     cn(
-      "-mb-px border-b-2 px-1 pb-2.5 pt-1 text-sm font-semibold transition-colors duration-150",
+      "-mb-px whitespace-nowrap border-b-2 px-1 pb-2.5 pt-1 text-sm font-semibold transition-colors duration-150",
       active ? "border-gold-500 text-navy-950" : "border-transparent text-navy-500 hover:border-navy-200 hover:text-navy-900",
     );
   return (
@@ -87,7 +88,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                     <td className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={r.finalizedAt} />
                     </td>
-                    <td className={tdText}>{r.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
+                    <td className={tdText}>{r.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                     <td className={tdNum}>
                       <Money value={r.grandTotal} />
                     </td>
@@ -225,10 +226,10 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                       <Link href={`/dashboard/sales/${p.saleId}`} className={codeLink}>
                         {p.saleNumber}
                       </Link>
-                      {p.isTraining && <SampleBadge label="Training" />}
+                      {p.isTraining && <TrainingBadge />}
                     </span>
                   </td>
-                  <td className={tdText}>{p.customerName ?? <span className="text-navy-400">Walk-in</span>}</td>
+                  <td className={tdText}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                   <td className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
                       {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}

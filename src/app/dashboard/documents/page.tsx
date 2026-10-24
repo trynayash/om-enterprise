@@ -5,7 +5,8 @@ import { can } from "@/server/auth/actor";
 import { listDocuments } from "@/server/services/documents";
 import type { DocType } from "@/lib/document-types";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
-import { SampleBadge, StatusBadge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { DateTime, Money } from "@/components/ui/money";
 import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-bar";
 import { Pagination } from "@/components/dashboard/ops/pagination";
@@ -124,7 +125,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                       <Link href={`/dashboard/documents/${d.id}`} className={`${codeLink} whitespace-nowrap`}>
                         {d.docNumber}
                       </Link>
-                      {d.isTraining && <SampleBadge label="Training" />}
+                      {d.isTraining && <TrainingBadge />}
                     </span>
                   </td>
                   <td className={tdText}>
@@ -136,7 +137,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                   <td className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={d.issuedAt} />
                   </td>
-                  <td className={tdText}>{d.customerName ?? <span className="text-navy-400">Cash sale</span>}</td>
+                  <td className={tdText}>{d.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                   <td className={tdText}>
                     <Link href={`/dashboard/sales/${d.saleId}`} className="font-mono text-[13px] text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
                       {d.saleNumber}

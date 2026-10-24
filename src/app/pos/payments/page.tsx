@@ -5,6 +5,7 @@ import { listPayments } from "@/server/services/payments";
 import { ListFilters } from "@/components/pos/list-filters";
 import { istRange, Pager, str, type SP } from "@/components/pos/list-utils";
 import { Badge, StatusBadge } from "@/components/ui/badge";
+import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { DateTime, Money } from "@/components/ui/money";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
 import { D } from "@/lib/money";
@@ -44,13 +45,16 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
     page,
     pageSize: 50,
   });
-  const verifiedIn = res.items.filter((p) => p.status === "successful" && p.direction === "in").reduce((a, p) => a.plus(D(p.amount)), D(0));
+  // Training (sample) payments are listed but never counted as money received.
+  const verified = res.items.filter((p) => p.status === "successful" && p.direction === "in");
+  const verifiedIn = verified.filter((p) => !p.isTraining).reduce((a, p) => a.plus(D(p.amount)), D(0));
+  const trainingIn = verified.filter((p) => p.isTraining).reduce((a, p) => a.plus(D(p.amount)), D(0));
   return (
     <div className="space-y-4">
       <PageHeader
         eyebrow="Point of sale"
         title="Payment history"
-        description="Every QR shown and every payment confirmed. A QR that was shown is NOT a payment until someone verifies it."
+        description="Every QR shown and every payment confirmed. A QR that has been shown is not a payment until someone verifies it."
       />
       <ListFilters
         initial={{ q: str(sp, "q"), status: str(sp, "status"), method: str(sp, "method"), direction, from: str(sp, "from"), to: str(sp, "to") }}
@@ -89,9 +93,14 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
         <EmptyState title="No payments found" />
       ) : (
         <>
-          <p className="flex flex-wrap items-baseline gap-x-2 text-sm text-navy-600">
+          <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-navy-600">
             <span className="label-mono text-navy-500">Verified receipts on this page</span>
             <Money value={verifiedIn.toFixed(2)} className="font-mono font-semibold text-navy-950" />
+            {trainingIn.greaterThan(0) && (
+              <span className="basis-full text-[13px] text-navy-500">
+                Training payments (<Money value={trainingIn.toFixed(2)} className="font-mono" />) are listed but not counted.
+              </span>
+            )}
           </p>
           <ul className="divide-y divide-navy-100 overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card md:hidden">
             {res.items.map((p) => (
@@ -105,10 +114,10 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                     <StatusBadge status={p.status} />
                     {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
                     <Badge tone="navy">{METHOD[p.method] ?? p.method}</Badge>
-                    {p.isTraining && <Badge tone="red">Training</Badge>}
+                    {p.isTraining && <TrainingBadge />}
                   </div>
                   <div className="mt-1.5 text-xs text-navy-500">
-                    <DateTime value={p.verifiedAt ?? p.createdAt} /> · {p.customerName ?? "No customer"}
+                    <DateTime value={p.verifiedAt ?? p.createdAt} /> · {p.customerName ?? CASH_SALE}
                     {p.reference && <span className="font-mono"> · {p.reference}</span>}
                   </div>
                   {p.verificationMethod && (
@@ -145,10 +154,10 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                         <Link href={`/pos/sale/${p.saleId}`} className="link-draw font-mono font-semibold text-navy-950">
                           {p.saleNumber}
                         </Link>
-                        {p.isTraining && <Badge tone="red">Training</Badge>}
+                        {p.isTraining && <TrainingBadge />}
                       </span>
                     </td>
-                    <td className={td}>{p.customerName ?? <span className="text-navy-300">—</span>}</td>
+                    <td className={td}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                     <td className={td}>
                       <span className="flex flex-wrap items-center gap-1.5">
                         {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}

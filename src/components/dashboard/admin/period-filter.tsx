@@ -35,8 +35,26 @@ export function presetRange(preset: string): { from: string; to: string } {
   }
 }
 
+const PRESETS = [
+  { key: "today", label: "Today" },
+  { key: "7d", label: "Last 7 days" },
+  { key: "30d", label: "Last 30 days" },
+  { key: "month", label: "This month" },
+  { key: "last-month", label: "Last month" },
+  { key: "fy", label: "This financial year" },
+] as const;
+
+/** The preset whose range is exactly from–to (the default range is "Last 30 days"), or "custom". */
+function matchingPreset(from: string, to: string) {
+  return PRESETS.find((p) => {
+    const r = presetRange(p.key);
+    return r.from === from && r.to === to;
+  })?.key ?? "custom";
+}
+
 /** One row of filters above everything it scopes (date range first). */
 export function PeriodFilter({ from, to }: { from: string; to: string }) {
+  const preset = matchingPreset(from, to);
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();
@@ -48,31 +66,31 @@ export function PeriodFilter({ from, to }: { from: string; to: string }) {
   };
   return (
     <div className="no-print mb-5 flex flex-wrap items-end gap-3">
-      <div className="w-48">
+      <div className="w-full sm:w-48">
         <Label htmlFor="preset">Period</Label>
+        {/* Shows the preset the dates match (the default is the last 30 days), or "Custom range" after picking dates. */}
         <Select
           id="preset"
-          defaultValue=""
+          value={preset}
           onChange={(e) => {
-            if (!e.target.value) return;
+            if (e.target.value === "custom") return;
             const r = presetRange(e.target.value);
             go(r.from, r.to);
           }}
         >
-          <option value="">Choose…</option>
-          <option value="today">Today</option>
-          <option value="7d">Last 7 days</option>
-          <option value="30d">Last 30 days</option>
-          <option value="month">This month</option>
-          <option value="last-month">Last month</option>
-          <option value="fy">This financial year</option>
+          {PRESETS.map((p) => (
+            <option key={p.key} value={p.key}>
+              {p.label}
+            </option>
+          ))}
+          {preset === "custom" && <option value="custom">Custom range</option>}
         </Select>
       </div>
-      <div className="w-[152px]">
+      <div className="w-[calc(50%-0.375rem)] sm:w-[152px]">
         <Label htmlFor="from">From</Label>
         <Input id="from" type="date" value={from} max={to} onChange={(e) => e.target.value && go(e.target.value, to)} className="font-mono text-[13px]" />
       </div>
-      <div className="w-[152px]">
+      <div className="w-[calc(50%-0.375rem)] sm:w-[152px]">
         <Label htmlFor="to">To</Label>
         <Input id="to" type="date" value={to} min={from} onChange={(e) => e.target.value && go(from, e.target.value)} className="font-mono text-[13px]" />
       </div>

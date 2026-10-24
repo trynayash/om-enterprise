@@ -9,7 +9,8 @@ import { toAppError } from "@/server/errors";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
 import { NewSaleButton } from "@/components/pos/new-sale-button";
-import { StatusBadge, Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/badge";
+import { TrainingBadge } from "@/components/staff/labels";
 import { EmptyState, PageSkeleton } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { DOC_TYPE_LABEL } from "@/lib/document-types";
@@ -50,7 +51,7 @@ async function DocumentLoader({ params }: { params: Promise<{ id: string }> }) {
           </h1>
           <div className="flex flex-wrap items-center gap-1.5">
             <StatusBadge status={doc.status} />
-            {doc.isTraining && <Badge tone="red">Training — not a valid bill</Badge>}
+            {doc.isTraining && <TrainingBadge label="Training — not a valid bill" />}
           </div>
         </div>
         <div className="ml-auto">
