@@ -51,7 +51,7 @@ One connected system for the shop:
 |---|---|
 | Public website | Homepage, categories, product catalogue with search, filters and variants, configured selling prices, enquiry list, order requests, WhatsApp, about and contact pages, customer bill links |
 | POS | New sale, product/SKU/barcode search, exact variant and unit, server-calculated cart, discounts within personal limits, approvals (remote or in person), quotations, exact-amount UPI QR, payment verification, customer details, bill, print/PDF/WhatsApp |
-| Catalogue | Dynamic categories/subcategories, brands, products, variants (SKU, barcode, attributes), specifications, images, unit conversions, pipe/fitting compatibility, review-before-publish, CSV import |
+| Catalogue | Dynamic categories/subcategories, brands, products, variants (SKU, barcode, attributes), specifications, images, unit conversions, pipe/fitting compatibility, review-before-publish, Excel/CSV import |
 | Pricing | One pricing engine everywhere; immutable price versions with effective dates, approval and history; quantity tiers; MRP guard; landed cost; margin and markup kept separate; price-review list |
 | Sales | Drafts, quotations, finalisation with a frozen snapshot, reopen if unpaid, cancellation, returns with credit notes |
 | Payments | Static UPI QR with exact amount and manual verification (UTR); cash, card, bank transfer and cheque; split payments; Razorpay dynamic QR with signed, idempotent webhooks; reversals and refunds |
@@ -231,12 +231,12 @@ The full permission catalogue, with descriptions, is in `src/lib/permissions.ts`
 - **Products → variants.** Every sellable variant has its own SKU (unique), optional barcode, attributes (e.g. Colour, Pack size, Size, Class), unit, tax-class override and its own price history.
 - **Units:** pcs, nos, ltr, bucket, m, ft, length, kg, box, set, roll, pack, bag. Alternate selling units exist only where explicitly configured per variant (e.g. "1 length = 3 m", "1 box = 10 rolls"); no other unit conversion is allowed.
 - **Compatibility** links (e.g. a ¾" CPVC elbow ↔ ¾" CPVC pipe) are explicit. Nothing is assumed compatible.
-- **Publishing:** new and imported products are unpublished drafts. Someone with `catalog.publish` marks the information *reviewed* and then publishes it. Editing key fields of a reviewed product sends it back to review.
+- **Publishing:** new and imported products are unpublished drafts. Someone with `catalog.publish` marks the information *reviewed* and then publishes it, or ticks *Publish on the website straight away* when importing. Editing key fields of a reviewed product sends it back to review.
 - **Data integrity:** never enter invented specifications, prices, warranties or stock. Record where data came from in *Source info*.
 
-### CSV import (Dashboard → Bulk import)
+### Excel / CSV import (Dashboard → Bulk import)
 
-Save your spreadsheet as **CSV UTF-8**, one row per variant. Rows with the same `product_name + brand + category` become one product. Download the template from the import page.
+Upload the Excel workbook (`.xlsx`, first sheet) as it is, or a **CSV UTF-8** file, one row per variant. Rows with the same `product_name + brand + category` become one product. Download the template from the import page. Excel files are read in the browser; old `.xls` files must be re-saved as `.xlsx`.
 
 | Column | Required | Notes |
 |---|---|---|
@@ -248,8 +248,11 @@ Save your spreadsheet as **CSV UTF-8**, one row per variant. Rows with the same 
 | `barcode`, `mrp`, `selling_price`, `price_includes_tax` (yes/no) | | Prices need `prices.edit`; they go *pending* unless the importer can approve |
 | `purchase_cost`, `purchase_tax_rate`, `freight`, `handling` | | Need `costs.edit` |
 | `is_sample` (yes/no) | | Marks demonstration data |
+| `image_url` | | Up to 4 links to the product photo on the maker's website, separated by spaces. Downloaded after the import is saved; needs `catalog.edit` |
 
-**Validate** gives a row-by-row report: duplicate SKUs or barcodes (against the database and within the file), missing fields, unknown categories, units or tax rates, invalid numbers, and price above MRP. **Import** is enabled only when there are no errors, and it is all-or-nothing.
+**Validate** gives a row-by-row report: duplicate SKUs or barcodes (against the database and within the file), missing fields, unknown categories, units or tax rates, invalid numbers, price above MRP and malformed photo links. **Import** is enabled only when there are no errors, and it is all-or-nothing.
+
+Photos are fetched after the products are saved, so a broken link never undoes an import; each photo that could not be added is listed with the reason. The server only downloads from public internet addresses (checked on every redirect), only image files, up to 6 MB each (`src/server/remote-image.ts`).
 
 ### Real catalogue files (`data/catalog/`)
 
