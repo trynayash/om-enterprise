@@ -4,7 +4,7 @@
   "notes": [
     "TOOLING LIMITATION: during this research the page-fetch tool could not resolve any host (DNS failure for every site, including finolexpipes.com), and the session web-search budget ran out before the end. All facts were taken from search-engine extracts of official finolexpipes.com product pages and Finolex catalogue PDFs (URLs in sourceUrls), not from directly opened pages. Spot-check against the live pages before publishing.",
     "PRICES: no official, current Finolex Industries pipe price list could be found or opened. Search results only gave third-party aggregator pages, dealer listings, a 2021 distributor copy, and Finolex Cables (a separate company) lists. Every listPrice/mrp is therefore null; obtain the current list from the Finolex distributor.",
-    "IMAGES: none recorded. Official image URLs could not be read because product pages could not be fetched. All images arrays are empty and need to be filled from finolexpipes.com.",
+    "IMAGES (added 25 Oct 2026): each product uses the product photo of its own finolexpipes.com page (the page's first product image, ahead of its line drawing and the related-products strip). The SDR 11 and SDR 13.5 CPVC pipes share the CPVC pipes page photo, and the ASTM Schedule 40 and Schedule 80 pipes share the ASTM pipes page photo, because Finolex lists each pair on one page.",
     "Material codes in specifications are Finolex's own codes as shown on the product pages. They can help when ordering from the distributor. Finolex pages sometimes give conflicting codes for similar items (e.g. Selfit vs Ringfit SWR bends), so confirm with the distributor.",
     "CPVC Pipe SDR 13.5: the product page lists 15–50 mm in SDR 11 and SDR 13.5, but one Finolex brochure lists only SDR 11. Confirm which SDR 13.5 sizes the distributor actually stocks.",
     "CPVC pipes come in 3 m and 5 m lengths, and ASTM pipes in 3 m and 6 m, so altUnit is null for them. Set altUnit once the stocked length is known.",
@@ -69,7 +69,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2073/cpvc-pipe-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-pipes/",
         "https://www.finolexpipes.com/plumbing-products/cpvc-pipes-and-fittings/",
@@ -212,7 +212,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2073/cpvc-pipe-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-pipes/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -334,7 +334,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2363/elbow-90-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-90/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -456,7 +456,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2375/elbow-45_-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-45/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -582,7 +582,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2388/tee-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/tee/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -704,7 +704,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2357/coupler-1-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/coupler/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -830,7 +830,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2502/reducer-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/reducer/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -994,7 +994,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2412/end-cap-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/end-cap/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1124,7 +1124,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/147808/female-threaded-adapter-f_t_a_-366x366_1-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/female-threaded-adapter-f-t-a/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1254,7 +1254,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/147554/male-threaded-adapter-m_t_a_-1-366x366_1-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/male-threaded-adapter-m-t-a/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1384,7 +1384,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2424/male-threaded-adapter-m_t_a_-brass-insert-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/male-threaded-adapter-m-t-a-brass-insert/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1514,7 +1514,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2436/female-threaded-adapter-f_t_a_-brass-insert-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/female-threaded-adapter-f-t-a-brass-insert-old/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1644,7 +1644,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2369/elbow-90_-brass-insert-366x366_1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/elbow-90-brass-insert/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1746,7 +1746,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2406/tee-brass-insert-1-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/tee-brass-insert/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -1900,7 +1900,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2442/union-1-366x366_1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/union/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_cpvc_brochure_004.pdf"
@@ -2026,7 +2026,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2490/ball-valve-red-handle-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/cpvc-pipes-fittings/cpvc-ball-valve/",
         "https://www.finolexpipes.com/cpvc-pipes-fittings/ball-valve-accessories-red-handle/",
@@ -2165,7 +2165,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1929/pvc-u-astm-sch-40-_-80-finolex-1.jpg"],
       "sourceUrls": [
         "https://www.finolexpipes.com/astm-pipes-fittings/pvc-u-schd-40/",
         "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/",
@@ -2304,7 +2304,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1929/pvc-u-astm-sch-40-_-80-finolex-1.jpg"],
       "sourceUrls": [
         "https://www.finolexpipes.com/astm-pipes-fittings/pvc-u-schd-40/",
         "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/",
@@ -2432,7 +2432,7 @@
         "Size",
         "End"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1971/astm_elbow_90-1-min.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/elbow-plain-threaded/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
@@ -2655,7 +2655,7 @@
         "Size",
         "End"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1989/tee-threaded-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/astm-pipes-fittings/tee-plain-threaded/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
@@ -2877,7 +2877,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1959/coupler-5-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/astm-pipes-fittings/coupler/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_astm_004.pdf"
@@ -3012,7 +3012,7 @@
         "Size",
         "Pressure class"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1222/pvc-u-agri-selfit-pipe-e-366x366-finolex-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/agriculture-products/agriculture-pipes-fittings/selfit-pvc-u-pipes/",
         "https://www.finolexpipes.com/agriculture-products/agriculture-pipes-fittings/",
@@ -3183,7 +3183,7 @@
         "Size",
         "Type"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1811/product2-1-366x366-finolex-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/agriculture-products/column-pipes/pvc-u-column-pipes/",
         "https://www.finolexpipes.com/agriculture-products/column-pipes/"
@@ -3350,7 +3350,7 @@
         "Size",
         "Type"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2013/swr-selfit-pvc-pipes-finolex-3.jpg"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/swr-selfit-pvc-pipes-2/",
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/",
@@ -3483,7 +3483,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2037/bend-87_5-plain-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/bend-87-5-2/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
@@ -3563,7 +3563,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2049/bend-45-plain-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/bend-45/",
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/plain-bend-45/",
@@ -3644,7 +3644,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/147947/tee-plain-366x366-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/tee/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
@@ -3724,7 +3724,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/3659/single-y-plain-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/single-y/",
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/plain-y/",
@@ -3809,7 +3809,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2025/coupler-2-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/selfit-coupler/",
         "https://www.finolexpipes.com/site/assets/files/1045/new_swr_pipes_004.pdf"
@@ -3889,7 +3889,7 @@
       "variantAttributes": [
         "Size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/3228/swr-selfit-nahani-trap-w_o-jali-short-366x366.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/nahani-trap-w-o-jali-short/",
         "https://www.finolexpipes.com/plumbing-products/swr-pipes-fittings/nahani-trap-jali-only-jali/",
@@ -3978,7 +3978,7 @@
       "variantAttributes": [
         "Pack size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2679/finolex_primer-6-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/medium-bodied-cpvc-solvent-cement/",
         "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/"
@@ -4086,7 +4086,7 @@
       "variantAttributes": [
         "Pack size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/1408/finolex_primer-4-1-1-1_copy-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/solvent-cement-plumbing-products/medium-duty-pvc-u-solvent-cement/",
         "https://www.finolexpipes.com/plumbing-products/solvent-cement-plumbing-products/"
@@ -4170,7 +4170,7 @@
       "variantAttributes": [
         "Pack size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/147367/finolex_pvc-u_light_green-3_1-4-2.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/agriculture-products/solvent-cement-lubricants-agri-products/pvc-u-solvent-cement/"
       ],
@@ -4277,7 +4277,7 @@
       "variantAttributes": [
         "Pack size"
       ],
-      "images": [],
+      "images": ["https://www.finolexpipes.com/site/assets/files/2705/finolex_primer-4-1-1-1-1.png"],
       "sourceUrls": [
         "https://www.finolexpipes.com/solvent-cement-plumbing-products/pvc-u-solvent-cement-for-swr-applications/"
       ],
