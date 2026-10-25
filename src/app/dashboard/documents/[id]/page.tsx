@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getDocument } from "@/server/services/documents";
+import { emailInfoFor } from "@/server/services/document-email";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
 import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
@@ -86,6 +87,7 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
               businessName={s.seller.name}
               canShare={can(actor, "documents.share")}
               showPdf={false}
+              email={await emailInfoFor(doc)}
             />
           </ClientOnly>
           <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />

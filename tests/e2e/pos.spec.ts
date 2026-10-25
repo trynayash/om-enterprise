@@ -1,5 +1,5 @@
 import { expect, test, type Browser, type Page } from "@playwright/test";
-import { apiCall, expectNoHorizontalScroll, login, OWNER, uniq } from "./helpers";
+import { apiCall, clearSentMail, expectNoHorizontalScroll, login, OWNER, sentMail, uniq } from "./helpers";
 
 interface Reference {
   categories: { id: string; name: string }[];
@@ -19,6 +19,7 @@ test.describe("POS counter", () => {
   test("acceptance scenario: over-limit discount → manager approval → UPI QR → verified UTR → GST tax invoice → PDF", async ({ page, browser }) => {
     test.skip(test.info().project.name !== "desktop", "creates staff accounts and a real bill; runs once");
     test.setTimeout(120_000);
+    clearSentMail();
 
     // ---- Setup by the Super Admin: a non-sample test item with an approved price and a cost, plus two staff.
     await login(page, OWNER.username, OWNER.password);
@@ -156,6 +157,23 @@ test.describe("POS counter", () => {
     const pdf = await sachin.request.get(`/api/documents/${documentId}/pdf`);
     expect(pdf.status()).toBe(200);
     expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+
+    // ---- 10b. One click emails the bill, as a PDF, to the address taken before the QR.
+    await expect(sachin.getByTestId("email-note")).toContainText("ramesh.e2e@example.com");
+    await sachin.getByTestId("email-bill").click();
+    await expect(sachin.getByTestId("email-note")).toContainText(/Emailed to ramesh\.e2e@example\.com/);
+    const first = sentMail().filter((m) => m.to === "ramesh.e2e@example.com");
+    expect(first).toHaveLength(1);
+    expect(first[0].subject).toMatch(/^Tax Invoice OE\/\d{2}-\d{2}\/\d+ from /);
+    expect(first[0].text).toContain("Hello Ramesh Patel (e2e),");
+    expect(first[0].attachments[0].filename).toMatch(/^OE-\d{2}-\d{2}-\d+\.pdf$/);
+    expect(first[0].attachments[0].content.subarray(0, 4).toString()).toBe("%PDF");
+    // Another address can be typed when the customer wants it sent elsewhere.
+    await sachin.getByRole("button", { name: "send to another address" }).click();
+    await sachin.locator("#email-to").fill("accounts.e2e@example.com");
+    await sachin.getByRole("button", { name: "Send bill" }).click();
+    await expect(sachin.getByTestId("email-note")).toContainText("accounts.e2e@example.com");
+    expect(sentMail().some((m) => m.to === "accounts.e2e@example.com")).toBe(true);
 
     // The same UTR can never be used for a second payment.
     const other = await apiCall<{ id: string }>(sachin, "POST", "/api/sales", {});

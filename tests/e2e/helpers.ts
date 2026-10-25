@@ -1,3 +1,5 @@
+import { existsSync, readdirSync, readFileSync, rmSync, statSync } from "node:fs";
+import { join } from "node:path";
 import { expect, type Page } from "@playwright/test";
 
 export const OWNER = { username: "e2e.owner", password: "E2e-Owner-Pass-2026!" };
@@ -48,4 +50,31 @@ export async function makeTrainingBill(page: Page, sku = "DEMO-PNT-INT-4L", quan
   });
   const doc = await apiCall<{ id: string; docNumber: string }>(page, "POST", `/api/sales/${sale.id}/bill`, { customer: { name: "E2E Customer", mobile: "9876501234" } });
   return { saleId: sale.id, saleNumber: sale.saleNumber, grandTotal: fin.grandTotal, documentId: doc.id, docNumber: doc.docNumber };
+}
+
+/** A message the app "emailed" during the run: e2e runs write mail to a folder instead of sending it. */
+export interface SentMail {
+  to: string;
+  subject: string;
+  replyTo: string | null;
+  text: string;
+  attachments: { filename: string; file: string; bytes: number; content: Buffer }[];
+}
+
+const OUTBOX = join(process.cwd(), "storage", "e2e-outbox");
+
+export function clearSentMail() {
+  rmSync(OUTBOX, { recursive: true, force: true });
+}
+
+/** Everything emailed since `clearSentMail`, oldest first. */
+export function sentMail(): SentMail[] {
+  if (!existsSync(OUTBOX)) return [];
+  return readdirSync(OUTBOX)
+    .map((folder) => ({ folder, at: statSync(join(OUTBOX, folder)).mtimeMs }))
+    .sort((a, b) => a.at - b.at)
+    .map(({ folder }) => {
+      const m = JSON.parse(readFileSync(join(OUTBOX, folder, "message.json"), "utf8"));
+      return { ...m, attachments: m.attachments.map((a: { file: string }) => ({ ...a, content: readFileSync(join(OUTBOX, folder, a.file)) })) } as SentMail;
+    });
 }

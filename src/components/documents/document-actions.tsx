@@ -6,6 +6,8 @@ import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { formatINR } from "@/lib/money";
 import { whatsappLink } from "@/lib/india";
+import type { DocumentEmailInfo } from "@/lib/document-types";
+import { useEmailBill } from "./email-bill";
 
 /** Print / PDF / share controls for an issued document. */
 export function DocumentActions({
@@ -18,6 +20,7 @@ export function DocumentActions({
   businessName = "OM ENTERPRISE",
   canShare = true,
   showPdf = true,
+  email,
 }: {
   documentId: string;
   docNumber: string;
@@ -29,8 +32,11 @@ export function DocumentActions({
   canShare?: boolean;
   /** Off where the page has its own PDF control (the dashboard's copy selector). */
   showPdf?: boolean;
+  /** Emailing the document to the customer; left out where it does not apply. */
+  email?: DocumentEmailInfo;
 }) {
   const toast = useToast();
+  const mail = useEmailBill(documentId, canShare ? email : undefined);
   const [printing, setPrinting] = useState(false);
   // Read the origin without a server/client mismatch (null during SSR, real value after hydration).
   const origin = useSyncExternalStore(
@@ -64,6 +70,7 @@ export function DocumentActions({
           <Download className="h-4 w-4" /> PDF
         </a>
       )}
+      {mail.button}
       {canShare && shareUrl && (
         <>
           <span aria-hidden className="mx-1 hidden h-6 w-px bg-navy-200 sm:block" />
@@ -82,6 +89,8 @@ export function DocumentActions({
           </Button>
         </>
       )}
+      {mail.note}
+      {mail.dialog}
     </div>
   );
 }

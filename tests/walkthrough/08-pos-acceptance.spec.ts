@@ -1,3 +1,4 @@
+import { clearSentMail, sentMail } from "../e2e/helpers";
 import { SACHIN, TEST_ITEM, YASH, check, expect, finish, follow, inr, newRecordedPage, pause, say, setup, signIn, tap, test, titleCard, type } from "./kit";
 
 setup();
@@ -144,6 +145,17 @@ test("08 · Counter sale end to end: discount approval, UPI QR, UTR check, GST t
     const pdf = await page.request.get(`/api/documents/${docId}/pdf`);
     expect(pdf.status()).toBe(200);
     expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+  });
+
+  await say(page, "Email the bill: one click sends the PDF to the address taken before the QR.");
+  clearSentMail();
+  await check(page, "The page says where it will go", () => expect(page.getByTestId("email-note")).toContainText("ramesh.patel@example.com"));
+  await tap(page.getByTestId("email-bill"));
+  await check(page, "Sent, with the PDF attached", async () => {
+    await expect(page.getByTestId("email-note")).toContainText(/Emailed to ramesh\.patel@example\.com/);
+    const mail = sentMail().find((m) => m.to === "ramesh.patel@example.com");
+    expect(mail?.subject).toMatch(/^Tax Invoice OE\/\d{2}-\d{2}\/\d+ from /);
+    expect(mail?.attachments[0].content.subarray(0, 4).toString()).toBe("%PDF");
   });
 
   await say(page, "Share on WhatsApp: the customer gets a private link to view and download the bill.");

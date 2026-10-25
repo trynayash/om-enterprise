@@ -114,6 +114,18 @@ export interface DocSnapshot {
   issuedBy: string;
 }
 
+/** What a page needs to know about emailing a document (worked out on the server). */
+export interface DocumentEmailInfo {
+  /** The shop's email service is connected. */
+  ready: boolean;
+  /** The customer's email on the bill, if any. */
+  buyerEmail: string | null;
+  /** Why this document can't be emailed (a practice bill), if so. */
+  blocked?: string;
+  /** The last time it was emailed (ISO time), and how many times in all. */
+  last: { to: string; at: string; count: number } | null;
+}
+
 export const DOC_TYPE_LABEL: Record<DocType, string> = {
   quotation: "Quotation",
   tax_invoice: "Tax Invoice",
