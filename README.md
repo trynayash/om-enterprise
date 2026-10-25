@@ -372,18 +372,23 @@ Returns create credit notes against the original bill and record refunds. Cancel
 - Needs the permission to share bills (Sales staff and Admins have it). The reply-to is the shop's email on the bill, so a customer's reply goes to the shop.
 - The app cannot send mail until the shop's email service is connected. Until then the button is disabled and says so.
 
-**Setup** (once, on the server; nothing to change in the shop's settings): bills go through [Resend](https://resend.com), over HTTPS.
+**Setup, with the shop's own Gmail** (once, on the server; nothing to change in the shop's settings). Customers see the shop's Gmail address, their replies come to the same inbox, and every bill sent is also in that Gmail's "Sent" folder.
 
-1. In Resend, verify a sending domain (Domains → Add domain, then the DNS records it shows). Customers see this domain in the From line.
-2. Create an API key with sending access only.
-3. Set two environment variables on the host (Vercel: Project → Settings → Environment Variables) and redeploy:
+1. Sign in to the shop's Google account and turn on **2-Step Verification** (Google Account → Security).
+2. Google Account → Security → 2-Step Verification → **App passwords** → create one named "OM ENTERPRISE bills". Google shows a 16-letter password once; copy it. (This is not the Gmail password, and it can be deleted there at any time to cut access.)
+3. Set three environment variables on the host (Vercel: Project → Settings → Environment Variables; mark the password *Sensitive*) and redeploy:
 
-   | Variable | Example |
+   | Variable | Value |
    | --- | --- |
-   | `EMAIL_FROM` | `OM ENTERPRISE <bills@your-verified-domain>` |
-   | `RESEND_API_KEY` | `re_…` (secret, never commit it) |
+   | `SMTP_USER` | the Gmail address, e.g. `shop@gmail.com` |
+   | `SMTP_PASSWORD` | the 16-letter app password (secret, never commit it) |
+   | `EMAIL_FROM` | `OM ENTERPRISE <shop@gmail.com>` — the same Gmail address; Gmail replaces any other |
 
-For development and tests, `EMAIL_OUTBOX_DIR=./storage/outbox` (with `EMAIL_FROM`) writes each message to a folder instead of sending anything: one folder per message with `message.json` and the PDF. The e2e and walkthrough runs use it.
+   `SMTP_HOST` (default `smtp.gmail.com`), `SMTP_PORT` (default `465`) and `SMTP_SECURE` are only needed for another mail provider's SMTP.
+
+A free Gmail account can send to about 500 recipients a day, which is far more than a shop's bills; if the limit is ever reached the button says so. The Email button shows "Email is not set up yet" until the variables are in place.
+
+**Alternatives.** With a domain of its own, [Resend](https://resend.com) works instead: verify the domain there, create a sending-only API key, and set `RESEND_API_KEY` and `EMAIL_FROM=OM ENTERPRISE <bills@your-domain>`. If both are set, SMTP is used. For development and tests, `EMAIL_OUTBOX_DIR=./storage/outbox` (with `EMAIL_FROM`) writes each message to a folder instead of sending anything — one folder per message with `message.json` and the PDF; the e2e and walkthrough runs use it. The SMTP sending is tested against a real local mail server (`tests/unit/send-mail.test.ts`).
 
 ---
 
