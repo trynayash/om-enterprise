@@ -3,7 +3,7 @@ import type { Actor } from "@/server/auth/actor";
 import { createProduct, createVariant, setProductPublished, setProductReview } from "@/server/services/catalog";
 import { proposePrice } from "@/server/services/pricing";
 import { searchPublicProducts } from "@/server/services/public-catalog";
-import { firstCategoryId, makeUser, setRegistration, taxClassId, uid } from "./helpers";
+import { firstCategoryId, makeUser, setRegistration, taxClassId } from "./helpers";
 
 /** A published product with one priced variant, named with a token unique to this run. */
 async function publish(admin: Actor, name: string, variantName: string, price: string) {
@@ -14,7 +14,8 @@ async function publish(admin: Actor, name: string, variantName: string, price: s
     taxClassId: await taxClassId("18"),
     hsnCode: "3917",
   });
-  const variant = await createVariant(admin, product.id, { sku: uid("SKU-").toUpperCase(), name: variantName, unitCode: "pcs" });
+  // Letters only: a random hex SKU can contain "20" and then matches the search for a size of 20.
+  const variant = await createVariant(admin, product.id, { sku: `SKU-${name.replace(/[^A-Za-z]/g, "").toUpperCase()}`, name: variantName, unitCode: "pcs" });
   await proposePrice(admin, { variantId: variant.id, price, priceIncludesTax: true, reason: "test price" });
   await setProductReview(admin, product.id, "approved");
   await setProductPublished(admin, product.id, true);

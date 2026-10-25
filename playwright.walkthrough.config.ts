@@ -48,6 +48,9 @@ export default defineConfig({
       APP_BASE_URL: `http://localhost:${port}`,
       APP_SECRET: process.env.APP_SECRET ?? "e2e-secret-e2e-secret-e2e-secret-e2e",
       UPLOAD_DIR: "./storage/e2e-uploads",
+      // Bills are "emailed" into this folder; nothing leaves the machine.
+      EMAIL_FROM: "OM ENTERPRISE <bills@example.test>",
+      EMAIL_OUTBOX_DIR: "./storage/e2e-outbox",
       LOGIN_RATE_LIMIT_PER_15MIN: "10000",
     },
   },

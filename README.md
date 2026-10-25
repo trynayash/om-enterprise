@@ -358,9 +358,37 @@ Price for target margin m (0 < m < 1) = landed cost / (1 − m)
 7. **Payment QR** for the exact outstanding amount (UPI, or Razorpay when configured), with the customer shown above it.
 8. **Verify payment.** This is automatic only with a gateway webhook. Otherwise staff check the merchant app and record the 12-digit UTR and explicit confirmation. Split payments are supported.
 9. **Generate the bill** for the customer already taken (still changeable here). The document type comes from the GST registration — a **Bill of Supply** (with the composition declaration and no tax) for a composition dealer — and the number is allocated gaplessly.
-10. **Saved and searchable.** Bills can be printed (A4), downloaded as PDF, or shared on WhatsApp with a private link.
+10. **Saved and searchable.** On the bill page: **Print** (A4), **PDF**, **Email** (one click, to the address taken in step 6), **WhatsApp** (a private link) and **Copy link**.
 
 Returns create credit notes against the original bill and record refunds. Cancelling a bill (goods not supplied) requires the refund to be recorded first, and keeps the cancelled document and its number.
+
+---
+
+## Sending bills by email
+
+**Email** on the bill page sends the bill to the customer as a PDF, with a short note in plain words and (when share links are on) a link to view it online. The page says where it will go ("Email goes to ramesh@example.com"), and one click sends it. **send to another address** opens a small box for a different one; a bill with no address on it opens the same box, and can keep the typed address on the customer for next time.
+
+- Only an issued bill or quotation is sent: never a cancelled document or a practice (training) bill. A bill can be emailed up to 5 times. Every send, and every failed send, is in the audit log (the log line shows `r***@example.com`; the full address is in the record).
+- Needs the permission to share bills (Sales staff and Admins have it). The reply-to is the shop's email on the bill, so a customer's reply goes to the shop.
+- The app cannot send mail until the shop's email service is connected. Until then the button is disabled and says so.
+
+**Setup, with the shop's own Gmail** (once, on the server; nothing to change in the shop's settings). Customers see the shop's Gmail address, their replies come to the same inbox, and every bill sent is also in that Gmail's "Sent" folder.
+
+1. Sign in to the shop's Google account and turn on **2-Step Verification** (Google Account → Security).
+2. Google Account → Security → 2-Step Verification → **App passwords** → create one named "OM ENTERPRISE bills". Google shows a 16-letter password once; copy it. (This is not the Gmail password, and it can be deleted there at any time to cut access.)
+3. Set three environment variables on the host (Vercel: Project → Settings → Environment Variables; mark the password *Sensitive*) and redeploy:
+
+   | Variable | Value |
+   | --- | --- |
+   | `SMTP_USER` | the Gmail address, e.g. `shop@gmail.com` |
+   | `SMTP_PASSWORD` | the 16-letter app password (secret, never commit it) |
+   | `EMAIL_FROM` | `OM ENTERPRISE <shop@gmail.com>` — the same Gmail address; Gmail replaces any other |
+
+   `SMTP_HOST` (default `smtp.gmail.com`), `SMTP_PORT` (default `465`) and `SMTP_SECURE` are only needed for another mail provider's SMTP.
+
+A free Gmail account can send to about 500 recipients a day, which is far more than a shop's bills; if the limit is ever reached the button says so. The Email button shows "Email is not set up yet" until the variables are in place.
+
+**Alternatives.** With a domain of its own, [Resend](https://resend.com) works instead: verify the domain there, create a sending-only API key, and set `RESEND_API_KEY` and `EMAIL_FROM=OM ENTERPRISE <bills@your-domain>`. If both are set, SMTP is used. For development and tests, `EMAIL_OUTBOX_DIR=./storage/outbox` (with `EMAIL_FROM`) writes each message to a folder instead of sending anything — one folder per message with `message.json` and the PDF; the e2e and walkthrough runs use it. The SMTP sending is tested against a real local mail server (`tests/unit/send-mail.test.ts`).
 
 ---
 
