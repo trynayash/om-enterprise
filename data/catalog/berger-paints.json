@@ -4,7 +4,7 @@
   "notes": [
     "RESEARCH LIMITS: WebFetch could not resolve any host (getaddrinfo ENOTFOUND for www.bergerpaints.com and every other host tried), so no page could be opened directly. Facts below come from web-search extracts of bergerpaints.com pages and data sheets. The session's web-search budget then ran out, so this file holds only the 7 products that have at least one pack size confirmed in a public listing. Spot-check the specs against the live product pages before publishing.",
     "PRICES: all null. bergerpaints.com product pages show no MRP, and no shop.bergerpaints.com product page with a price came up in search. The only dealer/MRP lists found were dated Jan 2024 (DPL Non-XP, Scribd), Apr 2023 (DPL XP, Scribd), May 2021 and Dec 2018, and none could be opened. Prices from third-party aggregators and marketplaces (NoBroker, 1pdf.in, IndiaMART, Amazon.in) disagreed widely and were not used.",
-    "IMAGES: none. Page source could not be fetched. Search extracts showed only bare filenames (e.g. Silk_Glamor_High_Sheen_canshot.jpg, luxol_pu_enamel.png), never the full URL, so no image link is given rather than a guessed one.",
+    "IMAGES (added 25 Oct 2026): each product uses the main pack photo of its own bergerpaints.com product page (served from images.bergerpaints.com), on a page whose heading is the product name.",
     "PACK SIZES come from retailer and marketplace listings (Amazon.in, IndiaMART, Flipkart, IBO, colourdrive.in, BuildersMART, lntsufin), not from an official Berger pack-size list. Only sizes actually seen are included. Other sizes probably exist (e.g. Silk Glamor High Sheen 10 L, Easy Clean 1 L / 4 L, Bison Acrylic Distemper 10 kg) and can be added later, because the import adds missing SKUs to an existing product. WeatherCoat Anti Dustt 10 L and WeatherCoat Long Life 10 10 L are backed only by third-party listings or aggregator pages. One directory says tinted Easy Clean Fresh comes in 0.9 / 3.6 / 9 / 18 L; those packs are not included.",
     "WARRANTY CONFLICTS on Berger's own pages: Easy Clean Fresh 6 vs 7 years; WeatherCoat Anti Dustt 8 vs 6 vs 5 years; WeatherCoat Long Life 10 is 10 years on the product page and 2020 data sheet but 12 years on an older listing. Where the sources conflict, warranty is left null or the conflict is stated.",
     "COVERAGE figures are written as Berger's range listings give them (e.g. '150-170 sqft per 2 coats'). The listing does not say 'per litre', even though that is the usual meaning.",
@@ -42,7 +42,7 @@
         { "label": "Shade range", "value": "10,000+ shades via tinting (base white listed here)" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2023-11/Silk_Glamor_High_Sheen_canshot.jpg?format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/interior-wall-coatings/silk-glamor-high-sheen",
         "https://www.bergerpaints.com/products/interior-wall-coatings/brand/silk",
@@ -112,7 +112,7 @@
         { "label": "Certification", "value": "GreenPro certified" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2023-11/silk_glamor_soft_sheen_canshot.jpg?format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/interior-wall-coatings/silk-glamor-soft-sheen",
         "https://www.bergerpaints.com/products/interior-wall-coatings/brand/silk",
@@ -153,7 +153,7 @@
         { "label": "Coverage", "value": "120-130 sq ft per 2 coats" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2025-02/capture_1.jpg?VersionId=It54rS_VjS0JK1WdnPRzE3buKaHCjBu4&format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean",
         "https://www.bergerpaints.com/products/interior-wall-coatings/brand/easy-clean",
@@ -205,7 +205,7 @@
         { "label": "Coverage", "value": "120-130 sq ft per 2 coats" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2025-10/ecf_1st.jpg?VersionId=X7vsQ2iAe7crNB3ik_psiBstWcjImN34&format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/interior-wall-coatings/easy-clean-fresh",
         "https://www.bergerpaints.com/products/interior-wall-coatings/brand/easy-clean",
@@ -283,7 +283,7 @@
         { "label": "Shades", "value": "Ready shades or tintable base (white listed here)" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2023-11/bison_distemper_canshot_0.jpg?format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/interior-wall-coatings/bison-acrylic-distemper",
         "https://www.bergerpaints.com/products/interior-wall-coatings/brand/bison",
@@ -350,7 +350,7 @@
         { "label": "Protection", "value": "Anti-algal / anti-fungal" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2024-04/weathercoat-antidust-back.png?VersionId=AKOA0FteYXTIGve6pNhrz.xdnXlK87Bk&format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/exterior-wall-coatings/weathercoat-anti-dustt",
         "https://www.bergerpaints.com/products/exterior-wall-coatings/brand/weathercoat",
@@ -392,7 +392,7 @@
         { "label": "Recommended for", "value": "Exterior walls in heavy-rainfall areas" }
       ],
       "variantAttributes": ["Pack size"],
-      "images": [],
+      "images": ["https://images.bergerpaints.com/2023-11/weathercoat_long_life_10_canshot.jpg?format=webp&width=1080&quality=75"],
       "sourceUrls": [
         "https://www.bergerpaints.com/products/exterior-wall-coatings/weathercoat-long-life-10",
         "https://www.bergerpaints.com/products/exterior-wall-coatings/brand/long-life",

@@ -11,7 +11,7 @@
     "OMITTED (not enough published data to make honest variants): Umiya Gold loft tanks (a black square PP loft tank with no capacity stated; a white LLDPE loft tank is listed at 175–1050 L but may be Umiya Plus), horizontal 4- and 5-layer tanks, underground tanks, customised tanks, a generic black 'Umiya Gold Water Tank' (layers not stated), and a yellow 5-layer listing on umiyagold.com (HDPE; possibly the same 5-layer tank in a different colour).",
     "PRICES: No official Umiya Gold price list, MRP list or catalogue with prices was found. The maker's own marketplace listings show one 'approx.' B2B price per listing (for example 7000 INR for the 5-layer listing, which spans 500–5000 L; 3600, 2360 or 1728 INR on other pages), never tied to a capacity. Some are labelled 'per litre' by mistake, and some are years old. Dealer listings (IndiaMART, Plumbing Mart, ExportersIndia) vary just as much. So every listPrice and mrp is null. Prices should be entered from the shop's supplier invoices and approved in Price review.",
     "WARRANTY: The manufacturer's 5-layer listing says these tanks 'come with a 10-year warranty'. This was found on one page only, with no terms, so the warranty field is left null. The Super Admin can add it after the supplier confirms it in writing.",
-    "IMAGES: None were added. WebFetch failed with a DNS error for every host during this research, so no page could be opened to read its real image-file URLs. Image URLs were not guessed. The maker's own product photos are on its pvcwatertank.in / TradeIndia pages (hosted on tiimg.tistatic.com) and on umiyagold.com. A follow-up with working page fetch, or photos the shop takes itself, is needed.",
+    "IMAGES (added 25 Oct 2026): each tank uses the maker's own photo from its pvcwatertank.in product page (the image is served from the TradeIndia image server, cpimg.tistatic.com).",
     "HSN/GST for the accountant: All variants in this file are 500 L or larger, so HSN 3925 (3925 10 00: plastic reservoirs, tanks, vats, capacity over 300 L) at 18% GST is used. If the shop adds tanks of 300 L or less (for example 200 L or loft tanks of 175–300 L), those may fall under 3923 or 3924 instead. Please confirm.",
     "Research was done with WebSearch result snippets only; no page was opened directly. Every figure was seen in search snippets from the URLs listed in each product's sourceUrls. Re-verify against the live pages before publishing.",
     "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
@@ -38,7 +38,7 @@
         { "label": "Foundation", "value": "Level concrete base" }
       ],
       "variantAttributes": ["Capacity"],
-      "images": [],
+      "images": ["https://cpimg.tistatic.com/01708895/b/6/3-Layer-Water-Tanks.jpg"],
       "sourceUrls": [
         "https://www.pvcwatertank.in/umiya-gold-water-tank.html",
         "https://www.pvcwatertank.in/3-layer-water-tanks-1708895.html",
@@ -109,7 +109,7 @@
         { "label": "Use", "value": "Overhead water storage" }
       ],
       "variantAttributes": ["Capacity"],
-      "images": [],
+      "images": ["https://cpimg.tistatic.com/01708881/b/5/5-layer-Umiya-Gold-Water-Tanks.jpeg"],
       "sourceUrls": [
         "https://www.pvcwatertank.in/5-layer-umiya-gold-water-tanks-1708881.html",
         "https://www.tradeindia.com/products/5-layer-umiya-gold-water-tanks-c1708881.html",
@@ -210,7 +210,7 @@
         { "label": "Diameter (1000 L)", "value": "42.5 in (approx. 1080 mm)" }
       ],
       "variantAttributes": ["Capacity"],
-      "images": [],
+      "images": ["https://cpimg.tistatic.com/01708891/b/4/Black-2-Layer-Water-Tanks.jpg"],
       "sourceUrls": [
         "https://www.pvcwatertank.in/",
         "https://www.pvcwatertank.in/water-tank-4071858.html",
@@ -254,7 +254,7 @@
         { "label": "Size range", "value": "500 L to 2000 L" }
       ],
       "variantAttributes": ["Capacity"],
-      "images": [],
+      "images": ["https://cpimg.tistatic.com/10974416/b/4/4-Layer-Water-Storage-Tank..jpg"],
       "sourceUrls": [
         "https://www.pvcwatertank.in/4-layer-water-storage-tank-10974416.html",
         "https://www.pvcwatertank.in/umiya-gold-water-tank.html",
@@ -320,7 +320,7 @@
         { "label": "Capacity", "value": "Ask us for the litre capacity of each diameter" }
       ],
       "variantAttributes": ["Diameter"],
-      "images": [],
+      "images": ["https://cpimg.tistatic.com/01712407/b/5/Sky-Blue-7-Layer-Water-tank.jpg"],
       "sourceUrls": [
         "https://www.pvcwatertank.in/sky-blue-7-layer-water-tank-1712407.html",
         "https://www.tradeindia.com/products/sky-blue-7-layer-water-tank-c1712407.html",

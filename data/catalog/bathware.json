@@ -2,7 +2,7 @@
   "group": "bathware",
   "researchedOn": "2026-10-23",
   "notes": [
-    "RESEARCH LIMITS (read first): during this research WebFetch failed with a DNS error (getaddrinfo ENOTFOUND) for every host tried, including the brand sites, google.com and wikipedia.org, and the shared WebSearch budget ran out part-way. Every fact below was therefore read from search-engine extracts of the official pages and PDFs listed in sourceUrls, not from opening the pages directly. No image URLs could be collected, so every product has an empty images list. Before approving any price, a reviewer should open the linked official page or PDF and check it.",
+    "RESEARCH LIMITS (read first): during this research WebFetch failed with a DNS error (getaddrinfo ENOTFOUND) for every host tried, including the brand sites, google.com and wikipedia.org, and the shared WebSearch budget ran out part-way. Every fact below was therefore read from search-engine extracts of the official pages and PDFs listed in sourceUrls, not from opening the pages directly. Images were added later from the brands' own product pages (see the IMAGES part of the Aris note). Before approving any price, a reviewer should open the linked official page or PDF and check it.",
     "AGL: identified as AGL Bathware by Asian Granito India Ltd. (Ahmedabad, Gujarat). Evidence: the official site aglasiangranito.com has faucet, bathware, sanitary-ware and allied-products sections. Trade news reported a 2019 launch of 300+ faucet, shower and accessory SKUs and an entry into sanitaryware with 160 SKUs under the AGL brand (retail4growth.com; thetilesofindia.com). AGL publishes a faucet price list titled 'May 2026 PRICELIST' at https://aglasiangranito.com/catalogue/Faucet_Collection.pdf.",
     "AGL products come from one code family in that price list: 291101CP, 291103CP, 291105CP, 291106CP, 291201CP, 291204CP and 291212CP, plus 132207CP. The PDF's text layer is garbled, so codes and prices often don't line up. Only one price could be read the same way twice (291101CP = 2290) and it is included; all other AGL prices are null. Other readings, NOT used: 291103CP 2420, 291201CP 9520, and black finishes 291101BL 2470, 291103BL 2475, 291105BL 3260, 291106BL 2005. The source names no series for the 291 family, so 'Code family' is our own label. The CP suffix is read as chrome-plated (the usual Indian faucet code convention), but AGL does not state this.",
     "AGL items not included: the Cham series (aglasiangranito.com/cham, 23 items; codes 222101CP and 222103CP appear there) was left out because the item names and prices for its codes came only from retailers (Yoobuy, Navya Ceramics, Veda Ceramics, IndiaMART). The Tigris 611-series (gold and black finishes) and the 502-series (BL/BR/BG finishes) were left out because the finish codes are not explained in the source. Sanitaryware (EWC, wall-hung WC, wash basin) was left out because no official codes or prices could be read before the tools ran out. The price list mentions a 12-year warranty subject to the warranty card, but it was not confirmed for these items, so the warranty field is null.",
@@ -11,7 +11,7 @@
     "Plumber: identified as Plumber Bathware by Aqua Plumbings Pvt. Ltd. Evidence: the official site plumberbathware.com ('Bathroom Fitting Manufacturers and Suppliers in Mathura, Delhi NCR') and its company presentation PDF titled 'AQUA PLUMBINGS PVT. LTD.'. Its lifetime-warranty page names Aqua Plumbings Private Limited (APPL). The manufacturing unit is at Gaur Udyog Kendra, Delhi–Mathura Bypass, Mathura 281001 (UP), and the corporate office is in Sector 65, Gurgaon. Spengler is a sister brand. This is not the generic word 'plumber'.",
     "Plumber prices: the newest official faucet price list found is 'Plumber Faucets Price List' w.e.f. 2 April 2022 (plumberbathware.com/prices/Plumber-Faucets-Price-List-02.04.2022.pdf), with MRP and HSN 84818020 for cocks. No 2023–2026 list was found, so these MRPs are probably out of date. MRPs on the website's product pages match the older April 2021 list (e.g. EC-5111 shows 5835 on the site against 6805 in the 2022 list), so the 2022 list is used where it covers the item. Items found only on product pages (EC-0209, U-0507, UBP-0450) use the product-page MRP and are marked as probably outdated.",
     "Plumber warranty: plumberbathware.com/life-time-warranty describes a 'Lifetime Performance Warranty'. It covers residential use, needs a certificate generated within 30 days of purchase (otherwise the standard 10-year warranty applies) and is 5 years for commercial use. It was not confirmed that Economy and Universal items carry the lifetime certificate, so the warranty field is null.",
-    "Aris: identified as Aris Bathware Fittings of Rajkot, Gujarat, from the official site aris.co.in (given by the shop owner on 24 Oct 2026). The site gives the address 177/1, Nr. Balaji Casting, Padavla-Veraval Road, Rajkot, claims 3000+ showrooms and a 7-year warranty on its products, and lists about 30 tap series (Florentine, Mini Florentine, Star 1-5, Star Motivate, Kubic, Shinia, Lagoon, Ornamix and others) plus a PVD collection, showers, bathroom accessories and sanitaryware. The legal company name was not found. aris.co.in did not open from the research environment, so codes and names were read from search-engine extracts of its product pages. The Mini Florentine range is included because dealers sell it and each code ties to an official page; MFLT-103, MFLT-107 and MFLT-115 were seen only as related products on the MFLT-140 page. The product pages show a placeholder price of ₹1, so there is no list price or MRP: check the MRP printed on the box. No images were collected.",
+    "Aris: identified as Aris Bathware Fittings of Rajkot, Gujarat, from the official site aris.co.in (given by the shop owner on 24 Oct 2026). The site gives the address 177/1, Nr. Balaji Casting, Padavla-Veraval Road, Rajkot, claims 3000+ showrooms and a 7-year warranty on its products, and lists about 30 tap series (Florentine, Mini Florentine, Star 1-5, Star Motivate, Kubic, Shinia, Lagoon, Ornamix and others) plus a PVD collection, showers, bathroom accessories and sanitaryware. The legal company name was not found. aris.co.in did not open from the research environment, so codes and names were read from search-engine extracts of its product pages. The Mini Florentine range is included because dealers sell it and each code ties to an official page; MFLT-103, MFLT-107 and MFLT-115 were seen only as related products on the MFLT-140 page. The product pages show a placeholder price of ₹1, so there is no list price or MRP: check the MRP printed on the box. IMAGES (added 25 Oct 2026): each Aris product uses the main photo of its own aris.co.in product page, on a page whose SKU field is the product's model code; the image file names carry the same code (for example MFLT-101-Bib-Cock-With-Wall-Flange.png). AGL, Blues and Plumber have no images: aglasiangranito.com refuses automated access (HTTP 403), plumberbathware.com product pages return a server error (HTTP 500), and bluesbathfittings.in no longer has product pages. Those products show the drawing until the shop adds a photo in the dashboard.",
     "Bottle traps were found (Plumber UN-1730 Bottle Trap 32mm, MRP 1395 on its product page; Plumber Bottle Trap 'Slim', MRP 1630; Blues BT-01 Bottle Trap Primex SS pipe 5\"x12\", no price). They were left out because the body material, and so the HSN code, is not stated. Plumber's price list lists health faucets (Ultima, Curvy, Bellezza, Italian Square) and an overhead shower (ITP-2031, 1975 in the 2022 list), but their details could not be confirmed, so they are not included.",
     "HSN: 84818020 is taken from Plumber's own price list for its cocks. Other taps and mixers use 8481, and the PVC connection hose uses 3917 (plastic tubes and hoses). The 18% GST rate is believed correct, but the shop's accountant must confirm all HSN codes and GST rates.",
     "Market prices (marketPrice) researched 24 Oct 2026 from public price lists and retailer listings; check before relying on them."
@@ -1140,7 +1140,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-101-Bib-Cock-With-Wall-Flange.png"],
       "sourceUrls": [
         "https://aris.co.in/product/bib-cock-with-wall-flange-19/",
         "https://aris.co.in/product-category/faucets/",
@@ -1180,7 +1180,7 @@
         { "label": "Mounting", "value": "Deck mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-103-Pillar-Cock.png"],
       "sourceUrls": [
         "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
         "https://aris.co.in/product-category/faucets/",
@@ -1220,7 +1220,7 @@
         { "label": "Mounting", "value": "Deck mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-104-Pillar-Cock-With-Extension-Body.png"],
       "sourceUrls": [
         "https://aris.co.in/product/pillar-cock-with-extension-body-16/",
         "https://aris.co.in/product-category/faucets/",
@@ -1260,7 +1260,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-105-Angular-Stop-Cock-With-Wall-Flange.png"],
       "sourceUrls": [
         "https://aris.co.in/product/angular-stop-cock-with-wall-flange-16/",
         "https://aris.co.in/product-category/faucets/",
@@ -1300,7 +1300,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-106-2-Way-Angular-Stop-Cock-With-Wall-Flange.png"],
       "sourceUrls": [
         "https://aris.co.in/product/2-way-angular-stop-cock-with-wall-flange-8/",
         "https://aris.co.in/product-category/faucets/",
@@ -1340,7 +1340,7 @@
         { "label": "Mounting", "value": "Concealed (in wall)" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-107-Concealed-Stop-Cock-With-Adjustable-Wall-Flange.png"],
       "sourceUrls": [
         "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
         "https://aris.co.in/product-category/faucets/",
@@ -1380,7 +1380,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-113-Sink-Cock-With-Extended-Swinging-Spout-Wall-Mounted.png"],
       "sourceUrls": [
         "https://aris.co.in/product/sink-cock-with-extended-swinging-spout-wall-mounted-10/",
         "https://aris.co.in/product-category/faucets/",
@@ -1420,7 +1420,7 @@
         { "label": "Mounting", "value": "Table mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-115-Sink-Cock-With-Regular-Swinging-Spout-Table-Mounted.png"],
       "sourceUrls": [
         "https://aris.co.in/product/mini-florentine-flush-cock-with-adjustable-wall-flange/",
         "https://aris.co.in/product-category/faucets/",
@@ -1460,7 +1460,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-125-Wall-Mixer-With-Non-Telephonic-Shower-System-Wall-Mounted.png"],
       "sourceUrls": [
         "https://aris.co.in/product/wall-mixer-non-telephonic-shower-system-wall-mounted-4/",
         "https://aris.co.in/product-category/faucets/",
@@ -1500,7 +1500,7 @@
         { "label": "Mounting", "value": "Wall mounted" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-128-Wall-Mixer-Telephonic-With-Crutch.png"],
       "sourceUrls": [
         "https://aris.co.in/product/wall-mixer-telephonic-with-crutch-13/",
         "https://aris.co.in/product-category/faucets/",
@@ -1541,7 +1541,7 @@
         { "label": "Size", "value": "25 mm" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/MFLT-140-Flush-Cock-With-Adjustable-Wall-Flange.png"],
       "sourceUrls": [
         "https://aris.co.in/product/flush-cock-with-adjustable-wall-flange-13/",
         "https://aris.co.in/product-category/faucets/",
@@ -1582,7 +1582,7 @@
         { "label": "Includes", "value": "Wall hook" }
       ],
       "variantAttributes": [],
-      "images": [],
+      "images": ["https://aris.co.in/wp-content/uploads/2026/07/HF-01.png"],
       "sourceUrls": [
         "https://aris.co.in/product/health-faucet-with-1mtr-tube-360-hook/",
         "https://aris.co.in/product-category/bathroom-accessories/",
