@@ -22,14 +22,22 @@ interface Report {
   errorCount: number;
   productCount: number;
   variantCount: number;
+  photoCount: number;
+}
+interface ImportResult {
+  createdProducts: number;
+  createdVariants: number;
+  published: boolean;
+  images: { stored: number; failed: { product: string; url: string; reason: string }[] };
 }
 
-export function ImportWizard() {
+export function ImportWizard({ canPublish }: { canPublish: boolean }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [csv, setCsv] = useState<string | null>(null);
   const [report, setReport] = useState<Report | null>(null);
-  const [result, setResult] = useState<{ createdProducts: number; createdVariants: number } | null>(null);
+  const [result, setResult] = useState<ImportResult | null>(null);
+  const [publish, setPublish] = useState(false);
   const [busy, setBusy] = useState<"validate" | "commit" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
@@ -41,8 +49,18 @@ export function ImportWizard() {
     setError(null);
     if (!file) return;
     if (file.size > 5_000_000) return setError("The file is larger than 5 MB — split it into smaller files.");
-    if (!/\.csv$/i.test(file.name) && file.type !== "text/csv") return setError("Please choose a .csv file (in Excel / Google Sheets use File → Save as / Download → CSV UTF-8).");
-    const text = await file.text();
+    if (/\.xls$/i.test(file.name)) return setError("Old Excel files (.xls) can't be read. In Excel use File → Save As → Excel Workbook (.xlsx), or save as CSV.");
+    const isExcel = /\.xlsx$/i.test(file.name);
+    if (!isExcel && !/\.csv$/i.test(file.name) && file.type !== "text/csv") return setError("Choose an Excel (.xlsx) or CSV file.");
+    let text: string;
+    try {
+      if (isExcel) {
+        const { readXlsxRows, toCsv } = await import("@/lib/xlsx");
+        text = toCsv(readXlsxRows(new Uint8Array(await file.arrayBuffer())));
+      } else text = await file.text();
+    } catch (err) {
+      return setError(errorMessage(err));
+    }
     setFileName(file.name);
     setCsv(text);
     await validate(text);
@@ -63,11 +81,13 @@ export function ImportWizard() {
 
   const commit = async () => {
     if (!csv) return;
-    if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? They will be created as unpublished drafts.`)) return;
+    const photos = report?.photoCount ? ` ${report.photoCount} photo link${report.photoCount > 1 ? "s" : ""} will be downloaded.` : "";
+    const where = publish ? "They will go live on the website straight away." : "They will be created as unpublished drafts.";
+    if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? ${where}${photos}`)) return;
     setBusy("commit");
     setError(null);
     try {
-      setResult(await apiFetch<{ createdProducts: number; createdVariants: number }>("/api/admin/import/commit", { method: "POST", body: { csv } }));
+      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv, publish } }));
       setReport(null);
       setCsv(null);
       setFileName(null);
@@ -87,14 +107,15 @@ export function ImportWizard() {
     <div className="space-y-6">
       <ol className="grid overflow-hidden rounded-xl border border-navy-100 bg-white shadow-card md:grid-cols-3 md:divide-x md:divide-navy-100">
         <Step n={1} title="Download the template" done={false}>
-          <p>One row per variant. Rows with the same product name, brand and category become one product.</p>
+          <p>One row per variant (size, colour…). Rows with the same product name, brand and category become one product.</p>
           <a href="/api/admin/import/template" className="mt-2.5 inline-flex items-center gap-1.5 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
             <FileSpreadsheet className="h-4 w-4 shrink-0" aria-hidden /> om-product-import-template.csv
           </a>
         </Step>
-        <Step n={2} title="Fill it in & save as CSV" done={false}>
+        <Step n={2} title="Fill it in" done={false}>
           <p>
-            Use real data from catalogues / data sheets. In Excel: <b>File → Save As → CSV UTF-8</b>. In Google Sheets: <b>File → Download → CSV</b>.
+            Use real data from the brand&apos;s catalogue or price list. Upload the Excel file (.xlsx) as it is, or a CSV. From Google Sheets use{" "}
+            <b>File → Download → Microsoft Excel</b>.
           </p>
         </Step>
         <Step n={3} title="Upload, check, import" done={!!result}>
@@ -103,22 +124,46 @@ export function ImportWizard() {
       </ol>
 
       <Card>
-        <CardHeader title="Upload file" description="Imported products are created as unpublished drafts — review and publish them individually." />
+        <CardHeader
+          title="Upload file"
+          description={canPublish ? "Products are created as unpublished drafts unless you choose to publish them straight away." : "Imported products are created as unpublished drafts for review."}
+        />
         <CardBody className="space-y-4">
           {error && <Alert tone="danger">{error}</Alert>}
           {result && (
             <Alert tone="success" title="Import complete">
-              Created {result.createdProducts} products with {result.createdVariants} variants. Find them under{" "}
-              <Link className="font-semibold underline" href="/dashboard/products?status=needs_review">
-                Products → Needs review
+              Created {result.createdProducts} products with {result.createdVariants} variants
+              {result.published ? ", published on the website" : ""}.
+              {result.images.stored > 0 && ` ${result.images.stored} photo${result.images.stored > 1 ? "s" : ""} added.`} Find them under{" "}
+              <Link className="font-semibold underline" href={result.published ? "/dashboard/products?status=published" : "/dashboard/products?status=needs_review"}>
+                {result.published ? "Products → Published" : "Products → Needs review"}
               </Link>
               .
             </Alert>
           )}
-          <input ref={fileRef} id="csv-file" type="file" accept=".csv,text/csv" className="sr-only" onChange={(e) => choose(e.target.files)} />
+          {result && result.images.failed.length > 0 && (
+            <Alert tone="warning" title={`${result.images.failed.length} photo${result.images.failed.length > 1 ? "s" : ""} could not be added`}>
+              The products were imported; add these photos from the product page instead.
+              <ul className="mt-1.5 list-inside list-disc text-xs">
+                {result.images.failed.slice(0, 20).map((f) => (
+                  <li key={f.url}>
+                    {f.product}: {f.reason}
+                  </li>
+                ))}
+              </ul>
+            </Alert>
+          )}
+          <input
+            ref={fileRef}
+            id="csv-file"
+            type="file"
+            accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            className="sr-only"
+            onChange={(e) => choose(e.target.files)}
+          />
           <div className="flex flex-wrap items-center gap-3">
             <Button variant="outline" icon={<Upload className="h-4 w-4" />} onClick={() => fileRef.current?.click()} loading={busy === "validate"}>
-              {fileName ? "Choose another file" : "Choose CSV file"}
+              {fileName ? "Choose another file" : "Choose Excel or CSV file"}
             </Button>
             {fileName && <span className="font-mono text-[13px] text-navy-700">{fileName}</span>}
             {csv && report && (
@@ -143,12 +188,20 @@ export function ImportWizard() {
               ) : (
                 <Alert tone="success" title="Ready to import">
                   {warnings ? "Warnings don't block the import, but read them — e.g. items without a price can't be sold yet." : "All rows look good."}
+                  {report.photoCount > 0 && ` ${report.photoCount} photo link${report.photoCount > 1 ? "s" : ""} will be downloaded after the import.`}
                 </Alert>
               )}
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <label className="inline-flex items-center gap-2 text-sm text-navy-700">
-                  <input type="checkbox" className="accent-navy-900" checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} /> Show only rows with errors or warnings
-                </label>
+                <div className="flex flex-col gap-2">
+                  <label className="inline-flex items-center gap-2 text-sm text-navy-700">
+                    <input type="checkbox" className="accent-navy-900" checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} /> Show only rows with errors or warnings
+                  </label>
+                  {canPublish && (
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-navy-900">
+                      <input type="checkbox" className="accent-navy-900" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish on the website straight away
+                    </label>
+                  )}
+                </div>
                 <Button icon={<ShieldCheck className="h-4 w-4" />} disabled={report.errorCount > 0} loading={busy === "commit"} onClick={commit}>
                   Import {report.variantCount} variants
                 </Button>
@@ -224,6 +277,7 @@ const COLUMNS: [string, string][] = [
   ["warranty", "Manufacturer warranty text"],
   ["specifications", "Label: Value; Label: Value"],
   ["source_info", "Where the data came from"],
+  ["image_url", "Link to the product photo on the maker's website (https://…). Up to 4, separated by spaces. Downloaded on import"],
   ["sku *", "Unique code for the variant"],
   ["barcode", "Optional barcode"],
   ["variant_name *", "e.g. White · 10 L"],

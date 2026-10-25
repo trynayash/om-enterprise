@@ -5,7 +5,9 @@ import "server-only";
  *
  * Two-step: `validateImport` (dry run, returns a row-by-row report) then `commitImport`
  * (all-or-nothing transaction). Imported products are created UNPUBLISHED with review status
- * "draft" so nothing reaches the website before someone reviews it.
+ * "draft" so nothing reaches the website before someone reviews it, unless a person allowed to
+ * publish asks for them to go live straight away. Photos given as `image_url` links are fetched
+ * after the products are saved; a photo that can't be fetched is reported, not fatal.
  */
 import { eq, sql } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
@@ -15,6 +17,8 @@ import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/
 import { invalid } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { getDefaultPriceList, itcPolicyFor } from "@/server/services/pricing";
+import { uploadProductImage } from "@/server/services/uploads";
+import { fetchRemoteImage } from "@/server/remote-image";
 import { isValidHsn, slugify } from "@/lib/india";
 import { D, m } from "@/lib/money";
 import { landedUnitCost } from "@/lib/pricing/engine";
@@ -32,6 +36,7 @@ export const IMPORT_COLUMNS = [
   "warranty",
   "specifications",
   "source_info",
+  "image_url",
   "sku",
   "barcode",
   "variant_name",
@@ -83,6 +88,12 @@ export function parseCsv(text: string): string[][] {
 }
 
 const yes = (v: string) => /^(y|yes|true|1)$/i.test(v.trim());
+
+/** Photo links in an `image_url` cell: up to 4, separated by spaces, commas or semicolons. */
+function imageUrls(cell: string): string[] {
+  return cell.split(/[\s,;]+/).filter(Boolean);
+}
+const MAX_PHOTOS = 4;
 
 export interface ImportRowResult {
   row: number;
@@ -175,6 +186,12 @@ export async function validateImport(actor: Actor, csv: string) {
     if (data.selling_price && !canPrice) warn.push("You can't set prices — selling_price will be ignored");
     if (data.purchase_cost && !canCost) warn.push("You can't record costs — cost columns will be ignored");
     if (!data.selling_price) warn.push("No selling price — the item can't be sold until a price is set");
+    const photos = imageUrls(data.image_url);
+    if (photos.length > MAX_PHOTOS) msgs.push(`image_url has ${photos.length} links — at most ${MAX_PHOTOS} photos per product`);
+    for (const u of photos) {
+      if (!/^https?:\/\/[^\s/]+\.[^\s/]+\//i.test(u)) msgs.push(`image_url "${u.slice(0, 60)}" is not a web address (https://…)`);
+    }
+    if (photos.length && !can(actor, "catalog.edit")) warn.push("You can't add photos — image_url will be ignored");
     try {
       parsePairs(data.specifications, ":");
       parsePairs(data.variant_attributes, "=");
@@ -194,10 +211,16 @@ export async function validateImport(actor: Actor, csv: string) {
     errorCount: results.filter((r) => r.status === "error").length,
     productCount: new Set(rows.map((r) => `${r.data.product_name}|${r.data.brand}|${r.data.category}`.toLowerCase())).size,
     variantCount: rows.length,
+    photoCount: new Set(rows.flatMap((r) => imageUrls(r.data.image_url))).size,
   };
 }
 
-export async function commitImport(actor: Actor, csv: string) {
+export interface ImportOptions {
+  /** Approve and publish the new products at once (needs the publish permission). */
+  publish?: boolean;
+}
+
+export async function commitImport(actor: Actor, csv: string, opts: ImportOptions = {}) {
   const report = await validateImport(actor, csv);
   if (report.errorCount) throw invalid(`Fix ${report.errorCount} row(s) with errors before importing`, { report });
   const rows = await loadRows(csv);
@@ -206,13 +229,15 @@ export async function commitImport(actor: Actor, csv: string) {
   const autoApprove = can(actor, "prices.approve") || !(await getSettings("pricing")).priceChangeRequiresApproval;
   const tax = await getSettings("tax");
   const itcPolicy = itcPolicyFor(tax.registrationType);
+  const publish = !!opts.publish && can(actor, "catalog.publish");
   const db = getDb();
-  return db.transaction(async (tx) => {
+  const saved = await db.transaction(async (tx) => {
     const cats = await tx.select().from(categories);
     const taxRows = await tx.select().from(taxClasses);
     const list = await getDefaultPriceList(tx);
     const brandCache = new Map<string, string>();
     const productCache = new Map<string, string>();
+    const photos = new Map<string, { name: string; urls: string[] }>();
     const now = new Date();
     let createdProducts = 0;
     let createdVariants = 0;
@@ -253,8 +278,8 @@ export async function commitImport(actor: Actor, csv: string) {
             unitCode: data.unit,
             isSample: yes(data.is_sample),
             sourceInfo: data.source_info || "Bulk import",
-            isPublished: false,
-            reviewStatus: "draft",
+            isPublished: publish,
+            reviewStatus: publish ? "approved" : "draft",
             createdBy: actor.id,
             updatedBy: actor.id,
           })
@@ -262,6 +287,12 @@ export async function commitImport(actor: Actor, csv: string) {
         productId = p.id;
         productCache.set(pkey, productId);
         createdProducts++;
+      }
+      const urls = imageUrls(data.image_url);
+      if (urls.length) {
+        const entry = photos.get(productId) ?? { name: data.product_name, urls: [] };
+        for (const u of urls) if (!entry.urls.includes(u) && entry.urls.length < MAX_PHOTOS) entry.urls.push(u);
+        photos.set(productId, entry);
       }
       const attrs = Object.fromEntries(parsePairs(data.variant_attributes, "=").map((p) => [p.label, p.value]));
       const [v] = await tx
@@ -309,11 +340,33 @@ export async function commitImport(actor: Actor, csv: string) {
     await audit(tx, auditActorOf(actor), {
       action: "catalog.import",
       entityType: "catalog",
-      summary: `Imported ${createdProducts} products / ${createdVariants} variants (unpublished, awaiting review)`,
-      data: { createdProducts, createdVariants, pricesStatus: canPrice ? (autoApprove ? "approved" : "pending") : "skipped" },
+      summary: `Imported ${createdProducts} products / ${createdVariants} variants (${publish ? "published on the website" : "unpublished, awaiting review"})`,
+      data: { createdProducts, createdVariants, published: publish, pricesStatus: canPrice ? (autoApprove ? "approved" : "pending") : "skipped" },
     });
-    return { createdProducts, createdVariants };
+    return { createdProducts, createdVariants, photos };
   });
+
+  // Photos are fetched after the products are saved: a slow or broken link must not hold the
+  // transaction open or undo the import. Each failure is reported back.
+  const images = { stored: 0, failed: [] as { product: string; url: string; reason: string }[] };
+  if (can(actor, "catalog.edit")) {
+    const jobs = [...saved.photos].flatMap(([productId, p]) => p.urls.map((url) => ({ productId, name: p.name, url })));
+    let next = 0;
+    const worker = async () => {
+      while (next < jobs.length) {
+        const job = jobs[next++];
+        try {
+          const bytes = await fetchRemoteImage(job.url);
+          await uploadProductImage(actor, job.productId, { bytes, alt: job.name });
+          images.stored++;
+        } catch (err) {
+          images.failed.push({ product: job.name, url: job.url, reason: err instanceof Error ? err.message : String(err) });
+        }
+      }
+    };
+    await Promise.all(Array.from({ length: Math.min(4, jobs.length) }, worker));
+  }
+  return { createdProducts: saved.createdProducts, createdVariants: saved.createdVariants, published: publish, images };
 }
 
 export function importTemplateCsv(): string {
@@ -331,6 +384,7 @@ export function importTemplateCsv(): string {
     "As per manufacturer",
     "Finish: Matt; Coverage: (from data sheet)",
     "Catalogue page / data sheet reference",
+    "",
     "EXAMPLE-SKU-10L",
     "",
     "White 10 L",
