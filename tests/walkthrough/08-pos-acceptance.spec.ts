@@ -86,8 +86,20 @@ test("08 · Counter sale end to end: discount approval, UPI QR, UTR check, GST t
   await tap(page.getByTestId("finalize"));
   await pause(page, 1200);
   await tap(page.getByRole("button", { name: /Customer agrees/ }));
+
+  await say(page, "Before any QR: who is buying. Name and mobile are needed; the QR can't be started without them.");
+  await page.getByRole("region", { name: "Customer details" }).waitFor();
+  await check(page, "No QR button yet", () => expect(page.getByRole("button", { name: /Show UPI QR for/ })).toHaveCount(0));
+  await type(page.locator("#c-name"), "Ramesh Patel");
+  await type(page.locator("#c-mobile"), "12345");
+  await type(page.locator("#c-email"), "ramesh.patel@example.com");
+  await check(page, "A short mobile number is refused", () => expect(page.getByRole("button", { name: "Continue to payment" })).toBeDisabled());
+  await type(page.locator("#c-mobile"), "9825012345");
+  await pause(page, 800);
+  await tap(page.getByRole("button", { name: "Continue to payment" }));
   const due = page.getByTestId("amount-due");
   await due.waitFor();
+  await check(page, "The customer stays in view above the payment", () => expect(page.getByTestId("customer-summary")).toContainText("Ramesh Patel"));
   const amount = inr(await due.textContent());
   await check(page, `Amount due ₹${amount.toFixed(2)}`, () => expect(Math.abs(amount - discounted)).toBeLessThan(1.01));
 
@@ -112,10 +124,9 @@ test("08 · Counter sale end to end: discount approval, UPI QR, UTR check, GST t
   await pause(page, 800);
   await tap(confirm);
 
-  await say(page, "Customer details for the bill.");
-  await page.getByRole("region", { name: "Customer and bill" }).waitFor();
-  await type(page.locator("#c-name"), "Ramesh Patel");
-  await type(page.locator("#c-mobile"), "9825012345");
+  await say(page, "The bill is made out to the customer already taken; one last look, then generate it.");
+  await page.getByRole("region", { name: "Bill" }).waitFor();
+  await check(page, "Bill to Ramesh Patel", () => expect(page.getByTestId("bill-to")).toContainText("Ramesh Patel"));
   await tap(page.getByRole("button", { name: "Generate bill" }));
   await page.waitForURL(/\/pos\/documents\/[0-9a-f-]{36}$/);
   const docId = page.url().split("/").pop()!;

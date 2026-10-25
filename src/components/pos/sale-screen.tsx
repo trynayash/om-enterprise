@@ -18,6 +18,8 @@ import { ApprovalCard } from "./approval";
 import { FinalizeDialog, QuotationDialog } from "./checkout-dialogs";
 import { PaymentPanel, outstandingOf } from "./payment-panel";
 import { CustomerBillPanel } from "./customer-bill";
+import { CustomerStep, CustomerSummary } from "./customer-step";
+import { useWalkIn } from "./walk-in";
 import { ReasonDialog } from "./reason-dialog";
 import { TaxBanner, TrainingBanner } from "./tax-banner";
 import { NewSaleButton } from "./new-sale-button";
@@ -25,13 +27,21 @@ import { SaleStatusBadge } from "./sale-status";
 import { TrainingBadge } from "@/components/staff/labels";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData } from "./types";
 
-const STEPS = ["Cart", "Agree amount", "Payment", "Customer & bill"] as const;
+const STEPS = ["Cart", "Agree amount", "Customer", "Payment", "Bill"] as const;
 
-function stepOf(data: SaleData): number {
+/**
+ * The customer is asked once the amount is agreed and before any payment starts. A sale already being
+ * paid (started before this step existed) is not held up for it, and nor is a walk-in.
+ */
+function needsCustomer(data: SaleData, walkIn: boolean, canAsk: boolean): boolean {
+  return canAsk && data.sale.status === "finalized" && !data.customer && !walkIn && data.payments.length === 0 && outstandingOf(data).greaterThan(0);
+}
+
+function stepOf(data: SaleData, asking: boolean): number {
   const s = data.sale;
   if (s.status === "draft") return data.lines.some((l) => l.lineType === "item") ? 1 : 0;
-  if (s.status === "finalized") return outstandingOf(data).greaterThan(0) ? 2 : 3;
-  return 4;
+  if (s.status === "finalized") return asking ? 2 : outstandingOf(data).greaterThan(0) ? 3 : 4;
+  return 5;
 }
 
 export function SaleScreen({ initial, config, me, units }: { initial: SaleData; config: PosConfig; me: Me; units: PosUnit[] }) {
@@ -45,7 +55,9 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
     setData(initial);
   }
   const [dialog, setDialog] = useState<null | "finalize" | "quotation" | "cancel" | "reopen">(null);
+  const [changingCustomer, setChangingCustomer] = useState(false);
   const saleId = initial.sale.id;
+  const walkIn = useWalkIn(saleId);
 
   const reload = useCallback(async () => {
     const fresh = await apiFetch<SaleData>(`/api/sales/${saleId}?refresh=1`);
@@ -101,7 +113,9 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
     return () => clearInterval(t);
   }, [pendingApproval, reload]);
 
-  const step = stepOf(data);
+  const canAskCustomer = hasPerm(me, "sales.create");
+  const asking = needsCustomer(data, walkIn, canAskCustomer);
+  const step = stepOf(data, asking);
   const items = data.lines.filter((l) => l.lineType === "item");
   const draft = s.status === "draft";
   const finalized = s.status === "finalized";
@@ -151,12 +165,12 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
 
       {/* Steps: a ruled progress line — ink for done, brass for the current step. */}
       {s.status !== "cancelled" && (
-        <ol className="mb-5 grid grid-cols-4 gap-2 sm:gap-3" aria-label="Progress">
+        <ol className="mb-5 grid grid-cols-5 gap-2 sm:gap-3" aria-label="Progress">
           {STEPS.map((label, i) => {
             const done = i < step;
             const current = i === step;
             return (
-              <li key={label} aria-current={i === Math.min(step, 3) && step < 4 ? "step" : undefined} className="min-w-0">
+              <li key={label} aria-current={i === Math.min(step, 4) && step < 5 ? "step" : undefined} className="min-w-0">
                 <span
                   aria-hidden
                   className={cn(
@@ -196,8 +210,19 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         <div className="space-y-4">
           {finalized && (
             <div id="step-panel" className="scroll-mt-20 space-y-4">
-              {outstanding.greaterThan(0) && <PaymentPanel data={data} config={config} me={me} run={run} />}
-              {(outstanding.lessThanOrEqualTo(0) || canCredit) && hasPerm(me, "documents.issue") && <CustomerBillPanel data={data} config={config} me={me} />}
+              {asking || changingCustomer ? (
+                <CustomerStep data={data} config={config} run={run} onClose={changingCustomer ? () => setChangingCustomer(false) : undefined} />
+              ) : (
+                <>
+                  {outstanding.greaterThan(0) && (
+                    <>
+                      {canAskCustomer && <CustomerSummary data={data} onChange={() => setChangingCustomer(true)} />}
+                      <PaymentPanel data={data} config={config} me={me} run={run} />
+                    </>
+                  )}
+                  {(outstanding.lessThanOrEqualTo(0) || canCredit) && hasPerm(me, "documents.issue") && <CustomerBillPanel data={data} config={config} me={me} />}
+                </>
+              )}
             </div>
           )}
           {draft && <ProductSearch saleId={s.id} priceListId={s.priceListId} units={units} taxCharged={s.taxMode !== "none"} onAdded={onAdded} onError={onError} />}
@@ -305,7 +330,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
             <div className="headline mt-1 text-[1.85rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
           </div>
           <a href={draft ? "#checkout" : "#step-panel"} className={buttonClass("gold", "lg", "shrink-0")}>
-            {draft ? "Checkout" : finalized && outstanding.greaterThan(0) ? "Take payment" : "Bill"} <ArrowDown className="h-4 w-4" />
+            {draft ? "Checkout" : asking ? "Customer" : finalized && outstanding.greaterThan(0) ? "Take payment" : "Bill"} <ArrowDown className="h-4 w-4" />
           </a>
         </div>
       )}

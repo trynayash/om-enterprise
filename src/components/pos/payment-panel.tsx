@@ -61,7 +61,7 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
         <div>
           <div className="label-mono flex items-center gap-2 text-gold-700">
             <span aria-hidden className="h-px w-4 bg-gold-500" />
-            Step 3 · Take payment
+            Step 4 · Take payment
           </div>
           <div className="mt-1.5 text-sm text-navy-500">
             {D(s.amountPaid).greaterThan(0) ? (
@@ -247,7 +247,8 @@ function QrCard({
             <dd className="min-w-0 text-navy-800">
               {payment.provider === "upi_static" ? (
                 <>
-                  <b className="font-semibold">{config.businessName}</b> · <span className="break-all font-mono text-[13px]">{config.payments.upiVpa}</span>
+                  <b className="font-semibold">{config.businessName}</b>
+                  <span className="block font-mono text-[13px] [overflow-wrap:anywhere]">{config.payments.upiVpa}</span>
                 </>
               ) : (
                 <>Razorpay dynamic QR · single use</>

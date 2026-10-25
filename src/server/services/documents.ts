@@ -25,7 +25,7 @@ import { creditedTotal, recomputeSalePayments, recordRefund } from "@/server/ser
 import { recalculate } from "@/server/services/sales";
 import { computeTax } from "@/lib/pricing/engine";
 import { amountInWords, D, m, r0, r2 } from "@/lib/money";
-import { financialYear, formatDocNumber, stateName } from "@/lib/india";
+import { financialYear, formatDocNumber, normalizeMobile, stateName } from "@/lib/india";
 import {
   COMPOSITION_DECLARATION,
   TRAINING_WATERMARK,
@@ -232,9 +232,75 @@ async function resolveCustomer(
     await tx.update(sales).set({ customerId: null }).where(eq(sales.id, sale.id));
     return null;
   }
-  const c = input.id ? await updateCustomer(actor, input.id, input, tx) : await createCustomer(actor, input, tx);
+  const c = input.id ? await updateCustomer(actor, input.id, input, tx) : await createOrReuseCustomer(actor, input, tx);
   await tx.update(sales).set({ customerId: c.id }).where(eq(sales.id, sale.id));
   return c;
+}
+
+/**
+ * A repeat customer typed in again — same mobile number and same name — is the customer already
+ * saved, not a second one. What was typed only fills in what the saved record lacks; nothing saved is
+ * changed or blanked. Anyone else (another name on the same number) is a new customer.
+ */
+async function createOrReuseCustomer(actor: Actor, input: CustomerInput, tx: Tx): Promise<Customer> {
+  const mobile = input.mobile?.trim() ? normalizeMobile(input.mobile) : null;
+  const name = input.name?.trim();
+  if (mobile && name) {
+    const [same] = await tx
+      .select()
+      .from(customers)
+      .where(and(eq(customers.mobile, mobile), sql`lower(trim(${customers.name})) = lower(${name})`))
+      .orderBy(asc(customers.createdAt))
+      .limit(1);
+    if (same) {
+      const fields = ["email", "businessName", "gstin", "billingAddress", "city", "stateCode", "pincode"] as const;
+      const fill: Partial<Record<(typeof fields)[number], string>> = {};
+      for (const f of fields) {
+        const typed = input[f]?.trim();
+        if (!same[f] && typed) fill[f] = typed;
+      }
+      if (!Object.keys(fill).length) return same;
+      return updateCustomer(actor, same.id, { ...same, ...fill }, tx);
+    }
+  }
+  return createCustomer(actor, input, tx);
+}
+
+/**
+ * Whether the bill could be issued to this buyer: the same checks as at billing, run early so that a
+ * missing address or a wrong state is found before the customer pays, not after.
+ */
+async function assertBuyerFits(tx: Tx, sale: Sale, customer: Customer | null) {
+  const settings = await getAllSettings(tx);
+  const lines = await tx.select().from(saleLines).where(eq(saleLines.saleId, sale.id)).orderBy(asc(saleLines.lineNo));
+  const buyer = partyFromCustomer(customer);
+  const { docType } = billingDocType(settings.tax.registrationType, lines, buyer?.gstin ?? null);
+  checkBuyerRequirements({
+    regType: settings.tax.registrationType,
+    docType,
+    buyer,
+    taxableTotal: sale.taxableTotal,
+    threshold: settings.tax.b2cDetailsThreshold,
+    placeOfSupply: sale.placeOfSupplyStateCode,
+  });
+}
+
+/**
+ * Saves who is buying (a new customer, changes to a saved one, or none for a walk-in) on a sale that
+ * has not been billed yet. Asked at the counter before the QR is shown; the bill then uses it.
+ */
+export async function saveSaleCustomer(actor: Actor, saleId: string, input: (CustomerInput & { id?: string | null }) | null) {
+  requirePermission(actor, "sales.create");
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const sale = await lockSale(tx, saleId);
+    if (!canSeeSale(actor, sale)) throw forbidden();
+    if (sale.status === "completed" || sale.status === "cancelled") throw conflict("The customer can't be changed after billing");
+    const customer = await resolveCustomer(tx, actor, sale, input);
+    // Only an agreed sale has its final amount; a draft is checked when the bill is issued.
+    if (sale.status === "finalized") await assertBuyerFits(tx, sale, customer);
+    return customer;
+  });
 }
 
 /* ------------------------------------------------------------------ */

@@ -17,7 +17,7 @@ test("20 · Training mode: SAMPLE products make practice sales that never count"
   await check(page, "Real + sample mix refused", () => expect(page.getByText(/can't be in the same sale/).filter({ visible: true }).first()).toBeVisible());
   await agree(page);
   await payCash(page);
-  await tap(page.getByRole("button", { name: "Cash sale — skip details" }));
+  await tap(page.getByRole("button", { name: "Generate bill" }));
   await page.waitForURL(/\/pos\/documents\//);
   await check(page, "TRN number", () => expect(page.getByText(/TRN\/\d{2}-\d{2}\/\d+/).filter({ visible: true }).first()).toBeVisible());
   await check(page, "Watermark: NOT A VALID BILL", () => expect(page.getByText(/NOT A VALID BILL/).filter({ visible: true }).first()).toBeVisible());

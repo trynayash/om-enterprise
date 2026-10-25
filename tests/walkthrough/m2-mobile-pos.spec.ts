@@ -21,11 +21,15 @@ test("M2 · Counter sale on a phone", async ({ page }) => {
   await tap(page.getByRole("link", { name: /Checkout/ }));
   await tap(page.getByTestId("finalize"));
   await tap(page.getByRole("button", { name: /Customer agrees/ }));
+  await say(page, "The customer's name and mobile come before payment.");
+  await type(page.locator("#c-name"), "Walk-in customer");
+  await type(page.locator("#c-mobile"), "9825012345");
+  await check(page, "Customer form fits the phone", () => noSideScroll(page));
+  await tap(page.getByRole("button", { name: "Continue to payment" }));
   await tap(page.getByRole("button", { name: /Record cash, card, bank transfer/ }));
   await page.getByTestId("confirm-received").check();
   await pause(page, 600);
   await tap(page.getByRole("button", { name: /^Confirm .* received$/ }));
-  await type(page.locator("#c-name"), "Walk-in customer");
   await tap(page.getByRole("button", { name: "Generate bill" }));
   await page.waitForURL(/\/pos\/documents\//);
   await check(page, "Bill on the phone", () => expect(page.getByText(/OE\/\d{2}-\d{2}\/\d+/).filter({ visible: true }).first()).toBeVisible());

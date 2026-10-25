@@ -354,10 +354,10 @@ Price for target margin m (0 < m < 1) = landed cost / (1 − m)
 5. **Finalise:** the customer agrees the amount, and the sale's lines and totals are frozen.
    - A draft can be saved, or a **quotation** issued. A quotation holds its prices for the validity period.
    - An unpaid finalised sale can be reopened.
-6. **Payment QR** for the exact outstanding amount (UPI, or Razorpay when configured).
-7. **Verify payment.** This is automatic only with a gateway webhook. Otherwise staff check the merchant app and record the 12-digit UTR and explicit confirmation. Split payments are supported.
-8. **Customer details**, as required for the document (see GST rules below).
-9. **Generate the bill.** The document type comes from the GST registration, and the number is allocated gaplessly.
+6. **Customer, before any QR.** Once the amount is agreed the screen asks who is buying: name and a valid 10-digit mobile are needed to go on (the bill is made out to them and can be sent to that number on WhatsApp); email is optional. Address, GSTIN and business name sit under "more details" and open by themselves when the bill needs them: a GST-registered buyer, or a bill at or above the threshold on a regular registration. Those rules are checked **here**, with the same code that issues the bill, so a missing address or a wrong state is found before the customer pays, not after. A walk-in who gives nothing can be recorded as "Walk-in — no details" (not allowed where the law wants the buyer's details). A mobile number and name already on file is the same customer, not a second one — nothing saved is blanked. A sale already being paid is not held up for this step.
+7. **Payment QR** for the exact outstanding amount (UPI, or Razorpay when configured), with the customer shown above it.
+8. **Verify payment.** This is automatic only with a gateway webhook. Otherwise staff check the merchant app and record the 12-digit UTR and explicit confirmation. Split payments are supported.
+9. **Generate the bill** for the customer already taken (still changeable here). The document type comes from the GST registration — a **Bill of Supply** (with the composition declaration and no tax) for a composition dealer — and the number is allocated gaplessly.
 10. **Saved and searchable.** Bills can be printed (A4), downloaded as PDF, or shared on WhatsApp with a private link.
 
 Returns create credit notes against the original bill and record refunds. Cancelling a bill (goods not supplied) requires the refund to be recorded first, and keeps the cancelled document and its number.
