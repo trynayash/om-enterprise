@@ -106,6 +106,20 @@ test.describe("POS counter", () => {
     await sachin.getByTestId("finalize").click();
     await sachin.getByRole("button", { name: /Customer agrees — ₹2,760\.00/ }).click();
 
+    // ---- 5b. Who is buying is asked before any QR: name and a valid mobile are needed to go on.
+    await expect(sachin.getByRole("region", { name: "Customer details" })).toBeVisible();
+    await expect(sachin.getByRole("button", { name: /Show UPI QR/ })).toHaveCount(0);
+    const goOn = sachin.getByRole("button", { name: "Continue to payment" });
+    await expect(goOn).toBeDisabled();
+    await sachin.locator("#c-name").fill("Ramesh Patel (e2e)");
+    await sachin.locator("#c-mobile").fill("12345");
+    await expect(goOn).toBeDisabled();
+    await sachin.locator("#c-mobile").fill("98765 43210");
+    await sachin.locator("#c-email").fill("ramesh.e2e@example.com");
+    await expect(goOn).toBeEnabled();
+    await goOn.click();
+    await expect(sachin.getByTestId("customer-summary")).toContainText("Ramesh Patel (e2e)");
+
     // ---- 6–7. UPI QR for the exact amount; showing it proves nothing.
     await expect(sachin.getByTestId("amount-due")).toHaveText(/2,760\.00/);
     await sachin.getByRole("button", { name: /Show UPI QR for ₹2,760\.00/ }).click();
@@ -125,10 +139,9 @@ test.describe("POS counter", () => {
     await sachin.getByTestId("confirm-received").check();
     await confirm.click();
 
-    // ---- 9. Customer details and the bill.
-    await expect(sachin.getByRole("region", { name: "Customer and bill" })).toBeVisible();
-    await sachin.locator("#c-name").fill("Ramesh Patel (e2e)");
-    await sachin.locator("#c-mobile").fill("9876543210");
+    // ---- 9. The bill is made out to the customer taken before the QR.
+    await expect(sachin.getByRole("region", { name: "Bill" })).toBeVisible();
+    await expect(sachin.getByTestId("bill-to")).toContainText("Ramesh Patel (e2e)");
     await sachin.getByRole("button", { name: "Generate bill" }).click();
     await sachin.waitForURL(/\/pos\/documents\/[0-9a-f-]{36}$/);
     const documentId = sachin.url().split("/").pop()!;
@@ -137,6 +150,7 @@ test.describe("POS counter", () => {
     await expect(sachin.getByText(/TAX INVOICE/i).first()).toBeVisible();
     await expect(sachin.getByText(/OE\/\d{2}-\d{2}\/\d+/).first()).toBeVisible();
     await expect(sachin.getByText("Ramesh Patel (e2e)").first()).toBeVisible();
+    await expect(sachin.getByText("ramesh.e2e@example.com").first()).toBeVisible();
     await expect(sachin.getByText(/NOT A VALID BILL/)).toHaveCount(0);
     await expect(sachin.getByRole("button", { name: "Print" })).toBeVisible();
     const pdf = await sachin.request.get(`/api/documents/${documentId}/pdf`);

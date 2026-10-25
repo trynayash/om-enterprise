@@ -16,14 +16,14 @@ test("10 · Cash with change, split payment (part UPI, part cash), and a quick c
   await check(page, `Change to return: ₹${(2000 - due).toFixed(2)}`, () => expect(page.getByText(`Return change: ₹${(2000 - due).toLocaleString("en-IN", { minimumFractionDigits: 2 })}`)).toBeVisible());
   await page.getByTestId("confirm-received").check();
   await tap(page.getByRole("button", { name: /^Confirm .* received$/ }));
-  await say(page, "Paid in full: a cash sale can skip customer details for a small bill.");
-  await tap(page.getByRole("button", { name: "Cash sale — skip details" }));
+  await say(page, "Paid in full: a walk-in on a small bill needs no customer details.");
+  await tap(page.getByRole("button", { name: "Generate bill" }));
   await page.waitForURL(/\/pos\/documents\//);
   await check(page, "Bill issued without customer details", () => expect(page.getByRole("heading", { level: 1 })).toContainText(/Tax Invoice/i));
 
   await say(page, "Sale 2: 5 pieces, paid partly by UPI and the rest in cash.");
   await newSaleWith(page, "TEST Pressure", TEST_ITEM.sku, "5");
-  await agree(page);
+  await agree(page, { name: "Suresh Rathwa", mobile: "9825098765" });
   const total = inr(await page.getByTestId("amount-due").textContent());
   await type(page.locator("#qr-amount"), "1000");
   await tap(page.getByRole("button", { name: /Show UPI QR for/ }));
@@ -39,10 +39,10 @@ test("10 · Cash with change, split payment (part UPI, part cash), and a quick c
   await page.getByTestId("confirm-received").check();
   await tap(page.getByRole("button", { name: /^Confirm .* received$/ }));
   await check(page, "Fully paid — the bill step opens", async () => {
-    await expect(page.getByRole("region", { name: "Customer and bill" })).toBeVisible();
+    await expect(page.getByRole("region", { name: "Bill" })).toBeVisible();
     await expect(page.getByTestId("amount-due")).toHaveCount(0);
+    await expect(page.getByTestId("bill-to")).toContainText("Suresh Rathwa");
   });
-  await type(page.locator("#c-name"), "Suresh Rathwa");
   await tap(page.getByRole("button", { name: "Generate bill" }));
   await page.waitForURL(/\/pos\/documents\//);
   await check(page, "Bill issued", () => expect(page.getByText(/OE\/\d{2}-\d{2}\/\d+/).filter({ visible: true }).first()).toBeVisible());

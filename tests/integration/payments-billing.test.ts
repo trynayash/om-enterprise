@@ -12,7 +12,7 @@ import {
   reversePayment,
   startUpiPayment,
 } from "@/server/services/payments";
-import { cancelBill, createReturn, getDocument, issueBill, issueQuotation } from "@/server/services/documents";
+import { cancelBill, createReturn, getDocument, issueBill, issueQuotation, saveSaleCustomer } from "@/server/services/documents";
 import { listDocuments } from "@/server/services/documents";
 import { productPerformance, salesSummary } from "@/server/services/reports";
 import { gstinCheckChar } from "@/lib/india";
@@ -366,6 +366,110 @@ describe("billing documents", () => {
       expect(snap.declarationTop).toBe("Composition taxable person, not eligible to collect tax on supplies");
       expect(snap.totals.taxTotal).toBe("0.00");
       expect(snap.showTax).toBe(false);
+    } finally {
+      await setRegistration("regular");
+    }
+  });
+});
+
+describe("customer asked before payment", () => {
+  it("saves the customer on the agreed sale before any payment, and the bill uses it", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const { sale } = await finalizedSale(sachin, kishan);
+    const c = await saveSaleCustomer(sachin, sale.id, { name: "Ramesh Patel", mobile: "98765 43210", email: "ramesh@example.com" });
+    expect(c).toMatchObject({ name: "Ramesh Patel", mobile: "9876543210", email: "ramesh@example.com" });
+    expect((await getSale(sachin, sale.id)).customer?.id).toBe(c!.id);
+    expect((await getSale(sachin, sale.id)).payments).toHaveLength(0);
+
+    await payInFull(sachin, sale.id);
+    // The bill is issued without sending the details again.
+    const doc = await issueBill(sachin, sale.id);
+    expect((await getDocument(kishan, doc.id)).snapshot.buyer).toMatchObject({ name: "Ramesh Patel", mobile: "9876543210", email: "ramesh@example.com" });
+  });
+
+  it("refuses a bad mobile number or email and saves nothing", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const { sale } = await finalizedSale(sachin, kishan);
+    expect((await rejects(saveSaleCustomer(sachin, sale.id, { name: "Ramesh", mobile: "12345" }))).message).toMatch(/10-digit/);
+    expect((await rejects(saveSaleCustomer(sachin, sale.id, { name: "Ramesh", mobile: "9876543210", email: "not-an-email" }))).message).toMatch(/email/i);
+    expect((await getSale(sachin, sale.id)).customer).toBeNull();
+  });
+
+  it("finds a missing address or wrong state now, before the customer pays", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const a = await finalizedSale(sachin, kishan);
+    // A GST-registered buyer needs name, address and state on the invoice.
+    expect((await rejects(saveSaleCustomer(sachin, a.sale.id, { name: "Builder Co", gstin: BUYER_GSTIN }))).message).toMatch(/name, address and state/);
+    // An unregistered buyer's address decides the place of supply.
+    expect((await rejects(saveSaleCustomer(sachin, a.sale.id, { name: "Out of state", billingAddress: "Indore", stateCode: "23" }))).message).toMatch(/place of supply/);
+    expect((await getSale(sachin, a.sale.id)).customer).toBeNull();
+    // Nothing was kept from the refused attempts, and the right details go through.
+    await saveSaleCustomer(sachin, a.sale.id, { name: "Builder Co", gstin: BUYER_GSTIN, billingAddress: "GIDC, Vadodara" });
+
+    const big = await finalizedSale(sachin, kishan, { price: "60000" });
+    expect((await rejects(saveSaleCustomer(sachin, big.sale.id, { name: "Walk-in" }))).message).toMatch(/or more/);
+    await saveSaleCustomer(sachin, big.sale.id, { name: "Mahesh Rathwa", billingAddress: "Bodeli Road", stateCode: "24" });
+  });
+
+  it("a walk-in with no details is allowed on a small sale; saved details can be changed or cleared", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const { sale } = await finalizedSale(sachin, kishan);
+    const first = await saveSaleCustomer(sachin, sale.id, { name: "Ramesh Patel", mobile: "9876543210" });
+    const renamed = await saveSaleCustomer(sachin, sale.id, { id: first!.id, name: "Ramesh K. Patel", mobile: "9876543210" });
+    expect(renamed!.id).toBe(first!.id);
+    expect((await getSale(sachin, sale.id)).customer?.name).toBe("Ramesh K. Patel");
+    expect(await saveSaleCustomer(sachin, sale.id, null)).toBeNull();
+    expect((await getSale(sachin, sale.id)).customer).toBeNull();
+    await payInFull(sachin, sale.id);
+    const doc = await issueBill(sachin, sale.id);
+    expect((await getDocument(kishan, doc.id)).snapshot.buyer).toBeNull();
+  });
+
+  it("can't be changed once the bill is issued, and needs permission to sell", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const { sale } = await finalizedSale(sachin, kishan);
+    await payInFull(sachin, sale.id);
+    await issueBill(sachin, sale.id, { customer: { name: "Ramesh Patel", mobile: "9876543210" } });
+    expect((await rejects(saveSaleCustomer(sachin, sale.id, { name: "Someone else" }))).message).toMatch(/after billing/);
+    const other = await finalizedSale(sachin, kishan);
+    const accountant = await makeUser("accountant");
+    expect((await rejects(saveSaleCustomer(accountant, other.sale.id, { name: "Not allowed" }))).code).toBe("FORBIDDEN");
+  });
+
+  it("a repeat customer typed in again is the saved one: nothing saved is blanked, blanks are filled", async () => {
+    const kishan = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const mobile = `9${String(Date.now()).slice(-9)}`;
+    const a = await finalizedSale(sachin, kishan);
+    const first = await saveSaleCustomer(sachin, a.sale.id, { name: "Dinesh Rathwa", mobile, billingAddress: "Bodeli Road", city: "Naswadi", stateCode: "24" });
+
+    // Same name and number, typed with fewer details on another sale: the same customer, address kept, email added.
+    const b = await finalizedSale(sachin, kishan);
+    const again = await saveSaleCustomer(sachin, b.sale.id, { name: " dinesh rathwa ", mobile: `${mobile.slice(0, 5)} ${mobile.slice(5)}`, email: "dinesh@example.com", stateCode: "24" });
+    expect(again!.id).toBe(first!.id);
+    expect(again).toMatchObject({ billingAddress: "Bodeli Road", city: "Naswadi", email: "dinesh@example.com", name: "Dinesh Rathwa" });
+
+    // Another name on the same number is another customer.
+    const c = await finalizedSale(sachin, kishan);
+    const other = await saveSaleCustomer(sachin, c.sale.id, { name: "Suresh Rathwa", mobile });
+    expect(other!.id).not.toBe(first!.id);
+  });
+
+  it("a bill of supply asks for no address", async () => {
+    await setRegistration("composition");
+    try {
+      const kishan = await makeUser("super_admin");
+      const { sale } = await finalizedSale(kishan, kishan, { price: "60000" });
+      await saveSaleCustomer(kishan, sale.id, { name: "Mahesh Rathwa", mobile: "9876543210" });
+      await payInFull(kishan, sale.id);
+      const doc = await issueBill(kishan, sale.id);
+      expect(doc.docType).toBe("bill_of_supply");
+      expect((await getDocument(kishan, doc.id)).snapshot.buyer?.name).toBe("Mahesh Rathwa");
     } finally {
       await setRegistration("regular");
     }

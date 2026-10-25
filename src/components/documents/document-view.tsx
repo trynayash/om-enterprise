@@ -126,9 +126,15 @@ export function DocumentView({
           <div className="mt-1 text-xs leading-relaxed text-navy-600">
             <div className="text-sm font-semibold text-navy-950">{s.buyer.businessName ? `${s.buyer.businessName} (${s.buyer.name})` : s.buyer.name}</div>
             {[s.buyer.address, [s.buyer.city, s.buyer.pincode].filter(Boolean).join(" "), s.buyer.stateName ? `${s.buyer.stateName} (${s.buyer.stateCode})` : null].filter(Boolean).join(", ")}
-            {s.buyer.mobile && (
+            {(s.buyer.mobile || s.buyer.email) && (
               <div>
-                Mobile: <span className="font-mono text-[11.5px]">{s.buyer.mobile}</span>
+                {s.buyer.mobile && (
+                  <>
+                    Mobile: <span className="font-mono text-[11.5px]">{s.buyer.mobile}</span>
+                  </>
+                )}
+                {s.buyer.mobile && s.buyer.email && "  ·  "}
+                {s.buyer.email && <span className="break-all">{s.buyer.email}</span>}
               </div>
             )}
             {s.buyer.gstin && (

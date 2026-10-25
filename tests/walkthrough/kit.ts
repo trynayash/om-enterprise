@@ -318,10 +318,22 @@ export async function newSaleWith(page: Page, search: string, sku: string, qty =
   return (await page.getByRole("heading", { level: 1 }).textContent())!.trim();
 }
 
-/** Finalise the current POS sale (customer agrees the amount). */
-export async function agree(page: Page) {
+/**
+ * Finalise the current POS sale (customer agrees the amount) and get through the customer step that
+ * comes before payment: with `customer`, their details are typed; without, the sale is a walk-in.
+ */
+export async function agree(page: Page, customer: { name: string; mobile: string; email?: string } | null = null) {
   await tap(page.getByTestId("finalize"));
   await tap(page.getByRole("button", { name: /Customer agrees/ }));
+  await page.getByRole("region", { name: "Customer details" }).waitFor();
+  if (customer) {
+    await type(page.locator("#c-name"), customer.name);
+    await type(page.locator("#c-mobile"), customer.mobile);
+    if (customer.email) await type(page.locator("#c-email"), customer.email);
+    await tap(page.getByRole("button", { name: "Continue to payment" }));
+  } else {
+    await tap(page.getByRole("button", { name: "Walk-in — no details" }));
+  }
   await page.getByTestId("amount-due").waitFor();
 }
 
