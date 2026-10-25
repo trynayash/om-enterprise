@@ -234,9 +234,25 @@ The full permission catalogue, with descriptions, is in `src/lib/permissions.ts`
 - **Publishing:** new and imported products are unpublished drafts. Someone with `catalog.publish` marks the information *reviewed* and then publishes it, or ticks *Publish on the website straight away* when importing. Editing key fields of a reviewed product sends it back to review.
 - **Data integrity:** never enter invented specifications, prices, warranties or stock. Record where data came from in *Source info*.
 
-### Excel / CSV import (Dashboard → Bulk import)
+### Importing a company's price list or catalogue (Dashboard → Bulk import)
 
-Upload the Excel workbook (`.xlsx`, first sheet) as it is, or a **CSV UTF-8** file, one row per variant. Rows with the same `product_name + brand + category` become one product. Download the template from the import page. Excel files are read in the browser; old `.xls` files must be re-saved as `.xlsx`.
+Upload the file as the company sent it. Files are read in the browser (`src/lib/import-files/`); the file type is decided by its content, not its name, because many billing systems save "Excel" files that are really web pages or text.
+
+| Format | How it is read |
+|---|---|
+| PDF | [Mozilla pdf.js](https://github.com/mozilla/pdf.js) gives each text-drawing operation and its position, and the lines and boxes drawn on the page; the tables are rebuilt from them (`pdf-ops.ts`, `layout.ts`). Borders, when there are any, mark the rows and columns, and cells wrapped over several lines are joined. Text-only spreadsheet, Word, browser and catalogue PDFs all work, including pages turned sideways. Scans and photos have no text and are refused with an explanation, as are password-protected PDFs |
+| Excel `.xlsx`, `.xlsm`, `.xls` (97–2003) | Every sheet; `.xls` through a small reader for the binary format |
+| OpenDocument `.ods`, Word `.docx`, web pages `.html` | Every table in the file |
+| CSV, TSV, `.txt`, `.prn` | Comma, semicolon, tab or `\|`, UTF-8, UTF-16 or Windows-1252 |
+| JSON | A list of records |
+
+Old Word `.doc`, Excel `.xlsb` and Apple Numbers files are refused with the menu steps to save them in a format that works.
+
+Then **match the columns**: pick the sheet or page (a PDF also offers "All pages") and the heading row, say which column is the name, size, code, MRP, selling and dealer price, GST, HSN, unit and so on (guessed from the headings), and fill in what is the same for every row — category, brand, unit, GST and HSN. Rules cover common price-list layouts: a heading row above each product's sizes becomes the product name; repeated page headers and footers are left out; the selling price can be the MRP or MRP less a discount; the cost can come from a dealer price column (with or without GST) or MRP less the dealer discount; item codes can be made from the brand, name and size when the file has none. A preview shows the rows that will be checked, and the choices are remembered for the next file with the same columns. A file that already uses the template's headings skips this step.
+
+**Check** sends only the matched rows, in the template's columns. A row whose code is already in the catalogue can be left out with one click, so a new price list from the same company imports just its new items. Up to 5,000 rows at a time.
+
+The template (download it from the import page) has one row per variant. Rows with the same `product_name + brand + category` become one product.
 
 | Column | Required | Notes |
 |---|---|---|

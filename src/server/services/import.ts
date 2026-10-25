@@ -23,34 +23,8 @@ import { isValidHsn, slugify } from "@/lib/india";
 import { D, m } from "@/lib/money";
 import { landedUnitCost } from "@/lib/pricing/engine";
 
-export const IMPORT_COLUMNS = [
-  "product_name",
-  "category",
-  "brand",
-  "manufacturer",
-  "model",
-  "description",
-  "hsn_code",
-  "gst_rate",
-  "unit",
-  "warranty",
-  "specifications",
-  "source_info",
-  "image_url",
-  "sku",
-  "barcode",
-  "variant_name",
-  "variant_attributes",
-  "mrp",
-  "selling_price",
-  "price_includes_tax",
-  "purchase_cost",
-  "purchase_tax_rate",
-  "freight",
-  "handling",
-  "is_sample",
-] as const;
-export const REQUIRED_COLUMNS = ["product_name", "category", "unit", "sku", "variant_name"] as const;
+export { IMPORT_COLUMNS, REQUIRED_COLUMNS } from "@/lib/import-columns";
+import { IMPORT_COLUMNS, REQUIRED_COLUMNS } from "@/lib/import-columns";
 
 /** RFC 4180 CSV parser (quoted fields, escaped quotes, CRLF/LF, BOM). */
 export function parseCsv(text: string): string[][] {
