@@ -4,7 +4,7 @@ import { ArrowRight, UserRound } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/page";
-import { BuyerFields, buyerRules, contactProblem, customerBody, formFrom, type BuyerForm, type CustomerRow } from "./buyer-form";
+import { BuyerFields, buyerRules, contactProblem, customerBody, formFrom, rulesProblem, type BuyerForm, type CustomerRow } from "./buyer-form";
 import type { PosConfig, SaleData } from "./types";
 import { setWalkIn } from "./walk-in";
 
@@ -22,7 +22,7 @@ export function CustomerStep({ data, config, run, onClose }: { data: SaleData; c
   const [busy, setBusy] = useState<null | "save" | "walkin">(null);
   const [error, setError] = useState<string | null>(null);
   const rules = buyerRules(form, config, s.taxableTotal);
-  const problem = contactProblem(form);
+  const problem = contactProblem(form) ?? rulesProblem(form, config, s.taxableTotal);
   const changing = !!onClose;
 
   const setForm = (update: (f: BuyerForm) => BuyerForm) => {
@@ -79,7 +79,7 @@ export function CustomerStep({ data, config, run, onClose }: { data: SaleData; c
             Cancel
           </Button>
         )}
-        {problem && (form.name || form.mobile) && <span className="basis-full text-xs text-navy-500">{problem}</span>}
+        {problem && (form.name || form.mobile || rules.detailsRequired) && <span className="basis-full text-xs text-navy-500">{problem}</span>}
       </div>
     </section>
   );

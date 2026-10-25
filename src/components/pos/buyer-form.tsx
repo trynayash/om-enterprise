@@ -98,6 +98,13 @@ export function contactProblem(form: BuyerForm): string | null {
   return null;
 }
 
+/** What is still missing for the bill's tax rules (the server checks the same when the customer is saved). */
+export function rulesProblem(form: BuyerForm, config: PosConfig, taxableTotal: string): string | null {
+  const rules = buyerRules(form, config, taxableTotal);
+  if (rules.detailsRequired && !form.billingAddress.trim()) return "This bill needs the customer's address.";
+  return null;
+}
+
 export function BuyerFields({
   form,
   setForm,
