@@ -1,7 +1,7 @@
 /**
  * Copies the files the browser needs to read scanned price lists from node_modules into public/,
  * so they are served from this site (nothing is loaded from another address):
- *   public/ocr/    Tesseract text recognition (tesseract.js worker, WebAssembly core, English data)
+ *   public/ocr/    Tesseract text recognition (tesseract.js worker, WebAssembly core, English, Hindi and Gujarati data)
  *   public/pdfjs/  pdf.js's WebAssembly decoders for scan compressions (JBIG2, JPEG 2000, ICC colours)
  * Runs before `next dev` and `next build` (see package.json). The copies are not committed.
  */
@@ -18,6 +18,8 @@ const copies = [
   ["tesseract.js-core/tesseract-core-simd-lstm.wasm.js", "public/ocr/tesseract-core-simd-lstm.wasm.js"],
   ["tesseract.js-core/tesseract-core-relaxedsimd-lstm.wasm.js", "public/ocr/tesseract-core-relaxedsimd-lstm.wasm.js"],
   ["@tesseract.js-data/eng/4.0.0_best_int/eng.traineddata.gz", "public/ocr/eng.traineddata.gz"],
+  ["@tesseract.js-data/hin/4.0.0_best_int/hin.traineddata.gz", "public/ocr/hin.traineddata.gz"],
+  ["@tesseract.js-data/guj/4.0.0_best_int/guj.traineddata.gz", "public/ocr/guj.traineddata.gz"],
 ];
 // pdf.js's decoders and their licences; its scripting engine (quickjs) is not needed.
 const pdfjs = join(modules, "pdfjs-dist/wasm");
@@ -36,5 +38,5 @@ writeFileSync(
   join(root, "public/ocr/README.txt"),
   "Copies of open-source files, made by scripts/copy-engine-files.mjs:\n" +
     "- worker.min.js, tesseract-core-*.wasm.js: tesseract.js and tesseract.js-core (Apache-2.0), https://github.com/naptha/tesseract.js\n" +
-    "- eng.traineddata.gz: Tesseract English model 4.0.0_best_int (Apache-2.0), https://github.com/tesseract-ocr/tessdata_best\n",
+    "- eng/hin/guj.traineddata.gz: Tesseract English, Hindi and Gujarati models 4.0.0_best_int (Apache-2.0), https://github.com/tesseract-ocr/tessdata_best\n",
 );

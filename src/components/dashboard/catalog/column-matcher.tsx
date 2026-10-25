@@ -106,7 +106,7 @@ export function ColumnMatcher({
   tables: ImportTable[];
   options: MatcherOptions;
   /** The file was a scan or photo read with text recognition; prices need a second look. */
-  scanned: { confidence: number } | null;
+  scanned: { confidence: number; language?: string } | null;
   busy: boolean;
   onCheck: (rows: ImportRow[], sourceRows: number[]) => void;
 }) {
@@ -173,8 +173,8 @@ export function ColumnMatcher({
       <CardBody className="space-y-6">
         {scanned && (
           <Alert tone="warning" title="This file is a scan, read by text recognition">
-            It was about {Math.round(scanned.confidence)}% sure of what it read. Check every price and code in the preview below against the original — a missing decimal point (11.5 read as 115) and
-            look-alike characters (0 and O, 1 and 7, 5 and 6) are the usual slips. Products from a scan are saved as drafts.
+            It was about {Math.round(scanned.confidence)}% sure of what it read{scanned.language ? ` (as ${scanned.language})` : ""}. Check every price and code in the preview below against the
+            original — a missing decimal point (11.5 read as 115) and look-alike characters (0 and O, 1 and 7, 5 and 6) are the usual slips. Products from a scan are saved as drafts.
           </Alert>
         )}
         {restored && (

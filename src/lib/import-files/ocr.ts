@@ -27,12 +27,25 @@ export type OcrImage = Uint8Array | Blob | HTMLCanvasElement | OffscreenCanvas;
 
 export interface OcrEngine {
   recognize(image: OcrImage): Promise<OcrPage>;
-  /** Reads one short number in a picture of just that number: digits, point, comma and % only. */
-  recognizeNumber(image: OcrImage): Promise<{ text: string; confidence: number } | null>;
+  /** Reads one line in a picture of just that line. `characters`, when given, are the only letters it may answer with. */
+  recognizeLine(image: OcrImage, characters?: string): Promise<{ text: string; confidence: number } | null>;
   close(): Promise<void>;
 }
 
+/** The languages text can be recognised in: Tesseract's codes. */
+export type OcrLanguage = "eng" | "hin" | "guj";
+
+/** What can be chosen for a scan: reading more languages at once is slower, so English is the default. */
+export const OCR_LANGUAGE_CHOICES: { id: string; label: string; languages: OcrLanguage[] }[] = [
+  { id: "eng", label: "English", languages: ["eng"] },
+  { id: "hin", label: "English + Hindi (हिन्दी)", languages: ["eng", "hin"] },
+  { id: "guj", label: "English + Gujarati (ગુજરાતી)", languages: ["eng", "guj"] },
+  { id: "all", label: "English + Hindi + Gujarati", languages: ["eng", "hin", "guj"] },
+];
+
 export interface OcrOptions {
+  /** Languages of the text, English first. More languages read slower, so the default is English alone. */
+  languages?: OcrLanguage[];
   /** Where the engine's files are served; defaults to this site's /ocr/. */
   workerPath?: string;
   corePath?: string;
@@ -50,7 +63,7 @@ export async function createOcr(opts: OcrOptions = {}): Promise<OcrEngine> {
   if (opts.workerPath ?? base) paths.workerPath = opts.workerPath ?? `${base}/worker.min.js`;
   if (opts.corePath ?? base) paths.corePath = (opts.corePath ?? base)!;
   if (opts.langPath ?? base) paths.langPath = (opts.langPath ?? base)!;
-  const worker = await createWorker("eng", 1, {
+  const worker = await createWorker(opts.languages?.length ? opts.languages : ["eng"], 1, {
     ...paths,
     // A worker script from our own address (the page's security policy does not allow blob: scripts).
     workerBlobURL: false,
@@ -80,12 +93,13 @@ export async function createOcr(opts: OcrOptions = {}): Promise<OcrEngine> {
       const confidence = words.length ? words.reduce((n, w) => n + w.confidence, 0) / words.length : 0;
       return { lines, confidence };
     },
-    async recognizeNumber(image) {
-      await worker.setParameters({ tessedit_pageseg_mode: "7" as never, tessedit_char_whitelist: "0123456789.,%" });
+    async recognizeLine(image, characters = "") {
+      await worker.setParameters({ tessedit_pageseg_mode: "7" as never, tessedit_char_whitelist: characters });
       try {
         const { data } = await worker.recognize(image as never, {}, { blocks: true });
         const words = (data.blocks ?? []).flatMap((b) => b.paragraphs.flatMap((p) => p.lines.flatMap((l) => l.words)));
-        return words.length === 1 ? { text: words[0].text.trim(), confidence: words[0].confidence } : null;
+        const text = words.map((w) => w.text.trim()).join(" ").trim();
+        return text ? { text, confidence: words.reduce((n, w) => n + w.confidence, 0) / words.length } : null;
       } finally {
         await worker.setParameters({ tessedit_pageseg_mode: "6" as never, tessedit_char_whitelist: "" });
       }

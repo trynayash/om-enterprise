@@ -1,4 +1,4 @@
-import type { OcrOptions } from "./ocr";
+import type { OcrLanguage, OcrOptions } from "./ocr";
 import type { CanvasKit } from "./scan";
 
 /** What a file read is doing, for the message shown while it runs. */
@@ -13,6 +13,8 @@ export interface ReadOptions {
   onProgress?: (p: ReadProgress) => void;
   /** Stops a long read (scanned pages take several seconds each). */
   signal?: AbortSignal;
+  /** Languages of scanned text (English alone when omitted); more languages read slower. */
+  languages?: OcrLanguage[];
   /** Where the recognition engine's files are; the browser uses this site's /ocr/. Set by tests. */
   ocr?: OcrOptions;
   /** Makes canvases and opens picture files; the browser's by default. Set by tests. */

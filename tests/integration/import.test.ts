@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
-import { products, productVariants, variantPrices } from "@/server/db/schema";
+import { brands, products, productVariants, variantPrices } from "@/server/db/schema";
 import { commitImport, IMPORT_COLUMNS, validateImport } from "@/server/services/import";
 import { makeUser, uid } from "./helpers";
 
@@ -69,5 +69,37 @@ describe("bulk import", () => {
     const ok = await validateImport(owner, csv(sheet(tag, { image_url: "https://a.example/1.jpg; https://a.example/2.jpg" })));
     expect(ok.errorCount).toBe(0);
     expect(ok.photoCount).toBe(2);
+  });
+
+  it("imports Hindi and Gujarati names, giving each product and brand its own page address", async () => {
+    const owner = await makeUser("super_admin");
+    const tag = uid("IND").toUpperCase();
+    const base = { category: "cpvc-pipes-fittings", gst_rate: "18", hsn_code: "3917", unit: "pcs", price_includes_tax: "yes", mrp: "210", selling_price: "180" };
+    const rows: Row[] = [
+      { ...base, brand: "चौधरी पाइप्स", product_name: "सीपीवीसी एल्बो 90°", sku: `${tag}-H1`, variant_name: "15 मिमी", variant_attributes: "Size=15 मिमी" },
+      { ...base, brand: "चौधरी पाइप्स", product_name: "सीपीवीसी एल्बो 90°", sku: `${tag}-H2`, variant_name: "20 मिमी", variant_attributes: "Size=20 मिमी" },
+      { ...base, brand: "चौधरी पाइप्स", product_name: "सीपीवीसी टी", sku: `${tag}-H3`, variant_name: "15 मिमी" },
+      { ...base, brand: "ચૌધરી પાઇપ્સ", product_name: "સીપીવીસી એલ્બો 90°", sku: `${tag}-G1`, variant_name: "15 મીમી" },
+      { ...base, brand: "ચૌધરી પાઇપ્સ", product_name: "સીપીવીસી ટી", sku: `${tag}-G2`, variant_name: "15 મીમી" },
+    ];
+    const report = await validateImport(owner, csv(rows));
+    expect(report.errorCount).toBe(0);
+    const r = await commitImport(owner, csv(rows));
+    expect(r).toMatchObject({ createdProducts: 4, createdVariants: 5 });
+
+    const db = getDb();
+    const vs = await db.select().from(productVariants).where(inArray(productVariants.sku, rows.map((x) => x.sku!)));
+    const ps = await db.select().from(products).where(inArray(products.id, [...new Set(vs.map((v) => v.productId))]));
+    expect(ps.map((p) => p.name).sort()).toEqual(["સીપીવીસી એલ્બો 90°", "સીપીવીસી ટી", "सीपीवीसी एल्बो 90°", "सीपीवीसी टी"].sort());
+    // Every product has an address of Latin letters and digits, and no two are the same.
+    expect(ps.every((p) => /^[a-z0-9][a-z0-9-]*$/.test(p.slug))).toBe(true);
+    expect(new Set(ps.map((p) => p.slug)).size).toBe(4);
+    // The 15 mm and 20 mm elbows are one product with two variants.
+    const elbow = ps.find((p) => p.name === "सीपीवीसी एल्बो 90°")!;
+    expect(vs.filter((v) => v.productId === elbow.id).map((v) => v.name).sort()).toEqual(["15 मिमी", "20 मिमी"]);
+    const bs = await db.select().from(brands).where(inArray(brands.name, ["चौधरी पाइप्स", "ચૌધરી પાઇપ્સ"]));
+    expect(bs).toHaveLength(2);
+    expect(bs.every((b) => /^brand-[a-z0-9]+$/.test(b.slug))).toBe(true);
+    expect(new Set(bs.map((b) => b.slug)).size).toBe(2);
   });
 });

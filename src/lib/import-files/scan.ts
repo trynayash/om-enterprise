@@ -1,5 +1,7 @@
+import { ctxOf, imageOf, type Canvas2D, type CanvasKit } from "./canvas";
 import type { PageText, Rule } from "./layout";
-import { createOcr, pageFromOcr, textHeightOf, type OcrEngine, type OcrImage, type OcrPage } from "./ocr";
+import { createOcr, pageFromOcr, textHeightOf, type OcrEngine, type OcrLanguage, type OcrPage } from "./ocr";
+import { rereadIndic, rereadNumbers, type IndicLanguage, type IndicSupport } from "./reread";
 import { CANCELLED, raceAbort, type ReadOptions } from "./read-options";
 import { evenLight, inkBox, rulesOf, skewOf, toGray, unevenLight, type Gray } from "./raster";
 
@@ -7,54 +9,8 @@ import { evenLight, inkBox, rulesOf, skewOf, toGray, unevenLight, type Gray } fr
  * Reading a scanned page: straighten it, recognise the text, and find the table's borders. All in
  * pixels of a canvas; the canvas comes from the page (browser) or from the tests.
  */
-export interface CanvasCtx {
-  /** drawImage(image, dx, dy[, dw, dh]) or drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh). */
-  drawImage(image: unknown, ...args: number[]): void;
-  getImageData(x: number, y: number, w: number, h: number): { data: ArrayLike<number>; width: number; height: number };
-  fillRect(x: number, y: number, w: number, h: number): void;
-  createImageData(w: number, h: number): { data: { [i: number]: number; length: number } };
-  putImageData(image: never, x: number, y: number): void;
-  translate(x: number, y: number): void;
-  rotate(radians: number): void;
-  fillStyle: unknown;
-  imageSmoothingQuality?: string;
-}
-export interface Canvas2D {
-  width: number;
-  height: number;
-  getContext(type: "2d"): CanvasCtx | null;
-  /** Node canvases (tests) can give PNG bytes; browser canvases are passed to the engine as they are. */
-  toBuffer?(mime: string): Uint8Array;
-}
-export interface CanvasKit {
-  create(width: number, height: number): Canvas2D;
-  /** A photo or scan file as a canvas, turned upright by its EXIF orientation. */
-  decode(bytes: Uint8Array): Promise<Canvas2D>;
-}
-
-export const browserCanvasKit: CanvasKit = {
-  create(width, height) {
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    return canvas as unknown as Canvas2D;
-  },
-  async decode(bytes) {
-    let bitmap: ImageBitmap;
-    try {
-      bitmap = await createImageBitmap(new Blob([bytes as BlobPart]), { imageOrientation: "from-image" });
-    } catch {
-      throw new Error("That picture can't be opened. Save it as a JPG or PNG (or as a PDF) and upload that.");
-    }
-    const canvas = browserCanvasKit.create(bitmap.width, bitmap.height);
-    const ctx = ctxOf(canvas);
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, bitmap.width, bitmap.height);
-    ctx.drawImage(bitmap, 0, 0);
-    bitmap.close();
-    return canvas;
-  },
-};
+export { browserCanvasKit, type Canvas2D, type CanvasCtx, type CanvasKit } from "./canvas";
+export { betterNumber } from "./reread";
 
 /** Longest side, in pixels, the engine is given: bigger pictures are reduced. */
 const MAX_SIDE = 4200;
@@ -66,14 +22,6 @@ const TOO_BIG = 70;
 const TARGET = 32;
 /** Lighting this uneven (share of the paper's brightness) is evened out first. */
 const UNEVEN = 0.07;
-/** Height, in pixels, a number is enlarged to when it is read again on its own. */
-const NUMBER_HEIGHT = 56;
-
-function ctxOf(canvas: Canvas2D): CanvasCtx {
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("This browser can't process pictures.");
-  return ctx;
-}
 
 function grayOf(canvas: Canvas2D): Gray {
   return toGray(ctxOf(canvas).getImageData(0, 0, canvas.width, canvas.height));
@@ -114,8 +62,6 @@ function turned(src: Canvas2D, radians: number, kit: CanvasKit): Canvas2D {
   return out;
 }
 
-const imageOf = (canvas: Canvas2D): OcrImage => (typeof canvas.toBuffer === "function" ? canvas.toBuffer("image/png") : (canvas as unknown as HTMLCanvasElement));
-
 /** A copy with the table's lines painted out: lines through a picture of text make the engine drop or garble the words beside them. */
 function withoutRules(src: Canvas2D, rules: Rule[], kit: CanvasKit): Canvas2D {
   const out = kit.create(src.width, src.height);
@@ -134,60 +80,6 @@ function withoutRules(src: Canvas2D, rules: Rule[], kit: CanvasKit): Canvas2D {
 export interface ScanSession {
   /** Quarter turns (clockwise) pages needed to read upright. */
   quarters: number;
-}
-
-/** A word that is only digits and number punctuation, two characters or more: a price, a quantity, a percentage. */
-const NUMBER = /^[\d.,%]{2,}$/;
-
-/**
- * Whether the second reading of a number should replace the first. A lost decimal point is the usual
- * slip, a made-up one is rare: when both have the same digits the one with more points wins; when
- * the digits differ the second wins unless the engine is clearly less sure of it.
- */
-export function betterNumber(first: string, firstConfidence: number, second: string, secondConfidence: number): boolean {
-  if (second === first) return false;
-  const digits = (t: string) => t.replace(/\D/g, "");
-  const points = (t: string) => t.replace(/[^.,]/g, "").length;
-  if (digits(first) === digits(second)) return points(second) > points(first);
-  return secondConfidence >= firstConfidence - 5;
-}
-
-/**
- * Numbers are what matters most and what the engine slips on most (a decimal point lost between two
- * digits turns 24.3 into 243), so each one is read again on its own: cut out, enlarged and limited
- * to digits. The second reading replaces the first when it is a number too and the engine is not
- * clearly less sure of it.
- */
-async function rereadNumbers(page: OcrPage, canvas: Canvas2D, engine: OcrEngine, kit: CanvasKit): Promise<OcrPage> {
-  const lines = [];
-  for (const line of page.lines) {
-    const words = [];
-    for (const w of line.words) {
-      const text = w.text.trim();
-      const height = w.bbox.y1 - w.bbox.y0;
-      if (!NUMBER.test(text) || height < 6) {
-        words.push(w);
-        continue;
-      }
-      const padX = Math.round(height * 0.4);
-      const padY = Math.round(height * 0.3);
-      const x0 = Math.max(0, w.bbox.x0 - padX);
-      const y0 = Math.max(0, w.bbox.y0 - padY);
-      const sw = Math.min(canvas.width, w.bbox.x1 + padX) - x0;
-      const sh = Math.min(canvas.height, w.bbox.y1 + padY) - y0;
-      const zoom = Math.min(4, Math.max(1, NUMBER_HEIGHT / height));
-      const crop = kit.create(Math.max(8, Math.round(sw * zoom)), Math.max(8, Math.round(sh * zoom)));
-      const ctx = ctxOf(crop);
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, crop.width, crop.height);
-      ctx.imageSmoothingQuality = "high";
-      ctx.drawImage(canvas, x0, y0, sw, sh, 0, 0, crop.width, crop.height);
-      const again = await engine.recognizeNumber(imageOf(crop));
-      words.push(again && NUMBER.test(again.text) && betterNumber(text, w.confidence, again.text, again.confidence) ? { ...w, text: again.text, confidence: again.confidence } : w);
-    }
-    lines.push({ ...line, words });
-  }
-  return { ...page, lines };
 }
 
 export interface ScanResult {
@@ -245,8 +137,9 @@ async function turnsNeeded(work: Canvas2D, engine: OcrEngine, kit: CanvasKit): P
  * @param pixelsPerUnit for a page drawn from a PDF: pixels of `canvas` to a point, so the page's text
  *   comes out in points like the text of other PDFs and all pages share one scale. For a lone picture
  *   (omitted) the scale is taken from the size of its text.
+ * @param indic when the text is in Hindi or Gujarati: engines for second readings of what the main one is unsure of.
  */
-export async function readScan(canvas: Canvas2D, engine: OcrEngine, kit: CanvasKit, session: ScanSession = { quarters: 0 }, pixelsPerUnit?: number): Promise<ScanResult> {
+export async function readScan(canvas: Canvas2D, engine: OcrEngine, kit: CanvasKit, session: ScanSession = { quarters: 0 }, pixelsPerUnit?: number, indic?: IndicSupport): Promise<ScanResult> {
   let work = canvas;
   // How much `work` has been enlarged or reduced from `canvas`.
   let zoom = 1;
@@ -291,42 +184,58 @@ export async function readScan(canvas: Canvas2D, engine: OcrEngine, kit: CanvasK
       }
     }
     const clean = rules.length ? withoutRules(work, rules, kit) : work;
-    const read = await rereadNumbers(ocr, clean, engine, kit);
+    let read = await rereadNumbers(ocr, clean, engine, kit);
+    if (indic) read = await rereadIndic(read, clean, engine, kit, indic);
     return { page: pageFromOcr(read, rules, pixelsPerUnit ? 1 / (pixelsPerUnit * zoom) : undefined), confidence: ocr.confidence };
   }
 }
 
-/** The recognition engine, started when the first scanned page needs it and stopped when the file has been read. */
+/**
+ * The recognition engines of one file read, each started when first needed and stopped when the read
+ * ends: the main one (the languages chosen), and for Hindi and Gujarati one for each script alone.
+ */
 export function lazyOcr(opts: ReadOptions) {
-  let engine: Promise<OcrEngine> | null = null;
+  const engines = new Map<string, Promise<OcrEngine>>();
   const stop = async () => {
-    if (!engine) return;
-    const e = engine;
-    engine = null;
-    try {
-      await (await e).close();
-    } catch {
-      // Already stopped.
+    const all = [...engines.values()];
+    engines.clear();
+    for (const e of all) {
+      try {
+        await (await e).close();
+      } catch {
+        // Already stopped.
+      }
     }
   };
   opts.signal?.addEventListener("abort", () => void stop(), { once: true });
+  const open = async (languages: OcrLanguage[] | undefined): Promise<OcrEngine> => {
+    if (opts.signal?.aborted) throw new Error(CANCELLED);
+    const key = (languages ?? ["eng"]).join("+");
+    if (!engines.has(key)) {
+      engines.set(
+        key,
+        createOcr({
+          ...opts.ocr,
+          ...(languages ? { languages } : {}),
+          onStatus: (status, progress) => {
+            if (/loading|initializing/i.test(status)) opts.onProgress?.({ stage: "engine", progress });
+          },
+        }),
+      );
+    }
+    const ready = await raceAbort(opts.signal, engines.get(key)!);
+    // Calls stop at once on cancel, whatever the stopped worker does.
+    return {
+      recognize: (image) => raceAbort(opts.signal, ready.recognize(image)),
+      recognizeLine: (image, characters) => raceAbort(opts.signal, ready.recognizeLine(image, characters)),
+      close: ready.close,
+    };
+  };
+  const indicLanguages = (opts.languages ?? []).filter((l): l is IndicLanguage => l !== "eng");
   return {
-    async get(): Promise<OcrEngine> {
-      if (opts.signal?.aborted) throw new Error(CANCELLED);
-      engine ??= createOcr({
-        ...opts.ocr,
-        onStatus: (status, progress) => {
-          if (/loading|initializing/i.test(status)) opts.onProgress?.({ stage: "engine", progress });
-        },
-      });
-      const ready = await raceAbort(opts.signal, engine);
-      // Calls stop at once on cancel, whatever the stopped worker does.
-      return {
-        recognize: (image) => raceAbort(opts.signal, ready.recognize(image)),
-        recognizeNumber: (image) => raceAbort(opts.signal, ready.recognizeNumber(image)),
-        close: ready.close,
-      };
-    },
+    get: () => open(opts.languages),
+    /** For Hindi or Gujarati: second readings by the engine for each script alone; undefined for English. */
+    indic: indicLanguages.length ? ({ languages: indicLanguages, engineFor: (language) => open([language]) } satisfies IndicSupport) : undefined,
     close: stop,
   };
 }

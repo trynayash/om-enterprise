@@ -12,6 +12,7 @@ import type { ReadOptions } from "./read-options";
 export type { ImportTable } from "./text";
 export { toCsv } from "./delimited";
 export type { ReadOptions, ReadProgress } from "./read-options";
+export { OCR_LANGUAGE_CHOICES, type OcrLanguage } from "./ocr";
 export { CANCELLED } from "./read-options";
 
 /**
@@ -86,7 +87,7 @@ async function readPicture(bytes: Uint8Array, opts: ReadOptions): Promise<Import
   try {
     const canvas = await kit.decode(bytes);
     opts.onProgress?.({ stage: "scan", done: 0, total: 1 });
-    const scan = await readScan(canvas, await ocr.get(), kit);
+    const scan = await readScan(canvas, await ocr.get(), kit, undefined, undefined, ocr.indic);
     opts.onProgress?.({ stage: "scan", done: 1, total: 1 });
     if (!scan.page.pieces.length) throw new Error("No text could be read in that picture. Try a sharper, straighter photo with the whole page in view, or ask for the PDF or Excel file.");
     return { kind: "picture", tables: tablesFromPages([scan.page], "Picture"), scanned: true, confidence: scan.confidence };

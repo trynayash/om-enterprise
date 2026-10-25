@@ -381,7 +381,7 @@ function columnFor(c: Chunk, cols: [number, number][], splits: number[] = []): n
   return best;
 }
 
-const NUMERIC = /^[₹$€£]?\s*(rs\.?|inr)?\s*[-+]?[\d,]+(\.\d+)?\s*(%|\/-)?$/i;
+const NUMERIC = /^[₹$€£]?\s*(rs\.?|inr|रु\.?|રૂ\.?)?\s*[-+]?[\d\u0966-\u096F\u0AE6-\u0AEF,]+(\.[\d\u0966-\u096F\u0AE6-\u0AEF]+)?\s*(%|\/-)?$/i;
 
 /** Typical distance between rows that hold numbers; null when the page doesn't show one. */
 function rowPitch(lines: Line[]): number | null {
