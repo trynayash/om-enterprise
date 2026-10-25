@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { strToU8, zipSync } from "fflate";
-import { readXlsxRows, toCsv } from "@/lib/xlsx";
+import { readXlsx } from "@/lib/import-files/xlsx";
+import { toCsv } from "@/lib/import-files/delimited";
 
 /** A minimal workbook laid out the way Excel saves one. */
 function workbook(sheetXml: string, shared: string[] = [], target = "worksheets/sheet1.xml", file = `xl/${target}`) {
@@ -19,8 +20,8 @@ function workbook(sheetXml: string, shared: string[] = [], target = "worksheets/
   });
 }
 
-describe("readXlsxRows", () => {
-  it("reads the first sheet: shared and inline text, numbers, booleans, formulas and gaps", () => {
+describe("readXlsx", () => {
+  it("reads every sheet: shared and inline text, numbers, booleans, formulas and gaps", () => {
     const xlsx = workbook(
       `<row r="1" spans="1:4"><c r="A1" t="s"><v>0</v></c><c r="B1" t="s"><v>1</v></c><c r="D1" t="s"><v>2</v></c></row>` +
         `<row r="2"><c r="A2" t="inlineStr"><is><t xml:space="preserve">Silk Glamor &amp; Co</t></is></c><c r="B2" s="3"><v>1290.0000000000002</v></c>` +
@@ -29,7 +30,10 @@ describe("readXlsxRows", () => {
         `<row r="4"><c r="AA4"><v>7</v></c></row>`,
       ["<t>product_name</t>", "<r><t>selling</t></r><r><rPr><b/></rPr><t>_price</t></r>", '<t>note</t><rPh sb="0" eb="1"><t>ignored</t></rPh>'],
     );
-    const rows = readXlsxRows(xlsx);
+    const [products, notes] = readXlsx(xlsx);
+    expect(products.name).toBe("Products");
+    expect(notes).toEqual({ name: "Notes", rows: [["wrong sheet"]] });
+    const rows = products.rows;
     expect(rows[0]).toEqual(["product_name", "selling_price", "", "note"]);
     expect(rows[1]).toEqual(["Silk Glamor & Co", "1290", "TRUE", "A<B>"]);
     expect(rows[2]).toEqual([]);
@@ -38,13 +42,13 @@ describe("readXlsxRows", () => {
   });
 
   it("follows the workbook's relationship to an absolute sheet path", () => {
-    const rows = readXlsxRows(workbook(`<row r="1"><c r="A1"><v>42</v></c></row>`, [], "/xl/worksheets/data.xml", "xl/worksheets/data.xml"));
-    expect(rows).toEqual([["42"]]);
+    const [sheet] = readXlsx(workbook(`<row r="1"><c r="A1"><v>42</v></c></row>`, [], "/xl/worksheets/data.xml", "xl/worksheets/data.xml"));
+    expect(sheet.rows).toEqual([["42"]]);
   });
 
   it("refuses files that are not workbooks", () => {
-    expect(() => readXlsxRows(strToU8("product_name,sku\nA,B"))).toThrow(/not an Excel workbook/);
-    expect(() => readXlsxRows(zipSync({ "hello.txt": strToU8("hi") }))).toThrow(/not an Excel workbook/);
+    expect(() => readXlsx(strToU8("product_name,sku\nA,B"))).toThrow(/not an Excel workbook/);
+    expect(() => readXlsx(zipSync({ "hello.txt": strToU8("hi") }))).toThrow(/not an Excel workbook/);
   });
 });
 

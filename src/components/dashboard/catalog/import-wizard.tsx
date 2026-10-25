@@ -9,6 +9,9 @@ import { Alert } from "@/components/ui/page";
 import { tdCode, tdText, th } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
+import { IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, type ImportTable } from "@/lib/import-files";
+import { importSheet, isTemplateHeader, type ImportRow } from "@/lib/import-files/mapping";
+import { ColumnMatcher, MAX_IMPORT_ROWS, type MatcherOptions } from "./column-matcher";
 
 interface RowResult {
   row: number;
@@ -30,66 +33,119 @@ interface ImportResult {
   published: boolean;
   images: { stored: number; failed: { product: string; url: string; reason: string }[] };
 }
+/** The rows being checked, in the import template's columns, and where each came from in the file. */
+interface Sheet {
+  header: string[];
+  rows: string[][];
+  sourceRows: number[];
+}
 
-export function ImportWizard({ canPublish }: { canPublish: boolean }) {
+const csvOf = async (sheet: Sheet) => {
+  const { toCsv } = await import("@/lib/import-files/delimited");
+  return toCsv([sheet.header, ...sheet.rows]);
+};
+
+export function ImportWizard({ canPublish, ...options }: { canPublish: boolean } & MatcherOptions) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
-  const [csv, setCsv] = useState<string | null>(null);
+  const [reading, setReading] = useState<string | null>(null);
+  const [tables, setTables] = useState<ImportTable[] | null>(null);
+  const [sheet, setSheet] = useState<Sheet | null>(null);
   const [report, setReport] = useState<Report | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [publish, setPublish] = useState(false);
   const [busy, setBusy] = useState<"validate" | "commit" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
+  const [readCount, setReadCount] = useState(0);
 
   const choose = async (files: FileList | null) => {
     const file = files?.[0];
     setReport(null);
     setResult(null);
     setError(null);
+    setSheet(null);
+    setTables(null);
     if (!file) return;
-    if (file.size > 5_000_000) return setError("The file is larger than 5 MB — split it into smaller files.");
-    if (/\.xls$/i.test(file.name)) return setError("Old Excel files (.xls) can't be read. In Excel use File → Save As → Excel Workbook (.xlsx), or save as CSV.");
-    const isExcel = /\.xlsx$/i.test(file.name);
-    if (!isExcel && !/\.csv$/i.test(file.name) && file.type !== "text/csv") return setError("Choose an Excel (.xlsx) or CSV file.");
-    let text: string;
-    try {
-      if (isExcel) {
-        const { readXlsxRows, toCsv } = await import("@/lib/xlsx");
-        text = toCsv(readXlsxRows(new Uint8Array(await file.arrayBuffer())));
-      } else text = await file.text();
-    } catch (err) {
-      return setError(errorMessage(err));
-    }
+    if (file.size > MAX_IMPORT_FILE_BYTES) return setError("The file is larger than 40 MB — split it into smaller files.");
     setFileName(file.name);
-    setCsv(text);
-    await validate(text);
+    setReading(`Reading ${file.name}…`);
+    try {
+      const { readImportFile } = await import("@/lib/import-files");
+      const read = await readImportFile(file.name, new Uint8Array(await file.arrayBuffer()), (done, total) => setReading(`Reading ${file.name} — page ${done} of ${total}`));
+      const found = read.tables.filter((t) => t.rows.some((r) => r.some((c) => c.trim())));
+      if (!found.length) throw new Error("No rows found in that file.");
+      // Our own template goes straight to the check; any other layout is matched first.
+      const template = found.find((t) => t.rows.length && isTemplateHeader(t.rows[0]));
+      if (template) {
+        const body = template.rows
+          .slice(1)
+          .map((r, i) => ({ r, n: i + 2 }))
+          .filter(({ r }) => r.some((c) => c.trim()));
+        const next = { header: template.rows[0], rows: body.map((b) => b.r), sourceRows: body.map((b) => b.n) };
+        setSheet(next);
+        await validate(next);
+      } else {
+        setTables(found);
+        setReadCount((n) => n + 1);
+      }
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setReading(null);
+    }
   };
 
-  const validate = async (text = csv) => {
-    if (!text) return;
+  const validate = async (next: Sheet | null = sheet) => {
+    if (!next) return;
     setBusy("validate");
     setError(null);
     try {
-      setReport(await apiFetch<Report>("/api/admin/import/validate", { method: "POST", body: { csv: text } }));
+      setReport(await apiFetch<Report>("/api/admin/import/validate", { method: "POST", body: { csv: await csvOf(next) } }));
     } catch (err) {
+      setReport(null);
       setError(errorMessage(err));
     } finally {
       setBusy(null);
     }
   };
 
+  const checkMatched = async (rows: ImportRow[], sourceRows: number[]) => {
+    const [header, ...body] = importSheet(rows);
+    const next = { header, rows: body, sourceRows };
+    setSheet(next);
+    setResult(null);
+    await validate(next);
+    document.getElementById("import-check")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  /** Rows whose code is already in the catalogue (a new price list from the same company). */
+  const existing = report?.rows.filter((r) => r.messages.some((m) => /already exists/.test(m))) ?? [];
+  const leaveOutExisting = async () => {
+    if (!sheet) return;
+    const drop = new Set(existing.map((r) => r.row - 2));
+    const next = { header: sheet.header, rows: sheet.rows.filter((_, i) => !drop.has(i)), sourceRows: sheet.sourceRows.filter((_, i) => !drop.has(i)) };
+    setSheet(next);
+    if (next.rows.length) await validate(next);
+    else {
+      setReport(null);
+      setError("Every row is already in your catalogue — there is nothing new to import.");
+      document.getElementById("import-upload")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   const commit = async () => {
-    if (!csv) return;
+    if (!sheet) return;
     const photos = report?.photoCount ? ` ${report.photoCount} photo link${report.photoCount > 1 ? "s" : ""} will be downloaded.` : "";
     const where = publish ? "They will go live on the website straight away." : "They will be created as unpublished drafts.";
     if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? ${where}${photos}`)) return;
     setBusy("commit");
     setError(null);
     try {
-      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv, publish } }));
+      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv: await csvOf(sheet), publish } }));
       setReport(null);
-      setCsv(null);
+      setSheet(null);
+      setTables(null);
       setFileName(null);
       if (fileRef.current) fileRef.current.value = "";
     } catch (err) {
@@ -102,79 +158,87 @@ export function ImportWizard({ canPublish }: { canPublish: boolean }) {
 
   const warnings = report?.rows.filter((r) => r.status === "warning").length ?? 0;
   const rows = report ? (onlyProblems ? report.rows.filter((r) => r.status !== "ok") : report.rows) : [];
+  const sourceRow = (r: RowResult) => sheet?.sourceRows[r.row - 2] ?? r.row;
 
   return (
     <div className="space-y-6">
       <ol className="grid overflow-hidden rounded-xl border border-navy-100 bg-white shadow-card md:grid-cols-3 md:divide-x md:divide-navy-100">
-        <Step n={1} title="Download the template" done={false}>
-          <p>One row per variant (size, colour…). Rows with the same product name, brand and category become one product.</p>
-          <a href="/api/admin/import/template" className="mt-2.5 inline-flex items-center gap-1.5 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
-            <FileSpreadsheet className="h-4 w-4 shrink-0" aria-hidden /> om-product-import-template.csv
-          </a>
-        </Step>
-        <Step n={2} title="Fill it in" done={false}>
+        <Step n={1} title="Upload the company's file" done={!!tables || !!sheet || !!result}>
           <p>
-            Use real data from the brand&apos;s catalogue or price list. Upload the Excel file (.xlsx) as it is, or a CSV. From Google Sheets use{" "}
-            <b>File → Download → Microsoft Excel</b>.
+            The price list or catalogue as the company sent it: <b>PDF</b>, Excel (.xlsx, .xls), Word (.docx), OpenOffice (.ods), CSV or text, web page (.html) or JSON. Or fill in our{" "}
+            <a href="/api/admin/import/template" className="inline-flex items-center gap-1 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
+              <FileSpreadsheet className="h-3.5 w-3.5 shrink-0" aria-hidden /> template
+            </a>
+            .
           </p>
         </Step>
-        <Step n={3} title="Upload, check, import" done={!!result}>
-          <p>We check every row first. Nothing is saved until the file has no errors.</p>
+        <Step n={2} title="Match the columns" done={!!sheet || !!result}>
+          <p>Say which column is the name, size, code, MRP and price. We guess from the headings and remember your choices for the next file from the same company.</p>
+        </Step>
+        <Step n={3} title="Check, then import" done={!!result}>
+          <p>Every row is checked first. Nothing is saved until there are no errors.</p>
         </Step>
       </ol>
 
-      <Card>
-        <CardHeader
-          title="Upload file"
-          description={canPublish ? "Products are created as unpublished drafts unless you choose to publish them straight away." : "Imported products are created as unpublished drafts for review."}
-        />
-        <CardBody className="space-y-4">
-          {error && <Alert tone="danger">{error}</Alert>}
-          {result && (
-            <Alert tone="success" title="Import complete">
-              Created {result.createdProducts} products with {result.createdVariants} variants
-              {result.published ? ", published on the website" : ""}.
-              {result.images.stored > 0 && ` ${result.images.stored} photo${result.images.stored > 1 ? "s" : ""} added.`} Find them under{" "}
-              <Link className="font-semibold underline" href={result.published ? "/dashboard/products?status=published" : "/dashboard/products?status=needs_review"}>
-                {result.published ? "Products → Published" : "Products → Needs review"}
-              </Link>
-              .
-            </Alert>
-          )}
-          {result && result.images.failed.length > 0 && (
-            <Alert tone="warning" title={`${result.images.failed.length} photo${result.images.failed.length > 1 ? "s" : ""} could not be added`}>
-              The products were imported; add these photos from the product page instead.
-              <ul className="mt-1.5 list-inside list-disc text-xs">
-                {result.images.failed.slice(0, 20).map((f) => (
-                  <li key={f.url}>
-                    {f.product}: {f.reason}
-                  </li>
-                ))}
-              </ul>
-            </Alert>
-          )}
-          <input
-            ref={fileRef}
-            id="csv-file"
-            type="file"
-            accept=".xlsx,.csv,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            className="sr-only"
-            onChange={(e) => choose(e.target.files)}
+      <div id="import-upload" className="scroll-mt-6">
+        <Card>
+          <CardHeader
+            title="Upload file"
+            description={canPublish ? "Products are created as unpublished drafts unless you choose to publish them straight away." : "Imported products are created as unpublished drafts for review."}
           />
-          <div className="flex flex-wrap items-center gap-3">
-            <Button variant="outline" icon={<Upload className="h-4 w-4" />} onClick={() => fileRef.current?.click()} loading={busy === "validate"}>
-              {fileName ? "Choose another file" : "Choose Excel or CSV file"}
-            </Button>
-            {fileName && <span className="font-mono text-[13px] text-navy-700">{fileName}</span>}
-            {csv && report && (
-              <Button variant="ghost" size="sm" onClick={() => validate()} loading={busy === "validate"}>
-                Re-check
-              </Button>
+          <CardBody className="space-y-4">
+            {error && <Alert tone="danger">{error}</Alert>}
+            {result && (
+              <Alert tone="success" title="Import complete">
+                Created {result.createdProducts} products with {result.createdVariants} variants
+                {result.published ? ", published on the website" : ""}.{result.images.stored > 0 && ` ${result.images.stored} photo${result.images.stored > 1 ? "s" : ""} added.`} Find them under{" "}
+                <Link className="font-semibold underline" href={result.published ? "/dashboard/products?status=published" : "/dashboard/products?status=needs_review"}>
+                  {result.published ? "Products → Published" : "Products → Needs review"}
+                </Link>
+                .
+              </Alert>
             )}
-          </div>
+            {result && result.images.failed.length > 0 && (
+              <Alert tone="warning" title={`${result.images.failed.length} photo${result.images.failed.length > 1 ? "s" : ""} could not be added`}>
+                The products were imported; add these photos from the product page instead.
+                <ul className="mt-1.5 list-inside list-disc text-xs">
+                  {result.images.failed.slice(0, 20).map((f) => (
+                    <li key={f.url}>
+                      {f.product}: {f.reason}
+                    </li>
+                  ))}
+                </ul>
+              </Alert>
+            )}
+            <input ref={fileRef} id="csv-file" type="file" accept={IMPORT_ACCEPT} className="sr-only" onChange={(e) => choose(e.target.files)} />
+            <div className="flex flex-wrap items-center gap-3">
+              <Button variant="outline" icon={<Upload className="h-4 w-4" />} onClick={() => fileRef.current?.click()} loading={!!reading || (busy === "validate" && !tables)}>
+                {fileName ? "Choose another file" : "Choose file"}
+              </Button>
+              {fileName && <span className="break-all font-mono text-[13px] text-navy-700">{fileName}</span>}
+            </div>
+            {reading ? (
+              <p className="text-sm text-navy-600" role="status">
+                {reading}
+              </p>
+            ) : (
+              !fileName && (
+                <p className="text-xs leading-relaxed text-navy-500">
+                  PDF, Excel (.xlsx .xls), Word (.docx), .ods, CSV / text, .html or .json — up to 40 MB. Read in your browser; only the rows you import are sent.
+                </p>
+              )
+            )}
+          </CardBody>
+        </Card>
+      </div>
 
-          {report && (
-            <>
+      {tables && fileName && <ColumnMatcher key={readCount} fileName={fileName} tables={tables} options={options} busy={busy === "validate"} onCheck={checkMatched} />}
+
+      {report && sheet && (
+        <div id="import-check" className="scroll-mt-6">
+          <Card>
+            <CardHeader title="Check" description={tables ? "Change the matching above and check again if something looks wrong." : undefined} />
+            <CardBody className="space-y-4">
               <div className="grid gap-3 sm:grid-cols-4">
                 <Mini label="Products" value={report.productCount} />
                 <Mini label="Variants (rows)" value={report.variantCount} />
@@ -183,7 +247,14 @@ export function ImportWizard({ canPublish }: { canPublish: boolean }) {
               </div>
               {report.errorCount > 0 ? (
                 <Alert tone="danger" title={`${report.errorCount} row${report.errorCount > 1 ? "s need" : " needs"} fixing`}>
-                  Correct the file and upload it again. Nothing has been imported.
+                  {tables ? "Fix the matching above, or correct the file and upload it again." : "Correct the file and upload it again."} Nothing has been imported.
+                  {existing.length > 0 && (
+                    <div className="mt-2">
+                      <Button size="sm" variant="outline" loading={busy === "validate"} onClick={leaveOutExisting}>
+                        Leave out the {existing.length} {existing.length === 1 ? "row" : "rows"} already in your catalogue
+                      </Button>
+                    </div>
+                  )}
                 </Alert>
               ) : (
                 <Alert tone="success" title="Ready to import">
@@ -202,7 +273,7 @@ export function ImportWizard({ canPublish }: { canPublish: boolean }) {
                     </label>
                   )}
                 </div>
-                <Button icon={<ShieldCheck className="h-4 w-4" />} disabled={report.errorCount > 0} loading={busy === "commit"} onClick={commit}>
+                <Button icon={<ShieldCheck className="h-4 w-4" />} disabled={report.errorCount > 0 || report.variantCount > MAX_IMPORT_ROWS} loading={busy === "commit"} onClick={commit}>
                   Import {report.variantCount} variants
                 </Button>
               </div>
@@ -220,7 +291,7 @@ export function ImportWizard({ canPublish }: { canPublish: boolean }) {
                     {rows.map((r) => (
                       <tr key={r.row} className={cn(r.status === "error" && "bg-red-50/60")}>
                         <td className={tdCode}>
-                          <span className="text-navy-500">{r.row}</span>
+                          <span className="text-navy-500">{sourceRow(r)}</span>
                         </td>
                         <td className={tdCode}>{r.sku || "—"}</td>
                         <td className={tdText}>{r.product || "—"}</td>
@@ -243,13 +314,16 @@ export function ImportWizard({ canPublish }: { canPublish: boolean }) {
                   </tbody>
                 </table>
               </div>
-            </>
-          )}
-        </CardBody>
-      </Card>
+            </CardBody>
+          </Card>
+        </div>
+      )}
 
       <Card>
-        <CardHeader title="Columns" description="Required columns are marked *. Use the exact header names from the template." />
+        <CardHeader
+          title="Columns"
+          description="The columns of our import template. A file that uses these exact headings is checked straight away, without matching. Required columns are marked *."
+        />
         <CardBody>
           <dl className="grid gap-x-10 text-sm sm:grid-cols-2">
             {COLUMNS.map(([k, v]) => (
@@ -308,7 +382,9 @@ function Mini({ label, value, tone }: { label: string; value: number; tone?: "re
   return (
     <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
       <div className="label-mono text-navy-500">{label}</div>
-      <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>{value}</div>
+      <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>
+        {value}
+      </div>
     </div>
   );
 }
