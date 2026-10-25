@@ -26,7 +26,7 @@ export const nodeCanvasKit: CanvasKit = {
 /** The recognition engine and decoders from node_modules, as the browser gets them from /ocr/ and /pdfjs/. */
 export const nodeReadOptions = (extra: ReadOptions = {}): ReadOptions => ({
   canvasKit: nodeCanvasKit,
-  ocr: { langPath: join(root, "node_modules/@tesseract.js-data/eng/4.0.0_best_int") },
+  ocr: { langPath: join(root, "public/ocr") },
   pdfWasmUrl: join(root, "node_modules/pdfjs-dist/wasm") + "/",
   ...extra,
 });

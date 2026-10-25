@@ -49,3 +49,8 @@ export function trimTable(rows: string[][]): string[][] {
 export function attr(tag: string, name: string): string | null {
   return tag.match(new RegExp(`(?:^|\\s)${name.replace(/[.*+?^${}()|[\]\\:]/g, "\\$&")}="([^"]*)"`))?.[1] ?? null;
 }
+
+/** Devanagari (०–९) and Gujarati (૦–૯) digits to 0–9; price lists in Hindi and Gujarati sometimes use them. */
+export function toAsciiDigits(s: string): string {
+  return s.replace(/[\u0966-\u096F\u0AE6-\u0AEF]/g, (c) => String(c.charCodeAt(0) - (c.charCodeAt(0) >= 0x0ae6 ? 0x0ae6 : 0x0966)));
+}

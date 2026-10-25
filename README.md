@@ -109,7 +109,7 @@ PostgreSQL 16
 | `src/server/` | Server-only: DB, auth, audit, settings, services, payments providers, PDF |
 | `src/components/` | UI kit (`ui/`), document view, POS, dashboard and public components |
 | `tests/unit`, `tests/integration`, `tests/e2e` | Vitest unit tests, Vitest tests against real PostgreSQL, Playwright browser tests |
-| `assets/fonts/` | DejaVu Sans (has the ₹ glyph) for PDFs, with its licence |
+| `assets/fonts/` | DejaVu Sans (has the ₹ glyph) for PDFs, and Noto Sans Devanagari and Gujarati for Hindi and Gujarati names on bills, with their licences |
 
 ---
 
@@ -246,13 +246,19 @@ Upload the file as the company sent it. Files are read in the browser (`src/lib/
 | CSV, TSV, `.txt`, `.prn` | Comma, semicolon, tab or `\|`, UTF-8, UTF-16 or Windows-1252 |
 | JSON | A list of records |
 
-| Scanned PDFs, photos (`.jpg`, `.png`, `.webp`, `.gif`, `.bmp`) | Text recognition with [Tesseract](https://github.com/tesseract-ocr/tesseract) (through [tesseract.js](https://github.com/naptha/tesseract.js)), English, in a web worker in the browser — see below |
+| Scanned PDFs, photos (`.jpg`, `.png`, `.webp`, `.gif`, `.bmp`) | Text recognition with [Tesseract](https://github.com/tesseract-ocr/tesseract) (through [tesseract.js](https://github.com/naptha/tesseract.js)), English, Hindi or Gujarati (chosen on the import page), in a web worker in the browser — see below |
 
 Old Word `.doc`, Excel `.xlsb`, Apple Numbers and `.tiff`/`.heic` files are refused with the steps to save them in a format that works.
 
 **Scans and photos.** A PDF page that is one picture covering most of the page, with almost no text of its own, is a scan; a picture file is read the same way. Each page is straightened (the tilt of the text lines is measured and undone), turned upright if it was fed in sideways or upside down, evened out if a phone photo has shadows, enlarged or reduced to the size Tesseract reads best, and the table's border lines are found and painted out (they make the engine drop or garble words next to them) and then used to place cells, like the borders of a text PDF. Every number is read a second time on its own, cut out and limited to digits, which recovers most lost decimal points. The result goes into the same table rebuilding as a text PDF. It takes about 10–20 seconds a page, with a progress message and a Cancel button. A photo catalogue — pictures with a caption under each — is *not* sent to recognition: its text is read directly.
 
-Recognition is good, not perfect (a 7 for a 1, an inch mark read as `%`), so for scans the import screen says so, marks every price that does not fit its neighbouring sizes or the usual dealer share of the MRP (a lost decimal point turns 11.5 into 115) in a "Check" column, and always saves the products as unpublished drafts. Only English text is recognised; the engine's files are served from this site (`public/ocr/`, copied from `node_modules` by `scripts/copy-engine-files.mjs` before `next dev` and `next build`, not committed), so nothing is downloaded from another address and the file never leaves the computer. WebAssembly, which the engine needs, is allowed by the content security policy only for `/ocr/*` and the import page (`next.config.ts`).
+Recognition is good, not perfect (a 7 for a 1, an inch mark read as `%`), so for scans the import screen says so, marks every price that does not fit its neighbouring sizes or the usual dealer share of the MRP (a lost decimal point turns 11.5 into 115) in a "Check" column, and always saves the products as unpublished drafts. The engine's files are served from this site (`public/ocr/`, copied from `node_modules` by `scripts/copy-engine-files.mjs` before `next dev` and `next build`, not committed), so nothing is downloaded from another address and the file never leaves the computer. WebAssembly, which the engine needs, is allowed by the content security policy only for `/ocr/*` and the import page (`next.config.ts`).
+
+**Hindi and Gujarati.** The import page has a "Language of scans and photos" choice — English (the default), English + Hindi, English + Gujarati, or all three — remembered in the browser; changing it re-reads a scan that is already loaded. English is always read with the other language because price lists mix them (item codes, prices and sizes are Latin). The combined engine has two known weaknesses, so the words it is unsure of get a second reading, each cut out and read on its own (`src/lib/import-files/reread.ts`): a Hindi or Gujarati phrase with a weak word is read again by the engine for that script alone (the combined one turns joined letters such as एल्बो into English nonsense like "gear"), and item codes are read again limited to Latin letters, digits and `- . / _` (so `GJ-101` does not come out as `62-101` or `GJ101`). A second reading replaces the first only when it is plainly better. Both single-script engines are started only when a Hindi or Gujarati language is chosen, so a scan takes longer and uses more memory than an English one (a page of the test scans takes about ten seconds on a computer; a phone is slower). The recognition data (`hin` 1.4 MB, `guj` 1.2 MB, on top of English's 3 MB) is downloaded from this site the first time, then kept by the browser.
+
+The rest of the import copes with Hindi and Gujarati names too: Hindi and Gujarati column headings (नाम / નામ, कोड / કોડ, एमआरपी / એમઆરપી, दर / ભાવ, जीएसटी / જીએસટી …) and units (नग / નંગ, किलो / કિલો, मीटर / મીટર, सेट / સેટ …) are matched, Hindi and Gujarati digits (१२३ / ૧૨૩) are read as numbers, and `रु` / `રૂ` before a price is dropped. A name with no Latin letters or digits still gets a page address and item code (the brand and item code, or a short code worked out from the text) so that products never end up without an address or with two the same. Digits written inside a product *name* are left as they are.
+
+On bills, a name containing Devanagari or Gujarati letters is printed in Noto Sans Devanagari or Noto Sans Gujarati ([SIL Open Font Licence](assets/fonts/LICENSE-Noto-OFL.txt); both include Latin letters, digits and ₹) and everything else in DejaVu Sans. A single string that mixes Hindi and Gujarati letters prints the part in the other script as empty boxes — the public website relies on the visitor's own fonts for these scripts.
 
 Then **match the columns**: pick the sheet or page (a PDF also offers "All pages") and the heading row, say which column is the name, size, code, MRP, selling and dealer price, GST, HSN, unit and so on (guessed from the headings), and fill in what is the same for every row — category, brand, unit, GST and HSN. Rules cover common price-list layouts: a heading row above each product's sizes becomes the product name; repeated page headers and footers are left out; the selling price can be the MRP or MRP less a discount; the cost can come from a dealer price column (with or without GST) or MRP less the dealer discount; item codes can be made from the brand, name and size when the file has none. A preview shows the rows that will be checked, and the choices are remembered for the next file with the same columns. A file that already uses the template's headings skips this step.
 
@@ -523,7 +529,7 @@ CSV export needs `reports.export`. Profit, costs and margins need `reports.profi
 
 ```bash
 npm run test:unit          # pricing engine, money, GST/India helpers, roles, CSV, import file readers (no DB)
-npm run test:ocr           # scanned files through the real text recognition engine (~2 minutes, no DB)
+npm run test:ocr           # scanned files (English, Hindi, Gujarati) through the real text recognition engine (~3 minutes, no DB)
 npm run test:integration   # real PostgreSQL in TEST_DATABASE_URL — rebuilt from migrations, then wiped
 npm test                   # all three
 npm run build && npm run test:e2e   # Playwright browser tests (desktop + mobile)

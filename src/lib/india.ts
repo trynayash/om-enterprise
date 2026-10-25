@@ -227,6 +227,19 @@ export function slugify(input: string): string {
     .slice(0, 80);
 }
 
+/**
+ * Like slugify, but a name with no Latin letters or digits (a Hindi or Gujarati name) still gets an
+ * address: "<fallback>-" and a short code worked out from the text, so the same name always gives the
+ * same address and different names differ.
+ */
+export function slugOr(input: string, fallback: string): string {
+  const slug = slugify(input);
+  if (slug) return slug;
+  let hash = 5381;
+  for (const ch of input.normalize("NFC").trim()) hash = ((hash * 33) ^ ch.codePointAt(0)!) >>> 0;
+  return `${fallback}-${hash.toString(36)}`;
+}
+
 export function whatsappLink(number: string, text?: string): string {
   const digits = number.replace(/\D/g, "");
   const full = digits.length === 10 ? `91${digits}` : digits;

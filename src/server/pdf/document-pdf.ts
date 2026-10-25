@@ -1,7 +1,9 @@
 import "server-only";
 /**
  * A4 PDF for any issued document, rendered ONLY from its frozen snapshot.
- * Uses bundled DejaVu Sans (has the ₹ glyph; redistributable licence in assets/fonts).
+ * Uses bundled DejaVu Sans (has the ₹ glyph; redistributable licence in assets/fonts). DejaVu has no
+ * Hindi or Gujarati letters, so text that contains any (customer and product names) is set in the
+ * Noto Sans font of that script, which also has the Latin letters, digits and ₹.
  */
 import path from "node:path";
 import PDFDocument from "pdfkit";
@@ -17,6 +19,58 @@ const LINE = "#D7DCE3";
 const FONT_DIR = path.join(process.cwd(), "assets", "fonts");
 const REGULAR = path.join(FONT_DIR, "DejaVuSans.ttf");
 const BOLD = path.join(FONT_DIR, "DejaVuSans-Bold.ttf");
+const INDIC_FONTS = {
+  DV: path.join(FONT_DIR, "NotoSansDevanagari-Regular.ttf"),
+  DVB: path.join(FONT_DIR, "NotoSansDevanagari-Bold.ttf"),
+  GJ: path.join(FONT_DIR, "NotoSansGujarati-Regular.ttf"),
+  GJB: path.join(FONT_DIR, "NotoSansGujarati-Bold.ttf"),
+};
+const DEVANAGARI = /[\u0900-\u097F]/g;
+const GUJARATI = /[\u0A80-\u0AFF]/g;
+
+/**
+ * Makes text drawing and measuring pick the Hindi or Gujarati font for any string that holds that
+ * script (whichever has more letters in it), then go back to the current font. A whole string uses
+ * one font, so wrapping, alignment and row heights work as for any other text.
+ */
+export function registerIndicFonts(doc: PDFKit.PDFDocument) {
+  for (const [name, file] of Object.entries(INDIC_FONTS)) doc.registerFont(name, file);
+  const select = doc.font.bind(doc) as (name: string) => PDFKit.PDFDocument;
+  // The font the caller chose (to know regular from bold) and the one in use right now: pdfkit
+  // measures words while it draws, so these calls nest.
+  let chosen = "R";
+  let active = "R";
+  const switchTo = (name: string) => {
+    active = name;
+    return select(name);
+  };
+  const target = doc as unknown as Record<string, unknown>;
+  target.font = (name: string) => {
+    chosen = name;
+    return switchTo(name);
+  };
+  const fontFor = (value: unknown): string | null => {
+    if (typeof value !== "string") return null;
+    const devanagari = value.match(DEVANAGARI)?.length ?? 0;
+    const gujarati = value.match(GUJARATI)?.length ?? 0;
+    if (!devanagari && !gujarati) return null;
+    return `${gujarati > devanagari ? "GJ" : "DV"}${chosen === "B" ? "B" : ""}`;
+  };
+  for (const method of ["text", "heightOfString", "widthOfString"]) {
+    const original = (target[method] as (...args: unknown[]) => unknown).bind(doc);
+    target[method] = (...args: unknown[]) => {
+      const font = fontFor(args[0]);
+      if (!font) return original(...args);
+      const before = active;
+      switchTo(font);
+      try {
+        return original(...args);
+      } finally {
+        switchTo(before);
+      }
+    };
+  }
+}
 
 export interface PdfOptions {
   status: "issued" | "cancelled";
@@ -50,6 +104,7 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   const doc = new PDFDocument({ size: "A4", margin: 36, bufferPages: true, info: { Title: `${snap.title} ${snap.number}`, Author: snap.seller.name } });
   doc.registerFont("R", REGULAR);
   doc.registerFont("B", BOLD);
+  registerIndicFonts(doc);
   doc.font("R");
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));
@@ -66,8 +121,16 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     y += 14;
   }
   drawLogo(doc, L, y, 46);
-  doc.font("B").fontSize(16).fillColor(NAVY).text(snap.seller.name, L + 56, y + 2, { width: 270 });
-  doc.font("B").fontSize(7.5).fillColor(GOLD).text(snap.seller.tagline.toUpperCase(), L + 56, y + 22, { width: 270, characterSpacing: 1 });
+  doc
+    .font("B")
+    .fontSize(16)
+    .fillColor(NAVY)
+    .text(snap.seller.name, L + 56, y + 2, { width: 270 });
+  doc
+    .font("B")
+    .fontSize(7.5)
+    .fillColor(GOLD)
+    .text(snap.seller.tagline.toUpperCase(), L + 56, y + 22, { width: 270, characterSpacing: 1 });
   doc.font("R").fontSize(8).fillColor(GREY);
   let hy = y + 34;
   for (const line of snap.seller.addressLines) {
@@ -77,7 +140,10 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   doc.text(`Phone/WhatsApp: ${formatPhone(snap.seller.phone)}${snap.seller.email ? `  ·  ${snap.seller.email}` : ""}`, L + 56, hy, { width: 300 });
   hy += 10;
   if (snap.seller.gstin) {
-    doc.font("B").fillColor(NAVY).text(`GSTIN: ${snap.seller.gstin}`, L + 56, hy);
+    doc
+      .font("B")
+      .fillColor(NAVY)
+      .text(`GSTIN: ${snap.seller.gstin}`, L + 56, hy);
     hy += 10;
   }
 
@@ -100,7 +166,11 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   if (snap.showTax) meta.push(["Reverse charge", snap.reverseCharge ? "Yes" : "No"]);
   for (const [k, v] of meta) {
     doc.font("R").fontSize(8).fillColor(GREY).text(k, tx, ty, { width: 70, lineBreak: false });
-    doc.font("B").fontSize(8).fillColor(NAVY).text(v, tx + 70, ty, { width: 130, align: "right" });
+    doc
+      .font("B")
+      .fontSize(8)
+      .fillColor(NAVY)
+      .text(v, tx + 70, ty, { width: 130, align: "right" });
     ty = Math.max(ty + 11, doc.y + 1);
   }
   if (opts.copyLabel) {
@@ -113,9 +183,17 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
 
   /* ---------- Buyer ---------- */
   const b = snap.buyer;
-  doc.font("B").fontSize(8).fillColor(GOLD).text(snap.docType === "quotation" ? "QUOTATION FOR" : "BILL TO", L, y);
+  doc
+    .font("B")
+    .fontSize(8)
+    .fillColor(GOLD)
+    .text(snap.docType === "quotation" ? "QUOTATION FOR" : "BILL TO", L, y);
   y += 11;
-  doc.font("B").fontSize(10).fillColor(NAVY).text(b ? (b.businessName ? `${b.businessName} (${b.name})` : b.name) : "Cash sale", L, y, { width: W / 2 });
+  doc
+    .font("B")
+    .fontSize(10)
+    .fillColor(NAVY)
+    .text(b ? (b.businessName ? `${b.businessName} (${b.name})` : b.name) : "Cash sale", L, y, { width: W / 2 });
   y += 13;
   doc.font("R").fontSize(8).fillColor(GREY);
   if (b) {
@@ -206,7 +284,10 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     if (idx % 2 === 1) doc.rect(L, y - 2, W, h).fill("#F5F7FA");
     let x = L;
     for (const c of cols) {
-      doc.font(c.key === "desc" ? "R" : "R").fillColor(c.key === "total" ? NAVY : "#1F2937").text(cells[c.key], x + 3, y + 1, { width: c.w - 6, align: c.align });
+      doc
+        .font(c.key === "desc" ? "R" : "R")
+        .fillColor(c.key === "total" ? NAVY : "#1F2937")
+        .text(cells[c.key], x + 3, y + 1, { width: c.w - 6, align: c.align });
       x += c.w;
     }
     y += h;
@@ -241,7 +322,11 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   for (const [k, v, strong] of rows) {
     if (strong) {
       doc.rect(totalsX - 4, ry - 3, 214, 18).fill(NAVY);
-      doc.font("B").fontSize(10).fillColor("#FFFFFF").text(k, totalsX, ry + 1, { width: 100 });
+      doc
+        .font("B")
+        .fontSize(10)
+        .fillColor("#FFFFFF")
+        .text(k, totalsX, ry + 1, { width: 100 });
       doc.text(v, totalsX + 100, ry + 1, { width: 106, align: "right" });
       ry += 20;
     } else {
@@ -250,7 +335,11 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
       ry += 13;
     }
   }
-  doc.font("R").fontSize(7.5).fillColor(GREY).text(t.amountInWords, totalsX - 4, ry, { width: 214, align: "right" });
+  doc
+    .font("R")
+    .fontSize(7.5)
+    .fillColor(GREY)
+    .text(t.amountInWords, totalsX - 4, ry, { width: 214, align: "right" });
   ry = doc.y + 4;
 
   // Left column: tax summary + payments
@@ -280,14 +369,21 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     ly += 6;
   }
   if (snap.docType !== "quotation") {
-    doc.font("B").fontSize(7.5).fillColor(GOLD).text(snap.docType === "credit_note" ? "REFUND" : "PAYMENT", L, ly);
+    doc
+      .font("B")
+      .fontSize(7.5)
+      .fillColor(GOLD)
+      .text(snap.docType === "credit_note" ? "REFUND" : "PAYMENT", L, ly);
     ly += 11;
     doc.font("R").fontSize(8).fillColor("#1F2937");
     for (const p of snap.payments) {
       doc.text(`${p.direction === "refund" ? "Refund" : "Received"} · ${p.method.toUpperCase()}${p.reference ? ` · Ref ${p.reference}` : ""} · ${formatINR(p.amount)}`, L, ly, { width: W - 230 });
       ly = doc.y + 1;
     }
-    doc.font("B").fillColor(NAVY).text(`Status: ${snap.paymentStatus}${Number(snap.balanceDue) ? ` · Balance due ${formatINR(snap.balanceDue)}` : ""}`, L, ly, { width: W - 230 });
+    doc
+      .font("B")
+      .fillColor(NAVY)
+      .text(`Status: ${snap.paymentStatus}${Number(snap.balanceDue) ? ` · Balance due ${formatINR(snap.balanceDue)}` : ""}`, L, ly, { width: W - 230 });
     ly = doc.y + 6;
   }
   y = Math.max(ly, ry) + 10;
@@ -315,8 +411,17 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     fy = doc.y + 4;
   }
   doc.font("R").fontSize(7.5).fillColor(GREY).text(`Prepared by ${snap.issuedBy}. Computer-generated document.`, L, fy, { width: leftW });
-  doc.font("B").fontSize(8).fillColor(NAVY).text(snap.signatoryLabel, R - 190, y + 40, { width: 190, align: "right" });
-  doc.moveTo(R - 150, y + 36).lineTo(R, y + 36).lineWidth(0.5).strokeColor(GREY).stroke();
+  doc
+    .font("B")
+    .fontSize(8)
+    .fillColor(NAVY)
+    .text(snap.signatoryLabel, R - 190, y + 40, { width: 190, align: "right" });
+  doc
+    .moveTo(R - 150, y + 36)
+    .lineTo(R, y + 36)
+    .lineWidth(0.5)
+    .strokeColor(GREY)
+    .stroke();
   y = Math.max(doc.y, y + 60) + 6;
   if (snap.footerNote) doc.font("R").fontSize(8).fillColor(GOLD).text(snap.footerNote, L, y, { width: W, align: "center" });
 
@@ -333,13 +438,26 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     marks.forEach(([text, color], k) => {
       doc.save();
       doc.rotate(-30, { origin: [doc.page.width / 2, doc.page.height / 2] });
-      doc.font("B").fontSize(text.length > 20 ? 26 : 70).fillColor(color).opacity(0.13).text(text, 0, doc.page.height / 2 - 30 + k * 80, { width: doc.page.width, align: "center" });
+      doc
+        .font("B")
+        .fontSize(text.length > 20 ? 26 : 70)
+        .fillColor(color)
+        .opacity(0.13)
+        .text(text, 0, doc.page.height / 2 - 30 + k * 80, { width: doc.page.width, align: "center" });
       doc.restore();
       doc.opacity(1);
     });
-    doc.font("R").fontSize(7).fillColor(GREY).text(`${snap.number} · Page ${i - range.start + 1} of ${range.count}`, L, doc.page.height - 26, { width: W, align: "right", lineBreak: false });
+    doc
+      .font("R")
+      .fontSize(7)
+      .fillColor(GREY)
+      .text(`${snap.number} · Page ${i - range.start + 1} of ${range.count}`, L, doc.page.height - 26, { width: W, align: "right", lineBreak: false });
     if (opts.status === "cancelled" && opts.cancelReason) {
-      doc.font("B").fontSize(7).fillColor("#C0392B").text(`Cancelled: ${opts.cancelReason}`, L, doc.page.height - 26, { width: W / 2, lineBreak: false });
+      doc
+        .font("B")
+        .fontSize(7)
+        .fillColor("#C0392B")
+        .text(`Cancelled: ${opts.cancelReason}`, L, doc.page.height - 26, { width: W / 2, lineBreak: false });
     }
     doc.page.margins.bottom = bottomMargin;
   }

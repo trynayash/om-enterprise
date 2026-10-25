@@ -10,6 +10,7 @@ import {
   istStartOfDay,
   normalizeMobile,
   slugify,
+  slugOr,
   stateName,
   validateGstin,
   whatsappLink,
@@ -92,5 +93,14 @@ describe("contact helpers", () => {
   it("slugifies and names states", () => {
     expect(slugify("CPVC Pipes & Fittings")).toBe("cpvc-pipes-fittings");
     expect(stateName("24")).toBe("Gujarat");
+  });
+  it("gives a name with no Latin letters (Hindi, Gujarati) a stable, distinct address", () => {
+    expect(slugOr("CPVC Elbow 90°", "product")).toBe("cpvc-elbow-90");
+    const hindi = slugOr("बॉल वाल्व", "product");
+    const gujarati = slugOr("બોલ વાલ્વ", "product");
+    expect(hindi).toMatch(/^product-[0-9a-z]+$/);
+    expect(slugOr("बॉल वाल्व", "product")).toBe(hindi);
+    expect(gujarati).not.toBe(hindi);
+    expect(slugOr("", "brand")).toMatch(/^brand-[0-9a-z]+$/);
   });
 });

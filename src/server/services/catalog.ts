@@ -18,7 +18,7 @@ import {
 import { audit, diff } from "@/server/audit";
 import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
 import { conflict, forbidden, invalid, notFound } from "@/server/errors";
-import { slugify } from "@/lib/india";
+import { slugOr } from "@/lib/india";
 import { D } from "@/lib/money";
 import {
   getActiveCosts,
@@ -113,7 +113,7 @@ export async function createCategory(actor: Actor, input: CategoryInput) {
     }
     const [row] = await tx
       .insert(categories)
-      .values({ ...input, slug: input.slug || slugify(input.name) })
+      .values({ ...input, slug: input.slug || slugOr(input.name, "category") })
       .returning();
     await audit(tx, auditActorOf(actor), { action: "category.create", entityType: "category", entityId: row.id, summary: `Created category ${row.name}` });
     return row;
@@ -161,7 +161,7 @@ export async function createBrand(actor: Actor, input: { name: string; manufactu
   requirePermission(actor, "catalog.create");
   const db = getDb();
   return db.transaction(async (tx) => {
-    const [row] = await tx.insert(brands).values({ ...input, slug: slugify(input.name) }).returning();
+    const [row] = await tx.insert(brands).values({ ...input, slug: slugOr(input.name, "brand") }).returning();
     await audit(tx, auditActorOf(actor), { action: "brand.create", entityType: "brand", entityId: row.id, summary: `Created brand ${row.name}` });
     return row;
   });
@@ -175,7 +175,7 @@ export async function updateBrand(actor: Actor, id: string, input: Partial<{ nam
     if (!before) throw notFound("Brand");
     const [row] = await tx
       .update(brands)
-      .set({ ...input, ...(input.name ? { slug: slugify(input.name) } : {}) })
+      .set({ ...input, ...(input.name ? { slug: slugOr(input.name, "brand") } : {}) })
       .where(eq(brands.id, id))
       .returning();
     await audit(tx, auditActorOf(actor), {
@@ -215,7 +215,7 @@ export interface ProductInput {
 }
 
 async function uniqueSlug(tx: Tx, base: string, excludeId?: string): Promise<string> {
-  const root = slugify(base) || "product";
+  const root = slugOr(base, "product");
   for (let i = 0; i < 50; i++) {
     const candidate = i === 0 ? root : `${root}-${i + 1}`;
     const rows = await tx.select({ id: products.id }).from(products).where(eq(products.slug, candidate));

@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/page";
+import { Label, Select } from "@/components/ui/field";
 import { tdCode, tdText, th } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
-import { CANCELLED, IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, type ImportTable, type ReadProgress } from "@/lib/import-files";
+import { CANCELLED, IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, OCR_LANGUAGE_CHOICES, type ImportTable, type ReadProgress } from "@/lib/import-files";
 import { importSheet, isTemplateHeader, type ImportRow } from "@/lib/import-files/mapping";
 import { ColumnMatcher, MAX_IMPORT_ROWS, type MatcherOptions } from "./column-matcher";
+import { chooseScanLanguage, useScanLanguage } from "./scan-language";
 
 interface RowResult {
   row: number;
@@ -43,9 +45,11 @@ interface Sheet {
 /** What the page says while a file is read. A scanned page takes seconds, so it says so. */
 function progressMessage(name: string, p: ReadProgress): string {
   if (p.stage === "page") return `Reading ${name} — page ${p.done} of ${p.total}`;
-  if (p.stage === "engine") return `Getting text recognition ready${p.progress < 1 ? ` (${Math.round(p.progress * 100)}%)` : ""} — the first time, it downloads about 7 MB from this site.`;
+  if (p.stage === "engine") return `Getting text recognition ready${p.progress < 1 ? ` (${Math.round(p.progress * 100)}%)` : ""} — the first time, it downloads 7–10 MB from this site.`;
   return `Reading the scan — page ${Math.min(p.done + 1, p.total)} of ${p.total}. Text recognition takes about 10–20 seconds a page.`;
 }
+
+const languageChoice = (id: string) => OCR_LANGUAGE_CHOICES.find((c) => c.id === id) ?? OCR_LANGUAGE_CHOICES[0];
 
 const csvOf = async (sheet: Sheet) => {
   const { toCsv } = await import("@/lib/import-files/delimited");
@@ -66,11 +70,16 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
   const [onlyProblems, setOnlyProblems] = useState(false);
   const [readCount, setReadCount] = useState(0);
   /** The file was a scan or photo, read with text recognition. */
-  const [scanned, setScanned] = useState<{ confidence: number } | null>(null);
+  const [scanned, setScanned] = useState<{ confidence: number; language: string } | null>(null);
+  /** The language of scans and photos (an id of OCR_LANGUAGE_CHOICES), remembered in this browser. */
+  const language = useScanLanguage();
   const cancelRef = useRef<AbortController | null>(null);
+  /** The file being worked on, kept so that a scan can be read again in another language. */
+  const loaded = useRef<File | null>(null);
 
   const choose = async (files: FileList | null) => {
     const file = files?.[0];
+    loaded.current = null;
     setReport(null);
     setResult(null);
     setError(null);
@@ -79,16 +88,31 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
     setScanned(null);
     if (!file) return;
     if (file.size > MAX_IMPORT_FILE_BYTES) return setError("The file is larger than 40 MB — split it into smaller files.");
+    loaded.current = file;
+    await open(file, language);
+  };
+
+  const open = async (file: File, languageId: string) => {
+    setReport(null);
+    setResult(null);
+    setError(null);
+    setSheet(null);
+    setTables(null);
+    setScanned(null);
     setFileName(file.name);
     setReading(`Reading ${file.name}…`);
     const cancel = new AbortController();
     cancelRef.current = cancel;
     try {
       const { readImportFile } = await import("@/lib/import-files");
-      const read = await readImportFile(file.name, new Uint8Array(await file.arrayBuffer()), { signal: cancel.signal, onProgress: (p) => setReading(progressMessage(file.name, p)) });
+      const read = await readImportFile(file.name, new Uint8Array(await file.arrayBuffer()), {
+        signal: cancel.signal,
+        languages: languageChoice(languageId).languages,
+        onProgress: (p) => setReading(progressMessage(file.name, p)),
+      });
       const found = read.tables.filter((t) => t.rows.some((r) => r.some((c) => c.trim())));
       if (!found.length) throw new Error("No rows found in that file.");
-      if (read.scanned) setScanned({ confidence: read.confidence ?? 0 });
+      if (read.scanned) setScanned({ confidence: read.confidence ?? 0, language: languageChoice(languageId).label });
       // Our own template goes straight to the check; any other layout is matched first. Text read
       // from a scan is always matched and looked over first.
       const template = read.scanned ? undefined : found.find((t) => t.rows.length && isTemplateHeader(t.rows[0]));
@@ -106,6 +130,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
       }
     } catch (err) {
       if (cancel.signal.aborted || (err instanceof Error && err.message === CANCELLED)) {
+        loaded.current = null;
         setFileName(null);
         if (fileRef.current) fileRef.current.value = "";
       } else setError(errorMessage(err));
@@ -113,6 +138,15 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
       cancelRef.current = null;
       setReading(null);
     }
+  };
+
+  /** A scan already read is read again in the new language, which starts the matching and the check over. */
+  const changeLanguage = (id: string) => {
+    const file = loaded.current;
+    const again = !!file && !!scanned && !reading;
+    if (again && report && !confirm(`Read the scan again as ${languageChoice(id).label}? The matching and the check start over.`)) return;
+    chooseScanLanguage(id);
+    if (again) void open(file, id);
   };
 
   const validate = async (next: Sheet | null = sheet) => {
@@ -168,6 +202,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
       setSheet(null);
       setTables(null);
       setScanned(null);
+      loaded.current = null;
       setFileName(null);
       if (fileRef.current) fileRef.current.value = "";
     } catch (err) {
@@ -245,6 +280,17 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
                 </Button>
               )}
             </div>
+            <div className="max-w-sm">
+              <Label htmlFor="scan-language">Language of scans and photos</Label>
+              <Select id="scan-language" value={language} onChange={(e) => changeLanguage(e.target.value)} disabled={!!reading}>
+                {OCR_LANGUAGE_CHOICES.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.label}
+                  </option>
+                ))}
+              </Select>
+              <p className="mt-1 text-xs text-navy-500">Only used for scanned PDFs and photos. Each added language makes reading a page slower, so pick only what the file needs.</p>
+            </div>
             {reading ? (
               <p className="text-sm text-navy-600" role="status">
                 {reading}
@@ -252,7 +298,8 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
             ) : (
               !fileName && (
                 <p className="text-xs leading-relaxed text-navy-500">
-                  PDF (also scans), Excel (.xlsx .xls), Word (.docx), .ods, CSV / text, .html, .json, or a photo (.jpg .png) — up to 40 MB. Read in your browser; only the rows you import are sent.
+                  PDF (also scans), Excel (.xlsx .xls), Word (.docx), .ods, CSV / text, .html, .json, or a photo (.jpg .png) — English, Hindi or Gujarati, up to 40 MB. Read in your browser; only the
+                  rows you import are sent.
                 </p>
               )
             )}
@@ -275,7 +322,8 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
               </div>
               {scanned && (
                 <Alert tone="warning" title="Read from a scan">
-                  Prices and codes were read by text recognition. Products are saved as unpublished drafts — compare each price with the original before you publish.
+                  Prices and codes were read by text recognition as {scanned.language}. If the words look wrong, choose the right language above and the scan is read again. Products are saved as
+                  unpublished drafts — compare each price with the original before you publish.
                 </Alert>
               )}
               {report.errorCount > 0 ? (

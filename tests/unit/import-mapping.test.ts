@@ -250,3 +250,73 @@ describe("suspectPrices", () => {
     expect(suspectPrices(rows)).toEqual([]);
   });
 });
+
+describe("Hindi and Gujarati price lists", () => {
+  const hindi = [
+    ["चौधरी पाइप्स प्रा. लि."],
+    ["क्र.सं.", "कोड", "विवरण", "साइज़", "एमआरपी (₹)", "डीलर रेट", "जीएसटी %", "इकाई"],
+    ["१", "TL-011", "सीपीवीसी एल्बो 90°", "15 मिमी", "₹ १,२५०.५०", "रु. 900", "१८%", "नग"],
+    ["२", "TL-012", "सीपीवीसी एल्बो 90°", "20 मिमी", "1,450/-", "1050", "18", "मीटर"],
+  ];
+  const gujarati = [
+    ["ક્રમ", "કોડ", "વિગત", "સાઇઝ", "એમઆરપી", "ડીલર ભાવ", "જીએસટી %", "એકમ"],
+    ["૧", "TL-011", "બોલ વાલ્વ", "15 mm", "૪૫૦", "રૂ. ૩૨૦", "૧૮", "નંગ"],
+  ];
+
+  it("finds the heading row and guesses the columns from Hindi headings", () => {
+    expect(detectHeaderRow(hindi)).toBe(1);
+    expect(guessColumns(hindi[1], hindi.slice(2))).toEqual({ sku: 1, product_name: 2, variant: 3, mrp: 4, purchase_cost: 5, gst_rate: 6, unit: 7 });
+  });
+
+  it("and from Gujarati headings", () => {
+    expect(detectHeaderRow(gujarati)).toBe(0);
+    expect(guessColumns(gujarati[0], gujarati.slice(1))).toEqual({ sku: 1, product_name: 2, variant: 3, mrp: 4, purchase_cost: 5, gst_rate: 6, unit: 7 });
+  });
+
+  it("reads native digits, rupee words and Indian number formats", () => {
+    expect(parseAmount("₹ १,२५०.५०")).toBe("1250.5");
+    expect(parseAmount("रु. 900")).toBe("900");
+    expect(parseAmount("રૂ. ૩૨૦")).toBe("320");
+    expect(parseAmount("1,450/-")).toBe("1450");
+    expect(parsePercent("१८%")).toBe("18");
+    expect(parsePercent("૧૨")).toBe("12");
+    expect(cleanSku("TL-०११")).toBe("TL-011");
+  });
+
+  it("maps Hindi and Gujarati unit names to the shop's units", () => {
+    expect(normalizeUnit("नग", UNITS)).toBe("nos");
+    expect(normalizeUnit("मीटर", UNITS)).toBe("m");
+    expect(normalizeUnit("सेट", UNITS)).toBe("set");
+    expect(normalizeUnit("નંગ", UNITS)).toBe("nos");
+    expect(normalizeUnit("લિટર", UNITS)).toBe("ltr");
+    expect(normalizeUnit("કાર્ટન", UNITS)).toBe("box");
+    expect(normalizeUnit("अज्ञात", UNITS)).toBe("");
+  });
+
+  it("builds import rows from a Hindi list, keeping the Hindi names", () => {
+    const columns = guessColumns(hindi[1], hindi.slice(2));
+    const out = buildImportRows(hindi, 1, { ...base, columns, costFrom: "column", skuFrom: "column", sellingFrom: "mrp" }, UNITS);
+    expect(out.rows.map((r) => [r.product_name, r.sku, r.variant_name, r.mrp, r.purchase_cost, r.gst_rate, r.unit])).toEqual([
+      ["सीपीवीसी एल्बो 90°", "TL-011", "15 मिमी", "1250.5", "900", "18", "nos"],
+      ["सीपीवीसी एल्बो 90°", "TL-012", "20 मिमी", "1450", "1050", "18", "m"],
+    ]);
+    // The title row has a name and no price: it is a heading for the rows below only if names are not in a column.
+    expect(out.skipped.map((x) => x.row)).toEqual([]);
+  });
+
+  it("makes codes for names with no Latin letters, the same each time and different for different names", () => {
+    const a = autoSku("Aris", "बॉल वाल्व", "15 mm");
+    expect(a).toMatch(/^ARIS-[0-9A-Z]{1,6}-15-MM$/);
+    expect(autoSku("Aris", "बॉल वाल्व", "15 mm")).toBe(a);
+    expect(autoSku("Aris", "બોલ વાલ્વ", "15 mm")).not.toBe(a);
+  });
+
+  it("recognises a title that is a single Hindi cell as a heading", () => {
+    const rows = [["कोड", "साइज", "एमआरपी"], ["बॉल वाल्व"], ["B-1", "15 मिमी", "450"], ["B-2", "20 मिमी", "610"]];
+    const out = buildImportRows(rows, 0, { ...base, columns: { sku: 0, variant: 1, mrp: 2 }, skuFrom: "column" }, UNITS);
+    expect(out.rows.map((r) => [r.product_name, r.sku])).toEqual([
+      ["बॉल वाल्व", "B-1"],
+      ["बॉल वाल्व", "B-2"],
+    ]);
+  });
+});

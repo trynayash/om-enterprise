@@ -19,7 +19,7 @@ import { getSettings } from "@/server/settings";
 import { getDefaultPriceList, itcPolicyFor } from "@/server/services/pricing";
 import { uploadProductImage } from "@/server/services/uploads";
 import { fetchRemoteImage } from "@/server/remote-image";
-import { isValidHsn, slugify } from "@/lib/india";
+import { isValidHsn, slugify, slugOr } from "@/lib/india";
 import { D, m } from "@/lib/money";
 import { landedUnitCost } from "@/lib/pricing/engine";
 
@@ -222,7 +222,7 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
         brandId = brandCache.get(key) ?? null;
         if (!brandId) {
           const [existing] = await tx.select().from(brands).where(sql`lower(${brands.name}) = ${key}`);
-          brandId = existing?.id ?? (await tx.insert(brands).values({ name: data.brand, slug: slugify(data.brand) }).returning())[0].id;
+          brandId = existing?.id ?? (await tx.insert(brands).values({ name: data.brand, slug: slugOr(data.brand, "brand") }).returning())[0].id;
           brandCache.set(key, brandId);
         }
       }
@@ -231,8 +231,10 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
       const pkey = `${data.product_name}|${data.brand}|${data.category}`.toLowerCase();
       let productId = productCache.get(pkey);
       if (!productId) {
-        let slug = slugify(`${data.brand} ${data.product_name}`);
-        for (let i = 2; (await tx.select({ id: products.id }).from(products).where(eq(products.slug, slug))).length; i++) slug = `${slugify(`${data.brand} ${data.product_name}`)}-${i}`;
+        // A name with no Latin letters (Hindi, Gujarati) is addressed by the brand and the first code instead.
+        const root = slugify(data.product_name) ? slugify(`${data.brand} ${data.product_name}`) : slugOr(`${data.brand} ${data.sku}`, "product");
+        let slug = root;
+        for (let i = 2; (await tx.select({ id: products.id }).from(products).where(eq(products.slug, slug))).length; i++) slug = `${root}-${i}`;
         const variantAttributes = [...new Set(rows.filter((r) => `${r.data.product_name}|${r.data.brand}|${r.data.category}`.toLowerCase() === pkey).flatMap((r) => parsePairs(r.data.variant_attributes, "=").map((p) => p.label)))];
         const [p] = await tx
           .insert(products)

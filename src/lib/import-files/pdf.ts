@@ -107,7 +107,7 @@ export async function readPdf(data: Uint8Array, opts: ReadOptions = {}): Promise
         const entry = factory.create(Math.ceil(viewport.width), Math.ceil(viewport.height));
         try {
           await page.render({ canvasContext: entry.context as never, canvas: entry.canvas as never, viewport, background: "rgb(255,255,255)" }).promise;
-          const scan = await readScan(entry.canvas, engine, kit, session, viewport.scale);
+          const scan = await readScan(entry.canvas, engine, kit, session, viewport.scale, ocr.indic);
           // Keep the text that was found as well, when the page had a little of its own.
           pages[i] = scan.page.pieces.length ? scan.page : pages[i];
           scanned = true;
