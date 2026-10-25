@@ -4,22 +4,26 @@ const isDev = process.env.NODE_ENV === "development";
 
 // No-nonce CSP (keeps pages prerenderable). React escapes all rendered data; inline scripts are
 // limited to Next.js runtime bootstrapping. Razorpay QR images are allowed when that gateway is used.
-const csp = [
-  "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' blob: data: https://rzp.io https://*.razorpay.com",
-  "font-src 'self'",
-  "connect-src 'self'",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "frame-ancestors 'none'",
-  ...(isDev ? [] : ["upgrade-insecure-requests"]),
-].join("; ");
+// `wasm` adds permission to run WebAssembly (not eval): the text recognition for scanned price
+// lists runs in a worker from /ocr/, and pdf.js decodes some scan formats with WebAssembly on the
+// import page. Only those two places get it.
+const contentSecurityPolicy = (wasm = false) =>
+  [
+    "default-src 'self'",
+    `script-src 'self' 'unsafe-inline'${wasm ? " 'wasm-unsafe-eval'" : ""}${isDev ? " 'unsafe-eval'" : ""}`,
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' blob: data: https://rzp.io https://*.razorpay.com",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    ...(isDev ? [] : ["upgrade-insecure-requests"]),
+  ].join("; ");
 
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
+  { key: "Content-Security-Policy", value: contentSecurityPolicy() },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -63,6 +67,16 @@ const nextConfig: NextConfig = {
     return [
       { source: "/(.*)", headers: securityHeaders },
       { source: "/(dashboard|pos|account|login|admin)(.*)", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
+      // Later rules win for the same header: WebAssembly where scanned price lists are read.
+      { source: "/dashboard/import", headers: [{ key: "Content-Security-Policy", value: contentSecurityPolicy(true) }] },
+      {
+        source: "/ocr/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: contentSecurityPolicy(true) },
+          { key: "Cache-Control", value: "public, max-age=86400" },
+        ],
+      },
+      { source: "/pdfjs/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=86400" }] },
     ];
   },
 };

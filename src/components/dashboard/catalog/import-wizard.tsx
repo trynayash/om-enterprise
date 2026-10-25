@@ -9,7 +9,7 @@ import { Alert } from "@/components/ui/page";
 import { tdCode, tdText, th } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
-import { IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, type ImportTable } from "@/lib/import-files";
+import { CANCELLED, IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, type ImportTable, type ReadProgress } from "@/lib/import-files";
 import { importSheet, isTemplateHeader, type ImportRow } from "@/lib/import-files/mapping";
 import { ColumnMatcher, MAX_IMPORT_ROWS, type MatcherOptions } from "./column-matcher";
 
@@ -40,6 +40,13 @@ interface Sheet {
   sourceRows: number[];
 }
 
+/** What the page says while a file is read. A scanned page takes seconds, so it says so. */
+function progressMessage(name: string, p: ReadProgress): string {
+  if (p.stage === "page") return `Reading ${name} — page ${p.done} of ${p.total}`;
+  if (p.stage === "engine") return `Getting text recognition ready${p.progress < 1 ? ` (${Math.round(p.progress * 100)}%)` : ""} — the first time, it downloads about 7 MB from this site.`;
+  return `Reading the scan — page ${Math.min(p.done + 1, p.total)} of ${p.total}. Text recognition takes about 10–20 seconds a page.`;
+}
+
 const csvOf = async (sheet: Sheet) => {
   const { toCsv } = await import("@/lib/import-files/delimited");
   return toCsv([sheet.header, ...sheet.rows]);
@@ -58,6 +65,9 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
   const [readCount, setReadCount] = useState(0);
+  /** The file was a scan or photo, read with text recognition. */
+  const [scanned, setScanned] = useState<{ confidence: number } | null>(null);
+  const cancelRef = useRef<AbortController | null>(null);
 
   const choose = async (files: FileList | null) => {
     const file = files?.[0];
@@ -66,17 +76,22 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
     setError(null);
     setSheet(null);
     setTables(null);
+    setScanned(null);
     if (!file) return;
     if (file.size > MAX_IMPORT_FILE_BYTES) return setError("The file is larger than 40 MB — split it into smaller files.");
     setFileName(file.name);
     setReading(`Reading ${file.name}…`);
+    const cancel = new AbortController();
+    cancelRef.current = cancel;
     try {
       const { readImportFile } = await import("@/lib/import-files");
-      const read = await readImportFile(file.name, new Uint8Array(await file.arrayBuffer()), (done, total) => setReading(`Reading ${file.name} — page ${done} of ${total}`));
+      const read = await readImportFile(file.name, new Uint8Array(await file.arrayBuffer()), { signal: cancel.signal, onProgress: (p) => setReading(progressMessage(file.name, p)) });
       const found = read.tables.filter((t) => t.rows.some((r) => r.some((c) => c.trim())));
       if (!found.length) throw new Error("No rows found in that file.");
-      // Our own template goes straight to the check; any other layout is matched first.
-      const template = found.find((t) => t.rows.length && isTemplateHeader(t.rows[0]));
+      if (read.scanned) setScanned({ confidence: read.confidence ?? 0 });
+      // Our own template goes straight to the check; any other layout is matched first. Text read
+      // from a scan is always matched and looked over first.
+      const template = read.scanned ? undefined : found.find((t) => t.rows.length && isTemplateHeader(t.rows[0]));
       if (template) {
         const body = template.rows
           .slice(1)
@@ -90,8 +105,12 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
         setReadCount((n) => n + 1);
       }
     } catch (err) {
-      setError(errorMessage(err));
+      if (cancel.signal.aborted || (err instanceof Error && err.message === CANCELLED)) {
+        setFileName(null);
+        if (fileRef.current) fileRef.current.value = "";
+      } else setError(errorMessage(err));
     } finally {
+      cancelRef.current = null;
       setReading(null);
     }
   };
@@ -137,15 +156,18 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
   const commit = async () => {
     if (!sheet) return;
     const photos = report?.photoCount ? ` ${report.photoCount} photo link${report.photoCount > 1 ? "s" : ""} will be downloaded.` : "";
-    const where = publish ? "They will go live on the website straight away." : "They will be created as unpublished drafts.";
+    // Prices read from a scan are looked over in the drafts first.
+    const live = publish && !scanned;
+    const where = live ? "They will go live on the website straight away." : "They will be created as unpublished drafts.";
     if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? ${where}${photos}`)) return;
     setBusy("commit");
     setError(null);
     try {
-      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv: await csvOf(sheet), publish } }));
+      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv: await csvOf(sheet), publish: publish && !scanned } }));
       setReport(null);
       setSheet(null);
       setTables(null);
+      setScanned(null);
       setFileName(null);
       if (fileRef.current) fileRef.current.value = "";
     } catch (err) {
@@ -165,7 +187,8 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
       <ol className="grid overflow-hidden rounded-xl border border-navy-100 bg-white shadow-card md:grid-cols-3 md:divide-x md:divide-navy-100">
         <Step n={1} title="Upload the company's file" done={!!tables || !!sheet || !!result}>
           <p>
-            The price list or catalogue as the company sent it: <b>PDF</b>, Excel (.xlsx, .xls), Word (.docx), OpenOffice (.ods), CSV or text, web page (.html) or JSON. Or fill in our{" "}
+            The price list or catalogue as the company sent it: <b>PDF</b> (even a scan), Excel (.xlsx, .xls), Word (.docx), OpenOffice (.ods), CSV or text, web page (.html), JSON, or a photo of a
+            page. Or fill in our{" "}
             <a href="/api/admin/import/template" className="inline-flex items-center gap-1 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
               <FileSpreadsheet className="h-3.5 w-3.5 shrink-0" aria-hidden /> template
             </a>
@@ -216,6 +239,11 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
                 {fileName ? "Choose another file" : "Choose file"}
               </Button>
               {fileName && <span className="break-all font-mono text-[13px] text-navy-700">{fileName}</span>}
+              {reading && (
+                <Button variant="ghost" size="sm" onClick={() => cancelRef.current?.abort()}>
+                  Cancel
+                </Button>
+              )}
             </div>
             {reading ? (
               <p className="text-sm text-navy-600" role="status">
@@ -224,7 +252,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
             ) : (
               !fileName && (
                 <p className="text-xs leading-relaxed text-navy-500">
-                  PDF, Excel (.xlsx .xls), Word (.docx), .ods, CSV / text, .html or .json — up to 40 MB. Read in your browser; only the rows you import are sent.
+                  PDF (also scans), Excel (.xlsx .xls), Word (.docx), .ods, CSV / text, .html, .json, or a photo (.jpg .png) — up to 40 MB. Read in your browser; only the rows you import are sent.
                 </p>
               )
             )}
@@ -232,7 +260,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
         </Card>
       </div>
 
-      {tables && fileName && <ColumnMatcher key={readCount} fileName={fileName} tables={tables} options={options} busy={busy === "validate"} onCheck={checkMatched} />}
+      {tables && fileName && <ColumnMatcher key={readCount} fileName={fileName} tables={tables} options={options} scanned={scanned} busy={busy === "validate"} onCheck={checkMatched} />}
 
       {report && sheet && (
         <div id="import-check" className="scroll-mt-6">
@@ -245,6 +273,11 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
                 <Mini label="Warnings" value={warnings} tone={warnings ? "amber" : undefined} />
                 <Mini label="Errors" value={report.errorCount} tone={report.errorCount ? "red" : "green"} />
               </div>
+              {scanned && (
+                <Alert tone="warning" title="Read from a scan">
+                  Prices and codes were read by text recognition. Products are saved as unpublished drafts — compare each price with the original before you publish.
+                </Alert>
+              )}
               {report.errorCount > 0 ? (
                 <Alert tone="danger" title={`${report.errorCount} row${report.errorCount > 1 ? "s need" : " needs"} fixing`}>
                   {tables ? "Fix the matching above, or correct the file and upload it again." : "Correct the file and upload it again."} Nothing has been imported.
@@ -267,7 +300,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
                   <label className="inline-flex items-center gap-2 text-sm text-navy-700">
                     <input type="checkbox" className="accent-navy-900" checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} /> Show only rows with errors or warnings
                   </label>
-                  {canPublish && (
+                  {canPublish && !scanned && (
                     <label className="inline-flex items-center gap-2 text-sm font-medium text-navy-900">
                       <input type="checkbox" className="accent-navy-900" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish on the website straight away
                     </label>

@@ -34,6 +34,8 @@ export interface Rule {
   y0: number;
   x1: number;
   y1: number;
+  /** How thick the line is drawn, when known (scans). */
+  width?: number;
 }
 
 export interface PageText {
@@ -183,11 +185,13 @@ function columnRules(rules: Rule[], lines: Line[]): number[] {
   if (!rules.length) return [];
   const heights = lines.map((l) => l.h).sort((a, b) => a - b);
   const h = heights[Math.floor(heights.length / 2)] ?? 10;
+  // The same border on different pages (scans never line up exactly) is one border, if within about half a line of text.
+  const tol = Math.max(2, 0.45 * h);
   const xs = rules.map((r) => ({ x: (r.x0 + r.x1) / 2, len: Math.abs(r.y1 - r.y0) })).sort((a, b) => a.x - b.x);
   const groups: { x: number; len: number }[] = [];
   for (const r of xs) {
     const g = groups[groups.length - 1];
-    if (g && r.x - g.x <= 2) {
+    if (g && r.x - g.x <= tol) {
       g.x = (g.x * g.len + r.x * r.len) / (g.len + r.len);
       g.len += r.len;
     } else groups.push({ ...r });

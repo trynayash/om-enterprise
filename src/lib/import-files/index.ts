@@ -7,29 +7,41 @@ import { readOds } from "./ods";
 import type { ImportTable } from "./text";
 import { isCompoundFile, readXls } from "./xls";
 import { readXlsx } from "./xlsx";
+import type { ReadOptions } from "./read-options";
 
 export type { ImportTable } from "./text";
 export { toCsv } from "./delimited";
+export type { ReadOptions, ReadProgress } from "./read-options";
+export { CANCELLED } from "./read-options";
 
 /**
  * Reads any price list or catalogue file a supplier is likely to send, into tables of text.
  * The file's content decides how it is read, not its name: many systems export "Excel" files that
  * are really HTML or text, and files get renamed. Everything runs in the browser.
  */
-export const IMPORT_ACCEPT = ".pdf,.xlsx,.xlsm,.xls,.ods,.odt,.csv,.tsv,.txt,.prn,.docx,.html,.htm,.json";
+export const IMPORT_ACCEPT = ".pdf,.xlsx,.xlsm,.xls,.ods,.odt,.csv,.tsv,.txt,.prn,.docx,.html,.htm,.json,.jpg,.jpeg,.png,.webp,.gif,.bmp";
 export const MAX_IMPORT_FILE_BYTES = 40 * 1024 * 1024;
 
-export type ImportFileKind = "pdf" | "excel" | "excel-97" | "opendocument" | "word" | "web page" | "text" | "json";
+export type ImportFileKind = "pdf" | "excel" | "excel-97" | "opendocument" | "word" | "web page" | "text" | "json" | "picture";
 
-/** @param onPage called after each page of a PDF is read, for a progress message. */
-export async function readImportFile(name: string, bytes: Uint8Array, onPage?: (done: number, total: number) => void): Promise<{ kind: ImportFileKind; tables: ImportTable[] }> {
+export interface ImportFileRead {
+  kind: ImportFileKind;
+  tables: ImportTable[];
+  /** Read from a scan or photo with text recognition, so numbers can be misread: check them. */
+  scanned?: boolean;
+  /** How sure the text recognition was, 0–100 (scans only). */
+  confidence?: number;
+}
+
+export async function readImportFile(name: string, bytes: Uint8Array, opts: ReadOptions = {}): Promise<ImportFileRead> {
   if (bytes.length > MAX_IMPORT_FILE_BYTES) throw new Error("That file is larger than 40 MB — split it into smaller files.");
   const ext = name.toLowerCase().match(/\.([a-z0-9]+)$/)?.[1] ?? "";
   const head = String.fromCharCode(...bytes.subarray(0, 1024));
 
   if (head.includes("%PDF-")) {
     const { readPdf } = await import("./pdf");
-    return { kind: "pdf", tables: await readPdf(bytes, onPage) };
+    const pdf = await readPdf(bytes, opts);
+    return { kind: "pdf", ...pdf };
   }
   if (isCompoundFile(bytes)) {
     if (ext === "doc") throw new Error("Old Word files (.doc) can't be read. Open it in Word and save it as .docx or PDF.");
@@ -44,8 +56,9 @@ export async function readImportFile(name: string, bytes: Uint8Array, onPage?: (
     if ([...names].some((n) => n.startsWith("Index/"))) throw new Error("Apple Numbers files can't be read. In Numbers use File → Export To → Excel.");
     throw new Error("That zip file is not a spreadsheet or document this importer reads.");
   }
-  if (/^(\xff\xd8\xff|\x89PNG|GIF8|RIFF[\s\S]{4}WEBP)/.test(head) || /^(jpe?g|png|gif|webp|heic|bmp|tiff?)$/.test(ext)) {
-    throw new Error("Photos and scans can't be read as a price list. Ask the company for the PDF or Excel file, or type the rows into the Excel template.");
+  if (/^(\xff\xd8\xff|\x89PNG|GIF8|RIFF[\s\S]{4}WEBP|BM)/.test(head) || /^(jpe?g|png|gif|webp|bmp)$/.test(ext)) return readPicture(bytes, opts);
+  if (/^(II\*\0|MM\0\*)/.test(head) || /^(tiff?|heic|heif|avif)$/.test(ext)) {
+    throw new Error("That picture format can't be opened here. Save it as a JPG or PNG (or as a PDF) and upload that.");
   }
 
   const text = decodeText(bytes);
@@ -63,6 +76,23 @@ export async function readImportFile(name: string, bytes: Uint8Array, onPage?: (
     }
   }
   return { kind: "text", tables: readDelimited(text, name.replace(/\.[^.]+$/, "") || "Table") };
+}
+
+/** A photo or scan of a price list: straightened, read with text recognition, and put into a table. */
+async function readPicture(bytes: Uint8Array, opts: ReadOptions): Promise<ImportFileRead> {
+  const [{ browserCanvasKit, lazyOcr, readScan }, { tablesFromPages }] = await Promise.all([import("./scan"), import("./layout")]);
+  const kit = opts.canvasKit ?? browserCanvasKit;
+  const ocr = lazyOcr(opts);
+  try {
+    const canvas = await kit.decode(bytes);
+    opts.onProgress?.({ stage: "scan", done: 0, total: 1 });
+    const scan = await readScan(canvas, await ocr.get(), kit);
+    opts.onProgress?.({ stage: "scan", done: 1, total: 1 });
+    if (!scan.page.pieces.length) throw new Error("No text could be read in that picture. Try a sharper, straighter photo with the whole page in view, or ask for the PDF or Excel file.");
+    return { kind: "picture", tables: tablesFromPages([scan.page], "Picture"), scanned: true, confidence: scan.confidence };
+  } finally {
+    await ocr.close();
+  }
 }
 
 function zipEntries(bytes: Uint8Array): Set<string> {

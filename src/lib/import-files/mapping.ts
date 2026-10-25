@@ -111,7 +111,7 @@ export function headingOf(row: string[]): string {
 const PAGE_NUMBER = /^(page|pg\.?|p\.)\s*\d+|\bpage\s*\d+\s*(of|\/)\s*\d+\b/i;
 
 /** Column guesses from the header row; each column is used for at most one field. */
-export function guessColumns(header: string[], sample: string[][]): Partial<Record<SourceField, number>> {
+export function guessColumns(header: string[], sample: string[][], above: string[] = []): Partial<Record<SourceField, number>> {
   const out: Partial<Record<SourceField, number>> = {};
   const used = new Set<number>();
   const cells = header.map((c) => norm(c));
@@ -132,7 +132,8 @@ export function guessColumns(header: string[], sample: string[][]): Partial<Reco
   if (weakName && out.product_name !== undefined && out.description === undefined) {
     const values = sample.map((r) => cleanCell(r[out.product_name!] ?? "")).filter(Boolean);
     const avg = values.reduce((n, v) => n + v.length, 0) / Math.max(1, values.length);
-    if (sample.filter((r) => headingOf(r)).length >= 2 && avg > 45) {
+    // The heading of the first block sits above the column headings, outside the sample.
+    if (sample.filter((r) => headingOf(r)).length + (headingOf(above) ? 1 : 0) >= 2 && avg > 45) {
       out.description = out.product_name;
       delete out.product_name;
     }
@@ -404,4 +405,49 @@ export function autoSku(prefix: string, name: string, variant: string): string {
 /** Rows of the import sheet as a table with the template's header. */
 export function importSheet(rows: ImportRow[]): string[][] {
   return [[...IMPORT_COLUMNS], ...rows.map((r) => IMPORT_COLUMNS.map((c) => r[c]))];
+}
+
+export interface PriceCheck {
+  /** Index in `rows`. */
+  index: number;
+  reason: string;
+}
+
+const median = (xs: number[]) => {
+  const s = [...xs].sort((a, b) => a - b);
+  return s[Math.floor(s.length / 2)];
+};
+
+/**
+ * Rows whose prices don't fit the rest of the list, for files read from a scan or photo where a
+ * missing decimal point turns 11.5 into 115: a dealer price above the MRP or far from the usual
+ * share of it, and a price that jumps up or down against both neighbouring sizes of its product.
+ */
+export function suspectPrices(rows: ImportRow[]): PriceCheck[] {
+  const found = new Map<number, string>();
+  const num = (s: string) => (s ? Number(s) : NaN);
+
+  const ratios = rows.map((r) => num(r.purchase_cost) / num(r.mrp));
+  const usual = median(ratios.filter((x) => Number.isFinite(x) && x > 0));
+  rows.forEach((r, i) => {
+    const x = ratios[i];
+    if (!Number.isFinite(x)) return;
+    if (x > 1) found.set(i, `Dealer price ${r.purchase_cost} is above the MRP ${r.mrp}`);
+    else if (Number.isFinite(usual) && ratios.filter(Number.isFinite).length >= 6 && (x > usual * 1.6 || x < usual / 1.6)) {
+      found.set(i, `Dealer price ${r.purchase_cost} is ${Math.round(x * 100)}% of the MRP ${r.mrp}; most rows are about ${Math.round(usual * 100)}%`);
+    }
+  });
+
+  for (const field of ["mrp", "selling_price", "purchase_cost"] as const) {
+    const label = { mrp: "MRP", selling_price: "Selling price", purchase_cost: "Dealer price" }[field];
+    for (let i = 1; i + 1 < rows.length; i++) {
+      const [a, b, c] = [num(rows[i - 1][field]), num(rows[i][field]), num(rows[i + 1][field])];
+      if (rows[i - 1].product_name !== rows[i].product_name || rows[i + 1].product_name !== rows[i].product_name) continue;
+      if (![a, b, c].every((x) => x > 0)) continue;
+      const [lo, hi] = [Math.min(a, c), Math.max(a, c)];
+      // The neighbours agree with each other; this one is far from both.
+      if (hi <= lo * 3 && (b > hi * 3 || b < lo / 3) && !found.has(i)) found.set(i, `${label} ${rows[i][field]} is far from the sizes either side (${a} and ${c})`);
+    }
+  }
+  return [...found].map(([index, reason]) => ({ index, reason })).sort((x, y) => x.index - y.index);
 }

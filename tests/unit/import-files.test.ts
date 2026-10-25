@@ -117,7 +117,18 @@ describe("PDF layouts", () => {
 
   it("explains password-protected and scanned PDFs", async () => {
     await expect(read("password.pdf")).rejects.toThrow(/password-protected/);
-    await expect(read("scan.pdf")).rejects.toThrow(/scan or a photo/);
+    // Drawn shapes, no text and no picture of text.
+    await expect(read("scan.pdf")).rejects.toThrow(/no text and no pictures of text/);
+  });
+});
+
+describe("text PDFs with pictures", () => {
+  it("a photo catalogue — pictures with a caption under each — is read for its text, not sent to text recognition", async () => {
+    // No recognition engine is configured here: trying to start one would fail the test.
+    const { kind, tables, scanned } = await read("photo-catalogue.pdf");
+    expect(kind).toBe("pdf");
+    expect(scanned).toBeFalsy();
+    expect(tables[0].rows.flat()).toEqual(["Ball Valve 15 mm", "MRP Rs. 450", "Gate Valve 20 mm", "MRP Rs. 610", "Angle Cock 15 mm", "MRP Rs. 380"]);
   });
 });
 
@@ -186,7 +197,8 @@ describe("readImportFile", () => {
     await expect(readImportFile("letter.doc", cfb)).rejects.toThrow(/Old Word files/);
     await expect(readImportFile("book.xlsb", zipSync({ "xl/workbook.bin": bytes("x") }))).rejects.toThrow(/\.xlsb/);
     await expect(readImportFile("list.numbers", zipSync({ "Index/Document.iwa": bytes("x") }))).rejects.toThrow(/Numbers/);
-    await expect(readImportFile("photo.jpg", new Uint8Array([0xff, 0xd8, 0xff, 0xe0, 0, 0]))).rejects.toThrow(/Photos and scans/);
+    await expect(readImportFile("scan.tif", new Uint8Array([0x49, 0x49, 0x2a, 0x00, 8, 0, 0, 0]))).rejects.toThrow(/Save it as a JPG or PNG/);
+    await expect(readImportFile("IMG_0001.heic", new Uint8Array([0, 0, 0, 0x18, 0x66, 0x74, 0x79, 0x70]))).rejects.toThrow(/Save it as a JPG or PNG/);
     await expect(readImportFile("broken.json", bytes("{nope"))).rejects.toThrow(/not valid JSON/);
   });
 });

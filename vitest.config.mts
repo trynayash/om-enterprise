@@ -19,6 +19,11 @@ export default defineConfig({
         test: { name: "unit", include: ["tests/unit/**/*.test.ts"], environment: "node" },
       },
       {
+        // Text recognition of scanned files: seconds per page, so kept apart from the fast unit tests.
+        extends: true,
+        test: { name: "ocr", include: ["tests/ocr/**/*.test.ts"], environment: "node", testTimeout: 300_000, hookTimeout: 120_000 },
+      },
+      {
         extends: true,
         test: {
           name: "integration",
