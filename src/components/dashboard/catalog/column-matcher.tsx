@@ -8,7 +8,7 @@ import { Alert } from "@/components/ui/page";
 import { tdCode, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
 import type { ImportTable } from "@/lib/import-files";
-import { buildImportRows, detectHeaderRow, guessColumns, norm, type ImportRow, type MappingSettings, type SourceField } from "@/lib/import-files/mapping";
+import { buildImportRows, detectHeaderRow, guessColumns, norm, suspectPrices, type ImportRow, type MappingSettings, type SourceField } from "@/lib/import-files/mapping";
 
 /**
  * Step 2 of an import from a supplier's own file: pick the table and its header row, say which
@@ -51,7 +51,7 @@ const letter = (i: number): string => (i >= 26 ? letter(Math.floor(i / 26) - 1) 
 
 function defaults(table: ImportTable, headerRow: number, fileName: string, opts: MatcherOptions): MappingSettings {
   const header = headerRow >= 0 ? table.rows[headerRow] : [];
-  const columns = guessColumns(header, table.rows.slice(headerRow + 1, headerRow + 41));
+  const columns = guessColumns(header, table.rows.slice(headerRow + 1, headerRow + 41), headerRow > 0 ? (table.rows[headerRow - 1] ?? []) : []);
   return {
     columns,
     category: opts.categories.length === 1 ? opts.categories[0].slug : "",
@@ -98,12 +98,15 @@ export function ColumnMatcher({
   fileName,
   tables,
   options,
+  scanned,
   busy,
   onCheck,
 }: {
   fileName: string;
   tables: ImportTable[];
   options: MatcherOptions;
+  /** The file was a scan or photo read with text recognition; prices need a second look. */
+  scanned: { confidence: number } | null;
   busy: boolean;
   onCheck: (rows: ImportRow[], sourceRows: number[]) => void;
 }) {
@@ -144,6 +147,10 @@ export function ColumnMatcher({
     return [...counts.entries()].sort((a, b) => b[1] - a[1]);
   }, [built.skipped]);
   const productCount = useMemo(() => new Set(built.rows.map((r) => r.product_name.toLowerCase())).size, [built.rows]);
+  // Text recognition can drop a decimal point; prices that don't fit their neighbours are marked.
+  const checks = useMemo(() => (scanned ? suspectPrices(built.rows) : []), [scanned, built.rows]);
+  const reasonOf = useMemo(() => new Map(checks.map((c) => [c.index, c.reason])), [checks]);
+  const [onlyChecks, setOnlyChecks] = useState(true);
 
   const missing = [!s.category && "the category", s.columns.product_name === undefined && !s.fillDown && "the product name column"].filter(Boolean) as string[];
   const tooMany = built.rows.length > MAX_IMPORT_ROWS;
@@ -164,6 +171,12 @@ export function ColumnMatcher({
         description="Tell us which column holds what. We guessed from the headings — check them against the preview, then fill in what is the same for every row."
       />
       <CardBody className="space-y-6">
+        {scanned && (
+          <Alert tone="warning" title="This file is a scan, read by text recognition">
+            It was about {Math.round(scanned.confidence)}% sure of what it read. Check every price and code in the preview below against the original — a missing decimal point (11.5 read as 115) and
+            look-alike characters (0 and O, 1 and 7, 5 and 6) are the usual slips. Products from a scan are saved as drafts.
+          </Alert>
+        )}
         {restored && (
           <Alert tone="info">
             Using the choices you made last time for a file with these columns.{" "}
@@ -362,6 +375,16 @@ export function ColumnMatcher({
             </div>
             {skippedSummary.length > 0 && <div className="text-xs text-navy-500">Left out: {skippedSummary.map(([reason, n]) => `${n} × ${reason.toLowerCase()}`).join(" · ")}</div>}
           </div>
+          {checks.length > 0 && (
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+              <span>
+                <b>{checks.length}</b> {checks.length === 1 ? "row has a price" : "rows have prices"} that look out of line with the rest — marked <b>Check</b> below.
+              </span>
+              <label className="inline-flex items-center gap-2">
+                <input type="checkbox" className="accent-navy-900" checked={onlyChecks} onChange={(e) => setOnlyChecks(e.target.checked)} /> Show only these
+              </label>
+            </div>
+          )}
           <div className="max-h-[360px] overflow-auto rounded-lg border border-navy-100">
             <table className="w-full min-w-[720px]">
               <thead className="sticky top-0 z-[1] bg-white">
@@ -375,28 +398,34 @@ export function ColumnMatcher({
                   <th className={thNum}>Cost</th>
                   <th className={thNum}>GST</th>
                   <th className={th}>Unit</th>
+                  {checks.length > 0 && <th className={th}>Check</th>}
                 </tr>
               </thead>
               <tbody>
-                {built.rows.slice(0, 50).map((r, i) => (
-                  <tr key={i}>
-                    <td className={tdCode}>
-                      <span className="text-navy-500">{built.sourceRows[i]}</span>
-                    </td>
-                    <td className={tdText}>{r.product_name}</td>
-                    <td className={tdText}>{r.variant_name}</td>
-                    <td className={tdCode}>{r.sku}</td>
-                    <td className={tdNum}>{r.mrp || "—"}</td>
-                    <td className={tdNum}>{r.selling_price || "—"}</td>
-                    <td className={tdNum}>{r.purchase_cost || "—"}</td>
-                    <td className={tdNum}>{r.gst_rate ? `${r.gst_rate}%` : "—"}</td>
-                    <td className={tdCode}>{r.unit}</td>
-                  </tr>
-                ))}
+                {built.rows
+                  .map((r, i) => ({ r, i }))
+                  .filter(({ i }) => !(checks.length > 0 && onlyChecks) || reasonOf.has(i))
+                  .slice(0, 50)
+                  .map(({ r, i }) => (
+                    <tr key={i} className={cn(reasonOf.has(i) && "bg-amber-50/70")}>
+                      <td className={tdCode}>
+                        <span className="text-navy-500">{built.sourceRows[i]}</span>
+                      </td>
+                      <td className={tdText}>{r.product_name}</td>
+                      <td className={tdText}>{r.variant_name}</td>
+                      <td className={tdCode}>{r.sku}</td>
+                      <td className={tdNum}>{r.mrp || "—"}</td>
+                      <td className={tdNum}>{r.selling_price || "—"}</td>
+                      <td className={tdNum}>{r.purchase_cost || "—"}</td>
+                      <td className={tdNum}>{r.gst_rate ? `${r.gst_rate}%` : "—"}</td>
+                      <td className={tdCode}>{r.unit}</td>
+                      {checks.length > 0 && <td className={tdText}>{reasonOf.has(i) ? <span className="text-xs text-amber-800">{reasonOf.get(i)}</span> : null}</td>}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
-          {built.rows.length > 50 && <p className="mt-1.5 text-xs text-navy-500">First 50 of {built.rows.length} rows.</p>}
+          {(checks.length > 0 && onlyChecks ? checks.length : built.rows.length) > 50 && <p className="mt-1.5 text-xs text-navy-500">First 50 rows shown.</p>}
         </div>
 
         {tooMany && (

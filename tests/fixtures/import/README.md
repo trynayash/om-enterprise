@@ -15,4 +15,15 @@ import rows.
 | `grid-rotated.pdf` | reportlab: a bordered table on a page turned 90°, product names drawn letter by letter |
 | `password.pdf`, `scan.pdf` | reportlab: needs a password to open; drawn shapes and no text |
 
+Scans, for the text recognition tests (`tests/ocr/`, run with `npm run test:ocr`; they take about two minutes), all pictures of pages of the same list rendered from the Chromium PDF (and the catalogue):
+
+| File | What it is |
+| --- | --- |
+| `scan-two-pages.pdf` | Two scanned pages in a PDF (pictures only, 200 dpi); the second is crooked (0.7°), shifted and blurred |
+| `scan-photo.jpg` | A phone-style photo: tilted 1.8°, darker toward one side, reduced and JPEG-compressed |
+| `scan-shadow.jpg` | A strong diagonal shadow (down to 45% brightness) and a 1.1° tilt |
+| `scan-sideways.jpg` | The page turned 90° |
+| `scan-catalogue.jpg` | The borderless catalogue page: product headings, wrapped descriptions |
+| `photo-catalogue.pdf` | A *text* PDF with a picture on each page and a caption under it: must not be sent to recognition |
+
 All names, codes and prices are invented.

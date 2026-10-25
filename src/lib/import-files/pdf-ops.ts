@@ -59,6 +59,23 @@ export interface OpCodes {
   closeEOFillStroke: number;
 }
 
+/** The operators that draw a picture (pdf.js's OPS), for judging whether a page is a scan. */
+export interface PictureOpCodes {
+  save: number;
+  restore: number;
+  transform: number;
+  paintFormXObjectBegin: number;
+  paintFormXObjectEnd: number;
+  beginGroup: number;
+  endGroup: number;
+  paintImageXObject: number;
+  paintInlineImageXObject: number;
+  paintImageMaskXObject: number;
+  paintImageXObjectRepeat: number;
+  paintInlineImageXObjectGroup: number;
+  paintImageMaskXObjectGroup: number;
+}
+
 /** A clipping region on the page: left, top, right, bottom. */
 type Box = [number, number, number, number];
 
@@ -393,4 +410,33 @@ function showText(st: State, glyphs: unknown, out: TextPiece[], normalize: (s: s
   }
   flush();
   st.x += x * hs;
+}
+
+/**
+ * How much of the page the biggest picture on it covers, 0–1: a scanned page is one picture of
+ * about the whole page, a photo catalogue's page has pictures that leave room for text.
+ * @param viewport pdf.js viewport transform; `width` and `height` are the page's size in the same units.
+ */
+export function pictureCoverage(fnArray: ArrayLike<number>, argsArray: ArrayLike<unknown>, ops: PictureOpCodes, viewport: ArrayLike<number>, width: number, height: number): number {
+  const stack: Matrix[] = [];
+  let ctm: Matrix = [...(viewport as number[])].slice(0, 6) as Matrix;
+  let best = 0;
+  for (let i = 0; i < fnArray.length; i++) {
+    const fn = fnArray[i];
+    const args = (argsArray[i] ?? []) as unknown[];
+    if (fn === ops.save || fn === ops.beginGroup) stack.push(ctm);
+    else if (fn === ops.restore || fn === ops.endGroup || fn === ops.paintFormXObjectEnd) ctm = stack.pop() ?? ctm;
+    else if (fn === ops.paintFormXObjectBegin) {
+      stack.push(ctm);
+      if (isMatrix(args[0])) ctm = multiply(ctm, args[0]);
+    } else if (fn === ops.transform && args.length >= 6) ctm = multiply(ctm, args as number[]);
+    else if (fn === ops.paintImageXObject || fn === ops.paintInlineImageXObject || fn === ops.paintImageMaskXObject) {
+      // An image fills the unit square of the current space.
+      best = Math.max(best, Math.abs(ctm[0] * ctm[3] - ctm[1] * ctm[2]) / Math.max(1, width * height));
+    } else if (fn === ops.paintImageXObjectRepeat || fn === ops.paintInlineImageXObjectGroup || fn === ops.paintImageMaskXObjectGroup) {
+      // Many small pictures (or tiles) with their own placement: not measured, assume a full page.
+      best = 1;
+    }
+  }
+  return Math.min(1, best);
 }

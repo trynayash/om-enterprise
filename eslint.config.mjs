@@ -22,6 +22,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "playwright-report/**",
     "test-results/**",
+    // Third-party engine files copied here by scripts/copy-engine-files.mjs.
+    "public/ocr/**",
+    "public/pdfjs/**",
   ]),
 ]);
 

@@ -20,6 +20,10 @@
 # production
 /build
 
+# engine files copied from node_modules by scripts/copy-engine-files.mjs
+/public/ocr/
+/public/pdfjs/
+
 # misc
 .DS_Store
 *.pem

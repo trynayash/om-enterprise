@@ -10,6 +10,8 @@ import {
   normalizeUnit,
   parseAmount,
   parsePercent,
+  suspectPrices,
+  type ImportRow,
   type MappingSettings,
 } from "@/lib/import-files/mapping";
 import { IMPORT_COLUMNS } from "@/lib/import-columns";
@@ -217,5 +219,34 @@ describe("buildImportRows", () => {
     expect(sheet[0]).toEqual([...IMPORT_COLUMNS]);
     expect(sheet[1][IMPORT_COLUMNS.indexOf("product_name")]).toBe("Bib Cock");
     expect(sheet[1][IMPORT_COLUMNS.indexOf("variant_name")]).toBe("Standard");
+  });
+});
+
+describe("suspectPrices", () => {
+  const row = (product_name: string, mrp: string, purchase_cost = ""): ImportRow => ({ ...(Object.fromEntries(IMPORT_COLUMNS.map((c) => [c, ""])) as ImportRow), product_name, mrp, purchase_cost });
+  const list = (mrps: string[], costs: string[] = [], name = "Elbow") => mrps.map((m, i) => row(name, m, costs[i] ?? ""));
+
+  it("flags a lost decimal point: a price ten times its neighbours", () => {
+    const flagged = suspectPrices(list(["8.5", "14.25", "205", "27.25", "33.5"]));
+    expect(flagged.map((f) => f.index)).toEqual([2]);
+    expect(flagged[0].reason).toMatch(/far from the sizes either side \(14.25 and 27.25\)/);
+  });
+
+  it("flags a dealer price that is off the usual share of the MRP, or above it", () => {
+    const mrps = ["10", "20", "30", "40", "50", "60", "70", "80"];
+    const costs = ["7", "14", "21", "280", "35", "42", "49", "90"];
+    const flagged = suspectPrices(mrps.map((m, i) => row(`P${i}`, m, costs[i])));
+    expect(flagged.map((f) => f.index)).toEqual([3, 7]);
+    expect(flagged[1].reason).toMatch(/above the MRP/);
+  });
+
+  it("leaves a normal price list alone, including sizes that rise steeply", () => {
+    expect(suspectPrices(list(["8", "12", "20", "45", "110", "260"], ["5.5", "8.5", "14", "31", "77", "182"]))).toEqual([]);
+    expect(suspectPrices(list(["8.5"]))).toEqual([]);
+  });
+
+  it("does not compare sizes across different products", () => {
+    const rows = [row("A", "10"), row("B", "500"), row("B", "520"), row("C", "11")];
+    expect(suspectPrices(rows)).toEqual([]);
   });
 });
