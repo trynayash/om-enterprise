@@ -106,10 +106,10 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
                   </td>
                   <td data-label="Who" className={`${tdText} text-xs`}>
                     <div className="font-semibold">{actorLabel(a.actorLabel)}</div>
-                    {a.ip && <div className="mt-0.5 font-mono text-[11px] text-navy-400">{a.ip}</div>}
+                    {a.ip && <div className="mt-0.5 tabular text-[11px] text-navy-400">{a.ip}</div>}
                   </td>
                   <td data-label="Action" className={tdText}>
-                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[12px] text-navy-700">
+                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap tabular text-[12px] text-navy-700">
                       <span aria-hidden className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[toneFor(a.action)]}`} />
                       {a.action}
                     </span>
@@ -126,7 +126,7 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
                         {a.data != null && (
                           <details className="group w-full">
                             <summary className="cursor-pointer text-navy-500 transition-colors hover:text-navy-900">Details</summary>
-                            <pre className="mt-1.5 max-h-64 overflow-auto rounded-md border border-rule bg-paper/70 p-2.5 font-mono text-[11px] leading-snug text-navy-800">{JSON.stringify(a.data, null, 2)}</pre>
+                            <pre className="mt-1.5 max-h-64 overflow-auto rounded-md border border-rule bg-paper/70 p-2.5 tabular text-[11px] leading-snug text-navy-800">{JSON.stringify(a.data, null, 2)}</pre>
                           </details>
                         )}
                       </div>

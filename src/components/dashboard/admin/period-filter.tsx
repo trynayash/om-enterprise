@@ -88,11 +88,11 @@ export function PeriodFilter({ from, to }: { from: string; to: string }) {
       </div>
       <div className="w-[calc(50%-0.375rem)] sm:w-[152px]">
         <Label htmlFor="from">From</Label>
-        <Input id="from" type="date" value={from} max={to} onChange={(e) => e.target.value && go(e.target.value, to)} className="font-mono text-[13px]" />
+        <Input id="from" type="date" value={from} max={to} onChange={(e) => e.target.value && go(e.target.value, to)} className="tabular text-[13px]" />
       </div>
       <div className="w-[calc(50%-0.375rem)] sm:w-[152px]">
         <Label htmlFor="to">To</Label>
-        <Input id="to" type="date" value={to} min={from} onChange={(e) => e.target.value && go(from, e.target.value)} className="font-mono text-[13px]" />
+        <Input id="to" type="date" value={to} min={from} onChange={(e) => e.target.value && go(from, e.target.value)} className="tabular text-[13px]" />
       </div>
     </div>
   );

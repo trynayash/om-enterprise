@@ -278,7 +278,7 @@ function ReturnDialog({ saleId, lines, netPaid, onClose }: { saleId: string; lin
                   <tr key={l.id}>
                     <td className={withPy(tdText, "py-2.5")}>
                       <div className="font-medium">{l.description}</div>
-                      <div className="font-mono text-[11.5px] text-navy-500">{l.sku}</div>
+                      <div className="tabular text-[11.5px] text-navy-500">{l.sku}</div>
                     </td>
                     <td className={withPy(tdNum, "py-2.5")}>
                       {formatQty(l.sold)} <span className="font-sans text-navy-500">{l.unit}</span>
@@ -289,7 +289,7 @@ function ReturnDialog({ saleId, lines, netPaid, onClose }: { saleId: string; lin
                         <Input
                           aria-label={`Quantity to return for ${l.description}`}
                           inputMode="decimal"
-                          className="text-right font-mono"
+                          className="text-right tabular"
                           placeholder="0"
                           disabled={remaining.lessThanOrEqualTo(0)}
                           value={qty[l.id] ?? ""}

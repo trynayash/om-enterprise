@@ -137,7 +137,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
             <StatusBadge status={p.reviewStatus} />
             {p.isPublished ? <Badge tone="green">On website</Badge> : <Badge>Not on website</Badge>}
             {!p.isActive && <Badge tone="red">Inactive — can&apos;t be sold</Badge>}
-            <span className="font-mono text-xs tabular text-navy-500">
+            <span className="tabular text-xs text-navy-500">
               {variants.length} variant{variants.length === 1 ? "" : "s"}
             </span>
           </span>

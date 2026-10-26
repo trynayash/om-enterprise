@@ -206,7 +206,7 @@ export function BuyerFields({
               <li key={c.id}>
                 <button type="button" onClick={() => pick(c)} className="block w-full px-3 py-2.5 text-left text-sm transition-colors hover:bg-paper/70">
                   <span className="font-semibold text-navy-950">{c.businessName ? `${c.businessName} (${c.name})` : c.name}</span>
-                  <span className="mt-0.5 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
+                  <span className="mt-0.5 flex flex-wrap gap-x-3 tabular text-xs text-navy-500">
                     {[c.mobile, c.city, c.gstin].filter(Boolean).map((t) => (
                       <span key={t}>{t}</span>
                     ))}
@@ -254,7 +254,7 @@ export function BuyerFields({
           <Input id="c-name" value={form.name} onChange={set("name")} maxLength={120} autoComplete="off" autoFocus />
         </Field>
         <Field label="Mobile" htmlFor="c-mobile" required={mobileRequired} hint="10-digit number">
-          <Input id="c-mobile" className="font-mono" inputMode="tel" value={form.mobile} onChange={set("mobile")} maxLength={16} autoComplete="off" />
+          <Input id="c-mobile" className="tabular" inputMode="tel" value={form.mobile} onChange={set("mobile")} maxLength={16} autoComplete="off" />
         </Field>
         <Field label="Email" htmlFor="c-email" hint="Optional — the bill can be emailed here">
           <Input id="c-email" type="email" value={form.email} onChange={set("email")} maxLength={120} autoComplete="off" />
@@ -269,7 +269,7 @@ export function BuyerFields({
         </div>
         {!form.whatsappSame && (
           <Field label="WhatsApp number" htmlFor="c-whatsapp" required hint="The number the bill is sent to on WhatsApp">
-            <Input id="c-whatsapp" className="font-mono" inputMode="tel" value={form.whatsapp} onChange={set("whatsapp")} maxLength={16} autoComplete="off" autoFocus />
+            <Input id="c-whatsapp" className="tabular" inputMode="tel" value={form.whatsapp} onChange={set("whatsapp")} maxLength={16} autoComplete="off" autoFocus />
           </Field>
         )}
       </div>
@@ -302,7 +302,7 @@ export function BuyerFields({
                 value={form.gstin}
                 onChange={(e) => setForm((f) => ({ ...f, gstin: e.target.value.toUpperCase().replace(/\s/g, "") }))}
                 maxLength={15}
-                className="font-mono uppercase"
+                className="tabular uppercase"
                 autoComplete="off"
               />
             </Field>
@@ -313,7 +313,7 @@ export function BuyerFields({
               <Input id="c-city" value={form.city} onChange={set("city")} maxLength={80} autoComplete="off" />
             </Field>
             <Field label="PIN code" htmlFor="c-pin">
-              <Input id="c-pin" className="font-mono" inputMode="numeric" value={form.pincode} onChange={set("pincode")} maxLength={6} autoComplete="off" />
+              <Input id="c-pin" className="tabular" inputMode="numeric" value={form.pincode} onChange={set("pincode")} maxLength={6} autoComplete="off" />
             </Field>
             <Field
               label="State"

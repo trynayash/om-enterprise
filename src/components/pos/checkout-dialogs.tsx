@@ -54,11 +54,11 @@ export function FinalizeDialog({ data, onClose, run }: { data: SaleData; onClose
       <div className="space-y-4">
         {error && <Alert tone="danger">{error}</Alert>}
         <div className="rounded-lg bg-navy-950 px-5 py-6 text-center text-white">
-          <div className="label-caps text-gold-400">Amount payable</div>
+          <div className="label-sm text-gold-400">Amount payable</div>
           <div className="headline mt-2 text-[2.25rem] font-bold tabular sm:text-[2.75rem]">{formatINR(s.grandTotal)}</div>
           {discount.greaterThan(0) && (
             <div className="mt-2 text-sm text-navy-300">
-              Includes <span className="font-mono">{formatINR(discount)}</span> discount
+              Includes <span className="tabular">{formatINR(discount)}</span> discount
             </div>
           )}
         </div>
@@ -68,11 +68,11 @@ export function FinalizeDialog({ data, onClose, run }: { data: SaleData; onClose
               <span className="min-w-0">
                 <span className="font-medium text-navy-950">{l.productName}</span>
                 {optionLabel(l.variantName) && <span className="text-navy-500"> · {l.variantName}</span>}
-                <span className="mt-0.5 block font-mono text-xs text-navy-500">
+                <span className="mt-0.5 block tabular text-xs text-navy-500">
                   {formatQty(l.quantity)} × {formatINR(l.unitPrice)}
                 </span>
               </span>
-              <span className="shrink-0 font-mono font-semibold text-navy-950 tabular">{formatINR(l.lineTotal)}</span>
+              <span className="shrink-0 tabular font-semibold text-navy-950">{formatINR(l.lineTotal)}</span>
             </li>
           ))}
         </ul>
@@ -127,7 +127,7 @@ export function QuotationDialog({ data, onClose }: { data: SaleData; onClose: ()
           <Input id="q-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={120} autoFocus />
         </Field>
         <Field label="Mobile (optional)" htmlFor="q-mobile" hint="10-digit Indian mobile number">
-          <Input id="q-mobile" className="font-mono" inputMode="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={16} />
+          <Input id="q-mobile" className="tabular" inputMode="tel" value={mobile} onChange={(e) => setMobile(e.target.value)} maxLength={16} />
         </Field>
       </div>
     </Dialog>

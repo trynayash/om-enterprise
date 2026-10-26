@@ -68,7 +68,7 @@ async function PosHome() {
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-navy-200 bg-paper/60 px-5 py-3">
           <h2 id="open-sales" className="text-[15px] font-semibold text-navy-950">
             Your open sales
-            {open.length > 0 && <span className="ml-2 font-mono text-xs font-medium text-navy-500 tabular">{open.length}</span>}
+            {open.length > 0 && <span className="ml-2 tabular text-xs font-medium text-navy-500">{open.length}</span>}
           </h2>
           <span className="text-xs text-navy-500">Drafts and sales awaiting payment</span>
         </div>
@@ -82,8 +82,8 @@ async function PosHome() {
                   href={`/pos/sale/${s.id}`}
                   className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1.5 px-5 py-3.5 transition-colors hover:bg-paper/60 sm:flex"
                 >
-                  <span className="font-mono text-sm font-semibold text-navy-950 sm:order-1 sm:w-[5.5rem]">{s.saleNumber}</span>
-                  <Money value={s.grandTotal} className="text-right font-mono text-[15px] font-semibold text-navy-950 sm:order-4" />
+                  <span className="tabular text-sm font-semibold text-navy-950 sm:order-1 sm:w-[5.5rem]">{s.saleNumber}</span>
+                  <Money value={s.grandTotal} className="text-right tabular text-[15px] font-semibold text-navy-950 sm:order-4" />
                   <span className="col-span-2 flex flex-wrap items-center gap-x-1.5 gap-y-1 sm:order-2">
                     <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
                     {s.isTraining && <TrainingBadge />}

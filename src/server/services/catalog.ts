@@ -20,6 +20,7 @@ import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/
 import { conflict, forbidden, invalid, notFound } from "@/server/errors";
 import { slugOr } from "@/lib/india";
 import { D } from "@/lib/money";
+import { getSettings } from "@/server/settings";
 import {
   getActiveCosts,
   getActivePrices,
@@ -328,18 +329,60 @@ export async function setProductPublished(actor: Actor, id: string, publish: boo
   });
 }
 
+/**
+ * Price filters for the products list, all on the default price list:
+ * live = some active size has a current price; missing = some active size has none;
+ * none = no active size has one (the website shows "Price on request"); pending = a change waits for approval;
+ * stale = a current price is older than the review period in pricing settings; scheduled = an approved future price.
+ */
+export const PRODUCT_PRICE_FILTERS = ["live", "missing", "none", "pending", "stale", "scheduled"] as const;
+export const PRODUCT_SORTS = ["updated", "name", "price_asc", "price_desc"] as const;
+
+/** A ₹ amount from a filter box: up to 9 digits and 2 decimals. Anything else is ignored. */
+export function moneyFilter(v: string | null | undefined): string | undefined {
+  const s = v?.trim();
+  return s && /^\d{1,9}(\.\d{1,2})?$/.test(s) ? s : undefined;
+}
+
 export interface AdminProductFilter {
   q?: string;
+  /** Includes products in its sub-categories. */
   categoryId?: string;
   brandId?: string;
   status?: "all" | "published" | "unpublished" | "inactive" | "sample" | "needs_review";
+  price?: (typeof PRODUCT_PRICE_FILTERS)[number];
+  /** ₹ incl. GST. A product matches when any active size's current price is within the range. */
+  min?: string;
+  max?: string;
+  /** "updated" (default), "name", or by each product's lowest current price incl. GST (unpriced last). */
+  sort?: (typeof PRODUCT_SORTS)[number];
   page?: number;
   pageSize?: number;
+}
+
+/** Number of products filed directly under each category id. */
+export async function productCountsByCategory(): Promise<Record<string, number>> {
+  const rows = await getDb().select({ id: products.categoryId, n: sql<number>`count(*)::int` }).from(products).groupBy(products.categoryId);
+  return Object.fromEntries(rows.map((r) => [r.id, r.n]));
 }
 
 export async function listProductsAdmin(actor: Actor, f: AdminProductFilter) {
   requirePermission(actor, ["catalog.view", "catalog.edit"]);
   const db = getDb();
+  const [list] = await db.select({ id: priceLists.id }).from(priceLists).where(eq(priceLists.isDefault, true));
+  const listId = list?.id ?? null;
+  // Each active size of the row's product with its current price on the default list (newest approved
+  // version already in effect), normalised to ₹ incl. GST. Outer columns are written out as "products"."…"
+  // so they bind to the outer row. Callers append further conditions with `and …`.
+  const liveSizes = sql`product_variants pv
+    left join tax_classes vt on vt.id = pv.tax_class_id
+    left join tax_classes pt on pt.id = "products"."tax_class_id"
+    cross join lateral (select x.effective_from,
+        case when x.price_includes_tax then x.price else round(x.price * (100 + coalesce(vt.gst_rate, pt.gst_rate, 0)) / 100, 2) end as amount
+      from variant_prices x
+      where x.variant_id = pv.id and x.price_list_id = ${listId} and x.status = 'approved' and x.effective_from <= now()
+      order by x.effective_from desc, x.created_at desc limit 1) lp
+    where pv.product_id = "products"."id" and pv.is_active`;
   const where: SQL[] = [];
   if (f.q) {
     const like = `%${f.q.trim()}%`;
@@ -351,8 +394,46 @@ export async function listProductsAdmin(actor: Actor, f: AdminProductFilter) {
       )!,
     );
   }
-  if (f.categoryId) where.push(eq(products.categoryId, f.categoryId));
+  if (f.categoryId) {
+    // `union` (not `union all`) stops on a parent loop.
+    where.push(
+      sql`"products"."category_id" in (with recursive sub(id) as (select id from categories where id = ${f.categoryId}
+        union select c.id from categories c join sub on c.parent_id = sub.id) select id from sub)`,
+    );
+  }
   if (f.brandId) where.push(eq(products.brandId, f.brandId));
+  switch (f.price) {
+    case "live":
+      where.push(sql`exists (select 1 from ${liveSizes})`);
+      break;
+    case "none":
+      where.push(sql`not exists (select 1 from ${liveSizes})`);
+      break;
+    case "missing":
+      where.push(
+        sql`exists (select 1 from product_variants pv where pv.product_id = "products"."id" and pv.is_active and not exists (select 1 from variant_prices x
+          where x.variant_id = pv.id and x.price_list_id = ${listId} and x.status = 'approved' and x.effective_from <= now()))`,
+      );
+      break;
+    case "pending":
+      where.push(sql`exists (select 1 from variant_prices x join product_variants pv on pv.id = x.variant_id where pv.product_id = "products"."id" and x.status = 'pending')`);
+      break;
+    case "stale": {
+      const { reviewAfterDays } = await getSettings("pricing");
+      where.push(sql`exists (select 1 from ${liveSizes} and lp.effective_from < now() - make_interval(days => ${reviewAfterDays}))`);
+      break;
+    }
+    case "scheduled":
+      where.push(
+        sql`exists (select 1 from variant_prices x join product_variants pv on pv.id = x.variant_id where pv.product_id = "products"."id" and x.status = 'approved' and x.effective_from > now())`,
+      );
+      break;
+  }
+  let [min, max] = [moneyFilter(f.min), moneyFilter(f.max)];
+  if (min && max && D(min).greaterThan(D(max))) [min, max] = [max, min];
+  if (min || max) {
+    where.push(sql`exists (select 1 from ${liveSizes}${min ? sql` and lp.amount >= ${min}` : sql.empty()}${max ? sql` and lp.amount <= ${max}` : sql.empty()})`);
+  }
   switch (f.status) {
     case "published":
       where.push(eq(products.isPublished, true));
@@ -372,26 +453,47 @@ export async function listProductsAdmin(actor: Actor, f: AdminProductFilter) {
   }
   const pageSize = Math.min(f.pageSize ?? 50, 200);
   const page = Math.max(1, f.page ?? 1);
+  const order: SQL[] =
+    f.sort === "name"
+      ? [asc(products.name), asc(products.id)]
+      : f.sort === "price_asc"
+        ? [sql`pr.min_price asc nulls last`, asc(products.name), asc(products.id)]
+        : f.sort === "price_desc"
+          ? [sql`pr.min_price desc nulls last`, asc(products.name), asc(products.id)]
+          : [desc(products.updatedAt), asc(products.id)];
   const rows = await db
     .select({
       p: products,
       brandName: brands.name,
       categoryName: categories.name,
       variantCount: sql<number>`(select count(*)::int from product_variants pv where pv.product_id = "products"."id")`,
+      minPrice: sql<string | null>`pr.min_price::text`,
+      maxPrice: sql<string | null>`pr.max_price::text`,
+      pendingPrices: sql<number>`(select count(*)::int from variant_prices x join product_variants pv on pv.id = x.variant_id where pv.product_id = "products"."id" and x.status = 'pending')`,
       total: sql<number>`count(*) over ()::int`,
     })
     .from(products)
     .leftJoin(brands, eq(brands.id, products.brandId))
     .innerJoin(categories, eq(categories.id, products.categoryId))
+    // Lowest and highest current price across the product's active sizes, ₹ incl. GST.
+    .leftJoinLateral(sql`(select min(lp.amount) as min_price, max(lp.amount) as max_price from ${liveSizes}) pr`, sql`true`)
     .where(where.length ? and(...where) : undefined)
-    .orderBy(desc(products.updatedAt))
+    .orderBy(...order)
     .limit(pageSize)
     .offset((page - 1) * pageSize);
   return {
     total: rows[0]?.total ?? 0,
     page,
     pageSize,
-    items: rows.map((r) => ({ ...r.p, brandName: r.brandName, categoryName: r.categoryName, variantCount: r.variantCount })),
+    items: rows.map((r) => ({
+      ...r.p,
+      brandName: r.brandName,
+      categoryName: r.categoryName,
+      variantCount: r.variantCount,
+      minPrice: r.minPrice,
+      maxPrice: r.maxPrice,
+      pendingPrices: r.pendingPrices,
+    })),
   };
 }
 

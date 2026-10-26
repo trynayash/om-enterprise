@@ -107,7 +107,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                     <div className="font-semibold">
                       {s.displayName} {s.id === me.id && <span className="text-xs font-normal text-navy-500">(you)</span>}
                     </div>
-                    <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">
+                    <div className="mt-0.5 tabular text-[11.5px] text-navy-500">
                       @{s.username}
                       {s.mobile ? ` · ${s.mobile}` : ""}
                     </div>
@@ -191,7 +191,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                   )}
                 </div>
                 <p className="mt-1.5 flex-1 text-xs leading-relaxed text-navy-500">{r.description}</p>
-                <div className="mt-3 border-t border-navy-100 pt-2.5 font-mono text-[11.5px] leading-relaxed text-navy-600">
+                <div className="mt-3 border-t border-navy-100 pt-2.5 tabular text-[11.5px] leading-relaxed text-navy-600">
                   {r.key === "super_admin" ? "All permissions, no limits" : `${r.permissions.length} permissions · discount ${Number(r.defaultDiscountLimitPercent)}% · approves up to ${Number(r.defaultApprovalLimitPercent)}%`}
                 </div>
               </div>
@@ -298,7 +298,7 @@ function StaffDialog({ staff, roles, me, onClose, onSaved }: { staff: Staff | nu
         {!staff && (
           <Field label="Temporary password" required className="sm:col-span-2" hint="They must choose their own password at first sign-in.">
             <div className="flex gap-2">
-              <Input value={f.temporaryPassword} onChange={set("temporaryPassword")} className="font-mono" />
+              <Input value={f.temporaryPassword} onChange={set("temporaryPassword")} className="tabular" />
               <Button variant="outline" onClick={() => setF({ ...f, temporaryPassword: tempPassword() })}>
                 New
               </Button>
@@ -356,7 +356,7 @@ function ResetDialog({ staff, onClose }: { staff: Staff; onClose: () => void }) 
     >
       {error && <Alert tone="danger" className="mb-3">{error}</Alert>}
       <Field label="Temporary password" hint="Share it privately. It must be changed at the next sign-in.">
-        <Input value={pw} onChange={(e) => setPw(e.target.value)} className="font-mono" />
+        <Input value={pw} onChange={(e) => setPw(e.target.value)} className="tabular" />
       </Field>
     </Dialog>
   );
@@ -408,7 +408,7 @@ function PermissionsDialog({ staff, role, catalogue, onClose, onSaved }: { staff
       <div className="space-y-5">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="label-caps mb-2 text-gold-700">{g.label}</div>
+            <div className="label-sm mb-2 text-gold-700">{g.label}</div>
             <div className="divide-y divide-navy-100 rounded-lg border border-navy-100">
               {g.permissions.map((p) => {
                 const v = state[p.key] ?? "default";
@@ -417,7 +417,7 @@ function PermissionsDialog({ staff, role, catalogue, onClose, onSaved }: { staff
                   <div key={p.key} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2">
                     <div className="min-w-0">
                       <div className="text-sm font-medium">{p.description}</div>
-                      <div className="font-mono text-[11px] text-navy-500">
+                      <div className="tabular text-[11px] text-navy-500">
                         {p.key} · role default: {roleSet.has(p.key) ? "yes" : "no"}
                       </div>
                     </div>
@@ -492,7 +492,7 @@ function RoleDialog({ role, catalogue, onClose, onSaved }: { role: Role; catalog
       <div className="grid gap-5 md:grid-cols-2">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="label-caps mb-2 text-gold-700">{g.label}</div>
+            <div className="label-sm mb-2 text-gold-700">{g.label}</div>
             <div className="space-y-1.5">
               {g.permissions.map((p) => (
                 <Checkbox
@@ -506,7 +506,7 @@ function RoleDialog({ role, catalogue, onClose, onSaved }: { role: Role; catalog
                   }}
                   label={
                     <>
-                      {p.description} <span className="font-mono text-[11px] text-navy-400">{p.key}</span>
+                      {p.description} <span className="tabular text-[11px] text-navy-400">{p.key}</span>
                     </>
                   }
                 />

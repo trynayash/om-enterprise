@@ -25,7 +25,7 @@ export function Stat({ label, value, hint, tone = "navy" }: { label: ReactNode; 
   const tones = { navy: "text-navy-900", gold: "text-gold-700", green: "text-emerald-700", red: "text-red-700" };
   return (
     <Card className="min-w-0 p-3.5 sm:p-4">
-      <div className="label-caps text-navy-500">{label}</div>
+      <div className="label-sm text-navy-500">{label}</div>
       <div className={cn("headline mt-1.5 break-words text-[1.375rem] font-bold tabular sm:mt-2 sm:text-[1.75rem]", tones[tone])}>{value}</div>
       {hint && <div className="mt-1 text-xs leading-snug text-navy-500 sm:mt-1.5">{hint}</div>}
     </Card>

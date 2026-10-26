@@ -25,7 +25,17 @@ export interface AuditEntry {
  * so the change and its audit trail commit (or roll back) together.
  */
 export async function audit(tx: Tx, actor: AuditActor, entry: AuditEntry): Promise<void> {
-  await tx.insert(auditLogs).values({
+  await tx.insert(auditLogs).values(auditRow(actor, entry));
+}
+
+/** Many records by the same actor in one statement (bulk decisions); each row is exactly what `audit` writes. */
+export async function auditMany(tx: Tx, actor: AuditActor, entries: AuditEntry[]): Promise<void> {
+  if (!entries.length) return;
+  await tx.insert(auditLogs).values(entries.map((e) => auditRow(actor, e)));
+}
+
+function auditRow(actor: AuditActor, entry: AuditEntry) {
+  return {
     actorUserId: actor.userId,
     actorLabel: actor.label,
     action: entry.action,
@@ -35,7 +45,7 @@ export async function audit(tx: Tx, actor: AuditActor, entry: AuditEntry): Promi
     data: entry.data ?? null,
     ip: actor.ip ?? null,
     userAgent: actor.userAgent?.slice(0, 300) ?? null,
-  });
+  };
 }
 
 /** Shallow diff of two plain objects, for audit `data`. */

@@ -113,7 +113,7 @@ export function DiscountDialog({
             inputMode="decimal"
             value={value}
             onChange={(e) => setValue(e.target.value.replace(/[^\d.]/g, ""))}
-            className="h-12 font-mono text-lg font-semibold tabular"
+            className="h-12 tabular text-lg font-semibold"
             autoFocus
             onKeyDown={(e) => {
               if (e.key === "Enter" && valid && !D(value).isZero() && !(reasonRequired && !reason.trim())) save({ type, value });
@@ -124,13 +124,13 @@ export function DiscountDialog({
           <dl className="animate-fade-in rounded-lg border border-navy-200 bg-paper/60 px-4 py-3 text-sm">
             <div className="flex items-baseline justify-between gap-4">
               <dt className="text-navy-600">
-                Discount <span className="ml-1 font-mono text-xs text-navy-500">({pct.toFixed(2)}%)</span>
+                Discount <span className="ml-1 tabular text-xs text-navy-500">({pct.toFixed(2)}%)</span>
               </dt>
-              <dd className="font-mono text-emerald-700 tabular">− {formatINR(amount)}</dd>
+              <dd className="tabular text-emerald-700">− {formatINR(amount)}</dd>
             </div>
             <div className="mt-1 flex items-baseline justify-between gap-4">
               <dt className="font-semibold text-navy-950">New amount</dt>
-              <dd className="font-mono font-semibold text-navy-950 tabular">{formatINR(base.minus(amount))}</dd>
+              <dd className="tabular font-semibold text-navy-950">{formatINR(base.minus(amount))}</dd>
             </div>
           </dl>
         )}

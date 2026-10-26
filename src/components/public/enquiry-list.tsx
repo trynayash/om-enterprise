@@ -115,11 +115,11 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
                       <Link href={`/products/${item.slug}`} className="link-draw font-semibold text-navy-950">
                         {line?.productName ?? item.productName}
                       </Link>
-                      <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-[12px] text-navy-500">
+                      <div className="mt-1 flex flex-wrap items-center gap-2 tabular text-[12px] text-navy-500">
                         <span>{line?.variantName ?? item.variantName}</span>
                         {line?.isSample && <SampleBadge />}
                       </div>
-                      <div className="mt-1 font-mono text-[13px] tabular text-navy-700">
+                      <div className="mt-1 tabular text-[13px] text-navy-700">
                         {line?.unitPrice ? (
                           <>
                             {formatPrice(line.unitPrice)} <span className="text-navy-400">/ {item.unit.toLowerCase()}</span>
@@ -145,13 +145,13 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
                           onChange={(e) => setDrafts((d) => ({ ...d, [item.variantId]: e.target.value }))}
                           onBlur={() => commit(item.variantId, decimals)}
                           onKeyDown={(e) => e.key === "Enter" && commit(item.variantId, decimals)}
-                          className="h-full w-16 border-x border-navy-100 text-center font-mono text-sm font-medium tabular focus:outline-none"
+                          className="h-full w-16 border-x border-navy-100 text-center tabular text-sm font-medium focus:outline-none"
                         />
                         <button type="button" onClick={() => bump(item.variantId, item.quantity, decimals, 1)} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-navy-50" aria-label={`Increase quantity of ${item.productName}`}>
                           <Plus className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                      <div className="w-28 text-right font-mono text-sm font-semibold tabular text-navy-950">{line?.lineTotal ? formatPrice(line.lineTotal) : "—"}</div>
+                      <div className="w-28 text-right tabular text-sm font-semibold text-navy-950">{line?.lineTotal ? formatPrice(line.lineTotal) : "—"}</div>
                       <button type="button" onClick={() => list.remove(item.variantId)} className="rounded-md p-2 text-navy-400 transition-colors hover:bg-red-50 hover:text-red-700" aria-label={`Remove ${item.productName}`}>
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -170,8 +170,8 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
             )}
             <div className="mt-2 rounded-xl bg-navy-950 p-5 text-white">
               <div className="flex items-baseline justify-between gap-4">
-                <span className="label-caps text-navy-300">Indicative total</span>
-                <span className="font-mono text-2xl font-semibold tabular tracking-[-0.02em]">{loading && !priced ? "…" : priced ? formatPrice(priced.total) : "—"}</span>
+                <span className="label-sm text-navy-300">Indicative total</span>
+                <span className="tabular text-2xl font-semibold tracking-[-0.02em]">{loading && !priced ? "…" : priced ? formatPrice(priced.total) : "—"}</span>
               </div>
               <p className="mt-2 text-xs leading-relaxed text-navy-300">
                 {priced && !priced.allPriced ? "Some items are priced on request and are not included. " : ""}

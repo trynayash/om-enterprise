@@ -130,11 +130,11 @@ export function useWhatsAppBill(documentId: string, docNumber: string, info: Doc
         <>
           {last ? (
             <>
-              Sent on WhatsApp to <span className="font-mono text-navy-700">{formatPhone(last.to)}</span> · {when(last.at)}
+              Sent on WhatsApp to <span className="tabular text-navy-700">{formatPhone(last.to)}</span> · {when(last.at)}
             </>
           ) : to ? (
             <>
-              WhatsApp sends the PDF to <span className="font-mono text-navy-700">{formatPhone(to)}</span> from the shop&apos;s number
+              WhatsApp sends the PDF to <span className="tabular text-navy-700">{formatPhone(to)}</span> from the shop&apos;s number
             </>
           ) : (
             "No WhatsApp number on this bill"
@@ -148,7 +148,7 @@ export function useWhatsAppBill(documentId: string, docNumber: string, info: Doc
           {to ? (
             <>
               {" "}
-              in <span className="font-mono text-navy-700">{formatPhone(to)}</span>&apos;s chat
+              in <span className="tabular text-navy-700">{formatPhone(to)}</span>&apos;s chat
             </>
           ) : null}{" "}
           with the bill&apos;s link
@@ -185,7 +185,7 @@ export function useWhatsAppBill(documentId: string, docNumber: string, info: Doc
       <div className="space-y-3">
         {error && <Alert tone="danger">{error}</Alert>}
         <Field label="Customer's WhatsApp number" htmlFor="wa-to" error={typed && !typedOk ? "That is not a valid 10-digit Indian number." : null}>
-          <Input id="wa-to" className="font-mono" inputMode="tel" autoComplete="off" autoFocus value={number} onChange={(e) => setNumber(e.target.value)} maxLength={16} />
+          <Input id="wa-to" className="tabular" inputMode="tel" autoComplete="off" autoFocus value={number} onChange={(e) => setNumber(e.target.value)} maxLength={16} />
         </Field>
         <Checkbox label="Keep this as the customer's WhatsApp number" checked={save} onChange={(e) => setSave(e.target.checked)} />
       </div>

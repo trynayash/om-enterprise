@@ -34,7 +34,7 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
         className="flex items-center gap-2.5 rounded-lg py-1.5 pl-1.5 pr-2 transition-colors hover:bg-white/[0.07]"
         aria-expanded={open}
       >
-        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-navy-800 font-mono text-sm font-semibold text-gold-400 ring-1 ring-inset ring-white/10">
+        <span className="flex h-8 w-8 items-center justify-center rounded-md bg-navy-800 tabular text-sm font-semibold text-gold-400 ring-1 ring-inset ring-white/10">
           {name.slice(0, 1).toUpperCase()}
         </span>
         <span className="hidden text-left leading-tight xl:block">
@@ -47,7 +47,7 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
         <div className="absolute right-0 z-40 mt-2 w-60 animate-sheet-in overflow-hidden rounded-lg border border-navy-100 bg-white py-1 text-navy-900 shadow-lift" onMouseLeave={() => setOpen(false)}>
           <div className="border-b border-navy-100 px-4 pb-2.5 pt-2 xl:hidden">
             <div className="text-sm font-semibold">{name}</div>
-            <div className="label-caps mt-0.5 text-navy-500">{role}</div>
+            <div className="label-sm mt-0.5 text-navy-500">{role}</div>
           </div>
           {canDashboard && (
             <Link href="/dashboard" className={item}>

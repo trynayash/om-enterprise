@@ -139,7 +139,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                   </td>
                   <td data-label="Customer" className={tdText}>{d.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                   <td data-label="Sale" className={tdText}>
-                    <Link href={`/dashboard/sales/${d.saleId}`} className="font-mono text-[13px] text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
+                    <Link href={`/dashboard/sales/${d.saleId}`} className="tabular text-[13px] text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
                       {d.saleNumber}
                     </Link>
                   </td>
@@ -155,7 +155,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                   </td>
                   <td data-label="Issued by" className={tdMuted}>
                     {d.issuedByName}
-                    {d.printCount > 0 && <div className="font-mono text-[11.5px] text-navy-400">Printed {d.printCount}×</div>}
+                    {d.printCount > 0 && <div className="tabular text-[11.5px] text-navy-400">Printed {d.printCount}×</div>}
                   </td>
                 </tr>
               ))}

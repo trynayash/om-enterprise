@@ -94,7 +94,7 @@ function DateField({ label, value, onChange, min, max, className }: { label: "Fr
   const id = useId();
   return (
     <div className={cn("relative w-[calc(50%-0.25rem)] sm:w-44", className)}>
-      <label htmlFor={id} className="label-caps pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-navy-500">
+      <label htmlFor={id} className="label-sm pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-navy-500">
         {label}
       </label>
       <Input id={id} type="date" value={value} min={min} max={max} onChange={(e) => onChange(e.target.value)} className={label === "From" ? "h-11 pl-14" : "h-11 pl-10"} aria-label={`${label} date`} />

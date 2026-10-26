@@ -49,7 +49,7 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
             eyebrow={DOC_LABEL[doc.docType] ?? doc.docType}
             title={
               <span className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <span className="font-mono text-[0.72em] font-semibold tracking-tight">{doc.docNumber}</span>
+                <span className="tabular text-[0.72em] font-semibold tracking-tight">{doc.docNumber}</span>
                 <TitleStamps>
                   <StatusBadge status={doc.status} />
                   {doc.isTraining && <TrainingBadge />}
@@ -59,7 +59,7 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
             description={
               <>
                 Issued by {doc.issuedByName} on <DateTime value={doc.issuedAt} /> · sale{" "}
-                <Link href={`/dashboard/sales/${doc.saleId}`} className="font-mono font-medium text-navy-700 underline-offset-[3px] hover:underline">
+                <Link href={`/dashboard/sales/${doc.saleId}`} className="tabular font-medium text-navy-700 underline-offset-[3px] hover:underline">
                   {s.saleNumber}
                 </Link>
                 {doc.printCount > 0 && (
@@ -115,7 +115,7 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
         )}
         {s.original && (
           <p className="text-sm text-navy-600">
-            Credit note against <span className="font-mono font-medium text-navy-900">{s.original.number}</span>
+            Credit note against <span className="tabular font-medium text-navy-900">{s.original.number}</span>
             {s.reason ? ` — ${s.reason}` : ""}
           </p>
         )}

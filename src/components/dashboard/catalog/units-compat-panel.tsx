@@ -143,7 +143,7 @@ export function UnitsCompatPanel({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <section>
-        <h3 className="label-caps text-navy-600">Other selling units</h3>
+        <h3 className="label-sm text-navy-600">Other selling units</h3>
         <p className="mt-1.5 text-xs leading-relaxed text-navy-500">
           Base unit: <b>{baseUnit?.name ?? variant.unitCode}</b>. Only units listed here can be used at the counter — nothing is converted automatically.
         </p>
@@ -155,7 +155,7 @@ export function UnitsCompatPanel({
             return (
               <li key={c.id} className="flex items-center justify-between px-3 py-1.5 text-sm">
                 <span>
-                  1 <b>{u?.name ?? c.unitCode}</b> = <span className="font-mono tabular">{Number(c.factor)}</span> {baseUnit?.name ?? variant.unitCode}
+                  1 <b>{u?.name ?? c.unitCode}</b> = <span className="tabular">{Number(c.factor)}</span> {baseUnit?.name ?? variant.unitCode}
                 </span>
                 {canEdit && (
                   <Button size="sm" variant="ghost" aria-label="Remove unit" onClick={() => removeConversion(c.id)}>
@@ -181,7 +181,7 @@ export function UnitsCompatPanel({
               </Select>
             </Field>
             <Field label={`= how many ${baseUnit?.name ?? variant.unitCode}?`} htmlFor="cv-factor" className="w-40">
-              <Input id="cv-factor" className="font-mono" inputMode="decimal" value={factor} onChange={(e) => setFactor(e.target.value)} placeholder="e.g. 10" required />
+              <Input id="cv-factor" className="tabular" inputMode="decimal" value={factor} onChange={(e) => setFactor(e.target.value)} placeholder="e.g. 10" required />
             </Field>
             <Button type="submit" variant="outline" loading={busy === "conv"} disabled={!unitCode || !/^\d{1,8}(\.\d{1,6})?$/.test(factor.trim()) || Number(factor) <= 0} icon={<Plus className="h-4 w-4" />}>
               Add
@@ -191,7 +191,7 @@ export function UnitsCompatPanel({
       </section>
 
       <section>
-        <h3 className="label-caps text-navy-600">Compatible items</h3>
+        <h3 className="label-sm text-navy-600">Compatible items</h3>
         <p className="mt-1.5 text-xs leading-relaxed text-navy-500">Link only items you know fit together (same system, size and class). Shown to staff and customers.</p>
         <ul className="mt-3 divide-y divide-navy-100 rounded-lg border border-navy-100 bg-white">
           {links.length === 0 && <li className="px-3 py-3 text-sm text-navy-500">No compatibility links.</li>}
@@ -209,7 +209,7 @@ export function UnitsCompatPanel({
                   )}
                 </span>
                 <span className="block text-xs text-navy-500">
-                  <span className="font-mono">{l.sku}</span>
+                  <span className="tabular">{l.sku}</span>
                   {l.note ? ` · ${l.note}` : ""}
                 </span>
               </span>
@@ -237,7 +237,7 @@ export function UnitsCompatPanel({
                         {lineDescription(null, h.productName, h.variantName)} {h.isSample && <SampleBadge className="ml-1" label="Sample" />}
                       </span>
                       <span className="text-xs text-navy-500">
-                        <span className="font-mono">{h.sku}</span>
+                        <span className="tabular">{h.sku}</span>
                         {h.brandName ? ` · ${h.brandName}` : ""}
                       </span>
                     </span>

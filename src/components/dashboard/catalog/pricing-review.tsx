@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/field";
 import { SampleBadge, type Tone } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/page";
 import { nameLink, rowHover, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
@@ -14,6 +15,7 @@ import { ClampText } from "@/components/dashboard/clamp-text";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { formatINR } from "@/lib/money";
 import { lineDescription } from "@/lib/line-description";
+import { priceSourceLabel, type PriceSource } from "@/lib/price-filters";
 import { plural } from "@/components/staff/labels";
 
 export interface ReviewItem {
@@ -41,8 +43,8 @@ function issueKind(issue: string): { key: string; tone: Tone } {
 const ISSUE_TEXT: Record<Tone, string> = {
   red: "text-red-800",
   amber: "text-amber-800",
-  blue: "text-sky-800",
-  purple: "text-violet-800",
+  blue: "text-navy-700",
+  purple: "text-amber-800",
   neutral: "text-navy-600",
   navy: "text-navy-800",
   gold: "text-gold-700",
@@ -51,8 +53,8 @@ const ISSUE_TEXT: Record<Tone, string> = {
 const ISSUE_DOT: Record<Tone, string> = {
   red: "bg-red-600",
   amber: "bg-amber-500",
-  blue: "bg-sky-600",
-  purple: "bg-violet-600",
+  blue: "bg-navy-500",
+  purple: "bg-amber-500",
   neutral: "bg-navy-300",
   navy: "bg-navy-700",
   gold: "bg-gold-500",
@@ -85,7 +87,7 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
   };
 
   const costLine = costUnknown > 0 && (
-    <p className="mb-4 flex items-baseline gap-2 border-l-[3px] border-navy-200 py-0.5 pl-3 text-sm leading-relaxed text-navy-700">
+    <p className="mb-4 flex items-baseline gap-2 text-sm leading-relaxed text-navy-700">
       <span>
         <span className="font-semibold text-navy-950">{plural(costUnknown, "variant")}</span> {costUnknown === 1 ? "has" : "have"} no recorded cost — margins can&apos;t be
         checked until purchase costs are entered. Record them on each product page{canImport ? (
@@ -117,11 +119,11 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
       {costLine}
       <div className="mb-3 flex flex-wrap items-center gap-1.5">
         <Chip active={filter === "all"} onClick={() => pick("all")}>
-          All <span className="font-mono text-[11.5px] tabular opacity-70">{actionable.length}</span>
+          All <span className="tabular text-[11.5px] opacity-70">{actionable.length}</span>
         </Chip>
         {counts.map(([k, n]) => (
           <Chip key={k} active={filter === k} onClick={() => pick(k)}>
-            {k} <span className="font-mono text-[11.5px] tabular opacity-70">{n}</span>
+            {k} <span className="tabular text-[11.5px] opacity-70">{n}</span>
           </Chip>
         ))}
         <label className="ml-auto inline-flex items-center gap-2 text-sm text-navy-600">
@@ -147,7 +149,7 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
                     {i.product}
                   </Link>
                   <div className="mt-0.5 flex items-center gap-1.5 text-xs text-navy-500">
-                    <span className="font-mono text-[11.5px]">{i.sku}</span>
+                    <span className="tabular text-[11.5px]">{i.sku}</span>
                     {i.isSample && <SampleBadge label="Sample" />}
                   </div>
                 </td>
@@ -176,7 +178,7 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
       </div>
       {visible.length > shown && (
         <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <span className="font-mono text-xs tabular text-navy-500">
+          <span className="tabular text-xs text-navy-500">
             Showing {shown.toLocaleString("en-IN")} of {visible.length.toLocaleString("en-IN")}
           </span>
           <Button size="sm" variant="outline" onClick={() => setShown((n) => n + PAGE)}>
@@ -214,6 +216,13 @@ export interface PendingChange {
   previousPrice: string | null;
   price: string;
   priceIncludesTax: boolean;
+  /** The proposed price including GST (the same as `price` when that already includes it). */
+  priceInclGst: string;
+  /** Change from the current price, both incl. GST, in % (null for a new price). */
+  changePct: string | null;
+  brandName: string | null;
+  categoryName: string;
+  source: PriceSource;
   effectiveFrom: string;
   createdAt: string;
   requestedBy: string;
@@ -222,17 +231,29 @@ export interface PendingChange {
   previousMarginPercent: string | null;
 }
 
+interface DecisionResult {
+  status: string;
+  effectiveFrom: string;
+  live?: boolean;
+}
+
 export function PendingPriceChanges({ items, canApprove, showCost }: { items: PendingChange[]; canApprove: boolean; showCost: boolean }) {
   const router = useRouter();
   const toast = useToast();
   const [busy, setBusy] = useState<string | null>(null);
-  const decide = async (id: string, decision: "approve" | "reject") => {
-    const note = decision === "reject" ? prompt("Reason for rejecting?") : "";
-    if (decision === "reject" && !note) return;
-    setBusy(id);
+  /** The item whose reject reason is being typed. */
+  const [rejecting, setRejecting] = useState<string | null>(null);
+  const [note, setNote] = useState("");
+  const decide = async (c: PendingChange, decision: "approve" | "reject") => {
+    setBusy(c.id);
     try {
-      await apiFetch(`/api/admin/prices/${id}/decision`, { method: "POST", body: { decision, note: note || null } });
-      toast(decision === "approve" ? "Approved — the new price is live" : "Rejected");
+      const r = await apiFetch<DecisionResult>(`/api/admin/prices/${c.id}/decision`, { method: "POST", body: { decision, note: decision === "reject" ? note.trim() : null } });
+      if (decision === "reject") toast(`Rejected the price for ${c.sku}`);
+      else if (r.live) toast(`Approved — ${formatINR(c.price)} is now the price of ${c.sku}`);
+      else if (new Date(r.effectiveFrom) > new Date()) toast(`Approved — the price of ${c.sku} changes on ${new Date(r.effectiveFrom).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}`);
+      else toast(`Approved, but a later price for ${c.sku} is already in force`, "info");
+      setRejecting(null);
+      setNote("");
       router.refresh();
     } catch (err) {
       toast(errorMessage(err), "error");
@@ -240,11 +261,11 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
       setBusy(null);
     }
   };
-  if (!items.length) return <p className="text-sm text-navy-500">No price changes are waiting for approval.</p>;
+  if (!items.length) return <p className="px-5 py-4 text-sm text-navy-500">No price changes match.</p>;
   return (
     <ul className="divide-y divide-navy-100">
       {items.map((c) => {
-        const change = c.previousPrice && Number(c.previousPrice) > 0 ? ((Number(c.price) - Number(c.previousPrice)) / Number(c.previousPrice)) * 100 : null;
+        const change = c.changePct === null ? null : Number(c.changePct);
         return (
           <li key={c.id} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-4">
             <div className="min-w-0 flex-1 text-sm">
@@ -252,16 +273,20 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
                 <Link href={`/dashboard/products/${c.productId}`} className={nameLink}>
                   {lineDescription(null, c.productName, c.variantName)}
                 </Link>
-                <span className="font-mono text-[11.5px] text-navy-500">{c.sku}</span>
+                <span className="tabular text-[11.5px] text-navy-500">{c.sku}</span>
+              </div>
+              <div className="mt-0.5 text-xs text-navy-500">
+                {c.brandName ?? "No brand"} · {c.categoryName} · {priceSourceLabel(c.source)}
               </div>
               <div className="mt-1 text-navy-700">
                 <span className="text-navy-500">{c.listName}:</span>{" "}
-                <span className="font-mono text-[13px] tabular">
+                <span className="tabular text-[13px]">
                   <span className="text-navy-400">{c.previousPrice ? formatINR(c.previousPrice) : "—"}</span> → <span className="font-semibold text-navy-950">{formatINR(c.price)}</span>
                 </span>{" "}
                 <span className="text-navy-500">{c.priceIncludesTax ? "incl." : "excl."} GST</span>
+                {!c.priceIncludesTax && <span className="ml-1 tabular text-[12.5px] text-navy-500">({formatINR(c.priceInclGst)} incl.)</span>}
                 {change !== null && (
-                  <span className={cn("ml-1.5 font-mono text-[12.5px] font-semibold", change < 0 ? "text-red-700" : "text-emerald-700")}>
+                  <span className={cn("ml-1.5 tabular text-[12.5px] font-semibold", change < 0 ? "text-red-700" : "text-emerald-700")}>
                     {change > 0 ? "+" : ""}
                     {change.toFixed(1)}%
                   </span>
@@ -269,7 +294,7 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
                 {showCost && c.marginPercent && (
                   <span className="ml-1.5 text-navy-500">
                     · margin{" "}
-                    <span className="font-mono text-[12.5px]">
+                    <span className="tabular text-[12.5px]">
                       {c.previousMarginPercent ? `${Number(c.previousMarginPercent).toFixed(1)}% → ` : ""}
                       {Number(c.marginPercent).toFixed(1)}%
                     </span>
@@ -283,16 +308,42 @@ export function PendingPriceChanges({ items, canApprove, showCost }: { items: Pe
                 </div>
               </div>
             </div>
-            {canApprove && (
-              <div className="flex shrink-0 gap-2">
-                <Button size="sm" variant="success" loading={busy === c.id} icon={<Check className="h-3.5 w-3.5" />} onClick={() => decide(c.id, "approve")}>
-                  Approve
-                </Button>
-                <Button size="sm" variant="outline" disabled={busy === c.id} icon={<X className="h-3.5 w-3.5" />} onClick={() => decide(c.id, "reject")}>
-                  Reject
-                </Button>
-              </div>
-            )}
+            {canApprove &&
+              (rejecting === c.id ? (
+                <form
+                  className="flex w-full flex-wrap items-center gap-2 sm:w-auto"
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (note.trim().length >= 3) void decide(c, "reject");
+                  }}
+                >
+                  <Input autoFocus aria-label={`Reason for rejecting the price for ${c.sku}`} placeholder="Reason for rejecting" value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} className="h-8 min-w-0 flex-1 text-[13px] sm:w-64" />
+                  <Button type="submit" size="sm" variant="danger" loading={busy === c.id} disabled={note.trim().length < 3} icon={<X className="h-3.5 w-3.5" />}>
+                    Reject
+                  </Button>
+                  <Button size="sm" variant="ghost" disabled={busy === c.id} onClick={() => setRejecting(null)}>
+                    Cancel
+                  </Button>
+                </form>
+              ) : (
+                <div className="flex shrink-0 gap-2">
+                  <Button size="sm" variant="success" loading={busy === c.id} disabled={!!busy} icon={<Check className="h-3.5 w-3.5" />} onClick={() => decide(c, "approve")}>
+                    Approve
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={!!busy}
+                    icon={<X className="h-3.5 w-3.5" />}
+                    onClick={() => {
+                      setRejecting(c.id);
+                      setNote("");
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </div>
+              ))}
           </li>
         );
       })}

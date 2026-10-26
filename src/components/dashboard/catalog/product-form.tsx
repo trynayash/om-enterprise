@@ -153,7 +153,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
                 <Input id="p-model" value={f.model} onChange={(e) => set("model", e.target.value)} maxLength={80} />
               </Field>
               <Field label="Web address (slug)" htmlFor="p-slug" hint={mode === "create" ? "Leave blank to generate from the name." : "Changing it changes the product's website link."}>
-                <Input id="p-slug" className="font-mono text-[13px]" value={f.slug} onChange={(e) => set("slug", e.target.value.toLowerCase())} placeholder="easy-clean-interior-emulsion" maxLength={80} />
+                <Input id="p-slug" className="tabular text-[13px]" value={f.slug} onChange={(e) => set("slug", e.target.value.toLowerCase())} placeholder="easy-clean-interior-emulsion" maxLength={80} />
               </Field>
               <Field label="Warranty" htmlFor="p-warranty" hint="Only as stated by the manufacturer.">
                 <Input id="p-warranty" value={f.warrantyInfo} onChange={(e) => set("warrantyInfo", e.target.value)} maxLength={500} />
@@ -166,7 +166,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
 
             <div>
               <div className="mb-1 flex items-center justify-between">
-                <span className="label-caps text-navy-600">Technical specifications</span>
+                <span className="label-sm text-navy-600">Technical specifications</span>
                 <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setSpecs([...specs, { label: "", value: "" }])}>
                   Add row
                 </Button>
@@ -207,7 +207,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
             </div>
 
             <div>
-              <span className="label-caps mb-1 block text-navy-600">Variant attributes</span>
+              <span className="label-sm mb-1 block text-navy-600">Variant attributes</span>
               <p className="mb-2.5 text-xs text-navy-500">What makes each variant different, e.g. Colour, Pack size, Capacity, Diameter, Class.</p>
               <div className="flex flex-wrap items-center gap-2">
                 {attrs.map((a) => (
@@ -245,7 +245,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
 
             <div className="grid gap-4 sm:grid-cols-3">
               <Field label="HSN code" htmlFor="p-hsn" hint="4–8 digits. Needed on tax invoices to registered buyers.">
-                <Input id="p-hsn" className="font-mono" inputMode="numeric" value={f.hsnCode} onChange={(e) => set("hsnCode", e.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="e.g. 3209" />
+                <Input id="p-hsn" className="tabular" inputMode="numeric" value={f.hsnCode} onChange={(e) => set("hsnCode", e.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="e.g. 3209" />
               </Field>
               <Field label="GST class" htmlFor="p-tax" hint={selectedTax?.isExempt ? "Exempt / nil-rated: no GST charged." : "Confirm the rate for this HSN with your accountant."}>
                 <Select id="p-tax" value={f.taxClassId} onChange={(e) => set("taxClassId", e.target.value)}>

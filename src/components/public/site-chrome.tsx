@@ -60,7 +60,7 @@ async function FooterWithData() {
             )}
           </div>
           <div>
-            <h2 className="label-caps text-gold-400">Catalogue</h2>
+            <h2 className="label-sm text-gold-400">Catalogue</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               {categories
                 .filter((c) => !c.parentId)
@@ -70,13 +70,13 @@ async function FooterWithData() {
                     <Link href={`/category/${c.slug}`} className={footLink}>
                       {c.name}
                     </Link>
-                    <span className="font-mono text-[11px] text-navy-500 tabular">{c.productCount}</span>
+                    <span className="tabular text-[11px] text-navy-500">{c.productCount}</span>
                   </li>
                 ))}
             </ul>
           </div>
           <div>
-            <h2 className="label-caps text-gold-400">Pages</h2>
+            <h2 className="label-sm text-gold-400">Pages</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
                 <Link href="/products" className={footLink}>All products</Link>
@@ -93,7 +93,7 @@ async function FooterWithData() {
             </ul>
           </div>
           <div>
-            <h2 className="label-caps text-gold-400">Visit or call</h2>
+            <h2 className="label-sm text-gold-400">Visit or call</h2>
             <address className="mt-4 text-sm not-italic leading-relaxed text-navy-200">
               {addressLines(business).map((l) => (
                 <span key={l} className="block">
@@ -104,7 +104,7 @@ async function FooterWithData() {
             <a href={mapsHref(business)} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-white">
               <span className="link-draw">Open in Maps</span> <ArrowUpRight className="h-3.5 w-3.5 text-gold-400" />
             </a>
-            <dl className="mt-5 space-y-1.5 font-mono text-[12.5px]">
+            <dl className="mt-5 space-y-1.5 tabular text-[12.5px]">
               {business.phone && (
                 <div className="flex gap-3">
                   <dt className="w-16 shrink-0 text-navy-500">Phone</dt>
@@ -138,7 +138,7 @@ async function FooterWithData() {
             </dl>
           </div>
         </div>
-        <div className="flex flex-col items-start justify-between gap-2 py-5 font-mono text-[11.5px] text-navy-500 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-2 py-5 tabular text-[11.5px] text-navy-500 sm:flex-row sm:items-center">
           <span>
             © {year} {business.name}
             {business.gstin ? ` · GSTIN ${business.gstin}` : ""}

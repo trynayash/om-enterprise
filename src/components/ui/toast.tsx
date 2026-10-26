@@ -26,10 +26,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           <div
             key={t.id}
             className={cn(
-              "pointer-events-auto flex w-full max-w-md animate-sheet-in items-start gap-2.5 rounded-lg border-l-[3px] bg-navy-950 px-4 py-3 text-sm text-white shadow-lift",
-              t.tone === "success" && "border-l-emerald-400",
-              t.tone === "error" && "border-l-red-400",
-              t.tone === "info" && "border-l-gold-400",
+              "pointer-events-auto flex w-full max-w-md animate-sheet-in items-start gap-2.5 rounded-lg bg-navy-950 px-4 py-3 text-sm text-white shadow-lift",
             )}
           >
             {t.tone === "success" ? (

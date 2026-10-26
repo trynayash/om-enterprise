@@ -58,15 +58,15 @@ async function ContactContent() {
                 className="group flex items-center gap-4 border-b border-navy-100 py-4"
               >
                 <c.icon className="h-[18px] w-[18px] shrink-0 text-gold-600" />
-                <span className="label-caps w-20 shrink-0 text-navy-500">{c.title}</span>
-                <span className={`min-w-0 flex-1 truncate text-[17px] text-navy-950 ${c.mono ? "font-mono" : "font-medium"}`}>{c.value}</span>
+                <span className="label-sm w-20 shrink-0 text-navy-500">{c.title}</span>
+                <span className={`min-w-0 flex-1 truncate text-[17px] text-navy-950 ${c.mono ? "tabular" : "font-medium"}`}>{c.value}</span>
                 <ArrowUpRight className="h-4 w-4 shrink-0 text-navy-300 transition-[transform,color] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-navy-900" />
               </a>
             </li>
           ))}
         </ul>
         <div className="mt-8 rounded-xl border border-navy-200 bg-paper/60 p-5">
-          <div className="label-caps flex items-center gap-2 text-navy-500">
+          <div className="label-sm flex items-center gap-2 text-navy-500">
             <MapPin className="h-3.5 w-3.5 text-gold-600" /> Shop address
           </div>
           <address className="mt-2 text-[15px] not-italic leading-relaxed text-navy-800">
@@ -84,7 +84,7 @@ async function ContactContent() {
             <div className="mt-4 flex gap-3 border-t border-rule pt-4">
               <Clock className="mt-0.5 h-4 w-4 shrink-0 text-gold-600" />
               <div>
-                <div className="label-caps text-navy-500">Opening hours</div>
+                <div className="label-sm text-navy-500">Opening hours</div>
                 <div className="mt-1 text-sm text-navy-800">{business.openingHours}</div>
               </div>
             </div>

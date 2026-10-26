@@ -55,7 +55,7 @@ function CategoryIndex({ categories, onPick, dense }: { categories: HeaderCatego
             className="group flex items-baseline justify-between gap-4 border-b border-navy-100 py-2.5 text-sm text-navy-900 transition-colors hover:text-navy-950"
           >
             <span className="font-medium transition-colors group-hover:text-gold-700">{c.name}</span>
-            <span className="shrink-0 font-mono text-[12px] text-navy-500 tabular">{c.productCount}</span>
+            <span className="shrink-0 tabular text-[12px] text-navy-500">{c.productCount}</span>
           </Link>
         </li>
       ))}
@@ -103,7 +103,7 @@ function NavLinks({ pathname, categories }: { pathname: string | null; categorie
         {open && top.length > 0 && (
           <div className="absolute left-1/2 top-full z-50 w-[620px] -translate-x-1/2 pt-2">
             <div className="animate-sheet-in rounded-xl border border-navy-200 bg-white p-5 shadow-lift">
-              <div className="label-caps mb-2 flex items-center justify-between text-navy-500">
+              <div className="label-sm mb-2 flex items-center justify-between text-navy-500">
                 <span>Categories</span>
                 <span>Products</span>
               </div>
@@ -144,7 +144,7 @@ function EnquiryButton() {
       {count > 0 && (
         <span
           key={count}
-          className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] animate-sheet-in items-center justify-center rounded-[4px] bg-navy-900 px-1 font-mono text-[11px] font-semibold text-white ring-2 ring-white"
+          className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] animate-sheet-in items-center justify-center rounded-[4px] bg-navy-900 px-1 tabular text-[11px] font-semibold text-white ring-2 ring-white"
         >
           {count}
         </span>
@@ -195,7 +195,7 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
   return (
     <header className="sticky top-0 z-40">
       <div className="hidden bg-navy-950 text-navy-300 md:block">
-        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 font-mono text-[11.5px] sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 tabular text-[11.5px] sm:px-6 lg:px-8">
           <span className="flex min-w-0 items-center gap-2 truncate">
             {addressShort && (
               <>
@@ -292,7 +292,7 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
               </nav>
               {top.length > 0 && (
                 <div className="mt-7">
-                  <div className="label-caps mb-1 text-navy-500">Categories</div>
+                  <div className="label-sm mb-1 text-navy-500">Categories</div>
                   <CategoryIndex categories={top} onPick={() => setMenuOpen(false)} dense />
                 </div>
               )}

@@ -43,7 +43,7 @@ export function PriceChangesTable({ rows, showCost }: { rows: PriceChangeRow[]; 
             </td>
             <td data-label="Variant" className={tdText}>
               <div className="font-medium">{r.product}</div>
-              <div className="mt-0.5 truncate font-mono text-[11.5px] text-navy-500">
+              <div className="mt-0.5 truncate tabular text-[11.5px] text-navy-500">
                 {r.sku} <span className="font-sans">· {r.list_name}</span>
               </div>
             </td>

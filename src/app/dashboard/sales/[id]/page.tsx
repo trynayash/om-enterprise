@@ -135,7 +135,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                         {l.isSample && <SampleBadge label="Sample" className="ml-1.5" />}
                       </div>
                       {optionLabel(l.variantName) && <div className="text-xs text-navy-600">{l.variantName}</div>}
-                      <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">
+                      <div className="mt-0.5 tabular text-[11.5px] text-navy-500">
                         {[l.sku, l.hsnCode ? `HSN ${l.hsnCode}` : null].filter(Boolean).join(" · ")}
                       </div>
                       <div className="mt-1 flex flex-wrap gap-1">
@@ -334,8 +334,8 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                 {D(sale.cessTotal).greaterThan(0) && <Row label="Cess" value={sale.cessTotal} />}
                 {D(sale.roundOff).isZero() ? null : <Row label="Round off" value={sale.roundOff} />}
                 <div className="my-2.5 flex items-baseline justify-between rounded-md bg-navy-900 px-3 py-2.5 text-white">
-                  <dt className="label-caps text-navy-200">Grand total</dt>
-                  <dd className="font-mono text-base font-semibold tabular">{formatINR(sale.grandTotal)}</dd>
+                  <dt className="label-sm text-navy-200">Grand total</dt>
+                  <dd className="tabular text-base font-semibold">{formatINR(sale.grandTotal)}</dd>
                 </div>
                 {D(sale.effectiveDiscountPercent).greaterThan(0) && <p className="text-right text-xs text-navy-500">Overall discount {sale.effectiveDiscountPercent}% vs list price</p>}
                 <div className="my-2 border-t border-navy-100" />
@@ -345,7 +345,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                 {sale.status !== "cancelled" && sale.status !== "draft" && (
                   <div className={`flex justify-between font-semibold ${balance.greaterThan(0) ? "text-amber-700" : "text-emerald-700"}`}>
                     <dt>{balance.greaterThan(0) ? "Balance due" : "Balance"}</dt>
-                    <dd className="font-mono text-[13px] tabular">{formatINR(m(balance.greaterThan(0) ? balance : 0))}</dd>
+                    <dd className="tabular text-[13px]">{formatINR(m(balance.greaterThan(0) ? balance : 0))}</dd>
                   </div>
                 )}
                 {canSeeCosts && sale.costKnown && sale.grossProfit && (
@@ -368,10 +368,10 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                   <Link href={`/dashboard/customers/${customer.id}`} className="font-semibold text-navy-900 hover:underline">
                     {customer.businessName ? `${customer.businessName} (${customer.name})` : customer.name}
                   </Link>
-                  {customer.mobile && <div className="font-mono text-[13px] text-navy-600">{customer.mobile}</div>}
+                  {customer.mobile && <div className="tabular text-[13px] text-navy-600">{customer.mobile}</div>}
                   {customer.gstin && (
                     <div className="text-navy-600">
-                      GSTIN <span className="font-mono text-[13px]">{customer.gstin}</span>
+                      GSTIN <span className="tabular text-[13px]">{customer.gstin}</span>
                     </div>
                   )}
                   {(customer.billingAddress || customer.city) && <div className="text-navy-500">{[customer.billingAddress, customer.city, stateName(customer.stateCode)].filter(Boolean).join(", ")}</div>}
@@ -391,13 +391,13 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                     <Link href={`/dashboard/documents/${d.id}`} className={`flex items-center gap-3 px-5 py-3 ${rowHover}`}>
                       <FileText className="h-4 w-4 shrink-0 text-navy-400" aria-hidden />
                       <div className="min-w-0 flex-1">
-                        <div className="font-mono text-[13px] font-medium tabular">{d.docNumber}</div>
+                        <div className="tabular text-[13px] font-medium">{d.docNumber}</div>
                         <div className="text-xs text-navy-500">
                           {DOC_LABEL[d.docType] ?? d.docType} · <DateTime value={d.issuedAt} />
                         </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
-                        <Money value={d.grandTotal} className="font-mono text-[13px]" />
+                        <Money value={d.grandTotal} className="tabular text-[13px]" />
                         {d.status === "cancelled" && <StatusBadge status="cancelled" />}
                       </div>
                     </Link>
@@ -427,7 +427,7 @@ function Row({ label, value, raw }: { label: string; value: string | null; raw?:
   return (
     <div className="flex justify-between gap-4">
       <dt className="text-navy-500">{label}</dt>
-      <dd className="whitespace-nowrap font-mono text-[13px] tabular">{raw ? value : <Money value={value} />}</dd>
+      <dd className="whitespace-nowrap tabular text-[13px]">{raw ? value : <Money value={value} />}</dd>
     </div>
   );
 }

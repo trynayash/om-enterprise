@@ -71,7 +71,7 @@ function Dim({ x1, y1, x2, y2, label, side = "below", marker }: { x1: number; y1
   return (
     <g className="text-navy-400" stroke="currentColor" strokeWidth={0.8}>
       <path d={`M${x1} ${y1} L${x2} ${y2}`} markerStart={`url(#${marker})`} markerEnd={`url(#${marker})`} />
-      <text x={tx} y={ty} textAnchor={vertical ? "end" : "middle"} className="fill-current font-mono" stroke="none" fontSize={9} letterSpacing={0.5}>
+      <text x={tx} y={ty} textAnchor={vertical ? "end" : "middle"} className="fill-current tabular" stroke="none" fontSize={9} letterSpacing={0.5}>
         {label}
       </text>
     </g>
@@ -121,7 +121,7 @@ function shapes(kind: DrawingKind, marker: string): ReactNode {
           <E cx={44} cy={118} rx={6} ry={18} />
           <E cx={154} cy={30} rx={18} ry={6} />
           <path d="M108 112 A16 16 0 0 0 124 96" className="text-gold-500" stroke="currentColor" strokeWidth={1} />
-          <text x={128} y={118} className="fill-current font-mono text-navy-400" stroke="none" fontSize={9}>
+          <text x={128} y={118} className="fill-current tabular text-navy-400" stroke="none" fontSize={9}>
             90°
           </text>
         </>
@@ -272,7 +272,7 @@ function shapes(kind: DrawingKind, marker: string): ReactNode {
           <D d="M100 76 V60 M108 76 V60" />
           <D d="M86 50 H122 L116 60 H92 Z" />
           <path d="M136 112 A20 20 0 0 1 116 132" className="text-gold-500" stroke="currentColor" strokeWidth={1} />
-          <text x={140} y={132} className="fill-current font-mono text-navy-400" stroke="none" fontSize={9}>
+          <text x={140} y={132} className="fill-current tabular text-navy-400" stroke="none" fontSize={9}>
             90°
           </text>
           <Centre d="M30 90 H104 V160" />

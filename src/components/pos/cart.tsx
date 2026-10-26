@@ -40,7 +40,7 @@ export function Cart({
   if (!lines.length) {
     return (
       <div className="blueprint flex flex-col items-center justify-center rounded-xl border border-navy-200 px-6 py-14 text-center">
-        <div className="label-caps text-navy-500">Cart · 0 items</div>
+        <div className="label-sm text-navy-500">Cart · 0 items</div>
         <div className="mt-2 text-base font-semibold text-navy-950">The cart is empty</div>
         <p className="mt-1 max-w-sm text-sm leading-relaxed text-navy-500">Search above and add the products the customer wants. Prices, discounts and GST are calculated automatically.</p>
       </div>
@@ -50,16 +50,16 @@ export function Cart({
   return (
     <section aria-label="Cart" className="@container overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="flex items-center justify-between gap-3 border-b border-navy-200 bg-paper/60 px-4 py-2.5 sm:px-5">
-        <h2 className="label-caps text-navy-700">
+        <h2 className="label-sm text-navy-700">
           Cart <span className="text-navy-300">·</span> {items.length} item{items.length === 1 ? "" : "s"}
         </h2>
         {taxCharged && <span className="hidden text-xs text-navy-500 @lg:inline">Rates as configured (incl./+ GST shown per line)</span>}
       </div>
       <div aria-hidden className="hidden grid-cols-[minmax(0,1fr)_12rem_8rem_7.5rem] gap-x-4 border-b border-navy-100 px-5 py-2 text-navy-400 @2xl:grid">
-        <span className="label-caps">Item</span>
-        <span className="label-caps">Qty</span>
-        <span className="label-caps text-right">Rate</span>
-        <span className="label-caps text-right">Amount</span>
+        <span className="label-sm">Item</span>
+        <span className="label-sm">Qty</span>
+        <span className="label-sm text-right">Rate</span>
+        <span className="label-sm text-right">Amount</span>
       </div>
       <ul className="divide-y divide-navy-100">
         {items.map((l) => (
@@ -166,7 +166,7 @@ function CartLine({
             {l.isSample && <SampleBadge label="Sample" />}
           </div>
           {optionLabel(l.variantName) && <div className="text-sm text-navy-700">{l.variantName}</div>}
-          <div className="mt-0.5 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
+          <div className="mt-0.5 flex flex-wrap gap-x-3 tabular text-xs text-navy-500">
             <span>{l.sku}</span>
             {l.hsnCode && <span>HSN {l.hsnCode}</span>}
           </div>
@@ -208,7 +208,7 @@ function CartLine({
                     if (e.key === "Enter") (e.target as HTMLInputElement).blur();
                   }}
                   aria-label={`Quantity of ${l.productName}`}
-                  className="w-16 border-x border-navy-200 bg-white text-center font-mono text-base font-semibold text-navy-950 tabular focus:outline-none"
+                  className="w-16 border-x border-navy-200 bg-white text-center tabular text-base font-semibold text-navy-950 focus:outline-none"
                 />
                 <button
                   type="button"
@@ -223,29 +223,29 @@ function CartLine({
             </>
           ) : (
             <span className="text-sm">
-              <span className="font-mono font-semibold text-navy-950 tabular">{formatQty(l.quantity)}</span> <span className="text-navy-500">{unit?.name ?? l.unitCode}</span>
+              <span className="tabular font-semibold text-navy-950">{formatQty(l.quantity)}</span> <span className="text-navy-500">{unit?.name ?? l.unitCode}</span>
             </span>
           )}
         </div>
 
         <div className="hidden text-right @2xl:block">
-          <div className="font-mono text-sm text-navy-900 tabular">
+          <div className="tabular text-sm text-navy-900">
             {overridden && D(l.priceListUnitPrice).greaterThan(D(l.unitPrice)) && <span className="mr-1.5 text-xs text-navy-400 line-through">{formatINR(l.priceListUnitPrice)}</span>}
             {formatINR(l.unitPrice)}
           </div>
           <div className="mt-0.5 text-[11px] text-navy-500">
             each{taxCharged ? (l.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
           </div>
-          {discount.greaterThan(0) && <div className="mt-0.5 font-mono text-xs font-medium text-emerald-700 tabular">− {formatINR(discount)}</div>}
+          {discount.greaterThan(0) && <div className="mt-0.5 tabular text-xs font-medium text-emerald-700">− {formatINR(discount)}</div>}
         </div>
 
         <div className="text-right">
-          <div className="font-mono text-[17px] font-semibold text-navy-950 tabular">{formatINR(l.lineTotal)}</div>
+          <div className="tabular text-[17px] font-semibold text-navy-950">{formatINR(l.lineTotal)}</div>
           <div className="mt-0.5 text-[11px] text-navy-500 @2xl:hidden">
-            <span className="font-mono">{formatINR(l.unitPrice)}</span> each{taxCharged ? (l.priceIncludesTax ? " incl. GST" : " + GST") : ""}
-            {discount.greaterThan(0) && <span className="ml-1 font-mono font-medium text-emerald-700">− {formatINR(discount)}</span>}
+            <span className="tabular">{formatINR(l.unitPrice)}</span> each{taxCharged ? (l.priceIncludesTax ? " incl. GST" : " + GST") : ""}
+            {discount.greaterThan(0) && <span className="ml-1 tabular font-medium text-emerald-700">− {formatINR(discount)}</span>}
           </div>
-          {taxCharged && D(l.gstRate).greaterThan(0) && <div className="mt-0.5 font-mono text-[11px] text-navy-400">GST {D(l.gstRate).toString()}%</div>}
+          {taxCharged && D(l.gstRate).greaterThan(0) && <div className="mt-0.5 tabular text-[11px] text-navy-400">GST {D(l.gstRate).toString()}%</div>}
         </div>
       </div>
 
@@ -281,17 +281,17 @@ function ChargeLine({ line: l, saleId, editable, taxCharged, run }: { line: Sale
     <li className="flex animate-[rise_320ms_var(--ease-out-quart)_both] flex-wrap items-center gap-x-4 gap-y-2 bg-paper/50 px-4 py-3 sm:px-5">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-2">
-          <span className="label-caps text-navy-500">Charge</span>
+          <span className="label-sm text-navy-500">Charge</span>
           <span className="text-sm font-semibold text-navy-950">{l.productName}</span>
         </div>
         {((taxCharged && D(l.gstRate).greaterThan(0)) || l.hsnCode) && (
           <div className="mt-0.5 flex flex-wrap gap-x-3 text-xs text-navy-500">
             {taxCharged && D(l.gstRate).greaterThan(0) && <span>GST {D(l.gstRate).toString()}% {l.priceIncludesTax ? "incl." : "extra"}</span>}
-            {l.hsnCode && <span className="font-mono">SAC {l.hsnCode}</span>}
+            {l.hsnCode && <span className="tabular">SAC {l.hsnCode}</span>}
           </div>
         )}
       </div>
-      <div className="font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(l.lineTotal)}</div>
+      <div className="tabular text-[15px] font-semibold text-navy-950">{formatINR(l.lineTotal)}</div>
       {editable && (
         <Button
           size="sm"
@@ -353,7 +353,7 @@ function OverrideDialog({ line, saleId, onClose, run }: { line: SaleLineJson; sa
         {error && <Alert tone="danger">{error}</Alert>}
         <Alert tone="info">A lower price counts as a discount against your limit. Below-cost prices need approval.</Alert>
         <Field label="New unit price (₹, same tax basis as the list price)" htmlFor="ovr-price">
-          <Input id="ovr-price" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 font-mono text-lg font-semibold tabular" autoFocus />
+          <Input id="ovr-price" inputMode="decimal" value={price} onChange={(e) => setPrice(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 tabular text-lg font-semibold" autoFocus />
         </Field>
         <Field label="Reason" htmlFor="ovr-reason" required>
           <Textarea id="ovr-reason" value={reason} onChange={(e) => setReason(e.target.value)} maxLength={200} className="min-h-16" />
@@ -410,7 +410,7 @@ export function ChargeDialog({ saleId, onClose, run }: { saleId: string; onClose
           <Input id="chg-label" value={label} onChange={(e) => setLabel(e.target.value)} maxLength={80} />
         </Field>
         <Field label="Amount (₹)" htmlFor="chg-amt">
-          <Input id="chg-amt" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))} className="font-mono font-semibold tabular" autoFocus />
+          <Input id="chg-amt" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))} className="tabular font-semibold" autoFocus />
         </Field>
         <Field label="GST rate" htmlFor="chg-gst" hint="Confirm the applicable rate with your accountant">
           <Select id="chg-gst" value={gstRate} onChange={(e) => setGstRate(e.target.value)}>

@@ -392,7 +392,7 @@ function PrefixesForm({ value, fy }: { value: Settings["documents"]; fy: string 
         <div className="grid gap-4 sm:grid-cols-3">
           {(Object.keys(p) as (keyof typeof p)[]).map((k) => (
             <Field key={k} label={labels[k]} hint={`e.g. ${p[k] || "?"}/${fy}/00001`}>
-              <Input value={p[k]} maxLength={4} onChange={(e) => setP({ ...p, [k]: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") })} className="font-mono" />
+              <Input value={p[k]} maxLength={4} onChange={(e) => setP({ ...p, [k]: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "") })} className="tabular" />
             </Field>
           ))}
         </div>
@@ -438,7 +438,7 @@ function TaxClasses({ classes, canEdit }: { classes: TaxClass[]; canEdit: boolea
                 <div className="font-semibold">{t.name}</div>
                 {t.description && <div className="mt-0.5 text-xs text-navy-500">{t.description}</div>}
               </div>
-              <div className="whitespace-nowrap font-mono text-[13px] font-semibold tabular">
+              <div className="whitespace-nowrap tabular text-[13px] font-semibold">
                 {Number(t.gstRate)}%{Number(t.cessRate) ? ` + ${Number(t.cessRate)}% cess` : ""}
               </div>
             </li>
@@ -450,10 +450,10 @@ function TaxClasses({ classes, canEdit }: { classes: TaxClass[]; canEdit: boolea
               <Input value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="e.g. GST 40%" />
             </Field>
             <Field label="GST %">
-              <Input value={f.gstRate} onChange={(e) => setF({ ...f, gstRate: e.target.value })} inputMode="decimal" className="font-mono" />
+              <Input value={f.gstRate} onChange={(e) => setF({ ...f, gstRate: e.target.value })} inputMode="decimal" className="tabular" />
             </Field>
             <Field label="Cess %">
-              <Input value={f.cessRate} onChange={(e) => setF({ ...f, cessRate: e.target.value })} inputMode="decimal" className="font-mono" />
+              <Input value={f.cessRate} onChange={(e) => setF({ ...f, cessRate: e.target.value })} inputMode="decimal" className="tabular" />
             </Field>
             <Button onClick={add} loading={busy} disabled={!f.name || !f.gstRate}>
               Add

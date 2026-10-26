@@ -68,7 +68,7 @@ export function CategoriesManager({ categories, canCreate, canEdit, canConfigure
                   <Link href={`/dashboard/products?categoryId=${c.id}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
                     {c.name}
                   </Link>
-                  <span className="font-mono text-[11.5px] tabular text-navy-500">
+                  <span className="tabular text-[11.5px] text-navy-500">
                     {c.productCount} product{c.productCount === 1 ? "" : "s"}
                   </span>
                   {!c.isActive && <Badge tone="red">Inactive</Badge>}
@@ -86,7 +86,7 @@ export function CategoriesManager({ categories, canCreate, canEdit, canConfigure
                   )}
                 </div>
                 <div className="mt-0.5 text-xs leading-relaxed text-navy-500">
-                  <span className="font-mono text-[11.5px] text-navy-400">/{c.slug}</span>
+                  <span className="tabular text-[11.5px] text-navy-400">/{c.slug}</span>
                   {c.description ? <> · {c.description}</> : null}
                 </div>
               </div>

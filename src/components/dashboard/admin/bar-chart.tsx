@@ -83,8 +83,8 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
             <tbody>
               {data.map((d) => (
                 <tr key={d.label} className="border-b border-navy-100 last:border-0">
-                  <td className="px-3 py-1.5 font-mono text-[12.5px] text-navy-600">{d.label}</td>
-                  <td className="px-3 py-1.5 text-right font-mono text-[13px] font-medium tabular">{formatINR(String(d.value))}</td>
+                  <td className="px-3 py-1.5 tabular text-[12.5px] text-navy-600">{d.label}</td>
+                  <td className="px-3 py-1.5 text-right tabular text-[13px] font-medium">{formatINR(String(d.value))}</td>
                 </tr>
               ))}
             </tbody>
@@ -96,7 +96,7 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
             {ticks.map((t) => (
               <g key={t} aria-hidden>
                 <line x1={padL} x2={width - padR} y1={y(t)} y2={y(t)} className={t === 0 ? "stroke-navy-400" : "stroke-navy-100"} strokeWidth={1} shapeRendering="crispEdges" />
-                <text x={padL - 8} y={y(t) + 3.5} textAnchor="end" className="fill-navy-500 font-mono text-[11px] tabular">
+                <text x={padL - 8} y={y(t) + 3.5} textAnchor="end" className="fill-navy-500 tabular text-[11px]">
                   {compact(t)}
                 </text>
               </g>
@@ -124,7 +124,7 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
                   {labelled(i) && (
                     <>
                       <line x1={x + barW / 2} x2={x + barW / 2} y1={base} y2={base + 4} className="stroke-navy-400" strokeWidth={1} shapeRendering="crispEdges" />
-                      <text x={x + barW / 2} y={height - 6} textAnchor={i === data.length - 1 ? "end" : "middle"} className={isToday ? "fill-gold-700 font-mono text-[11px] font-medium" : "fill-navy-500 font-mono text-[11px]"}>
+                      <text x={x + barW / 2} y={height - 6} textAnchor={i === data.length - 1 ? "end" : "middle"} className={isToday ? "fill-gold-700 tabular text-[11px] font-medium" : "fill-navy-500 tabular text-[11px]"}>
                         {isToday ? "Today" : dayLabel(d.label)}
                       </text>
                     </>
@@ -138,8 +138,8 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
               className="pointer-events-none absolute top-0 z-10 rounded-md bg-navy-950 px-2.5 py-1.5 text-xs text-white shadow-lift"
               style={{ left: Math.max(0, Math.min(padL + hover * slot, width - 150)) }}
             >
-              <div className="font-mono text-[11px] text-navy-300">{data[hover].label === today ? "Today" : dayLabel(data[hover].label)}</div>
-              <div className="font-mono font-semibold tabular">{formatINR(String(data[hover].value))}</div>
+              <div className="tabular text-[11px] text-navy-300">{data[hover].label === today ? "Today" : dayLabel(data[hover].label)}</div>
+              <div className="tabular font-semibold">{formatINR(String(data[hover].value))}</div>
             </div>
           )}
         </div>

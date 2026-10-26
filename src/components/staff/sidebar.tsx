@@ -2,9 +2,10 @@ import { requirePageActor } from "@/server/auth/session";
 import { visibleNav } from "@/lib/nav";
 import { can } from "@/server/auth/actor";
 import { newOrderCount } from "@/server/services/website-orders";
+import { countPendingPriceChanges } from "@/server/services/pricing";
 import { SidebarNav, type NavBadge } from "./sidebar-nav";
 import { getDb } from "@/server/db/client";
-import { approvalRequests, variantPrices } from "@/server/db/schema";
+import { approvalRequests } from "@/server/db/schema";
 import { eq, sql } from "drizzle-orm";
 
 export async function Sidebar() {
@@ -19,7 +20,7 @@ export async function Sidebar() {
     badges["/dashboard/approvals"] = { count: (await db.select({ c: sql<number>`count(*)::int` }).from(approvalRequests).where(eq(approvalRequests.status, "pending")))[0].c };
   }
   if (can(actor, "prices.approve")) {
-    badges["/dashboard/pricing"] = { count: (await db.select({ c: sql<number>`count(*)::int` }).from(variantPrices).where(eq(variantPrices.status, "pending")))[0].c, quiet: true };
+    badges["/dashboard/pricing"] = { count: await countPendingPriceChanges(), quiet: true };
   }
   return <SidebarNav groups={groups} user={{ name: actor.displayName, role: actor.roleName }} badges={badges} />;
 }

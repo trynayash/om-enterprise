@@ -59,23 +59,23 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
     <section aria-label="Payment" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-navy-200 px-5 py-4">
         <div>
-          <div className="label-caps text-gold-700">
+          <div className="label-sm text-gold-700">
             Step 4 · Take payment
           </div>
           <div className="mt-1.5 text-sm text-navy-500">
             {D(s.amountPaid).greaterThan(0) ? (
               <>
-                Received <span className="font-mono text-navy-800">{formatINR(s.amountPaid)}</span> of <span className="font-mono text-navy-800">{formatINR(s.grandTotal)}</span>
+                Received <span className="tabular text-navy-800">{formatINR(s.amountPaid)}</span> of <span className="tabular text-navy-800">{formatINR(s.grandTotal)}</span>
               </>
             ) : (
               <>
-                Agreed total <span className="font-mono text-navy-800">{formatINR(s.grandTotal)}</span>
+                Agreed total <span className="tabular text-navy-800">{formatINR(s.grandTotal)}</span>
               </>
             )}
           </div>
         </div>
         <div className="sm:text-right">
-          <div className="label-caps text-navy-500">Amount due</div>
+          <div className="label-sm text-navy-500">Amount due</div>
           <div className="headline mt-1 text-[2rem] font-bold text-navy-950 tabular sm:text-[2.25rem]" data-testid="amount-due">
             {formatINR(outstanding)}
           </div>
@@ -147,7 +147,7 @@ function StartQr({ saleId, outstanding, max, run }: { saleId: string; outstandin
             inputMode="decimal"
             value={amount}
             onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))}
-            className="h-12 font-mono text-lg font-semibold tabular"
+            className="h-12 tabular text-lg font-semibold"
           />
         </Field>
         <div className="flex min-w-56 flex-1 flex-col">
@@ -237,28 +237,28 @@ function QrCard({
           {expired && <div className="absolute inset-0 flex items-center justify-center text-base font-semibold text-red-700">QR expired</div>}
         </div>
         <div className="w-full min-w-0 flex-1 text-center md:text-left">
-          <div className="label-caps text-gold-700">Scan to pay</div>
+          <div className="label-sm text-gold-700">Scan to pay</div>
           <div className="headline mt-1.5 text-[2.25rem] font-bold text-navy-950 tabular sm:text-[2.75rem]" data-testid="qr-amount">
             {formatINR(payment.amount)}
           </div>
           <dl className="mx-auto mt-3 grid max-w-sm grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 text-left text-sm md:mx-0">
-            <dt className="label-caps pt-[3px] text-navy-500">Pay to</dt>
+            <dt className="label-sm pt-[3px] text-navy-500">Pay to</dt>
             <dd className="min-w-0 text-navy-800">
               {payment.provider === "upi_static" ? (
                 <>
                   <b className="font-semibold">{config.businessName}</b>
-                  <span className="block font-mono text-[13px] [overflow-wrap:anywhere]">{config.payments.upiVpa}</span>
+                  <span className="block tabular text-[13px] [overflow-wrap:anywhere]">{config.payments.upiVpa}</span>
                 </>
               ) : (
                 <>Razorpay dynamic QR · single use</>
               )}
             </dd>
-            <dt className="label-caps pt-[3px] text-navy-500">Note</dt>
-            <dd className="font-mono text-[13px] text-navy-800">{saleNumber}</dd>
+            <dt className="label-sm pt-[3px] text-navy-500">Note</dt>
+            <dd className="tabular text-[13px] text-navy-800">{saleNumber}</dd>
             {left !== null && !expired && (
               <>
-                <dt className="label-caps pt-[3px] text-navy-500">Valid for</dt>
-                <dd className="font-mono text-[13px] font-medium text-navy-900 tabular">
+                <dt className="label-sm pt-[3px] text-navy-500">Valid for</dt>
+                <dd className="tabular text-[13px] font-medium text-navy-900">
                   {Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")}
                 </dd>
               </>
@@ -387,7 +387,7 @@ function VerifyForm({
     <div className={cn("space-y-4", intent && "animate-fade-in rounded-lg border border-emerald-300 bg-emerald-50/40 p-4")}>
       {intent && (
         <div className="text-[15px] font-semibold text-emerald-950">
-          Verify the UPI payment for <span className="font-mono">{formatINR(intent.amount)}</span>
+          Verify the UPI payment for <span className="tabular">{formatINR(intent.amount)}</span>
         </div>
       )}
       {error && <Alert tone="danger">{error}</Alert>}
@@ -427,7 +427,7 @@ function VerifyForm({
               setAmount(e.target.value.replace(/[^\d.]/g, ""));
               setConfirmed(false);
             }}
-            className="h-12 font-mono text-lg font-semibold tabular"
+            className="h-12 tabular text-lg font-semibold"
           />
         </Field>
         {method === "cash" ? (
@@ -437,14 +437,14 @@ function VerifyForm({
             hint={
               change && change.greaterThanOrEqualTo(0) ? (
                 <span className="inline-block rounded-[3px] bg-emerald-50 px-1.5 text-[13px] font-semibold leading-5 text-emerald-800 ring-1 ring-inset ring-emerald-200">
-                  Return change: <span className="font-mono">{formatINR(change)}</span>
+                  Return change: <span className="tabular">{formatINR(change)}</span>
                 </span>
               ) : (
                 <span className="inline-block px-1.5 text-[13px] leading-5 ring-1 ring-inset ring-transparent">To calculate change</span>
               )
             }
           >
-            <Input id="pay-tendered" inputMode="decimal" value={tendered} onChange={(e) => setTendered(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 font-mono text-lg tabular" />
+            <Input id="pay-tendered" inputMode="decimal" value={tendered} onChange={(e) => setTendered(e.target.value.replace(/[^\d.]/g, ""))} className="h-12 tabular text-lg" />
           </Field>
         ) : (
           <Field
@@ -459,7 +459,7 @@ function VerifyForm({
               value={reference}
               inputMode={method === "upi" ? "numeric" : "text"}
               onChange={(e) => setReference(method === "upi" ? e.target.value.replace(/\D/g, "").slice(0, 12) : e.target.value)}
-              className="h-12 font-mono text-lg"
+              className="h-12 tabular text-lg"
               autoFocus={!!intent}
               aria-invalid={!!ref && !refValid}
             />
@@ -504,7 +504,7 @@ function PaymentList({ payments }: { payments: PaymentJson[] }) {
   if (!payments.length) return null;
   return (
     <div>
-      <div className="label-caps mb-1.5 text-navy-500">Payment records</div>
+      <div className="label-sm mb-1.5 text-navy-500">Payment records</div>
       <ul className="divide-y divide-navy-100 rounded-lg border border-navy-200">
         {payments
           .slice()
@@ -517,13 +517,13 @@ function PaymentList({ payments }: { payments: PaymentJson[] }) {
                 {METHOD_LABEL[p.method]}
               </span>
               <StatusBadge status={p.status} />
-              {p.reference && <span className="font-mono text-xs text-navy-500">Ref {p.reference}</span>}
+              {p.reference && <span className="tabular text-xs text-navy-500">Ref {p.reference}</span>}
               {p.verificationMethod && <span className="text-xs text-navy-500">{VERIFY_LABEL[p.verificationMethod]}</span>}
               <span className="ml-auto flex items-center gap-3">
                 <span className="text-xs text-navy-400">
                   <DateTime value={p.verifiedAt ?? p.createdAt} />
                 </span>
-                <span className="font-mono font-semibold text-navy-950 tabular">{formatINR(p.amount)}</span>
+                <span className="tabular font-semibold text-navy-950">{formatINR(p.amount)}</span>
               </span>
             </li>
           ))}

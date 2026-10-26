@@ -469,9 +469,12 @@ export const variantPrices = pgTable(
     decidedBy: uuid("decided_by").references(() => users.id),
     decidedAt: ts("decided_at"),
     decisionNote: text("decision_note"),
+    /** The bulk import that brought this price in (one id per import), so its prices can be reviewed together. */
+    importBatchId: uuid("import_batch_id"),
   },
   (t) => [
     index("variant_prices_lookup_idx").on(t.variantId, t.priceListId, t.status, t.effectiveFrom),
+    index("variant_prices_import_batch_idx").on(t.importBatchId).where(sql`${t.importBatchId} is not null`),
     check("vp_status", sql`${t.status} in ('pending','approved','rejected','cancelled')`),
     check("vp_price_nonneg", sql`${t.price} >= 0 and (${t.mrp} is null or ${t.mrp} >= 0)`),
   ],

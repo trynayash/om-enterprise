@@ -87,7 +87,7 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
             return (
               <div key={f.name} className={cn("w-[148px] max-sm:min-w-[130px] max-sm:flex-1", folded)}>
                 <Label htmlFor={id}>{f.label}</Label>
-                <Input id={id} name={f.name} type="date" defaultValue={values[f.name] ?? ""} className="font-mono text-[13px]" />
+                <Input id={id} name={f.name} type="date" defaultValue={values[f.name] ?? ""} className="tabular text-[13px]" />
               </div>
             );
           }

@@ -6,7 +6,7 @@ import { can } from "@/server/auth/actor";
 import { getSettings } from "@/server/settings";
 import { bestSellers, salesByDay, salesSummary } from "@/server/services/reports";
 import { listPendingApprovals, listSales } from "@/server/services/sales";
-import { listPendingPriceChanges } from "@/server/services/pricing";
+import { countPendingPriceChanges } from "@/server/services/pricing";
 import { newOrderCount } from "@/server/services/website-orders";
 import { istStartOfDay, istStartOfMonth } from "@/lib/india";
 import { D, formatINR } from "@/lib/money";
@@ -49,7 +49,7 @@ async function Overview() {
   const best = canReports ? await bestSellers(actor, { from: monthStart, to: tomorrow }, 5) : [];
 
   const pendingDiscounts = can(actor, "discounts.approve") ? (await listPendingApprovals(actor)).length : 0;
-  const pendingPrices = can(actor, "prices.approve") ? (await listPendingPriceChanges(actor)).length : 0;
+  const pendingPrices = can(actor, "prices.approve") ? await countPendingPriceChanges() : 0;
   const newOrders = can(actor, "orders.view") ? await newOrderCount() : 0;
   const canSales = can(actor, "sales.view_all") || can(actor, "sales.create");
   const recent = canSales ? await listSales(actor, { pageSize: 6 }) : null;
@@ -113,7 +113,7 @@ async function Overview() {
       {canReports && today && month ? (
         <>
           <section aria-labelledby="today-h">
-            <h2 id="today-h" className="label-caps mb-2.5 text-navy-500">
+            <h2 id="today-h" className="label-sm mb-2.5 text-navy-500">
               Today
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
@@ -135,7 +135,7 @@ async function Overview() {
           </section>
 
           <section aria-labelledby="month-h">
-            <h2 id="month-h" className="label-caps mb-2.5 text-navy-500">
+            <h2 id="month-h" className="label-sm mb-2.5 text-navy-500">
               This month
             </h2>
             <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
@@ -200,7 +200,7 @@ async function Overview() {
                         <td className={tdText}>
                           <div className="font-medium">{b.product}</div>
                           <div className="mt-0.5 text-xs text-navy-500">
-                            <span className="font-mono">{b.sku}</span> · {b.category}
+                            <span className="tabular">{b.sku}</span> · {b.category}
                           </div>
                         </td>
                         <td className={tdNum}>
@@ -237,7 +237,7 @@ async function Overview() {
                   <li key={s.id}>
                     <Link href={`/dashboard/sales/${s.id}`} className={`flex items-center justify-between gap-3 px-5 py-3 ${rowHover}`}>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2 font-mono text-[13px] font-medium">
+                        <div className="flex items-center gap-2 tabular text-[13px] font-medium">
                           {s.saleNumber}
                           {s.isTraining && <TrainingBadge />}
                         </div>
@@ -246,7 +246,7 @@ async function Overview() {
                         </div>
                       </div>
                       <div className="flex shrink-0 flex-col items-end gap-1">
-                        <Money value={s.grandTotal} className="font-mono text-[13px] font-semibold" />
+                        <Money value={s.grandTotal} className="tabular text-[13px] font-semibold" />
                         <StatusBadge status={s.status === "completed" ? s.paymentStatus : s.status} />
                       </div>
                     </Link>
@@ -312,7 +312,7 @@ function ActionItems({
               </span>
               {i.value !== null && (
                 <span
-                  className={`min-w-7 rounded-[3px] px-1.5 py-0.5 text-center font-mono text-[13px] font-semibold tabular ${i.value ? "bg-gold-100 text-gold-700" : "text-navy-400"}`}
+                  className={`min-w-7 rounded-[3px] px-1.5 py-0.5 text-center tabular text-[13px] font-semibold tabular ${i.value ? "bg-gold-100 text-gold-700" : "text-navy-400"}`}
                 >
                   {i.value.toLocaleString("en-IN")}
                 </span>

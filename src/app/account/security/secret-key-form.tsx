@@ -61,7 +61,7 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
             {setAt ? (
               <span className="text-emerald-800">
                 {" "}
-                · set <span className="font-mono text-[13px]">{new Date(setAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" })}</span>
+                · set <span className="tabular text-[13px]">{new Date(setAt).toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" })}</span>
               </span>
             ) : (
               ""

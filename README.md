@@ -276,7 +276,7 @@ The template (download it from the import page) has one row per variant. Rows wi
 | `hsn_code` (4–8 digits), `gst_rate` (must match a tax class) | | |
 | `specifications` | | `Label: Value; Label: Value` |
 | `variant_attributes` | | `Colour=White; Pack size=20 L` |
-| `barcode`, `mrp`, `selling_price`, `price_includes_tax` (yes/no) | | Prices need `prices.edit`; they go *pending* unless the importer can approve |
+| `barcode`, `mrp`, `selling_price`, `price_includes_tax` (yes/no) | | Prices need `prices.edit`; they go *pending* unless the importer can approve (see below) |
 | `purchase_cost`, `purchase_tax_rate`, `freight`, `handling` | | Need `costs.edit` |
 | `is_sample` (yes/no) | | Marks demonstration data |
 | `image_url` | | Up to 4 links to the product photo on the maker's website, separated by spaces. Downloaded after the import is saved; needs `catalog.edit` |
@@ -284,6 +284,13 @@ The template (download it from the import page) has one row per variant. Rows wi
 **Validate** gives a row-by-row report: duplicate SKUs or barcodes (against the database and within the file), missing fields, unknown categories, units or tax rates, invalid numbers, price above MRP and malformed photo links. **Import** is enabled only when there are no errors, and it is all-or-nothing.
 
 Photos are fetched after the products are saved, so a broken link never undoes an import; each photo that could not be added is listed with the reason. The server only downloads from public internet addresses (checked on every redirect), only image files, up to 6 MB each (`src/server/remote-image.ts`).
+
+**Imported prices.** Every import gets its own batch id, stored on each price it brings in (`variant_prices.import_batch_id`), so the prices of one import can be reviewed and decided together.
+
+- Someone who may approve prices (or anyone, when *require approval* is off) sees **Make these prices live now** next to *Publish on the website straight away*. It is ticked by default; untick it to import the prices as *pending* and look them over first.
+- Prices read from a **scan or photo** always stay pending ("Prices read from a scan always wait for review"), whoever imports them. Their reason reads *Bulk import (read from a scan)*.
+- Everyone else's imported prices are pending until approved.
+- When prices are left pending, the result says how many (*3 prices are waiting for approval.*), links to **Price review** filtered to that import, and, for an approver, offers **Approve all … prices** and **Reject all** (a reason is asked for) right there.
 
 ### Real catalogue files (`data/catalog/`)
 
@@ -308,6 +315,17 @@ npm run import:products -- --publish   # also mark new products reviewed and pub
 - Each price change creates a new, **immutable version** containing: price, tax-inclusive flag, MRP, quantity tiers, effective-from date, reason, the previous price, the landed-cost snapshot and the margin before and after.
 - The **active price** is the latest approved version whose effective date has passed. Future-dated prices are supported; back-dating is not.
 - With **Settings → Price changes → "require approval"** on (the default), changes made by staff without `prices.approve` stay *pending* until the Super Admin approves them (Approvals or Price review).
+
+### Reviewing waiting prices: filters, Approve all, Reject all
+An imported price list can bring a thousand prices at once, so the waiting prices on **Approvals** and on **Price review → Waiting for approval** are filtered, sorted and paged on the server (25 a page, "Showing 1–25 of 958 waiting"):
+
+- **Filters** (kept in the page address, so a filtered list can be shared): search by product name or SKU; **Brand** (with counts, e.g. *Finolex (958)*, or *No brand*); **Category** (a category includes its subcategories); **Source** — *Price list* (reason starts "Manufacturer list price:"), *Researched market price* ("Market price (researched):"), *Bulk import*, *Manual change*; **Change** — *New price*, *Increase*, *Decrease*; **Price from / to** in ₹ including GST (a price entered without GST is compared with GST added at its tax rate); **Sort** — *Newest*, *Product*, *Price: low to high*, *Price: high to low*, *Biggest change*. On a phone the filters fold behind a **Filters** button.
+- **Approve all N / Reject all N** (needs `prices.approve`) act on *every* waiting price that matches the filters, not only the page on screen. A dialog first shows how many, by brand and by source, how many are new prices, the reasons given with them (for example, that a list is from 2021 and excludes GST), and that approved prices are used at the counter and on the website straight away. Rejecting needs a reason; approving more than 100 at once needs the tick *I have checked these prices*. At most 5,000 are decided at a time.
+- The action only covers prices proposed up to the moment the list was shown: a proposal that arrives while the dialog is open is never decided unseen. Prices someone else is deciding at the same moment are skipped and counted. If an approved price is not the one in force (a later price applies, or it starts on a later date), the result says so per SKU.
+- Each price gets the same audit record as a one-by-one decision (`price.change_approved` / `price.change_rejected`, marked with the batch), plus one summary record (`price.bulk_approved` / `price.bulk_rejected`) with the filter used.
+- One-by-one **Approve** and **Reject** stay on every item; rejecting asks for a reason on the spot.
+
+On **Approvals**, when two or more discount requests wait, **Approve all** and **Reject all** sit above them as well. Each request is still checked on its own: one above the approver's limit, below cost without the permission, the approver's own request or one whose cart changed is skipped and listed with the reason. Rejecting a request whose sale was already finalised or cancelled clears it from the list (*Sale no longer open*); such a request can't be approved.
 - Selling price can never exceed the MRP (inclusive of tax).
 - **Price lists:** Retail is the default and the public list. Wholesale and Contractor exist but are inactive, ready for the future.
 
@@ -628,9 +646,9 @@ This rebuilds the e2e database, then records a narrated video of every page and 
 | # | Requirement | Where |
 |---|---|---|
 | 1–3 | Super Admin / Admin / Sales permissions | `tests/integration/auth-rbac.test.ts`, `tests/unit/permissions-csv.test.ts` |
-| 4 | Unauthorised users can't change master prices | `pricing-sales.test.ts` "unauthorised users cannot change master prices" |
+| 4 | Unauthorised users can't change master prices | `pricing-sales.test.ts` "unauthorised users cannot change master prices"; `bulk-approvals.test.ts` (filters, Approve all / Reject all, import batches) |
 | 5–6 | Exact variants; quantity & money maths | `tests/unit/pricing-engine.test.ts`, `pricing-sales.test.ts` |
-| 7–8 | Discount limits; exceptional discounts need approval | `pricing-sales.test.ts` (limits, remote/in-person approval, cart-bound approvals, approver limits); `tests/e2e/pos.spec.ts` |
+| 7–8 | Discount limits; exceptional discounts need approval | `pricing-sales.test.ts` (limits, remote/in-person approval, cart-bound approvals, approver limits); `bulk-approvals.test.ts` (several requests at once, skipped with reasons); `tests/e2e/pos.spec.ts` |
 | 9 | Tax & rounding | `pricing-engine.test.ts` (inclusive/exclusive, CGST/SGST/IGST, cess, round-off) |
 | 10 | Historical invoices unchanged by price/settings changes | `payments-billing.test.ts` |
 | 11 | QR amount = finalised payable | `payments-billing.test.ts` |

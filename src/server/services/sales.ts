@@ -20,7 +20,7 @@ import {
 } from "@/server/db/schema";
 import { audit } from "@/server/audit";
 import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
-import { AppError, conflict, forbidden, invalid, notFound, precondition } from "@/server/errors";
+import { AppError, conflict, forbidden, invalid, notFound, precondition, toAppError } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { verifyApproverCredentials } from "@/server/services/auth";
 import {
@@ -865,6 +865,13 @@ export async function requestApproval(actor: Actor, saleId: string, reason: stri
   });
 }
 
+const CART_CHANGED = "The cart changed after approval was requested. A new request is needed.";
+
+/**
+ * Decides a pending request. When the cart changed since it was asked, the request is marked
+ * superseded and "superseded" is returned instead of throwing, so that mark is kept: the caller
+ * reports the conflict after the transaction commits.
+ */
 async function applyDecision(
   tx: Tx,
   approver: Actor,
@@ -873,12 +880,29 @@ async function applyDecision(
   note: string | null,
   channel: "remote" | "in_person",
   onBehalfOf?: Actor,
-) {
+): Promise<"approved" | "rejected" | "cancelled" | "superseded"> {
   const sale = await lockSale(tx, req.saleId!);
-  if (sale.status !== "draft") throw conflict("The sale is no longer a draft");
+  if (sale.status !== "draft") {
+    if (decision === "approve") throw conflict("The sale is no longer a draft");
+    // Rejecting a request whose sale was finalised or cancelled clears it from the queue.
+    const details = req.details as { maxDiscountPercent?: string; saleNumber?: string };
+    const why = note ? `Sale no longer open — ${note}` : "Sale no longer open";
+    await tx
+      .update(approvalRequests)
+      .set({ status: "cancelled", decidedBy: approver.id, decidedAt: new Date(), decisionNote: why, decisionChannel: channel })
+      .where(eq(approvalRequests.id, req.id));
+    await audit(tx, auditActorOf(approver), {
+      action: "discount.approval_cancelled",
+      entityType: "sale",
+      entityId: sale.id,
+      summary: `Cleared the ${details.maxDiscountPercent ?? "?"}% discount request on ${sale.saleNumber}: the sale is ${sale.status}`,
+      data: { approvalRequestId: req.id, note: why, channel, saleStatus: sale.status },
+    });
+    return "cancelled";
+  }
   if (sale.cartFingerprint !== req.cartFingerprint) {
     await tx.update(approvalRequests).set({ status: "superseded", decidedAt: new Date(), decisionNote: "Cart changed" }).where(eq(approvalRequests.id, req.id));
-    throw conflict("The cart changed after approval was requested. A new request is needed.");
+    return "superseded";
   }
   if (approver.id === req.requestedBy && !approver.isSuperAdmin) throw forbidden("You cannot approve your own request");
   const details = req.details as { maxDiscountPercent: string; anyBelowCost: boolean; anyBelowMarginFloor: boolean; saleNumber: string; grandTotal: string };
@@ -906,18 +930,74 @@ async function applyDecision(
     }`,
     data: { approvalRequestId: req.id, note, channel, details },
   });
+  return status;
 }
 
 export async function decideApproval(approver: Actor, requestId: string, decision: "approve" | "reject", note?: string | null) {
   requirePermission(approver, "discounts.approve");
   const db = getDb();
-  return db.transaction(async (tx) => {
+  const status = await db.transaction(async (tx) => {
     const [req] = await tx.select().from(approvalRequests).where(eq(approvalRequests.id, requestId)).for("update");
     if (!req || req.type !== "sale_discount") throw notFound("Approval request");
     if (req.status !== "pending") throw conflict(`This request is already ${req.status}`);
-    await applyDecision(tx, approver, req, decision, note ?? null, "remote");
-    return { status: decision === "approve" ? "approved" : "rejected" };
+    return applyDecision(tx, approver, req, decision, note ?? null, "remote");
   });
+  if (status === "superseded") throw conflict(CART_CHANGED);
+  return { status };
+}
+
+/**
+ * Approve or reject several discount requests, each in its own transaction. A request that can't be
+ * decided (above the approver's limit, below cost, their own, the cart changed…) is skipped with
+ * the reason; the rest go ahead.
+ */
+export async function decideApprovals(approver: Actor, input: { decision: "approve" | "reject"; note?: string | null; ids: string[] }) {
+  requirePermission(approver, "discounts.approve");
+  const ids = [...new Set(input.ids)];
+  if (!ids.length) throw invalid("Choose at least one request");
+  if (ids.length > 100) throw invalid("Decide at most 100 requests at a time");
+  const note = input.note?.trim() || null;
+  if (input.decision === "reject" && (!note || note.length < 3)) throw invalid("Give a reason for rejecting (at least 3 characters)");
+  if (note && note.length > 300) throw invalid("Keep the note to 300 characters or fewer");
+  const db = getDb();
+  const known = await db
+    .select({ id: approvalRequests.id, saleNumber: sales.saleNumber })
+    .from(approvalRequests)
+    .innerJoin(sales, eq(sales.id, approvalRequests.saleId))
+    .where(and(inArray(approvalRequests.id, ids), eq(approvalRequests.type, "sale_discount")));
+  const saleNumberOf = new Map(known.map((k) => [k.id, k.saleNumber]));
+  const decided: { id: string; saleNumber: string; status: "approved" | "rejected" | "cancelled" }[] = [];
+  const skipped: { id: string; saleNumber: string | null; reason: string }[] = [];
+  let failure: unknown = null;
+  for (const id of ids) {
+    try {
+      const r = await decideApproval(approver, id, input.decision, note);
+      decided.push({ id, saleNumber: saleNumberOf.get(id) ?? "", status: r.status as "approved" | "rejected" | "cancelled" });
+    } catch (err) {
+      const e = toAppError(err);
+      // An unexpected failure stops the run; the summary below still records what was done.
+      if (e.code === "INTERNAL") {
+        failure = err;
+        break;
+      }
+      skipped.push({ id, saleNumber: saleNumberOf.get(id) ?? null, reason: e.message });
+    }
+  }
+  const count = (s: string) => decided.filter((d) => d.status === s).length;
+  try {
+    await db.transaction((tx) =>
+      audit(tx, auditActorOf(approver), {
+        action: "discount.bulk_decided",
+        entityType: "approval_request",
+        summary: `${input.decision === "approve" ? "Approved" : "Rejected"} ${count(input.decision === "approve" ? "approved" : "rejected")} of ${ids.length} discount requests at once${count("cancelled") ? ` (${count("cancelled")} cleared, sale no longer open)` : ""}${skipped.length ? ` · ${skipped.length} skipped` : ""}`,
+        data: { decision: input.decision, note, ids, decided, skipped, ...(failure ? { stoppedEarly: true } : {}) },
+      }),
+    );
+  } catch (err) {
+    if (!failure) throw err;
+  }
+  if (failure) throw failure;
+  return { decision: input.decision, decided: decided.length, cancelled: count("cancelled"), skipped };
 }
 
 /**
@@ -959,7 +1039,8 @@ export async function approveInPerson(
         requestedBy: cashier.id,
       })
       .returning();
-    await applyDecision(tx, approver, req, "approve", note, "in_person", cashier);
+    // The request was made from this very cart, so it cannot be superseded here.
+    if ((await applyDecision(tx, approver, req, "approve", note, "in_person", cashier)) !== "approved") throw conflict(CART_CHANGED);
     return { approvedBy: approver.displayName };
   });
 }

@@ -143,7 +143,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         </Link>
         <span aria-hidden className="h-6 w-px bg-navy-200" />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-          <h1 className="font-mono text-[1.5rem] font-semibold leading-none tracking-[-0.01em] text-navy-950 sm:text-[1.75rem]">{s.saleNumber}</h1>
+          <h1 className="tabular text-[1.5rem] font-semibold leading-none tracking-[-0.01em] text-navy-950 sm:text-[1.75rem]">{s.saleNumber}</h1>
           <div className="flex flex-wrap items-center gap-1.5">
             <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
             {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
@@ -186,7 +186,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                     done ? "text-navy-700" : current ? "font-semibold text-navy-950" : "text-navy-400",
                   )}
                 >
-                  <span aria-hidden className={cn("hidden font-mono text-xs tabular sm:inline", current ? "text-gold-700" : "text-navy-400")}>
+                  <span aria-hidden className={cn("hidden tabular text-xs sm:inline", current ? "text-gold-700" : "text-navy-400")}>
                     {done ? <Check className="h-3.5 w-3.5 text-navy-900" strokeWidth={2.5} /> : i + 1}
                   </span>
                   <span className="sr-only sm:hidden">{i + 1}. </span>
@@ -232,9 +232,9 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
           <Cart data={data} me={me} config={config} units={units} editable={draft} run={run} />
           {quotations.length > 0 && (
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-navy-200 bg-white px-4 py-3 text-sm">
-              <span className="label-caps text-navy-500">Quotations</span>
+              <span className="label-sm text-navy-500">Quotations</span>
               {quotations.map((q) => (
-                <Link key={q.id} href={`/pos/documents/${q.id}`} className="link-draw font-mono font-medium text-navy-950">
+                <Link key={q.id} href={`/pos/documents/${q.id}`} className="link-draw tabular font-medium text-navy-950">
                   {q.docNumber}
                 </Link>
               ))}
@@ -300,15 +300,15 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                 <ul className="divide-y divide-navy-100 text-sm">
                   {bills.map((b) => (
                     <li key={b.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 first:pt-0">
-                      <span className="label-caps text-navy-500">{DOC_TYPE_LABEL[b.docType]}</span>
-                      <span className="font-mono font-semibold text-navy-950">{b.docNumber}</span>
+                      <span className="label-sm text-navy-500">{DOC_TYPE_LABEL[b.docType]}</span>
+                      <span className="tabular font-semibold text-navy-950">{b.docNumber}</span>
                       <StatusBadge status={b.status} className="ml-auto" />
                     </li>
                   ))}
                 </ul>
                 {D(s.amountPaid).lessThan(D(s.grandTotal)) && (
                   <p className="mt-3 text-sm font-semibold text-amber-800">
-                    Balance due: <span className="font-mono tabular">{formatINR(outstanding)}</span>
+                    Balance due: <span className="tabular">{formatINR(outstanding)}</span>
                   </p>
                 )}
                 <div className="mt-4 flex flex-wrap gap-2">
@@ -329,7 +329,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
       {s.status !== "cancelled" && s.status !== "completed" && (
         <div data-bottom-bar className="no-print fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-navy-950 px-4 py-2.5 text-white lg:hidden">
           <div className="min-w-0">
-            <div className="label-caps text-gold-400">{finalized ? "Amount due" : "Total"}</div>
+            <div className="label-sm text-gold-400">{finalized ? "Amount due" : "Total"}</div>
             <div className="headline mt-0.5 text-[1.625rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
           </div>
           <a href={draft ? "#checkout" : "#step-panel"} className={buttonClass("gold", "lg", "shrink-0")}>

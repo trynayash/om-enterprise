@@ -225,14 +225,14 @@ export function ColumnMatcher({
         </div>
 
         <div>
-          <div className="label-caps mb-2 text-navy-600">What&apos;s in the file</div>
+          <div className="label-sm mb-2 text-navy-600">What&apos;s in the file</div>
           <div className="max-h-[340px] overflow-auto rounded-lg border border-navy-100">
             <table className="w-max min-w-full text-left text-[12.5px]">
               <thead className="sticky top-0 z-[1] bg-paper">
                 <tr>
-                  <th className="border-b border-navy-100 px-2 py-1.5 font-mono text-[11px] font-medium text-navy-500">#</th>
+                  <th className="border-b border-navy-100 px-2 py-1.5 tabular text-[11px] font-medium text-navy-500">#</th>
                   {Array.from({ length: Math.min(width, MAX_PREVIEW_COLS) }, (_, i) => (
-                    <th key={i} className="border-b border-navy-100 px-2 py-1.5 font-mono text-[11px] font-medium text-navy-500">
+                    <th key={i} className="border-b border-navy-100 px-2 py-1.5 tabular text-[11px] font-medium text-navy-500">
                       {letter(i)}
                       {fieldOf(i) && <span className="ml-1.5 rounded bg-gold-100 px-1 py-px font-sans text-[11px] text-gold-700">{fieldOf(i)}</span>}
                     </th>
@@ -242,7 +242,7 @@ export function ColumnMatcher({
               <tbody>
                 {preview.map((r, ri) => (
                   <tr key={ri} className={cn(ri === 0 && headerRow >= 0 && "bg-navy-50 font-semibold")}>
-                    <td className="border-b border-navy-50 px-2 py-1 font-mono text-[11px] text-navy-400">{firstRow + ri + 1}</td>
+                    <td className="border-b border-navy-50 px-2 py-1 tabular text-[11px] text-navy-400">{firstRow + ri + 1}</td>
                     {Array.from({ length: Math.min(width, MAX_PREVIEW_COLS) }, (_, i) => (
                       <td key={i} className="max-w-[14rem] truncate border-b border-navy-50 px-2 py-1 text-navy-800" title={r[i] ?? ""}>
                         {r[i] ?? ""}

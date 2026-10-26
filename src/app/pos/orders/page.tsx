@@ -72,7 +72,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
           {details.map(({ order: o, lines }) => (
             <article key={o.id} className="flex flex-col overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
               <header className="flex flex-wrap items-center gap-2 border-b border-navy-200 bg-paper/60 px-5 py-2.5">
-                <span className="font-mono text-sm font-semibold text-navy-950">{o.orderNumber}</span>
+                <span className="tabular text-sm font-semibold text-navy-950">{o.orderNumber}</span>
                 <Badge tone={o.kind === "order_request" ? "gold" : "blue"}>{o.kind === "order_request" ? "Order request" : "Enquiry"}</Badge>
                 <StatusBadge status={o.status} />
                 <span className="ml-auto text-xs text-navy-500">
@@ -87,7 +87,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                     {o.preferredContact && <div className="mt-0.5 text-xs text-navy-500">{preferredContactLabel(o.preferredContact)}</div>}
                   </div>
                   <div className="flex gap-2">
-                    <a href={`tel:+91${o.mobile}`} className={buttonClass("outline", "md", "font-mono font-medium")}>
+                    <a href={`tel:+91${o.mobile}`} className={buttonClass("outline", "md", "tabular font-medium")}>
                       <Phone className="h-4 w-4" /> {o.mobile}
                     </a>
                     <a
@@ -101,7 +101,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                     </a>
                   </div>
                 </div>
-                {o.message && <p className="border-l-[3px] border-navy-200 py-0.5 pl-3 text-sm leading-relaxed text-navy-800">&ldquo;{o.message}&rdquo;</p>}
+                {o.message && <p className="text-sm leading-relaxed text-navy-800">&ldquo;{o.message}&rdquo;</p>}
                 {lines.length > 0 && (
                   <ul className="divide-y divide-navy-100 rounded-lg border border-navy-200 text-sm">
                     {lines.map((l) => (
@@ -109,9 +109,9 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                         <span className="min-w-0">
                           <span className="font-medium text-navy-950">{l.productName}</span>
                           {optionLabel(l.variantName) && <span className="text-navy-500"> · {l.variantName}</span>}
-                          <span className="mt-0.5 block font-mono text-xs text-navy-500">{l.sku}</span>
+                          <span className="mt-0.5 block tabular text-xs text-navy-500">{l.sku}</span>
                         </span>
-                        <span className="shrink-0 text-right font-mono">
+                        <span className="shrink-0 text-right tabular">
                           <Qty value={l.quantity} />
                           {l.indicativeUnitPrice && (
                             <span className="mt-0.5 block text-xs text-navy-500">
@@ -125,7 +125,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SP> }) {
                 )}
                 {o.indicativeTotal && (
                   <div className="text-sm text-navy-600">
-                    Indicative total at submission: <Money value={o.indicativeTotal} className="font-mono font-semibold text-navy-950" />
+                    Indicative total at submission: <Money value={o.indicativeTotal} className="tabular font-semibold text-navy-950" />
                   </div>
                 )}
                 {o.convertedSaleId && (

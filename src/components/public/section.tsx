@@ -79,7 +79,7 @@ export function PageIntro({
 export function Breadcrumbs({ items }: { items: { href?: string; label: string }[] }) {
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[12px] text-navy-500">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 tabular text-[12px] text-navy-500">
         {items.map((it, i) => (
           <li key={`${it.label}-${i}`} className="flex items-center gap-2">
             {it.href ? (

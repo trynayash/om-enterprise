@@ -29,7 +29,7 @@ export function Pagination({
   const href = (p: number) => `${basePath}${withParams(sp, { [param]: p > 1 ? p : undefined })}${anchor ? `#${anchor}` : ""}`;
   return (
     <nav className="no-print mt-4 flex flex-wrap items-center justify-between gap-3" aria-label="Pagination">
-      <span className="font-mono text-xs tabular text-navy-500">
+      <span className="tabular text-xs text-navy-500">
         {first.toLocaleString("en-IN")}–{last.toLocaleString("en-IN")} of {total.toLocaleString("en-IN")}
       </span>
       {pages > 1 && (
@@ -43,7 +43,7 @@ export function Pagination({
               <ChevronLeft className="h-4 w-4" /> Previous
             </span>
           )}
-          <span className="px-1 font-mono text-xs tabular text-navy-500">
+          <span className="px-1 tabular text-xs text-navy-500">
             {page} / {pages}
           </span>
           {page < pages ? (

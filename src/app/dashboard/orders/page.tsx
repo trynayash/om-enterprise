@@ -95,7 +95,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
                   </td>
                   <td data-label="Contact" className={tdText}>
                     <div className="flex items-center gap-1.5">
-                      <a href={`tel:+91${o.mobile}`} className="inline-flex items-center gap-1.5 font-mono text-[13px] tabular underline-offset-[3px] hover:underline" aria-label={`Call ${o.customerName}`}>
+                      <a href={`tel:+91${o.mobile}`} className="inline-flex items-center gap-1.5 tabular text-[13px] underline-offset-[3px] hover:underline" aria-label={`Call ${o.customerName}`}>
                         <Phone className="h-3.5 w-3.5 text-navy-400" aria-hidden />
                         {o.mobile}
                       </a>

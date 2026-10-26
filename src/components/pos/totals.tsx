@@ -17,7 +17,7 @@ function Row({ label, value, tone }: { label: string; value: string; tone?: "gre
   return (
     <div className="flex items-baseline justify-between gap-4 py-[3px] text-sm">
       <dt className={cn("min-w-0", tone === "muted" ? "text-navy-500" : "text-navy-700")}>{label}</dt>
-      <dd className={cn("shrink-0 font-mono tabular", tone === "green" ? "font-medium text-emerald-700" : tone === "muted" ? "text-navy-600" : "text-navy-950")}>{value}</dd>
+      <dd className={cn("shrink-0 tabular", tone === "green" ? "font-medium text-emerald-700" : tone === "muted" ? "text-navy-600" : "text-navy-950")}>{value}</dd>
     </div>
   );
 }
@@ -55,7 +55,7 @@ export function TotalsCard({ data }: { data: SaleData }) {
       </dl>
       <div className="bg-navy-950 px-5 pb-4 pt-3.5 text-white">
         <div className="flex items-end justify-between gap-4">
-          <div className="label-caps pb-1.5 text-gold-400">Grand total</div>
+          <div className="label-sm pb-1.5 text-gold-400">Grand total</div>
           <div className="headline text-[2rem] font-bold tabular sm:text-[2.25rem]" data-testid="grand-total">
             {/* Re-keyed on change so a new total fades in instead of snapping. */}
             <span key={s.grandTotal} className="inline-block animate-fade-in">
@@ -65,7 +65,7 @@ export function TotalsCard({ data }: { data: SaleData }) {
         </div>
         {saved.greaterThan(0) && (
           <div className="mt-2.5 border-t border-white/10 pt-2 text-xs text-navy-300">
-            Customer saves <span className="font-mono text-white">{formatINR(saved)}</span> ({s.effectiveDiscountPercent}%)
+            Customer saves <span className="tabular text-white">{formatINR(saved)}</span> ({s.effectiveDiscountPercent}%)
           </div>
         )}
       </div>

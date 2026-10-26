@@ -43,6 +43,13 @@
       "when": 1793037339181,
       "tag": "0005_customer_whatsapp",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793045107932,
+      "tag": "0006_variant_price_import_batch",
+      "breakpoints": true
     }
   ]
 }

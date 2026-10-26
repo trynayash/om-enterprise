@@ -52,7 +52,7 @@ async function InventoryContent() {
               </p>
             </CardBody>
             <div className="border-t border-navy-100 bg-paper/50 px-5 py-6 md:border-l md:border-t-0">
-              <div className="label-caps mb-3 text-navy-500">Until it is switched on</div>
+              <div className="label-sm mb-3 text-navy-500">Until it is switched on</div>
               <ul className="divide-y divide-rule text-sm text-navy-700">
                 <li className="flex gap-2.5 py-2.5 first:pt-0">
                   <Lock className="mt-0.5 h-4 w-4 shrink-0 text-navy-400" aria-hidden /> Sales never deduct stock, so nothing can go wrong with half-counted shelves.

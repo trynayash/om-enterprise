@@ -1,0 +1,2 @@
+ALTER TABLE "variant_prices" ADD COLUMN "import_batch_id" uuid;--> statement-breakpoint
+CREATE INDEX "variant_prices_import_batch_idx" ON "variant_prices" USING btree ("import_batch_id") WHERE "variant_prices"."import_batch_id" is not null;

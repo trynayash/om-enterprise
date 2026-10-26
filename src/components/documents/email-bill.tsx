@@ -77,11 +77,11 @@ export function useEmailBill(documentId: string, info: DocumentEmailInfo | undef
             unavailable
           ) : last ? (
             <>
-              Emailed to <span className="font-mono text-navy-700">{last.to}</span> · {when(last.at)}
+              Emailed to <span className="tabular text-navy-700">{last.to}</span> · {when(last.at)}
             </>
           ) : (
             <>
-              Email goes to <span className="font-mono text-navy-700">{info.buyerEmail}</span>
+              Email goes to <span className="tabular text-navy-700">{info.buyerEmail}</span>
             </>
           )}
           {!unavailable && (

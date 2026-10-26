@@ -155,7 +155,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                   </td>
                   <td data-label="Customer" className={tdText}>
                     <div className="max-w-[200px] truncate">{s.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</div>
-                    {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
+                    {s.customerMobile && <div className="tabular text-xs text-navy-500">{s.customerMobile}</div>}
                   </td>
                   <td data-label="Items" className={tdNum}>{s.itemCount}</td>
                   <td data-label="Total" className={`${tdNum} font-semibold`}>

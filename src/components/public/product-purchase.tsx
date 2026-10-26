@@ -104,16 +104,16 @@ export function ProductPurchase({
           if (values.length === 1) {
             return (
               <div key={attr} className="flex items-baseline gap-2">
-                <span className="label-caps text-navy-500">{attr}</span>
-                <span className="font-mono text-sm text-navy-950">{values[0]}</span>
+                <span className="label-sm text-navy-500">{attr}</span>
+                <span className="tabular text-sm text-navy-950">{values[0]}</span>
               </div>
             );
           }
           return (
             <fieldset key={attr}>
               <legend className="flex items-baseline gap-2">
-                <span className="label-caps text-navy-500">{attr}</span>
-                <span key={selected.attributes[attr]} className="animate-fade-in font-mono text-sm text-navy-950">
+                <span className="label-sm text-navy-500">{attr}</span>
+                <span key={selected.attributes[attr]} className="animate-fade-in tabular text-sm text-navy-950">
                   {selected.attributes[attr]}
                 </span>
               </legend>
@@ -127,7 +127,7 @@ export function ProductPurchase({
                       onClick={() => pickAttr(attr, val)}
                       aria-pressed={active}
                       className={cn(
-                        "min-h-10 rounded-md border px-3.5 font-mono text-[13px] transition-[background-color,border-color,color] duration-150 active:translate-y-px",
+                        "min-h-10 rounded-md border px-3.5 tabular text-[13px] transition-[background-color,border-color,color] duration-150 active:translate-y-px",
                         active ? "border-navy-900 bg-navy-900 text-white" : "border-navy-200 bg-white text-navy-800 hover:border-navy-900",
                       )}
                     >
@@ -141,7 +141,7 @@ export function ProductPurchase({
         })
       ) : variants.length > 1 ? (
         <fieldset>
-          <legend className="label-caps text-navy-500">Choose an option</legend>
+          <legend className="label-sm text-navy-500">Choose an option</legend>
           <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
             {variants.map((v) => {
               const active = v.id === selected.id;
@@ -157,7 +157,7 @@ export function ProductPurchase({
                   )}
                 >
                   <span className="font-medium">{v.name}</span>
-                  {v.price && <span className={cn("font-mono text-[13px] tabular", active ? "text-gold-300" : "text-navy-500")}>{formatPrice(v.price.amount)}</span>}
+                  {v.price && <span className={cn("tabular text-[13px]", active ? "text-gold-300" : "text-navy-500")}>{formatPrice(v.price.amount)}</span>}
                 </button>
               );
             })}
@@ -166,7 +166,7 @@ export function ProductPurchase({
       ) : null}
 
       <div className="rounded-xl border border-navy-200 bg-white">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-navy-100 px-5 py-3 font-mono text-[12px]">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-navy-100 px-5 py-3 tabular text-[12px]">
           <span className="text-navy-900">{selected.name}</span>
           <span className="text-navy-500">
             SKU {selected.sku} · per {selected.unit.toLowerCase()}
@@ -182,7 +182,7 @@ export function ProductPurchase({
               <li key={t.minQty} className="flex items-center gap-2">
                 <Check className="h-4 w-4 text-emerald-600" />
                 <span>
-                  <span className="font-mono font-medium tabular">{formatPrice(t.amount)}</span> each for {Number(t.minQty)}+ {selected.unit.toLowerCase()}
+                  <span className="tabular font-medium">{formatPrice(t.amount)}</span> each for {Number(t.minQty)}+ {selected.unit.toLowerCase()}
                 </span>
               </li>
             ))}
@@ -191,7 +191,7 @@ export function ProductPurchase({
 
         <div className="mt-6 flex flex-wrap items-end gap-3">
           <div>
-            <label htmlFor="qty" className="label-caps block text-navy-500">
+            <label htmlFor="qty" className="label-sm block text-navy-500">
               Quantity · {selected.unit.toLowerCase()}
             </label>
             <div className="mt-1.5 flex h-12 items-center overflow-hidden rounded-lg border border-navy-200 bg-white transition-[border-color,box-shadow] focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">
@@ -204,7 +204,7 @@ export function ProductPurchase({
                 value={qtyText}
                 onChange={(e) => setQtyText(e.target.value)}
                 aria-invalid={!qty}
-                className="h-full w-20 border-x border-navy-100 text-center font-mono text-base font-medium tabular text-navy-950 focus:outline-none"
+                className="h-full w-20 border-x border-navy-100 text-center tabular text-base font-medium text-navy-950 focus:outline-none"
               />
               <button type="button" onClick={() => step(1)} className="flex h-full w-11 items-center justify-center text-navy-700 transition-colors hover:bg-navy-50" aria-label="Increase quantity">
                 <Plus className="h-4 w-4" />
@@ -223,7 +223,7 @@ export function ProductPurchase({
         </div>
         {!qty && <p className="mt-2 text-xs text-red-700">{decimals ? `Up to ${decimals} decimal places allowed.` : "Whole numbers only."}</p>}
         {qty && unitAmount && Number(qty) !== 1 && (
-          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-navy-100 pt-3 font-mono text-[13px] tabular text-navy-500">
+          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-navy-100 pt-3 tabular text-[13px] text-navy-500">
             <span>
               {formatQty(qty)} {selected.unit.toLowerCase()} × {formatPrice(unitAmount)}
             </span>

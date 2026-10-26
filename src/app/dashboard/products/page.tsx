@@ -3,11 +3,21 @@ import Link from "next/link";
 import { Package, Plus, Star, Upload } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
-import { listBrands, listCategories, listProductsAdmin, type AdminProductFilter } from "@/server/services/catalog";
+import {
+  listBrands,
+  listCategories,
+  listProductsAdmin,
+  moneyFilter,
+  productCountsByCategory,
+  PRODUCT_PRICE_FILTERS,
+  PRODUCT_SORTS,
+  type AdminProductFilter,
+} from "@/server/services/catalog";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap } from "@/components/ui/page";
 import { LinkButton } from "@/components/ui/button";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { DateTime } from "@/components/ui/money";
+import { D, formatINR } from "@/lib/money";
 import { cn } from "@/components/ui/cn";
 import { ProductFilters } from "@/components/dashboard/catalog/product-filters";
 import { Pagination } from "@/components/dashboard/ops/pagination";
@@ -35,15 +45,22 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
   const statusParam = one(sp.status);
   const status = (STATUS_VALUES as readonly string[]).includes(statusParam ?? "") ? (statusParam as AdminProductFilter["status"]) : "all";
   const page = Math.max(1, Number(one(sp.page)) || 1);
+  const priceParam = one(sp.price);
+  const sortParam = one(sp.sort);
   const filter: AdminProductFilter = {
     q: one(sp.q) || undefined,
     categoryId: one(sp.categoryId) || undefined,
     brandId: one(sp.brandId) || undefined,
     status,
+    price: PRODUCT_PRICE_FILTERS.find((v) => v === priceParam),
+    min: moneyFilter(one(sp.min)),
+    max: moneyFilter(one(sp.max)),
+    sort: PRODUCT_SORTS.find((v) => v === sortParam),
     page,
     pageSize: 40,
   };
-  const [result, categories, brands] = [await listProductsAdmin(actor, filter), await listCategories(), await listBrands()];
+  const filtered = !!(filter.q || filter.categoryId || filter.brandId || status !== "all" || filter.price || filter.min || filter.max);
+  const [result, categories, brands, counts] = [await listProductsAdmin(actor, filter), await listCategories(), await listBrands(), await productCountsByCategory()];
   return (
     <div>
       <PageHeader
@@ -68,12 +85,13 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
       <ProductFilters
         categories={categories.map((c) => ({ id: c.id, name: c.name, parentId: c.parentId, sortOrder: c.sortOrder, isActive: c.isActive }))}
         brands={brands.map((b) => ({ id: b.id, name: b.name }))}
+        counts={counts}
       />
 
       {result.items.length === 0 ? (
         <EmptyState
           icon={<Package className="h-10 w-10" />}
-          title={filter.q || filter.categoryId || filter.brandId || status !== "all" ? "No products match these filters" : "No products yet"}
+          title={filtered ? "No products match these filters" : "No products yet"}
           description="Add products one by one, or import a spreadsheet of products and variants."
           action={can(actor, "catalog.create") ? <LinkButton href="/dashboard/products/new">Add a product</LinkButton> : undefined}
         />
@@ -88,12 +106,13 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
                     <div className="min-w-0">
                       <div className="font-semibold leading-snug text-navy-900">{p.name}</div>
                       <div className="mt-0.5 text-xs text-navy-500">
-                        {[p.brandName, p.categoryName].filter(Boolean).join(" · ")}
+                        {[p.brandName, p.categoryName, `${p.variantCount} variant${p.variantCount === 1 ? "" : "s"}`].filter(Boolean).join(" · ")}
                       </div>
                     </div>
-                    <span className="shrink-0 whitespace-nowrap font-mono text-xs tabular text-navy-500">
-                      {p.variantCount} variant{p.variantCount === 1 ? "" : "s"}
-                    </span>
+                    <div className="max-w-[45%] shrink-0 text-right tabular text-[13px] text-navy-900">
+                      <PriceRange min={p.minPrice} max={p.maxPrice} />
+                      <PendingPrices count={p.pendingPrices} />
+                    </div>
                   </div>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     <ProductState published={p.isPublished} review={p.reviewStatus} />
@@ -104,13 +123,14 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
             ))}
           </ul>
           <TableWrap className="hidden md:block">
-            <table className="w-full min-w-[820px]">
+            <table className="w-full min-w-[900px]">
               <thead>
                 <tr>
                   <th className={th}>Product</th>
                   <th className={th}>Brand</th>
                   <th className={th}>Category</th>
                   <th className={thNum}>Variants</th>
+                  <th className={thNum}>Price</th>
                   <th className={th}>Status</th>
                   <th className={thNum}>Updated</th>
                 </tr>
@@ -125,13 +145,17 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
                       {(p.model || p.isSample || p.isFeatured || !p.isActive) && (
                         <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
                           <ProductFlags sample={p.isSample} featured={p.isFeatured} inactive={!p.isActive} />
-                          {p.model && <span className="font-mono text-[11.5px] text-navy-500">Model {p.model}</span>}
+                          {p.model && <span className="tabular text-[11.5px] text-navy-500">Model {p.model}</span>}
                         </div>
                       )}
                     </td>
                     <td className={tdMuted}>{p.brandName ?? <span className="text-navy-300">—</span>}</td>
                     <td className={tdMuted}>{p.categoryName}</td>
                     <td className={tdNum}>{p.variantCount}</td>
+                    <td className={tdNum}>
+                      <PriceRange min={p.minPrice} max={p.maxPrice} />
+                      <PendingPrices count={p.pendingPrices} />
+                    </td>
                     <td className={tdText}>
                       <ProductState published={p.isPublished} review={p.reviewStatus} />
                     </td>
@@ -148,6 +172,26 @@ async function ProductsContent({ searchParams }: { searchParams: PageProps<"/das
           <Pagination total={result.total} page={page} pageSize={result.pageSize} sp={sp} basePath="/dashboard/products" />
         </>
       )}
+    </div>
+  );
+}
+
+/** Current price incl. GST across the active sizes: one amount, or lowest – highest. */
+function PriceRange({ min, max }: { min: string | null; max: string | null }) {
+  if (!min || !max) return <span className="font-sans text-[13px] text-navy-400">No price</span>;
+  if (D(min).equals(D(max))) return <span className="whitespace-nowrap">{formatINR(min)}</span>;
+  return (
+    <>
+      <span className="whitespace-nowrap">{formatINR(min)} –</span> <span className="whitespace-nowrap">{formatINR(max)}</span>
+    </>
+  );
+}
+
+function PendingPrices({ count }: { count: number }) {
+  if (!count) return null;
+  return (
+    <div className="mt-1 whitespace-nowrap font-sans text-[11.5px] font-medium text-amber-700" title="Price changes waiting for approval">
+      {count} waiting
     </div>
   );
 }

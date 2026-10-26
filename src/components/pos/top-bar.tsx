@@ -22,7 +22,7 @@ export async function PosTopBar() {
           <LogoMark className="h-8 w-8" />
           <span className="hidden text-[13px] font-bold sm:inline">OM ENTERPRISE</span>
           <span aria-hidden className="hidden h-4 w-px bg-white/20 sm:block" />
-          <span className="label-caps text-gold-400">POS</span>
+          <span className="label-sm text-gold-400">POS</span>
         </Link>
         <PosNavLinks items={items} variant="desktop" />
         <div className="ml-auto flex items-center">

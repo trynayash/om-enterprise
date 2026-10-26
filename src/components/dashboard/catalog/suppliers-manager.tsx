@@ -66,7 +66,7 @@ export function SuppliersManager({ suppliers, canManage }: { suppliers: Supplier
                   </td>
                   <td className={tdCode}>{s.gstin ?? <span className="text-navy-300">—</span>}</td>
                   <td className={tdText}>
-                    {s.mobile ? <span className="font-mono text-[13px]">{s.mobile}</span> : <span className="text-navy-300">—</span>}
+                    {s.mobile ? <span className="tabular text-[13px]">{s.mobile}</span> : <span className="text-navy-300">—</span>}
                     {s.email && <div className="text-xs text-navy-500">{s.email}</div>}
                   </td>
                   <td className={`${withPy(tdText, "py-1.5")} w-px text-right`}>

@@ -84,7 +84,7 @@ async function SharedDocument({ params }: { params: PageProps<"/d/[token]">["par
               <div className="text-[13px] font-bold text-navy-950">{doc.snapshot.seller.name}</div>
               <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-navy-500">
                 <span>
-                  {doc.snapshot.title} <span className="font-mono text-navy-700">{doc.docNumber}</span>
+                  {doc.snapshot.title} <span className="tabular text-navy-700">{doc.docNumber}</span>
                 </span>
                 {doc.status === "cancelled" && (
                   <span className="rounded-[3px] bg-red-50 px-1.5 py-px text-xs font-medium text-red-800 ring-1 ring-inset ring-red-200">Cancelled</span>

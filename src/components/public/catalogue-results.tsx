@@ -57,11 +57,11 @@ export async function CatalogueResults({
             "No products found"
           ) : (
             <>
-              <span className="font-mono font-medium text-navy-950 tabular">{result.total}</span> {result.total === 1 ? "product" : "products"}
+              <span className="tabular font-medium text-navy-950">{result.total}</span> {result.total === 1 ? "product" : "products"}
               {totalPages > 1 && (
                 <span className="text-navy-400">
                   {" "}
-                  · showing <span className="font-mono tabular">{first}–{last}</span>
+                  · showing <span className="tabular">{first}–{last}</span>
                 </span>
               )}
             </>
@@ -101,12 +101,12 @@ export async function CatalogueResults({
             .filter((n) => n === 1 || n === totalPages || Math.abs(n - query.page) <= 1)
             .map((n, idx, arr) => (
               <span key={n} className="flex items-center gap-1.5">
-                {idx > 0 && n - arr[idx - 1] > 1 && <span className="px-1 font-mono text-navy-400">…</span>}
+                {idx > 0 && n - arr[idx - 1] > 1 && <span className="px-1 tabular text-navy-400">…</span>}
                 <Link
                   href={paginationHref(basePath, filterQuery, n)}
                   aria-current={n === query.page ? "page" : undefined}
                   className={cn(
-                    "flex h-10 min-w-10 items-center justify-center rounded-lg px-3 font-mono text-sm tabular transition-colors",
+                    "flex h-10 min-w-10 items-center justify-center rounded-lg px-3 tabular text-sm transition-colors",
                     n === query.page ? "bg-navy-900 text-white" : "border border-navy-200 bg-white text-navy-800 hover:border-navy-900",
                   )}
                 >

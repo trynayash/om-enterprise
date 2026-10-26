@@ -212,7 +212,7 @@ function ProfitCard({ profit }: { profit: Awaited<ReturnType<typeof reports.gros
 function Figure({ label, tone, children }: { label: string; tone?: string; children: React.ReactNode }) {
   return (
     <div className="lg:border-l lg:border-navy-100 lg:pl-5 lg:first:border-l-0 lg:first:pl-0">
-      <div className="label-caps text-navy-500">{label}</div>
+      <div className="label-sm text-navy-500">{label}</div>
       <div className={cn("headline mt-1.5 text-[1.375rem] font-bold tabular sm:text-[1.5rem]", tone ?? "text-navy-950")}>{children}</div>
     </div>
   );
@@ -289,7 +289,7 @@ async function Categories({ actor, period, canExport, qs }: P) {
                 <li key={r.category}>
                   <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
                     <span className="font-semibold">{r.category}</span>
-                    <span className="font-mono text-[13px] tabular">
+                    <span className="tabular text-[13px]">
                       {formatINR(r.revenue)}{" "}
                       <span className="text-navy-500">
                         · {pct.toFixed(1)}% · {r.bills} bills
@@ -498,7 +498,7 @@ async function Profit({ actor, period, canExport, qs }: P) {
                   </div>
                 </td>
                 <td className={tdText}>
-                  {b.product} <span className="font-mono text-[11.5px] text-navy-500">{b.sku}</span>
+                  {b.product} <span className="tabular text-[11.5px] text-navy-500">{b.sku}</span>
                   <div className="mt-1">{b.below_cost ? <Badge tone="red">below cost</Badge> : <Badge tone="amber">below margin floor</Badge>}</div>
                 </td>
                 <td className={tdNum}>{Number(b.quantity)}</td>

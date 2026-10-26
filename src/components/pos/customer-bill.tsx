@@ -51,7 +51,7 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
     <section aria-label="Bill" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-navy-200 px-5 py-4">
         <div>
-          <div className="label-caps text-gold-700">
+          <div className="label-sm text-gold-700">
             Step 5 · Bill
           </div>
           <div className="mt-1.5 text-sm">
@@ -86,11 +86,11 @@ export function CustomerBillPanel({ data, config, me }: { data: SaleData; config
         ) : (
           <div className="flex items-start justify-between gap-3 rounded-lg border border-navy-200 bg-paper/60 px-4 py-3">
             <div className="min-w-0 text-sm" data-testid="bill-to">
-              <div className="label-caps text-navy-500">Bill to</div>
+              <div className="label-sm text-navy-500">Bill to</div>
               {saved ? (
                 <>
                   <div className="mt-1 font-semibold text-navy-950">{saved.businessName ? `${saved.businessName} (${saved.name})` : saved.name}</div>
-                  <div className="mt-0.5 flex flex-wrap gap-x-3 font-mono text-xs text-navy-600">
+                  <div className="mt-0.5 flex flex-wrap gap-x-3 tabular text-xs text-navy-600">
                     {[saved.mobile, saved.email, saved.gstin].filter(Boolean).map((t) => (
                       <span key={t} className="break-all">
                         {t}

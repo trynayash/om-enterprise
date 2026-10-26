@@ -17,7 +17,7 @@ Use them before writing new styles.
 3. **Rules, not boxes.** Prefer solid hairline borders (`border-navy-100/200`, `border-rule` on
    paper) and ruled rows over floating cards with big shadows. No dashed or dotted rules.
 4. **Type does the hierarchy.** One family at a few sizes and weights. Bold `headline` for page
-   titles and big figures; regular text for reading; `tabular` figures for numbers; `label-caps`
+   titles and big figures; regular text for reading; `tabular` figures for numbers; `label-sm`
    (small sentence-case text) for table heads and figure names.
 5. **Motion explains, never decorates.** Short, quiet, purposeful; always disabled by
    `prefers-reduced-motion` (handled globally).
@@ -33,7 +33,7 @@ Roboto with tabular figures, so prefer `tabular` in new code.
 | Staff page titles | `PageHeader`: `headline`, 26px on a phone, 30px from `sm` |
 | Public page titles | `PageIntro`: 32px / 40px; section headings (`SectionHeading`) 26px / 32px; home hero at most 52px |
 | Big figures | `headline font-bold tabular` + size: `Stat` 22px / 28px, POS grand total 32px / 36px |
-| Table heads, figure names, small section names | `label-caps`: 12px medium, sentence case, normal spacing |
+| Table heads, figure names, small section names | `label-sm`: 12px medium, sentence case, normal spacing |
 | Form labels | `Label` / `Field`: 13px medium, written as typed ("Business name") |
 | SKUs, codes, sizes, quantities, prices | `tabular` (right-aligned in tables) |
 | Body | `text-sm`/`text-base`, `leading-relaxed` for paragraphs |
@@ -76,7 +76,7 @@ Roboto with tabular figures, so prefer `tabular` in new code.
 - `Card`, `CardHeader`, `CardBody`, `Stat` (big figure; the tone colours the figure). Figure grids
   are two to a row on a phone.
 - `PageHeader` — optional small grey line, title, description, actions.
-- `TableWrap` + `th` / `td` — data tables. Heads are `label-caps` in `text-navy-500`. Rows:
+- `TableWrap` + `th` / `td` — data tables. Heads are `label-sm` in `text-navy-500`. Rows:
   `hover:bg-paper/60`. Numbers right-aligned `text-right tabular`. Add `stack-sm` to the `<table>`
   and a `data-label` to each body cell (none on an actions cell) and the table becomes one block per
   row on a phone instead of scrolling sideways.
@@ -95,7 +95,7 @@ Roboto with tabular figures, so prefer `tabular` in new code.
 
 ## Utilities (`globals.css`)
 
-`headline` (bold, slightly tight), `label-caps` (12px medium sentence-case label), `blueprint`
+`headline` (bold, slightly tight), `label-sm` (12px medium sentence-case label), `blueprint`
 (flat paper fill behind line drawings), `tabular` (tabular figures), `link-draw` (underline draws in
 on hover), `stagger` (children rise in once; set `style={{ "--i": i }}`), `.drawing [data-draw]`
 (SVG strokes draw in; set `--len` / `--d`), `animate-fade-in`, `animate-rise`, `animate-sheet-in`.

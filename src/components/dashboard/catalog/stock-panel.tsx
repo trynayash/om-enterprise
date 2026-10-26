@@ -78,7 +78,7 @@ export function StockPanel({ items, recent, canManage }: { items: StockItem[]; r
                     <tr key={i.variantId} className={rowHover}>
                       <td className={tdText}>
                         <div className="font-medium">{i.name}</div>
-                        <div className="mt-0.5 font-mono text-[11.5px] text-navy-500">{i.sku}</div>
+                        <div className="mt-0.5 tabular text-[11.5px] text-navy-500">{i.sku}</div>
                       </td>
                       <td className={`${tdNum} font-semibold`}>{i.movements ? <Qty value={i.onHand} /> : <span className="font-sans text-xs font-normal text-navy-400">not counted</span>}</td>
                       <td className={tdNum}>{i.reorderLevel ? <Qty value={i.reorderLevel} /> : <span className="text-navy-300">—</span>}</td>
@@ -219,7 +219,7 @@ function MovementForm() {
             {picked ? (
               <div className="flex h-10 items-center justify-between gap-2 rounded-lg border border-navy-200 bg-paper px-3 text-sm">
                 <span className="truncate">
-                  {lineDescription(null, picked.productName, picked.variantName)} <span className="font-mono text-xs text-navy-500">{picked.sku}</span>
+                  {lineDescription(null, picked.productName, picked.variantName)} <span className="tabular text-xs text-navy-500">{picked.sku}</span>
                 </span>
                 <button type="button" className="text-xs font-semibold text-gold-700" onClick={() => setPicked(null)}>
                   Change
@@ -233,7 +233,7 @@ function MovementForm() {
                     {hits.map((h) => (
                       <li key={h.variantId}>
                         <button type="button" className="w-full px-3 py-2 text-left text-sm transition-colors hover:bg-paper" onClick={() => setPicked(h)}>
-                          {lineDescription(null, h.productName, h.variantName)} <span className="font-mono text-xs text-navy-500">{h.sku}</span>
+                          {lineDescription(null, h.productName, h.variantName)} <span className="tabular text-xs text-navy-500">{h.sku}</span>
                         </button>
                       </li>
                     ))}

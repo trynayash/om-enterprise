@@ -49,7 +49,7 @@ async function DocumentLoader({ params }: { params: Promise<{ id: string }> }) {
         <span aria-hidden className="hidden h-6 w-px bg-navy-200 sm:block" />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
           <h1 className="flex flex-wrap items-baseline gap-x-2 text-lg font-semibold text-navy-950">
-            {DOC_TYPE_LABEL[doc.docType]} <span className="font-mono text-[17px]">{doc.docNumber}</span>
+            {DOC_TYPE_LABEL[doc.docType]} <span className="tabular text-[17px]">{doc.docNumber}</span>
           </h1>
           <div className="flex flex-wrap items-center gap-1.5">
             <StatusBadge status={doc.status} />

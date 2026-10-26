@@ -9,6 +9,7 @@ import "server-only";
  * publish asks for them to go live straight away. Photos given as `image_url` links are fetched
  * after the products are saved; a photo that can't be fetched is reported, not fatal.
  */
+import { randomUUID } from "node:crypto";
 import { eq, sql } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
 import { brands, categories, products, productVariants, taxClasses, units, variantCosts, variantPrices } from "@/server/db/schema";
@@ -192,6 +193,13 @@ export async function validateImport(actor: Actor, csv: string) {
 export interface ImportOptions {
   /** Approve and publish the new products at once (needs the publish permission). */
   publish?: boolean;
+  /**
+   * Put the selling prices in force at once (the default). They still wait for approval when the
+   * importer may not approve prices and approval is required. False keeps them pending for review.
+   */
+  pricesLive?: boolean;
+  /** The rows were read from a scan or photo: their prices always wait for review. */
+  scanned?: boolean;
 }
 
 export async function commitImport(actor: Actor, csv: string, opts: ImportOptions = {}) {
@@ -200,7 +208,9 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
   const rows = await loadRows(csv);
   const canPrice = can(actor, "prices.edit");
   const canCost = can(actor, "costs.edit");
-  const autoApprove = can(actor, "prices.approve") || !(await getSettings("pricing")).priceChangeRequiresApproval;
+  const autoApprove = opts.pricesLive !== false && !opts.scanned && (can(actor, "prices.approve") || !(await getSettings("pricing")).priceChangeRequiresApproval);
+  // One id per import, on every price it brings in, so those prices can be reviewed and decided together.
+  const batchId = randomUUID();
   const tax = await getSettings("tax");
   const itcPolicy = itcPolicyFor(tax.registrationType);
   const publish = !!opts.publish && can(actor, "catalog.publish");
@@ -215,6 +225,7 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
     const now = new Date();
     let createdProducts = 0;
     let createdVariants = 0;
+    let createdPrices = 0;
     for (const { data } of rows) {
       let brandId: string | null = null;
       if (data.brand) {
@@ -285,11 +296,13 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
           mrp: data.mrp ? m(data.mrp) : null,
           effectiveFrom: now,
           status: autoApprove ? "approved" : "pending",
-          reason: "Bulk import",
+          reason: opts.scanned ? "Bulk import (read from a scan)" : "Bulk import",
           createdBy: actor.id,
           decidedBy: autoApprove ? actor.id : null,
           decidedAt: autoApprove ? now : null,
+          importBatchId: batchId,
         });
+        createdPrices++;
       }
       if (canCost && data.purchase_cost) {
         const landed = landedUnitCost({
@@ -317,9 +330,21 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
       action: "catalog.import",
       entityType: "catalog",
       summary: `Imported ${createdProducts} products / ${createdVariants} variants (${publish ? "published on the website" : "unpublished, awaiting review"})`,
-      data: { createdProducts, createdVariants, published: publish, pricesStatus: canPrice ? (autoApprove ? "approved" : "pending") : "skipped" },
+      data: {
+        createdProducts,
+        createdVariants,
+        published: publish,
+        pricesStatus: canPrice ? (autoApprove ? "approved" : "pending") : "skipped",
+        createdPrices,
+        batchId,
+        pricesLive: opts.pricesLive !== false,
+        scanned: !!opts.scanned,
+      },
     });
-    return { createdProducts, createdVariants, photos };
+    // When the prices were created (the transaction's time, rounded up to the millisecond), so that
+    // deciding them all from the result screen does not depend on the browser's clock.
+    const [{ at }] = (await tx.execute<{ at: string }>(sql`select ceil(extract(epoch from now()) * 1000)::bigint::text as at`)).rows;
+    return { createdProducts, createdVariants, createdPrices, photos, pricesAt: new Date(Number(at)) };
   });
 
   // Photos are fetched after the products are saved: a slow or broken link must not hold the
@@ -342,7 +367,13 @@ export async function commitImport(actor: Actor, csv: string, opts: ImportOption
     };
     await Promise.all(Array.from({ length: Math.min(4, jobs.length) }, worker));
   }
-  return { createdProducts: saved.createdProducts, createdVariants: saved.createdVariants, published: publish, images };
+  const prices: { status: "approved" | "pending" | "none"; count: number; batchId: string; asOf: string } = {
+    status: saved.createdPrices ? (autoApprove ? "approved" : "pending") : "none",
+    count: saved.createdPrices,
+    batchId,
+    asOf: saved.pricesAt.toISOString(),
+  };
+  return { createdProducts: saved.createdProducts, createdVariants: saved.createdVariants, published: publish, images, prices };
 }
 
 export function importTemplateCsv(): string {

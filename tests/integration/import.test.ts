@@ -3,7 +3,9 @@ import { eq, inArray } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
 import { brands, products, productVariants, variantPrices } from "@/server/db/schema";
 import { commitImport, IMPORT_COLUMNS, validateImport } from "@/server/services/import";
-import { makeUser, uid } from "./helpers";
+import { decidePriceChanges, getActivePrices, getDefaultPriceList, searchPendingPriceChanges } from "@/server/services/pricing";
+import { setPermissionOverrides } from "@/server/services/users";
+import { makeUser, reload, uid } from "./helpers";
 
 type Row = Partial<Record<(typeof IMPORT_COLUMNS)[number], string>>;
 const csv = (rows: Row[]) =>
@@ -37,6 +39,8 @@ describe("bulk import", () => {
     expect(vs).toHaveLength(3);
     expect(ps.every((p) => !p.isPublished && p.reviewStatus === "draft")).toBe(true);
     expect(prices.map((p) => [p.price, p.status]).sort()).toEqual([["12.00", "approved"], ["180.00", "approved"], ["215.25", "approved"]]);
+    expect(r.prices).toMatchObject({ status: "approved", count: 3 });
+    expect(prices.every((p) => p.importBatchId === r.prices.batchId)).toBe(true);
   });
 
   it("publishes straight away when asked by someone allowed to publish", async () => {
@@ -101,5 +105,56 @@ describe("bulk import", () => {
     expect(bs).toHaveLength(2);
     expect(bs.every((b) => /^brand-[a-z0-9]+$/.test(b.slug))).toBe(true);
     expect(new Set(bs.map((b) => b.slug)).size).toBe(2);
+  });
+
+  it("marks every price with the import's batch, and an Admin's prices wait for approval", async () => {
+    const admin = await makeUser("admin");
+    const tag = uid("ADM").toUpperCase();
+    const r = await commitImport(admin, csv(sheet(tag)));
+    expect(r.prices).toMatchObject({ status: "pending", count: 3 });
+    expect(r.prices.batchId).toMatch(/^[0-9a-f-]{36}$/);
+    const { prices } = await importedProducts(tag);
+    expect(prices.map((p) => [p.status, p.importBatchId, p.reason])).toEqual(Array(3).fill(["pending", r.prices.batchId, "Bulk import"]));
+    const waiting = await searchPendingPriceChanges(admin, { importBatchId: r.prices.batchId });
+    expect(waiting.total).toBe(3);
+    expect(waiting.items.every((i) => i.source === "import" && i.brandName === `Brand ${tag}`)).toBe(true);
+    // Another import gets its own batch.
+    const other = await commitImport(admin, csv(sheet(uid("ADM").toUpperCase())));
+    expect(other.prices.batchId).not.toBe(r.prices.batchId);
+  });
+
+  it("keeps the owner's prices waiting when they are not to go live now, and always for a scan", async () => {
+    const owner = await makeUser("super_admin");
+    const held = uid("HLD").toUpperCase();
+    const r = await commitImport(owner, csv(sheet(held)), { pricesLive: false });
+    expect(r.prices).toMatchObject({ status: "pending", count: 3 });
+    expect((await importedProducts(held)).prices.every((p) => p.status === "pending")).toBe(true);
+
+    const scan = uid("SCN").toUpperCase();
+    const s = await commitImport(owner, csv(sheet(scan)), { scanned: true, pricesLive: true, publish: false });
+    expect(s.prices).toMatchObject({ status: "pending", count: 3 });
+    const scanned = (await importedProducts(scan)).prices;
+    expect(scanned.every((p) => p.status === "pending" && p.reason === "Bulk import (read from a scan)")).toBe(true);
+  });
+
+  it("approving all of an import's prices puts them in force", async () => {
+    const owner = await makeUser("super_admin");
+    const tag = uid("APV").toUpperCase();
+    const r = await commitImport(owner, csv(sheet(tag)), { pricesLive: false });
+    const list = await getDefaultPriceList();
+    const { vs } = await importedProducts(tag);
+    expect((await getActivePrices(vs.map((v) => v.id), list.id)).size).toBe(0);
+    const d = await decidePriceChanges(owner, { decision: "approve", filter: { importBatchId: r.prices.batchId }, asOf: new Date(r.prices.asOf) });
+    expect(d).toMatchObject({ decided: 3, skipped: 0, warnings: [] });
+    const live = await getActivePrices(vs.map((v) => v.id), list.id);
+    expect([...live.values()].map((p) => p.price).sort()).toEqual(["12.00", "180.00", "215.25"]);
+  });
+
+  it("imports no prices for someone who may not set them", async () => {
+    const owner = await makeUser("super_admin");
+    const admin = await makeUser("admin");
+    await setPermissionOverrides(owner, admin.id, [{ permission: "prices.edit", effect: "deny" }]);
+    const r = await commitImport(await reload(admin), csv(sheet(uid("NOP").toUpperCase())));
+    expect(r.prices).toMatchObject({ status: "none", count: 0 });
   });
 });

@@ -59,7 +59,7 @@ async function AboutIntro() {
   return (
     <>
       <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-navy-600">{business.about}</p>
-      <p className="mt-3 font-mono text-[12.5px] text-navy-500">{addressLines(business).join(", ")}</p>
+      <p className="mt-3 tabular text-[12.5px] text-navy-500">{addressLines(business).join(", ")}</p>
       <div className="mt-7 flex flex-wrap gap-2.5">
         <LinkButton href="/products" size="lg" icon={<ArrowRight className="h-4 w-4" />} className="flex-row-reverse">
           Browse products
@@ -81,7 +81,7 @@ async function RangeList() {
         <li key={c.slug}>
           <Link href={`/category/${c.slug}`} className="group flex items-baseline justify-between gap-4 border-b border-rule py-3.5">
             <span className="font-medium text-navy-950 transition-colors group-hover:text-gold-700">{c.name}</span>
-            <span className="shrink-0 font-mono text-[12px] text-navy-500 tabular">{c.productCount} items</span>
+            <span className="shrink-0 tabular text-[12px] text-navy-500">{c.productCount} items</span>
           </Link>
         </li>
       ))}

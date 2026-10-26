@@ -165,8 +165,8 @@ function Detail({ icon, label, value, mono }: { icon?: React.ReactNode; label: s
     <div className="flex gap-3 border-b border-navy-100 pb-3 last:border-0 last:pb-0">
       <span className="mt-0.5 w-4 shrink-0 text-navy-400">{icon}</span>
       <div className="min-w-0">
-        <div className="label-caps text-navy-500">{label}</div>
-        <div className={mono ? "mt-0.5 break-all font-mono text-[13px]" : "mt-0.5"}>{value ?? <span className="text-navy-400">Not recorded</span>}</div>
+        <div className="label-sm text-navy-500">{label}</div>
+        <div className={mono ? "mt-0.5 break-all tabular text-[13px]" : "mt-0.5"}>{value ?? <span className="text-navy-400">Not recorded</span>}</div>
       </div>
     </div>
   );

@@ -236,7 +236,7 @@ export function PricePanel({
       </div>
       {cur && cur.tiers.length > 0 && (
         <div className="text-sm text-navy-700">
-          <span className="label-caps mr-2 text-navy-500">Quantity breaks</span>
+          <span className="label-sm mr-2 text-navy-500">Quantity breaks</span>
           {cur.tiers.map((t) => `${t.minQty}+ ${unitName} @ ${formatINR(t.price)}`).join(" · ")}
         </div>
       )}
@@ -299,8 +299,8 @@ export function PricePanel({
           <div className="grid gap-3 sm:grid-cols-3">
             <Field label={`Selling price per ${unitName}`} htmlFor="np-price" required>
               <div className="relative">
-                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-mono text-sm text-navy-400">₹</span>
-                <Input id="np-price" inputMode="decimal" className="pl-7 font-mono tabular" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={cur?.price ?? "0.00"} required />
+                <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 tabular text-sm text-navy-400">₹</span>
+                <Input id="np-price" inputMode="decimal" className="pl-7 tabular" value={price} onChange={(e) => setPrice(e.target.value)} placeholder={cur?.price ?? "0.00"} required />
               </div>
             </Field>
             <Field label="Price basis" htmlFor="np-incl">
@@ -310,7 +310,7 @@ export function PricePanel({
               </Select>
             </Field>
             <Field label="MRP (optional)" htmlFor="np-mrp" hint="Selling price can't exceed MRP.">
-              <Input id="np-mrp" inputMode="decimal" className="font-mono tabular" value={mrp} onChange={(e) => setMrp(e.target.value)} placeholder="As printed on pack" />
+              <Input id="np-mrp" inputMode="decimal" className="tabular" value={mrp} onChange={(e) => setMrp(e.target.value)} placeholder="As printed on pack" />
             </Field>
           </div>
 
@@ -353,7 +353,7 @@ export function PricePanel({
           {showCost && landedCost && (
             <div className="flex flex-wrap items-end gap-3 rounded-lg border border-navy-100 bg-white px-3 py-3">
               <Field label="Target gross margin %" htmlFor="np-target" className="w-48">
-                <Input id="np-target" inputMode="decimal" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 20" className="font-mono" />
+                <Input id="np-target" inputMode="decimal" value={target} onChange={(e) => setTarget(e.target.value)} placeholder="e.g. 20" className="tabular" />
               </Field>
               <div className="min-w-0 flex-1 pb-2.5 text-sm text-navy-700">
                 {suggestion ? (
@@ -375,7 +375,7 @@ export function PricePanel({
 
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <span className="label-caps text-navy-600">Quantity breaks (optional)</span>
+              <span className="label-sm text-navy-600">Quantity breaks (optional)</span>
               <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setTiers([...tiers, { minQty: "", price: "" }])} disabled={tiers.length >= 10}>
                 Add break
               </Button>
@@ -387,11 +387,11 @@ export function PricePanel({
                 {tiers.map((t, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
                     <div className="w-24 shrink-0">
-                      <Input aria-label="Minimum quantity" inputMode="decimal" className="font-mono" value={t.minQty} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, minQty: e.target.value } : x)))} placeholder="10" />
+                      <Input aria-label="Minimum quantity" inputMode="decimal" className="tabular" value={t.minQty} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, minQty: e.target.value } : x)))} placeholder="10" />
                     </div>
                     <span className="text-navy-500">{unitName} or more at ₹</span>
                     <div className="w-32 shrink-0">
-                      <Input aria-label="Tier price" inputMode="decimal" className="font-mono tabular" value={t.price} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))} placeholder="0.00" />
+                      <Input aria-label="Tier price" inputMode="decimal" className="tabular" value={t.price} onChange={(e) => setTiers(tiers.map((x, j) => (j === i ? { ...x, price: e.target.value } : x)))} placeholder="0.00" />
                     </div>
                     <Button variant="ghost" size="sm" aria-label="Remove break" onClick={() => setTiers(tiers.filter((_, j) => j !== i))}>
                       <Trash2 className="h-4 w-4" />
@@ -434,7 +434,7 @@ export function PricePanel({
 function InfoTile({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-      <div className="label-caps mb-1.5 text-navy-500">{label}</div>
+      <div className="label-sm mb-1.5 text-navy-500">{label}</div>
       {children}
     </div>
   );

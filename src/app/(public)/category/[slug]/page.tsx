@@ -72,7 +72,7 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
                 href={`/category/${c.slug}`}
                 className="rounded-md border border-navy-200 bg-white px-3 py-1.5 text-[13px] font-medium text-navy-800 transition-colors hover:border-navy-900"
               >
-                {c.name} <span className="font-mono text-navy-400">{c.productCount}</span>
+                {c.name} <span className="tabular text-navy-400">{c.productCount}</span>
               </Link>
             ))}
           </div>

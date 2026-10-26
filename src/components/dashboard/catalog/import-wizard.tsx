@@ -1,14 +1,15 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { CheckCircle2, FileSpreadsheet, ShieldCheck, Upload } from "lucide-react";
+import { Check, CheckCircle2, FileSpreadsheet, ShieldCheck, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/page";
-import { Label, Select } from "@/components/ui/field";
+import { Input, Label, Select } from "@/components/ui/field";
 import { tdCode, tdText, th } from "@/components/dashboard/table";
 import { cn } from "@/components/ui/cn";
+import { plural } from "@/components/staff/labels";
 import { apiFetch, ApiError, errorMessage } from "@/lib/api-client";
 import { CANCELLED, IMPORT_ACCEPT, MAX_IMPORT_FILE_BYTES, OCR_LANGUAGE_CHOICES, type ImportTable, type ReadProgress } from "@/lib/import-files";
 import { importSheet, isTemplateHeader, type ImportRow } from "@/lib/import-files/mapping";
@@ -34,6 +35,8 @@ interface ImportResult {
   createdVariants: number;
   published: boolean;
   images: { stored: number; failed: { product: string; url: string; reason: string }[] };
+  /** The selling prices brought in, and whether they are in force or wait for approval. */
+  prices: { status: "approved" | "pending" | "none"; count: number; batchId: string; asOf: string };
 }
 /** The rows being checked, in the import template's columns, and where each came from in the file. */
 interface Sheet {
@@ -56,7 +59,11 @@ const csvOf = async (sheet: Sheet) => {
   return toCsv([sheet.header, ...sheet.rows]);
 };
 
-export function ImportWizard({ canPublish, ...options }: { canPublish: boolean } & MatcherOptions) {
+/**
+ * `pricesGoLive`: this person's imported prices are in force at once unless they untick it (they may
+ * approve prices, or approval is switched off). `canApprovePrices`: may approve the waiting ones.
+ */
+export function ImportWizard({ canPublish, canApprovePrices, pricesGoLive, ...options }: { canPublish: boolean; canApprovePrices: boolean; pricesGoLive: boolean } & MatcherOptions) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [reading, setReading] = useState<string | null>(null);
@@ -65,6 +72,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
   const [report, setReport] = useState<Report | null>(null);
   const [result, setResult] = useState<ImportResult | null>(null);
   const [publish, setPublish] = useState(false);
+  const [pricesLive, setPricesLive] = useState(true);
   const [busy, setBusy] = useState<"validate" | "commit" | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [onlyProblems, setOnlyProblems] = useState(false);
@@ -193,11 +201,14 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
     // Prices read from a scan are looked over in the drafts first.
     const live = publish && !scanned;
     const where = live ? "They will go live on the website straight away." : "They will be created as unpublished drafts.";
-    if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? ${where}${photos}`)) return;
+    const priceNote = pricesGoLive ? (pricesLive && !scanned ? " Their prices go live now." : " Their prices will wait for approval.") : "";
+    if (!confirm(`Import ${report?.productCount} products / ${report?.variantCount} variants? ${where}${priceNote}${photos}`)) return;
     setBusy("commit");
     setError(null);
     try {
-      setResult(await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv: await csvOf(sheet), publish: publish && !scanned } }));
+      setResult(
+        await apiFetch<ImportResult>("/api/admin/import/commit", { method: "POST", body: { csv: await csvOf(sheet), publish: publish && !scanned, pricesLive: pricesLive && !scanned, scanned: !!scanned } }),
+      );
       setReport(null);
       setSheet(null);
       setTables(null);
@@ -224,7 +235,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
           <p>
             The price list or catalogue as the company sent it: <b>PDF</b> (even a scan), Excel (.xlsx, .xls), Word (.docx), OpenOffice (.ods), CSV or text, web page (.html), JSON, or a photo of a
             page. Or fill in our{" "}
-            <a href="/api/admin/import/template" className="inline-flex items-center gap-1 font-mono text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
+            <a href="/api/admin/import/template" className="inline-flex items-center gap-1 tabular text-[12.5px] font-medium text-gold-700 underline-offset-[3px] hover:underline">
               <FileSpreadsheet className="h-3.5 w-3.5 shrink-0" aria-hidden /> template
             </a>
             .
@@ -248,12 +259,13 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
             {error && <Alert tone="danger">{error}</Alert>}
             {result && (
               <Alert tone="success" title="Import complete">
-                Created {result.createdProducts} products with {result.createdVariants} variants
+                Created {plural(result.createdProducts, "product")} with {plural(result.createdVariants, "variant")}
                 {result.published ? ", published on the website" : ""}.{result.images.stored > 0 && ` ${result.images.stored} photo${result.images.stored > 1 ? "s" : ""} added.`} Find them under{" "}
                 <Link className="font-semibold underline" href={result.published ? "/dashboard/products?status=published" : "/dashboard/products?status=needs_review"}>
                   {result.published ? "Products → Published" : "Products → Needs review"}
                 </Link>
-                .
+                .{result.prices?.status === "approved" && ` ${plural(result.prices.count, "price")} ${result.prices.count === 1 ? "is" : "are"} now in force.`}
+                {result.prices?.status === "pending" && <ImportedPrices prices={result.prices} canApprove={canApprovePrices} />}
               </Alert>
             )}
             {result && result.images.failed.length > 0 && (
@@ -273,7 +285,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
               <Button variant="outline" icon={<Upload className="h-4 w-4" />} onClick={() => fileRef.current?.click()} loading={!!reading || (busy === "validate" && !tables)}>
                 {fileName ? "Choose another file" : "Choose file"}
               </Button>
-              {fileName && <span className="break-all font-mono text-[13px] text-navy-700">{fileName}</span>}
+              {fileName && <span className="break-all tabular text-[13px] text-navy-700">{fileName}</span>}
               {reading && (
                 <Button variant="ghost" size="sm" onClick={() => cancelRef.current?.abort()}>
                   Cancel
@@ -353,6 +365,12 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
                       <input type="checkbox" className="accent-navy-900" checked={publish} onChange={(e) => setPublish(e.target.checked)} /> Publish on the website straight away
                     </label>
                   )}
+                  {pricesGoLive && !scanned && (
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-navy-900">
+                      <input type="checkbox" className="accent-navy-900" checked={pricesLive} onChange={(e) => setPricesLive(e.target.checked)} /> Make these prices live now
+                    </label>
+                  )}
+                  {pricesGoLive && scanned && <p className="text-sm text-navy-600">Prices read from a scan always wait for review.</p>}
                 </div>
                 <Button icon={<ShieldCheck className="h-4 w-4" />} disabled={report.errorCount > 0 || report.variantCount > MAX_IMPORT_ROWS} loading={busy === "commit"} onClick={commit}>
                   Import {report.variantCount} variants
@@ -409,7 +427,7 @@ export function ImportWizard({ canPublish, ...options }: { canPublish: boolean }
           <dl className="grid gap-x-10 text-sm sm:grid-cols-2">
             {COLUMNS.map(([k, v]) => (
               <div key={k} className="flex gap-3 border-b border-navy-100 py-2">
-                <dt className="w-44 shrink-0 pt-px font-mono text-[12px] font-medium text-navy-900">{k}</dt>
+                <dt className="w-44 shrink-0 pt-px tabular text-[12px] font-medium text-navy-900">{k}</dt>
                 <dd className="leading-snug text-navy-600">{v}</dd>
               </div>
             ))}
@@ -445,11 +463,75 @@ const COLUMNS: [string, string][] = [
   ["is_sample", "yes for demonstration data only"],
 ];
 
+/** After an import whose prices wait for approval: approve or reject all of them here, or review them first. */
+function ImportedPrices({ prices, canApprove }: { prices: ImportResult["prices"]; canApprove: boolean }) {
+  const [rejecting, setRejecting] = useState(false);
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState<"approve" | "reject" | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState<string | null>(null);
+  const review = `/dashboard/pricing?importBatchId=${prices.batchId}#waiting`;
+  const decide = async (decision: "approve" | "reject") => {
+    setBusy(decision);
+    setError(null);
+    try {
+      const r = await apiFetch<{ decided: number; skipped: number }>("/api/admin/prices/decisions", {
+        method: "POST",
+        body: { decision, note: decision === "reject" ? note.trim() : null, filter: { importBatchId: prices.batchId }, asOf: prices.asOf },
+      });
+      setDone(`${decision === "approve" ? "Approved" : "Rejected"} ${plural(r.decided, "price")}${r.skipped ? ` · ${r.skipped} skipped` : ""}.`);
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setBusy(null);
+    }
+  };
+  if (done) return <p className="mt-2 font-medium">{done}</p>;
+  return (
+    <div className="mt-2 space-y-2">
+      <p>
+        {plural(prices.count, "price")} {prices.count === 1 ? "is" : "are"} waiting for approval.{" "}
+        <Link className="font-semibold underline" href={review}>
+          {prices.count === 1 ? "Review it" : "Review them"} in Price review
+        </Link>
+      </p>
+      {error && <p className="text-red-800">{error}</p>}
+      {canApprove &&
+        (rejecting ? (
+          <form
+            className="flex flex-wrap items-center gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (note.trim().length >= 3) void decide("reject");
+            }}
+          >
+            <Input autoFocus aria-label="Reason for rejecting these prices" placeholder="Reason for rejecting" value={note} onChange={(e) => setNote(e.target.value)} maxLength={300} className="h-8 max-w-xs text-[13px]" />
+            <Button type="submit" size="sm" variant="danger" loading={busy === "reject"} disabled={note.trim().length < 3} icon={<X className="h-3.5 w-3.5" />}>
+              Reject all
+            </Button>
+            <Button size="sm" variant="ghost" disabled={!!busy} onClick={() => setRejecting(false)}>
+              Cancel
+            </Button>
+          </form>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="success" loading={busy === "approve"} disabled={!!busy} icon={<Check className="h-3.5 w-3.5" />} onClick={() => decide("approve")}>
+              Approve all {plural(prices.count, "price")}
+            </Button>
+            <Button size="sm" variant="outline" className="text-red-700" disabled={!!busy} icon={<X className="h-3.5 w-3.5" />} onClick={() => setRejecting(true)}>
+              Reject all
+            </Button>
+          </div>
+        ))}
+    </div>
+  );
+}
+
 function Step({ n, title, done, children }: { n: number; title: string; done: boolean; children: React.ReactNode }) {
   return (
     <li className="border-b border-navy-100 p-4 text-sm leading-relaxed text-navy-600 last:border-b-0 md:border-b-0 md:p-5">
       <div className="mb-1.5 flex items-center gap-2.5 font-semibold text-navy-900">
-        <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-xs", done ? "bg-emerald-600 text-white" : "border border-navy-200 text-navy-700")}>
+        <span className={cn("flex h-6 w-6 shrink-0 items-center justify-center rounded-md tabular text-xs", done ? "bg-emerald-600 text-white" : "border border-navy-200 text-navy-700")}>
           {done ? <CheckCircle2 className="h-4 w-4" /> : n}
         </span>
         {title}
@@ -462,7 +544,7 @@ function Step({ n, title, done, children }: { n: number; title: string; done: bo
 function Mini({ label, value, tone }: { label: string; value: number; tone?: "red" | "amber" | "green" }) {
   return (
     <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-      <div className="label-caps text-navy-500">{label}</div>
+      <div className="label-sm text-navy-500">{label}</div>
       <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>
         {value}
       </div>

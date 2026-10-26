@@ -101,7 +101,7 @@
 }
 
 /* Small labels for table heads, figure names and section names: sentence case, written as read. */
-@utility label-caps {
+@utility label-sm {
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;

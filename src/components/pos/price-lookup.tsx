@@ -93,8 +93,8 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
                     {[p.brandName, p.categoryName].filter(Boolean).map((t) => (
                       <span key={t}>{t}</span>
                     ))}
-                    {p.hsnCode && <span className="font-mono">HSN {p.hsnCode}</span>}
-                    {taxCharged && <span className="font-mono">GST {D(p.gstRate).toString()}%</span>}
+                    {p.hsnCode && <span className="tabular">HSN {p.hsnCode}</span>}
+                    {taxCharged && <span className="tabular">GST {D(p.gstRate).toString()}%</span>}
                   </div>
                 </header>
                 <ul className="divide-y divide-navy-100">
@@ -105,27 +105,27 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
                         {optionLabel(v.variantName) ? (
                           <span className="min-w-0 text-sm font-medium text-navy-900">{v.variantName}</span>
                         ) : (
-                          <span className="min-w-0 font-mono text-[13px] text-navy-700">{v.sku}</span>
+                          <span className="min-w-0 tabular text-[13px] text-navy-700">{v.sku}</span>
                         )}
                         {v.price ? (
-                          <span className="shrink-0 font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(v.price)}</span>
+                          <span className="shrink-0 tabular text-[15px] font-semibold text-navy-950">{formatINR(v.price)}</span>
                         ) : (
                           <span className="shrink-0 text-xs font-semibold text-red-700">No price set</span>
                         )}
                       </div>
                       <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 text-[11px]">
-                        <span className="font-mono text-navy-500">{optionLabel(v.variantName) ? v.sku : ""}</span>
+                        <span className="tabular text-navy-500">{optionLabel(v.variantName) ? v.sku : ""}</span>
                         {v.price && (
                           <span className="text-navy-500">
                             per {v.unitName}
                             {taxCharged ? (v.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
-                            {v.mrp && <span className="ml-2 font-mono text-navy-400">MRP {formatINR(v.mrp)}</span>}
+                            {v.mrp && <span className="ml-2 tabular text-navy-400">MRP {formatINR(v.mrp)}</span>}
                           </span>
                         )}
                       </div>
                       {v.tiers.length > 0 && (
                         <div className="mt-1 text-[11px] font-medium text-gold-700">
-                          Bulk: <span className="font-mono">{v.tiers.map((t) => `${formatQty(t.minQty)}+ @ ${formatINR(t.price)}`).join(" · ")}</span>
+                          Bulk: <span className="tabular">{v.tiers.map((t) => `${formatQty(t.minQty)}+ @ ${formatINR(t.price)}`).join(" · ")}</span>
                         </div>
                       )}
                       {v.conversions.length > 0 && (

@@ -36,7 +36,7 @@ export function ProductCard({ p, index = 0 }: { p: PublicProductCard; index?: nu
       <ProductFigure p={p} className="aspect-[4/3] border-b border-navy-100" />
       {p.isSample && <SampleBadge className="absolute left-3 top-3" />}
       <div className="flex flex-1 flex-col px-3 pb-3.5 pt-3 sm:px-4 sm:pb-4 sm:pt-3.5">
-        <div className="label-caps truncate text-gold-700">{p.brand ?? p.category}</div>
+        <div className="label-sm truncate text-gold-700">{p.brand ?? p.category}</div>
         <h3 className="mt-1.5 line-clamp-3 text-[14px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[15px]">
           <KeepCodes text={p.name} />
         </h3>

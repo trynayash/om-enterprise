@@ -39,7 +39,7 @@ export function SalesChart({ points, caption }: { points: DayPoint[]; caption: s
     <figure>
       <div className="grid grid-cols-[2.75rem_minmax(0,1fr)] pt-2">
         {/* Y axis: the highest day and zero, set against the hairline and the baseline. */}
-        <div aria-hidden className="relative h-40 font-mono text-[11px] tabular text-navy-500">
+        <div aria-hidden className="relative h-40 tabular text-[11px] text-navy-500">
           {!empty && <span className="absolute right-2 top-0 -translate-y-1/2">{compact(max)}</span>}
           <span className="absolute bottom-0 right-2 translate-y-1/2 text-navy-400">0</span>
         </div>
@@ -64,7 +64,7 @@ export function SalesChart({ points, caption }: { points: DayPoint[]; caption: s
           </svg>
         </div>
         {/* X axis: first day, middle day and today, each with a short tick under its column. */}
-        <div aria-hidden className="relative col-start-2 h-6 font-mono text-[11px] text-navy-500">
+        <div aria-hidden className="relative col-start-2 h-6 tabular text-[11px] text-navy-500">
           {ticks.map((i) => (
             // The first label starts at its tick and the last ends at it, so neither hangs past the plot.
             <span

@@ -78,8 +78,8 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
               <li key={s.id}>
                 <Link href={`/pos/sale/${s.id}`} className="block px-4 py-3.5 transition-colors active:bg-paper">
                   <div className="flex items-baseline justify-between gap-3">
-                    <span className="font-mono text-sm font-semibold text-navy-950">{s.docNumber ?? s.saleNumber}</span>
-                    <Money value={s.grandTotal} className="font-mono text-[15px] font-semibold text-navy-950" />
+                    <span className="tabular text-sm font-semibold text-navy-950">{s.docNumber ?? s.saleNumber}</span>
+                    <Money value={s.grandTotal} className="tabular text-[15px] font-semibold text-navy-950" />
                   </div>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
@@ -114,7 +114,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                   <tr key={s.id} className="transition-colors hover:bg-paper/60">
                     <td className={td}>
                       <span className="flex flex-wrap items-center gap-1.5">
-                        <Link href={`/pos/sale/${s.id}`} className="link-draw font-mono font-semibold text-navy-950">
+                        <Link href={`/pos/sale/${s.id}`} className="link-draw tabular font-semibold text-navy-950">
                           {s.saleNumber}
                         </Link>
                         {s.isTraining && <TrainingBadge />}
@@ -122,7 +122,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                     </td>
                     <td className={td}>
                       {s.docNumber ? (
-                        <span className="flex flex-wrap items-center gap-1.5 whitespace-nowrap font-mono text-[13px] text-navy-800">
+                        <span className="flex flex-wrap items-center gap-1.5 whitespace-nowrap tabular text-[13px] text-navy-800">
                           {s.docNumber}
                           {s.docStatus === "cancelled" && <Badge tone="red">Cancelled</Badge>}
                         </span>
@@ -135,14 +135,14 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                     </td>
                     <td className={td}>
                       {s.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}
-                      {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
+                      {s.customerMobile && <div className="tabular text-xs text-navy-500">{s.customerMobile}</div>}
                     </td>
-                    <td className={`${td} text-right font-mono tabular`}>{s.itemCount}</td>
+                    <td className={`${td} text-right tabular`}>{s.itemCount}</td>
                     <td className={`${td} text-right`}>
-                      <Money value={s.grandTotal} className="font-mono font-semibold text-navy-950" />
+                      <Money value={s.grandTotal} className="tabular font-semibold text-navy-950" />
                     </td>
                     <td className={`${td} text-right`}>
-                      <Money value={s.amountPaid} muted className="font-mono" />
+                      <Money value={s.amountPaid} muted className="tabular" />
                       {s.paymentMethods && <div className="mt-0.5 text-xs text-navy-400">{s.paymentMethods.split(", ").map((m) => PAYMENT_METHOD_LABEL[m] ?? m.replace(/_/g, " ")).join(", ")}</div>}
                     </td>
                     <td className={td}>

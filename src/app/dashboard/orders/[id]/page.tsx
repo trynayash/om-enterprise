@@ -47,7 +47,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
         eyebrow={o.kind === "order_request" ? "Order request" : "Enquiry"}
         title={
           <span className="flex flex-wrap items-center gap-2">
-            <span className="font-mono text-[0.72em] font-semibold tracking-tight">{o.orderNumber}</span>
+            <span className="tabular text-[0.72em] font-semibold tracking-tight">{o.orderNumber}</span>
             <TitleStamps>
               <StatusBadge status={o.status} />
             </TitleStamps>
@@ -66,7 +66,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             <CardBody className="space-y-4">
               <div className="flex flex-wrap gap-2">
                 <a href={`tel:+91${o.mobile}`} className={buttonClass("outline")}>
-                  <Phone className="h-4 w-4" /> Call <span className="font-mono tabular">{o.mobile}</span>
+                  <Phone className="h-4 w-4" /> Call <span className="tabular">{o.mobile}</span>
                 </a>
                 <a href={whatsappLink(o.mobile, reply)} target="_blank" rel="noopener noreferrer" className={buttonClass("success")}>
                   <MessageCircle className="h-4 w-4" /> Reply on WhatsApp
@@ -79,13 +79,13 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
               </div>
               {o.address && (
                 <div className="text-sm">
-                  <div className="label-caps mb-1 text-navy-500">Address</div>
+                  <div className="label-sm mb-1 text-navy-500">Address</div>
                   <div className="whitespace-pre-line">{o.address}</div>
                 </div>
               )}
               {o.message && (
                 <div className="rounded-lg border border-rule bg-paper/70 px-4 py-3 text-sm">
-                  <div className="label-caps text-navy-500">Message</div>
+                  <div className="label-sm text-navy-500">Message</div>
                   <div className="mt-1.5 whitespace-pre-line leading-relaxed">{o.message}</div>
                 </div>
               )}
@@ -111,7 +111,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
                           <div className="font-medium">{l.productName}</div>
                           <div className="mt-0.5 text-xs text-navy-500">
                             {optionLabel(l.variantName) && <>{l.variantName} · </>}
-                            <span className="font-mono">{l.sku}</span>
+                            <span className="tabular">{l.sku}</span>
                           </div>
                         </td>
                         <td className={tdNum}>{formatQty(l.quantity)}</td>
@@ -129,8 +129,8 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             )}
             {o.indicativeTotal && (
               <CardBody className="flex items-baseline justify-end gap-3 bg-paper/50 text-sm">
-                <span className="label-caps text-navy-500">Indicative total</span>
-                <Money value={o.indicativeTotal} className="font-mono text-base font-semibold" />
+                <span className="label-sm text-navy-500">Indicative total</span>
+                <Money value={o.indicativeTotal} className="tabular text-base font-semibold" />
               </CardBody>
             )}
           </Card>
@@ -152,7 +152,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             </Card>
           )}
           <p className="px-1 text-xs leading-relaxed text-navy-500">
-            <span className="label-caps mr-1.5 text-navy-600">Privacy</span>
+            <span className="label-sm mr-1.5 text-navy-600">Privacy</span>
             Contact details are used only to respond to this request.
           </p>
         </div>

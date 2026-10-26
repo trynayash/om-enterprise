@@ -94,11 +94,11 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
       ) : (
         <>
           <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-navy-600">
-            <span className="label-caps text-navy-500">Verified receipts on this page</span>
-            <Money value={verifiedIn.toFixed(2)} className="font-mono font-semibold text-navy-950" />
+            <span className="label-sm text-navy-500">Verified receipts on this page</span>
+            <Money value={verifiedIn.toFixed(2)} className="tabular font-semibold text-navy-950" />
             {trainingIn.greaterThan(0) && (
               <span className="basis-full text-[13px] text-navy-500">
-                Training payments (<Money value={trainingIn.toFixed(2)} className="font-mono" />) are listed but not counted.
+                Training payments (<Money value={trainingIn.toFixed(2)} className="tabular" />) are listed but not counted.
               </span>
             )}
           </p>
@@ -107,8 +107,8 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
               <li key={p.id}>
                 <Link href={`/pos/sale/${p.saleId}`} className="block px-4 py-3.5 transition-colors active:bg-paper">
                   <div className="flex items-baseline justify-between gap-2">
-                    <span className="font-mono text-sm font-semibold text-navy-950">{p.saleNumber}</span>
-                    <Money value={p.amount} className={`font-mono text-[15px] font-semibold ${p.status === "successful" ? "text-navy-950" : "text-navy-400"}`} />
+                    <span className="tabular text-sm font-semibold text-navy-950">{p.saleNumber}</span>
+                    <Money value={p.amount} className={`tabular text-[15px] font-semibold ${p.status === "successful" ? "text-navy-950" : "text-navy-400"}`} />
                   </div>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <StatusBadge status={p.status} />
@@ -118,7 +118,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                   </div>
                   <div className="mt-1.5 text-xs text-navy-500">
                     <DateTime value={p.verifiedAt ?? p.createdAt} /> · {p.customerName ?? CASH_SALE}
-                    {p.reference && <span className="font-mono"> · {p.reference}</span>}
+                    {p.reference && <span className="tabular"> · {p.reference}</span>}
                   </div>
                   {p.verificationMethod && (
                     <div className="mt-0.5 text-xs text-navy-500">
@@ -151,7 +151,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                     </td>
                     <td className={td}>
                       <span className="flex flex-wrap items-center gap-1.5">
-                        <Link href={`/pos/sale/${p.saleId}`} className="link-draw font-mono font-semibold text-navy-950">
+                        <Link href={`/pos/sale/${p.saleId}`} className="link-draw tabular font-semibold text-navy-950">
                           {p.saleNumber}
                         </Link>
                         {p.isTraining && <TrainingBadge />}
@@ -164,7 +164,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                         {METHOD[p.method] ?? p.method}
                       </span>
                     </td>
-                    <td className={`${td} font-mono text-xs text-navy-700`}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
+                    <td className={`${td} tabular text-xs text-navy-700`}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
                     <td className={td}>
                       <StatusBadge status={p.status} />
                     </td>
@@ -179,7 +179,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                       )}
                     </td>
                     <td className={`${td} text-right`}>
-                      <Money value={p.amount} className={`font-mono font-semibold ${p.status === "successful" ? "text-navy-950" : "text-navy-400"}`} />
+                      <Money value={p.amount} className={`tabular font-semibold ${p.status === "successful" ? "text-navy-950" : "text-navy-400"}`} />
                     </td>
                   </tr>
                 ))}

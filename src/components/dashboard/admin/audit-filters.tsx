@@ -63,11 +63,11 @@ export function AuditFilters() {
       </div>
       <div className="w-[152px]">
         <Label htmlFor="audit-from">From</Label>
-        <Input id="audit-from" type="date" defaultValue={params.get("from") ?? ""} onChange={(e) => apply({ from: e.target.value })} className="font-mono text-[13px]" aria-label="From date" />
+        <Input id="audit-from" type="date" defaultValue={params.get("from") ?? ""} onChange={(e) => apply({ from: e.target.value })} className="tabular text-[13px]" aria-label="From date" />
       </div>
       <div className="w-[152px]">
         <Label htmlFor="audit-to">To</Label>
-        <Input id="audit-to" type="date" defaultValue={params.get("to") ?? ""} onChange={(e) => apply({ to: e.target.value })} className="font-mono text-[13px]" aria-label="To date" />
+        <Input id="audit-to" type="date" defaultValue={params.get("to") ?? ""} onChange={(e) => apply({ to: e.target.value })} className="tabular text-[13px]" aria-label="To date" />
       </div>
       <Button type="submit" variant="outline" icon={<Search className="h-4 w-4" />}>
         Search

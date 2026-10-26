@@ -66,5 +66,5 @@ export function TableWrap({ children, className }: { children: ReactNode; classN
   return <div className={cn("relative overflow-x-auto rounded-xl border border-navy-100 bg-white shadow-card", className)}>{children}</div>;
 }
 
-export const th = "label-caps whitespace-nowrap border-b border-navy-200 bg-paper/70 px-3 py-2.5 text-left text-navy-500";
+export const th = "label-sm whitespace-nowrap border-b border-navy-200 bg-paper/70 px-3 py-2.5 text-left text-navy-500";
 export const td = "border-b border-navy-100 px-3 py-3 align-top text-sm text-navy-900";

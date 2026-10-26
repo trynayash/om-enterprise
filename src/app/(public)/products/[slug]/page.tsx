@@ -112,7 +112,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
           </div>
         </div>
         <div>
-          <div className="label-caps flex flex-wrap items-center gap-2">
+          <div className="label-sm flex flex-wrap items-center gap-2">
             {p.brand && (
               <Link href={`/products?brand=${encodeURIComponent(p.brandSlug ?? "")}`} className="text-gold-700 transition-colors hover:text-gold-600">
                 {p.brand}
@@ -149,12 +149,12 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
             <section className="mt-12">
               <div className="flex items-baseline justify-between border-b border-navy-200 pb-2">
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Specifications</h2>
-                <span className="label-caps text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
+                <span className="label-sm text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
               </div>
               <dl>
                 {specs.map((s, i) => (
                   <div key={`${s.label}-${i}`} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-4 border-b border-navy-100 py-3 text-sm">
-                    <dt className="label-caps pt-0.5 text-navy-500">{s.label}</dt>
+                    <dt className="label-sm pt-0.5 text-navy-500">{s.label}</dt>
                     <dd className="text-navy-950">{s.value}</dd>
                   </div>
                 ))}
@@ -188,7 +188,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
                     >
                       <span>
                         <span className="block font-medium text-navy-950">{c.productName}</span>
-                        <span className="block font-mono text-[11.5px] text-navy-500">
+                        <span className="block tabular text-[11.5px] text-navy-500">
                           {c.variantName}
                           {c.note ? ` · ${c.note}` : ""}
                         </span>
@@ -209,7 +209,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
               </div>
               <a
                 href={telHref(business.phone)}
-                className="inline-flex h-11 items-center gap-2 rounded-lg bg-white px-4 font-mono text-sm font-medium text-navy-950 transition-colors hover:bg-paper"
+                className="inline-flex h-11 items-center gap-2 rounded-lg bg-white px-4 tabular text-sm font-medium text-navy-950 transition-colors hover:bg-paper"
               >
                 <Phone className="h-4 w-4" /> {formatPhone(business.phone)}
               </a>

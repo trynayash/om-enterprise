@@ -4,7 +4,8 @@ import { AlertTriangle } from "lucide-react";
 import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { listPendingApprovals } from "@/server/services/sales";
-import { listPendingPriceChanges } from "@/server/services/pricing";
+import { countPendingPriceChanges, searchPendingPriceChanges } from "@/server/services/pricing";
+import { listCategories } from "@/server/services/catalog";
 import { D, formatINR } from "@/lib/money";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Alert, EmptyState, PageHeader, PageSkeleton } from "@/components/ui/page";
@@ -16,6 +17,10 @@ import { tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { lineDescription } from "@/lib/line-description";
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { num, type SearchParams } from "@/components/dashboard/ops/params";
+import { BulkDiscountDecision } from "@/components/dashboard/ops/bulk-discount-decision";
+import { PendingPriceFilters } from "@/components/dashboard/catalog/pending-price-filters";
+import { BulkPriceDecision } from "@/components/dashboard/catalog/bulk-price-decision";
+import { isFiltered, parsePendingPriceFilter, priceSourceLabel } from "@/lib/price-filters";
 
 function SectionHeading({ id, title, count }: { id: string; title: string; count: number }) {
   return (
@@ -23,7 +28,7 @@ function SectionHeading({ id, title, count }: { id: string; title: string; count
       <h2 id={id} className="text-lg font-semibold tracking-[-0.01em] text-navy-950">
         {title}
       </h2>
-      <span className={`font-mono text-[13px] tabular ${count ? "font-semibold text-gold-700" : "text-navy-400"}`}>{count.toLocaleString("en-IN")}</span>
+      <span className={`tabular text-[13px] tabular ${count ? "font-semibold text-gold-700" : "text-navy-400"}`}>{count.toLocaleString("en-IN")}</span>
     </div>
   );
 }
@@ -31,7 +36,7 @@ function SectionHeading({ id, title, count }: { id: string; title: string; count
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="label-caps text-[10px] text-navy-500">{label}</dt>
+      <dt className="label-sm text-navy-500">{label}</dt>
       <dd className="mt-1 text-sm text-navy-900">{children}</dd>
     </div>
   );
@@ -84,8 +89,10 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
   const canDiscounts = can(actor, "discounts.approve");
   const canPrices = can(actor, "prices.approve");
   const discounts = canDiscounts ? await listPendingApprovals(actor) : [];
-  const prices = canPrices ? await listPendingPriceChanges(actor) : [];
-  const pricesPage = Math.min(num(sp, "prices", 1), Math.max(1, Math.ceil(prices.length / PRICES_PAGE)));
+  const filter = parsePendingPriceFilter(sp);
+  const pricesAll = canPrices ? await countPendingPriceChanges() : 0;
+  const prices = pricesAll ? await searchPendingPriceChanges(actor, filter, { page: num(sp, "prices", 1), pageSize: PRICES_PAGE }) : null;
+  const cats = prices ? await listCategories() : [];
   const showCost = can(actor, "costs.view");
   const mayBelowCost = can(actor, "pricing.sell_below_cost");
 
@@ -104,6 +111,21 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
       {canDiscounts && (
         <section aria-labelledby="disc-h" className="space-y-4">
           <SectionHeading id="disc-h" title="Discount approvals" count={discounts.length} />
+          <BulkDiscountDecision
+            requests={discounts.map(({ a, saleNumber }) => {
+              const d = a.details as ApprovalDetails;
+              const blocked = actor.isSuperAdmin
+                ? null
+                : a.requestedBy === actor.id
+                  ? "your own request"
+                  : D(d.maxDiscountPercent).greaterThan(D(actor.approvalLimitPercent))
+                    ? `above your approval limit of ${actor.approvalLimitPercent}%`
+                    : (d.anyBelowCost || d.anyBelowMarginFloor) && !mayBelowCost
+                      ? "below the allowed minimum price"
+                      : null;
+              return { id: a.id, saleNumber, percent: d.maxDiscountPercent, total: d.grandTotal, blocked };
+            })}
+          />
           {discounts.length === 0 ? (
             <EmptyState title="No discount approvals waiting" description="When a cashier asks for a discount above their limit, it appears here. Approvals can also be given in person at the counter." />
           ) : (
@@ -116,8 +138,8 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
                   <CardHeader
                     title={
                       <span className="flex flex-wrap items-center gap-2">
-                        <span className="font-mono">{d.maxDiscountPercent}%</span> discount on{" "}
-                        <Link href={`/dashboard/sales/${a.saleId}`} className="font-mono underline-offset-[3px] hover:underline">
+                        <span className="tabular">{d.maxDiscountPercent}%</span> discount on{" "}
+                        <Link href={`/dashboard/sales/${a.saleId}`} className="tabular underline-offset-[3px] hover:underline">
                           {saleNumber}
                         </Link>
                         <TitleStamps>
@@ -133,14 +155,14 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
                     }
                     actions={
                       <div className="text-right">
-                        <div className="label-caps text-[10px] text-navy-500">Bill total</div>
-                        <div className="mt-1 font-mono text-lg font-semibold tabular">{formatINR(d.grandTotal)}</div>
+                        <div className="label-sm text-navy-500">Bill total</div>
+                        <div className="mt-1 tabular text-lg font-semibold">{formatINR(d.grandTotal)}</div>
                       </div>
                     }
                   />
                   <CardBody className="space-y-4">
-                    <p className="border-l-2 border-gold-500 pl-3 text-sm leading-relaxed text-navy-800">
-                      <span className="label-caps mr-2 text-[10px] text-navy-500">Reason</span>“{a.reason}”
+                    <p className="text-sm leading-relaxed text-navy-800">
+                      <span className="label-sm mr-2 text-navy-500">Reason</span>“{a.reason}”
                     </p>
                     {d.reasons?.length ? (
                       <ul className="flex flex-wrap gap-2">
@@ -168,10 +190,10 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
                             <tr key={`${l.sku}-${i}`}>
                               <td className={withPy(tdText, "py-2.5")}>
                                 <div className="font-medium">{l.name}</div>
-                                <div className="font-mono text-[11.5px] text-navy-500">{l.sku}</div>
+                                <div className="tabular text-[11.5px] text-navy-500">{l.sku}</div>
                                 <div className="mt-1 flex flex-wrap gap-1">
                                   {l.overrideReason && <Badge tone="amber">Price changed: {l.overrideReason}</Badge>}
-                                  {l.discountReason && <Badge tone="gold">{l.discountReason}</Badge>}
+                                  {l.discountReason && <Badge tone="amber">{l.discountReason}</Badge>}
                                   {l.belowCost && <Badge tone="red">Below cost</Badge>}
                                   {!l.belowCost && l.belowMarginFloor && <Badge tone="amber">Below margin floor</Badge>}
                                 </div>
@@ -198,8 +220,8 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
                     </div>
                     <div className="flex flex-wrap justify-between gap-2 text-sm text-navy-600">
                       <span>
-                        List value <Money value={d.listTotal} className="font-mono text-[13px]" /> → bill <Money value={d.grandTotal} className="font-mono text-[13px] font-semibold text-navy-900" /> (overall{" "}
-                        <span className="font-mono text-[13px]">{d.effectiveDiscountPercent}%</span> off)
+                        List value <Money value={d.listTotal} className="tabular text-[13px]" /> → bill <Money value={d.grandTotal} className="tabular text-[13px] font-semibold text-navy-900" /> (overall{" "}
+                        <span className="tabular text-[13px]">{d.effectiveDiscountPercent}%</span> off)
                       </span>
                       {d.cartDiscount && (
                         <span>
@@ -230,62 +252,79 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
 
       {canPrices && (
         <section aria-labelledby="price-h" className="space-y-4">
-          <SectionHeading id="price-h" title="Price changes" count={prices.length} />
-          {prices.length === 0 ? (
+          <SectionHeading id="price-h" title="Price changes" count={pricesAll} />
+          {!prices ? (
             <EmptyState title="No price changes waiting" description="Price changes proposed by admins without approval rights appear here before they take effect." />
           ) : (
-            prices.slice((pricesPage - 1) * PRICES_PAGE, pricesPage * PRICES_PAGE).map((p) => {
-              const v = p.version;
-              const change = v.previousPrice && D(v.previousPrice).greaterThan(0) ? D(v.price).minus(D(v.previousPrice)).div(D(v.previousPrice)).times(100) : null;
-              return (
-                <Card key={v.id}>
-                  <CardBody className="space-y-4">
-                    <div className="flex flex-wrap items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <Link href={`/dashboard/products/${p.productId}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
-                          {lineDescription(null, p.productName, p.variantName)}
-                        </Link>
-                        <div className="mt-0.5 text-xs text-navy-500">
-                          <span className="font-mono text-[11.5px] text-navy-600">{p.sku}</span> · {p.listName} list · proposed by {p.requestedBy} · <DateTime value={v.createdAt} />
+            <>
+              <PendingPriceFilters brands={prices.brandOptions} categories={cats.map((c) => ({ id: c.id, name: c.name, parentId: c.parentId, sortOrder: c.sortOrder, isActive: c.isActive }))} pageParam="prices" />
+              <BulkPriceDecision
+                total={prices.total}
+                from={(prices.page - 1) * prices.pageSize + 1}
+                to={(prices.page - 1) * prices.pageSize + prices.items.length}
+                canApprove={canPrices}
+                filter={filter}
+                filtered={isFiltered(filter)}
+                asOf={prices.asOf.toISOString()}
+                summary={prices.summary}
+              />
+              {prices.total === 0 && <EmptyState title="No price changes match" description="Change or clear the filters to see the other prices waiting." />}
+              {prices.items.map((p) => {
+                const v = p.version;
+                const change = p.changePct === null ? null : D(p.changePct);
+                return (
+                  <Card key={v.id}>
+                    <CardBody className="space-y-4">
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <Link href={`/dashboard/products/${p.productId}`} className="font-semibold text-navy-900 underline-offset-[3px] hover:underline">
+                            {lineDescription(null, p.productName, p.variantName)}
+                          </Link>
+                          <div className="mt-0.5 text-xs text-navy-500">
+                            <span className="tabular text-[11.5px] text-navy-600">{p.sku}</span> · {p.brandName ?? "No brand"} · {p.categoryName} · {p.listName} list
+                          </div>
+                          <div className="mt-0.5 text-xs text-navy-500">
+                            {priceSourceLabel(p.source)} · proposed by {p.requestedBy} · <DateTime value={v.createdAt} />
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="flex items-baseline justify-end gap-2.5 tabular">
+                            {v.previousPrice ? (
+                              <span className="text-[13px] text-navy-400 line-through">{formatINR(v.previousPrice)}</span>
+                            ) : (
+                              <span className="font-sans text-xs text-navy-400">no price yet</span>
+                            )}
+                            <span className="text-xl font-semibold text-navy-950">{formatINR(v.price)}</span>
+                          </div>
+                          <div className="mt-0.5 text-xs text-navy-500">
+                            {v.priceIncludesTax ? "incl. GST" : `excl. GST (${formatINR(p.priceInclGst)} incl.)`}
+                            {change && <span className={change.isNegative() ? " text-red-700" : " text-emerald-700"}> · {change.isNegative() ? "" : "+"}{change.toFixed(1)}%</span>}
+                            {v.mrp && <> · MRP {formatINR(v.mrp)}</>}
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div className="flex items-baseline justify-end gap-2.5 font-mono tabular">
-                          {v.previousPrice ? (
-                            <span className="text-[13px] text-navy-400 line-through">{formatINR(v.previousPrice)}</span>
-                          ) : (
-                            <span className="font-sans text-xs text-navy-400">no price yet</span>
-                          )}
-                          <span className="text-xl font-semibold text-navy-950">{formatINR(v.price)}</span>
-                        </div>
-                        <div className="mt-0.5 text-xs text-navy-500">
-                          {v.priceIncludesTax ? "incl. GST" : "excl. GST"}
-                          {change && <span className={change.isNegative() ? " text-red-700" : " text-emerald-700"}> · {change.isNegative() ? "" : "+"}{change.toFixed(1)}%</span>}
-                          {v.mrp && <> · MRP {formatINR(v.mrp)}</>}
-                        </div>
-                      </div>
-                    </div>
-                    <dl className="grid gap-x-6 gap-y-3 border-y border-navy-100 py-3 sm:grid-cols-[minmax(0,2fr)_auto_auto_auto]">
-                      <Fact label="Reason">“{v.reason}”</Fact>
-                      <Fact label="Effective">
-                        <DateTime value={v.effectiveFrom} />
-                      </Fact>
-                      {showCost && (
-                        <Fact label="Margin">
-                          <span className="font-mono text-[13px]">
-                            {v.previousMarginPercent ? `${v.previousMarginPercent}%` : "—"} → <strong>{v.marginPercentSnapshot ? `${v.marginPercentSnapshot}%` : "cost unknown"}</strong>
-                          </span>
+                      <dl className="grid gap-x-6 gap-y-3 border-y border-navy-100 py-3 sm:grid-cols-[minmax(0,2fr)_auto_auto_auto]">
+                        <Fact label="Reason">“{v.reason}”</Fact>
+                        <Fact label="Effective">
+                          <DateTime value={v.effectiveFrom} />
                         </Fact>
-                      )}
-                      {v.tiers.length > 0 && <Fact label="Quantity prices">{v.tiers.length} quantity price(s)</Fact>}
-                    </dl>
-                    <DecisionButtons path={`/api/admin/prices/${v.id}/decision`} subject={`price for ${p.sku}`} />
-                  </CardBody>
-                </Card>
-              );
-            })
+                        {showCost && (
+                          <Fact label="Margin">
+                            <span className="tabular text-[13px]">
+                              {v.previousMarginPercent ? `${v.previousMarginPercent}%` : "—"} → <strong>{v.marginPercentSnapshot ? `${v.marginPercentSnapshot}%` : "cost unknown"}</strong>
+                            </span>
+                          </Fact>
+                        )}
+                        {v.tiers.length > 0 && <Fact label="Quantity prices">{v.tiers.length} quantity price(s)</Fact>}
+                      </dl>
+                      <DecisionButtons path={`/api/admin/prices/${v.id}/decision`} subject={`price for ${p.sku}`} />
+                    </CardBody>
+                  </Card>
+                );
+              })}
+              <Pagination total={prices.total} page={prices.page} pageSize={PRICES_PAGE} sp={sp} basePath="/dashboard/approvals" param="prices" anchor="price-h" />
+            </>
           )}
-          <Pagination total={prices.length} page={pricesPage} pageSize={PRICES_PAGE} sp={sp} basePath="/dashboard/approvals" param="prices" anchor="price-h" />
         </section>
       )}
     </div>

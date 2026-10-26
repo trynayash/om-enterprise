@@ -1,8 +1,9 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { requirePageActor } from "@/server/auth/session";
-import { can, canAny, type Actor } from "@/server/auth/actor";
-import { listPendingPriceChanges } from "@/server/services/pricing";
+import { can, canAny } from "@/server/auth/actor";
+import { countPendingPriceChanges, searchPendingPriceChanges } from "@/server/services/pricing";
+import { listCategories } from "@/server/services/catalog";
 import { priceChangeReport, productsNeedingReview } from "@/server/services/reports";
 import { getSettings } from "@/server/settings";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
@@ -12,6 +13,9 @@ import { NeedsReviewList, PendingPriceChanges } from "@/components/dashboard/cat
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { num, type SearchParams } from "@/components/dashboard/ops/params";
 import { PriceChangesTable } from "@/components/dashboard/price-changes-table";
+import { PendingPriceFilters } from "@/components/dashboard/catalog/pending-price-filters";
+import { BulkPriceDecision } from "@/components/dashboard/catalog/bulk-price-decision";
+import { isFiltered, parsePendingPriceFilter } from "@/lib/price-filters";
 
 export const metadata = { title: "Price review" };
 
@@ -34,11 +38,11 @@ async function PricingContent({ searchParams }: { searchParams: Promise<SearchPa
   const showCost = can(actor, "costs.view");
   const pricing = await getSettings("pricing");
   const review = canAny(actor, ["catalog.view", "prices.edit", "reports.view"]) ? await productsNeedingReview(actor) : [];
-  // Typed loosely so this works whether or not the service takes the actor (for redaction).
-  const pendingFor: (a: Actor) => ReturnType<typeof listPendingPriceChanges> = listPendingPriceChanges;
-  const pending = canAny(actor, ["prices.edit", "prices.approve"]) ? await pendingFor(actor) : [];
-  const waitingPage = Math.min(num(sp, "waiting", 1), Math.max(1, Math.ceil(pending.length / WAITING_PAGE)));
-  const waiting = pending.slice((waitingPage - 1) * WAITING_PAGE, waitingPage * WAITING_PAGE);
+  const seesPending = canAny(actor, ["prices.edit", "prices.approve"]);
+  const filter = parsePendingPriceFilter(sp);
+  const waitingAll = seesPending ? await countPendingPriceChanges() : 0;
+  const pending = seesPending && waitingAll ? await searchPendingPriceChanges(actor, filter, { page: num(sp, "waiting", 1), pageSize: WAITING_PAGE }) : null;
+  const cats = pending ? await listCategories() : [];
   const to = new Date(istStartOfDay(new Date()).getTime() + 86400_000);
   const from = new Date(to.getTime() - 30 * 86400_000);
   const recent = canAny(actor, ["reports.view", "prices.edit"]) ? await priceChangeReport(actor, { from, to }) : [];
@@ -57,38 +61,62 @@ async function PricingContent({ searchParams }: { searchParams: Promise<SearchPa
       <Card>
         <div id="waiting" className="scroll-mt-6">
           <CardHeader
-            title={`Waiting for approval (${pending.length.toLocaleString("en-IN")})`}
+            title={`Waiting for approval (${waitingAll.toLocaleString("en-IN")})`}
             description="Price changes proposed by admins or brought in with a price list. They take effect only after approval."
           />
         </div>
-        <CardBody className={pending.length ? "p-0" : undefined}>
-          <PendingPriceChanges
-            canApprove={can(actor, "prices.approve")}
-            showCost={showCost}
-            items={waiting.map((p) => ({
-              id: p.version.id,
-              productId: p.productId,
-              productName: p.productName,
-              variantName: p.variantName,
-              sku: p.sku,
-              listName: p.listName,
-              previousPrice: p.version.previousPrice,
-              price: p.version.price,
-              priceIncludesTax: p.version.priceIncludesTax,
-              effectiveFrom: p.version.effectiveFrom.toISOString(),
-              createdAt: p.version.createdAt.toISOString(),
-              requestedBy: p.requestedBy,
-              reason: p.version.reason,
-              marginPercent: showCost ? p.version.marginPercentSnapshot : null,
-              previousMarginPercent: showCost ? p.version.previousMarginPercent : null,
-            }))}
-          />
-          {pending.length > WAITING_PAGE && (
-            <div className="px-5 pb-4">
-              <Pagination total={pending.length} page={waitingPage} pageSize={WAITING_PAGE} sp={sp} basePath="/dashboard/pricing" param="waiting" anchor="waiting" />
-            </div>
-          )}
-        </CardBody>
+        {pending ? (
+          <>
+            <CardBody className="space-y-3 border-b border-navy-100">
+              <PendingPriceFilters inset brands={pending.brandOptions} categories={cats.map((c) => ({ id: c.id, name: c.name, parentId: c.parentId, sortOrder: c.sortOrder, isActive: c.isActive }))} pageParam="waiting" />
+              <BulkPriceDecision
+                total={pending.total}
+                from={(pending.page - 1) * pending.pageSize + 1}
+                to={(pending.page - 1) * pending.pageSize + pending.items.length}
+                canApprove={can(actor, "prices.approve")}
+                filter={filter}
+                filtered={isFiltered(filter)}
+                asOf={pending.asOf.toISOString()}
+                summary={pending.summary}
+              />
+            </CardBody>
+            <PendingPriceChanges
+              canApprove={can(actor, "prices.approve")}
+              showCost={showCost}
+              items={pending.items.map((p) => ({
+                id: p.version.id,
+                productId: p.productId,
+                productName: p.productName,
+                variantName: p.variantName,
+                sku: p.sku,
+                listName: p.listName,
+                previousPrice: p.version.previousPrice,
+                price: p.version.price,
+                priceIncludesTax: p.version.priceIncludesTax,
+                priceInclGst: p.priceInclGst,
+                changePct: p.changePct,
+                brandName: p.brandName,
+                categoryName: p.categoryName,
+                source: p.source,
+                effectiveFrom: p.version.effectiveFrom.toISOString(),
+                createdAt: p.version.createdAt.toISOString(),
+                requestedBy: p.requestedBy,
+                reason: p.version.reason,
+                marginPercent: showCost ? p.version.marginPercentSnapshot : null,
+                previousMarginPercent: showCost ? p.version.previousMarginPercent : null,
+              }))}
+            />
+            {pending.total > WAITING_PAGE && (
+              <div className="px-5 pb-4">
+                <Pagination total={pending.total} page={pending.page} pageSize={WAITING_PAGE} sp={sp} basePath="/dashboard/pricing" param="waiting" anchor="waiting" />
+              </div>
+            )}
+          </>
+        ) : (
+          <CardBody>
+            <p className="text-sm text-navy-500">No price changes are waiting for approval.</p>
+          </CardBody>
+        )}
       </Card>
 
       <Card>

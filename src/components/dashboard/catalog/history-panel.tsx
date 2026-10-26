@@ -64,7 +64,7 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="label-caps mb-2.5 text-navy-600">Price history</h3>
+        <h3 className="label-sm mb-2.5 text-navy-600">Price history</h3>
         {data.prices.length === 0 ? (
           <p className="text-sm text-navy-500">No prices recorded yet.</p>
         ) : (
@@ -124,7 +124,7 @@ export function HistoryPanel({ variantId, refreshKey }: { variantId: string; ref
       </section>
       {data.costs && (
         <section>
-          <h3 className="label-caps mb-2.5 text-navy-600">Cost history</h3>
+          <h3 className="label-sm mb-2.5 text-navy-600">Cost history</h3>
           {data.costs.length === 0 ? (
             <p className="text-sm text-navy-500">No costs recorded yet.</p>
           ) : (

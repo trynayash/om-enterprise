@@ -205,7 +205,7 @@ export function VariantsManager(props: VariantsManagerProps) {
             title={
               <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
                 {selected.name}
-                <span className="font-mono text-[12.5px] font-normal text-navy-500">{selected.sku}</span>
+                <span className="tabular text-[12.5px] font-normal text-navy-500">{selected.sku}</span>
               </span>
             }
             description="Pricing, cost and history for the selected variant. Click another row above to switch."

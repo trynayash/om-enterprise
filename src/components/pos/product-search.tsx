@@ -227,7 +227,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
                   </span>
                   {optionLabel(r.variantName) && <span className="block text-sm text-navy-700">{r.variantName}</span>}
                   <span className="mt-1 flex flex-wrap items-center gap-x-2 text-xs text-navy-500">
-                    <span className="font-mono text-navy-700">{r.sku}</span>
+                    <span className="tabular text-navy-700">{r.sku}</span>
                     {[r.brandName, r.categoryName].filter(Boolean).map((t) => (
                       <span key={t} className="before:mr-2 before:text-navy-300 before:content-['·']">
                         {t}
@@ -239,7 +239,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
                 <span className="shrink-0 text-right">
                   {r.price ? (
                     <>
-                      <span className="block font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(r.price)}</span>
+                      <span className="block tabular text-[15px] font-semibold text-navy-950">{formatINR(r.price)}</span>
                       <span className="mt-0.5 block text-[11px] text-navy-500">
                         per {r.unitName}
                         {taxCharged ? (r.priceIncludesTax ? " · incl. GST" : " · + GST") : ""}
@@ -262,7 +262,7 @@ function Kbd({ children, className }: { children: React.ReactNode; className?: s
   return (
     <kbd
       className={cn(
-        "inline-flex h-5 min-w-5 items-center justify-center rounded-[3px] border border-navy-200 bg-paper px-1 font-mono text-[11px] font-medium leading-none text-navy-600 shadow-[inset_0_-1px_0_var(--color-navy-200)]",
+        "inline-flex h-5 min-w-5 items-center justify-center rounded-[3px] border border-navy-200 bg-paper px-1 tabular text-[11px] font-medium leading-none text-navy-600 shadow-[inset_0_-1px_0_var(--color-navy-200)]",
         className,
       )}
     >
@@ -330,14 +330,14 @@ function AddPanel({
             {r.isSample && <SampleBadge label="Sample" />}
           </div>
           {optionLabel(r.variantName) && <div className="text-sm text-navy-700">{r.variantName}</div>}
-          <div className="mt-1 flex flex-wrap gap-x-3 font-mono text-xs text-navy-500">
+          <div className="mt-1 flex flex-wrap gap-x-3 tabular text-xs text-navy-500">
             <span className="text-navy-700">{r.sku}</span>
             {r.hsnCode && <span>HSN {r.hsnCode}</span>}
             {r.mrp && <span>MRP {formatINR(r.mrp)}</span>}
           </div>
           {r.tiers.length > 0 && (
             <div className="mt-1.5 text-xs font-medium text-gold-700">
-              Bulk: <span className="font-mono">{r.tiers.map((t) => `${formatQty(t.minQty)}+ ${r.unitName} @ ${formatINR(t.price)}`).join(" · ")}</span>
+              Bulk: <span className="tabular">{r.tiers.map((t) => `${formatQty(t.minQty)}+ ${r.unitName} @ ${formatINR(t.price)}`).join(" · ")}</span>
             </div>
           )}
         </div>
@@ -359,7 +359,7 @@ function AddPanel({
           }}
         >
           <div>
-            <label htmlFor="add-qty" className="label-caps mb-1.5 block text-navy-600">
+            <label htmlFor="add-qty" className="label-sm mb-1.5 block text-navy-600">
               Quantity
             </label>
             <div className="flex h-12 items-stretch overflow-hidden rounded-lg border border-navy-200 bg-white focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">
@@ -372,7 +372,7 @@ function AddPanel({
                 inputMode={unit.decimals ? "decimal" : "numeric"}
                 value={qty}
                 onChange={(e) => setQty(e.target.value.replace(/[^\d.]/g, ""))}
-                className="w-20 border-x border-navy-200 bg-white text-center font-mono text-lg font-semibold text-navy-950 tabular focus:outline-none"
+                className="w-20 border-x border-navy-200 bg-white text-center tabular text-lg font-semibold text-navy-950 focus:outline-none"
                 aria-invalid={!valid}
               />
               <button type="button" onClick={() => step(1)} className="w-12 text-navy-600 transition-colors hover:bg-navy-50 active:bg-navy-100" aria-label="Increase">
@@ -382,7 +382,7 @@ function AddPanel({
           </div>
           {unitOptions.length > 1 ? (
             <div>
-              <label htmlFor="add-unit" className="label-caps mb-1.5 block text-navy-600">
+              <label htmlFor="add-unit" className="label-sm mb-1.5 block text-navy-600">
                 Sell by
               </label>
               <select
@@ -406,11 +406,11 @@ function AddPanel({
             {pricePerChosen && (
               <>
                 <div className="text-[13px] text-navy-500">
-                  <span className="font-mono">{formatINR(pricePerChosen)}</span> / {unit.name}
+                  <span className="tabular">{formatINR(pricePerChosen)}</span> / {unit.name}
                   {taxCharged ? (r.priceIncludesTax ? " incl. GST" : " + GST") : ""}
                   {tierApplied && <span className="ml-1 font-medium text-gold-700">(bulk price)</span>}
                 </div>
-                {valid && <div className="mt-0.5 font-mono text-xl font-semibold text-navy-950 tabular">{formatINR(pricePerChosen.times(D(qty)))}</div>}
+                {valid && <div className="mt-0.5 tabular text-xl font-semibold text-navy-950">{formatINR(pricePerChosen.times(D(qty)))}</div>}
               </>
             )}
           </div>

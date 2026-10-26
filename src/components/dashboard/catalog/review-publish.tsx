@@ -69,7 +69,7 @@ export function ReviewPublish({
               <li key={s.key} aria-current={current ? "step" : undefined}>
                 <span aria-hidden className={`block h-[3px] rounded-full ${i <= stepIndex ? (i === 2 ? "bg-emerald-600" : "bg-navy-900") : "bg-navy-100"}`} />
                 <span className={`mt-1.5 flex items-center gap-1 text-[11.5px] font-semibold leading-tight ${current ? "text-navy-900" : i < stepIndex ? "text-navy-600" : "text-navy-400"}`}>
-                  {done ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden /> : <span className="font-mono text-[11px] font-medium">{i + 1}</span>}
+                  {done ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden /> : <span className="tabular text-[11px] font-medium">{i + 1}</span>}
                   {s.label}
                 </span>
               </li>
@@ -78,7 +78,7 @@ export function ReviewPublish({
         </ol>
 
         <div className="flex items-center justify-between border-y border-navy-100 py-2.5">
-          <span className="label-caps text-navy-500">Website</span>
+          <span className="label-sm text-navy-500">Website</span>
           {isPublished ? <Badge tone="green">Published</Badge> : <Badge>Not published</Badge>}
         </div>
 

@@ -129,7 +129,7 @@ async function CounterCard() {
   return (
     <aside className="relative animate-[rise_520ms_var(--ease-out-quart)_180ms_both] rounded-xl border border-navy-200 bg-white shadow-lift">
       <div className="flex items-center justify-between border-b border-navy-100 px-5 py-3.5">
-        <span className="label-caps text-navy-500">Brands at the counter</span>
+        <span className="label-sm text-navy-500">Brands at the counter</span>
         <span className="text-[13px] text-navy-500">{brands.length} brands</span>
       </div>
       <ul className="divide-y divide-navy-100 px-5 py-1">
@@ -137,7 +137,7 @@ async function CounterCard() {
           <li key={b.slug}>
             <Link href={`/products?brand=${encodeURIComponent(b.slug)}`} className="group flex items-baseline justify-between gap-4 py-2.5 text-[15px]">
               <span className="font-semibold text-navy-950 transition-colors group-hover:text-gold-700">{b.name}</span>
-              <span className="shrink-0 font-mono text-[13px] text-navy-500 tabular">
+              <span className="shrink-0 tabular text-[13px] text-navy-500">
                 {b.productCount} <span className="text-navy-400">{b.productCount === 1 ? "item" : "items"}</span>
               </span>
             </Link>
@@ -329,7 +329,7 @@ async function ShopContent() {
       </div>
       <div className="rounded-xl border border-navy-200 bg-white">
         <div className="border-b border-navy-100 px-6 py-5">
-          <div className="label-caps text-navy-500">Address</div>
+          <div className="label-sm text-navy-500">Address</div>
           <address className="mt-2 text-[17px] not-italic leading-snug text-navy-950">
             {addressLines(business).map((l) => (
               <span key={l} className="block">
@@ -344,9 +344,9 @@ async function ShopContent() {
         <dl className="divide-y divide-navy-100 px-6">
           {business.phone && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-caps text-navy-500">Phone</dt>
+              <dt className="label-sm text-navy-500">Phone</dt>
               <dd>
-                <a href={telHref(business.phone)} className="link-draw font-mono text-[15px] text-navy-950">
+                <a href={telHref(business.phone)} className="link-draw tabular text-[15px] text-navy-950">
                   {formatPhone(business.phone)}
                 </a>
               </dd>
@@ -354,19 +354,19 @@ async function ShopContent() {
           )}
           {business.whatsapp && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-caps text-navy-500">WhatsApp</dt>
-              <dd className="font-mono text-[15px] text-navy-950">{formatPhone(business.whatsapp)}</dd>
+              <dt className="label-sm text-navy-500">WhatsApp</dt>
+              <dd className="tabular text-[15px] text-navy-950">{formatPhone(business.whatsapp)}</dd>
             </div>
           )}
           {business.email && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-caps text-navy-500">Email</dt>
+              <dt className="label-sm text-navy-500">Email</dt>
               <dd className="min-w-0 truncate text-[15px] text-navy-950">{business.email}</dd>
             </div>
           )}
           {business.openingHours && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-caps text-navy-500">Hours</dt>
+              <dt className="label-sm text-navy-500">Hours</dt>
               <dd className="text-[15px] text-navy-950">{business.openingHours}</dd>
             </div>
           )}
