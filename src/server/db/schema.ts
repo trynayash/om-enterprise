@@ -164,7 +164,7 @@ export const auditLogs = pgTable(
     id: bigserial("id", { mode: "number" }).primaryKey(),
     at: ts("at").notNull().defaultNow(),
     actorUserId: uuid("actor_user_id").references(() => users.id),
-    /** Snapshot of the actor's name/role at the time ("Sachin (sales)", "system", "public"). */
+    /** Snapshot of the actor's name/role at the time ("Sachin (Sales & Operations)", "system", "public"); older rows carry the role key. */
     actorLabel: text("actor_label").notNull(),
     action: text("action").notNull(),
     entityType: text("entity_type"),

@@ -22,7 +22,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
 
 export function Label({ htmlFor, children, required, className }: { htmlFor?: string; children: ReactNode; required?: boolean; className?: string }) {
   return (
-    <label htmlFor={htmlFor} className={cn("label-mono mb-1.5 block text-navy-600", className)}>
+    <label htmlFor={htmlFor} className={cn("mb-1.5 block text-[13px] font-medium leading-snug text-navy-700", className)}>
       {children}
       {required && <span className="ml-0.5 text-red-600">*</span>}
     </label>
@@ -62,7 +62,7 @@ export function Field({
   return (
     <div className={className}>
       <label className="block">
-        <span className="label-mono mb-1.5 block text-navy-600">
+        <span className="mb-1.5 block text-[13px] font-medium leading-snug text-navy-700">
           {label}
           {required && <span className="ml-0.5 text-red-600">*</span>}
         </span>

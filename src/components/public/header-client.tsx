@@ -105,7 +105,7 @@ function NavLinks({ pathname, categories }: { pathname: string | null; categorie
         {open && top.length > 0 && (
           <div className="absolute left-1/2 top-full z-50 w-[620px] -translate-x-1/2 pt-2">
             <div className="animate-sheet-in rounded-xl border border-navy-200 bg-white p-5 shadow-lift">
-              <div className="label-mono mb-2 flex items-center justify-between text-navy-400">
+              <div className="label-caps mb-2 flex items-center justify-between text-navy-400">
                 <span>Catalogue index</span>
                 <span>Products</span>
               </div>
@@ -294,7 +294,7 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
               </nav>
               {top.length > 0 && (
                 <div className="mt-7">
-                  <div className="label-mono mb-1 text-gold-700">Categories</div>
+                  <div className="label-caps mb-1 text-gold-700">Categories</div>
                   <CategoryIndex categories={top} onPick={() => setMenuOpen(false)} dense />
                 </div>
               )}

@@ -8,6 +8,7 @@ import { DateTime } from "@/components/ui/money";
 import { AuditFilters } from "@/components/dashboard/admin/audit-filters";
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { rowHover, tdMuted, tdText, th } from "@/components/dashboard/table";
+import { actorLabel } from "@/components/staff/labels";
 
 export const metadata = { title: "Audit log" };
 
@@ -86,7 +87,7 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
       />
       <AuditFilters />
       <TableWrap>
-        <table className="w-full min-w-[760px]">
+        <table className="stack-sm w-full min-w-[760px]">
           <thead>
             <tr>
               <th className={th}>When</th>
@@ -100,20 +101,20 @@ async function Audit({ searchParams }: { searchParams: PageProps<"/dashboard/aud
               const link = entityLink(a.entityType, a.entityId);
               return (
                 <tr key={a.id} className={rowHover}>
-                  <td className={`${tdMuted} whitespace-nowrap text-xs`}>
+                  <td data-label="When" className={`${tdMuted} whitespace-nowrap text-xs`}>
                     <DateTime value={a.at} />
                   </td>
-                  <td className={`${tdText} text-xs`}>
-                    <div className="font-semibold">{a.actorLabel}</div>
+                  <td data-label="Who" className={`${tdText} text-xs`}>
+                    <div className="font-semibold">{actorLabel(a.actorLabel)}</div>
                     {a.ip && <div className="mt-0.5 font-mono text-[11px] text-navy-400">{a.ip}</div>}
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Action" className={tdText}>
                     <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-[12px] text-navy-700">
                       <span aria-hidden className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[toneFor(a.action)]}`} />
                       {a.action}
                     </span>
                   </td>
-                  <td className={tdText}>
+                  <td data-label="What happened" className={tdText}>
                     <div className="leading-snug">{a.summary}</div>
                     {(link || a.data != null) && (
                       <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">

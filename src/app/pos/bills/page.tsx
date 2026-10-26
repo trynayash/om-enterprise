@@ -142,7 +142,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                     </td>
                     <td className={`${td} text-right`}>
                       <Money value={s.amountPaid} muted className="font-mono" />
-                      {s.paymentMethods && <div className="label-mono mt-0.5 text-[10px] text-navy-400">{s.paymentMethods.replace(/_/g, " ")}</div>}
+                      {s.paymentMethods && <div className="label-caps mt-0.5 text-[10px] text-navy-400">{s.paymentMethods.replace(/_/g, " ")}</div>}
                     </td>
                     <td className={td}>
                       <div className="flex flex-wrap gap-1">

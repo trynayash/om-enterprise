@@ -98,7 +98,7 @@ export function CatalogueFilters({
       </div>
       {active && (
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs">
-          <span className="label-mono text-navy-400">Filtered by</span>
+          <span className="label-caps text-navy-400">Filtered by</span>
           {query.q && <Chip label={`“${query.q}”`} onClear={() => (setText(""), go({ q: "" }))} />}
           {!hideCategory && query.category && <Chip label={categories.find((c) => c.slug === query.category)?.name ?? query.category} onClear={() => go({ category: "" })} />}
           {query.brand && <Chip label={brands.find((b) => b.slug === query.brand)?.name ?? query.brand} onClear={() => go({ brand: "" })} />}

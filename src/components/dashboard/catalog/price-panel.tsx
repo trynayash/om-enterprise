@@ -174,7 +174,7 @@ export function PricePanel({
               )}
             >
               {l.name}
-              {l.isDefault && <span className="label-mono ml-1.5 text-[9.5px] text-gold-700">default</span>}
+              {l.isDefault && <span className="label-caps ml-1.5 text-[9.5px] text-gold-700">default</span>}
               {!l.isActive && <span className="ml-1.5 text-[11px] font-normal text-navy-400">(not in use)</span>}
             </button>
           ))}
@@ -236,7 +236,7 @@ export function PricePanel({
       </div>
       {cur && cur.tiers.length > 0 && (
         <div className="text-sm text-navy-700">
-          <span className="label-mono mr-2 text-navy-500">Quantity breaks</span>
+          <span className="label-caps mr-2 text-navy-500">Quantity breaks</span>
           {cur.tiers.map((t) => `${t.minQty}+ ${unitName} @ ${formatINR(t.price)}`).join(" · ")}
         </div>
       )}
@@ -375,7 +375,7 @@ export function PricePanel({
 
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <span className="label-mono text-navy-600">Quantity breaks (optional)</span>
+              <span className="label-caps text-navy-600">Quantity breaks (optional)</span>
               <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setTiers([...tiers, { minQty: "", price: "" }])} disabled={tiers.length >= 10}>
                 Add break
               </Button>
@@ -434,7 +434,7 @@ export function PricePanel({
 function InfoTile({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-      <div className="label-mono mb-1.5 text-navy-500">{label}</div>
+      <div className="label-caps mb-1.5 text-navy-500">{label}</div>
       {children}
     </div>
   );

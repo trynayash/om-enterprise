@@ -29,7 +29,7 @@ export function useEmailBill(documentId: string, info: DocumentEmailInfo | undef
   const [error, setError] = useState<string | null>(null);
   const [last, setLast] = useState(info?.last ?? null);
   if (!info) return { button: null, note: null, dialog: null };
-  const unavailable = !info.ready ? "Email is not set up yet. The owner connects it once on the server — see the README, “Sending bills by email”." : (info.blocked ?? null);
+  const unavailable = !info.ready ? "Emailing bills is not switched on yet. Ask the owner to set it up; until then use PDF or WhatsApp." : (info.blocked ?? null);
 
   const send = async (to: string | null) => {
     if (!info) return;

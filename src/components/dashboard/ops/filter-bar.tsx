@@ -1,7 +1,7 @@
 "use client";
 import { useRouter, usePathname } from "next/navigation";
-import { useTransition } from "react";
-import { Search, X } from "lucide-react";
+import { useState, useTransition } from "react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox, Input, Label, Select } from "@/components/ui/field";
 import { cn } from "@/components/ui/cn";
@@ -14,13 +14,17 @@ export type FilterField =
 
 /**
  * Filter form synced to the URL (so filters are shareable and the server renders the list).
- * Empty fields are dropped; changing filters resets to page 1.
+ * Empty fields are dropped; changing filters resets to page 1. On a phone only the search box shows
+ * until "Filters" is tapped, so the list itself is on the first screen.
  */
 export function FilterBar({ fields, values, className }: { fields: FilterField[]; values: Record<string, string | undefined>; className?: string }) {
   const router = useRouter();
   const pathname = usePathname();
   const [pending, start] = useTransition();
   const active = fields.some((f) => values[f.name]);
+  const narrowing = fields.filter((f) => f.kind !== "search" && values[f.name]).length;
+  const [open, setOpen] = useState(false);
+  const folded = !open && "max-sm:hidden";
 
   const submit = (form: HTMLFormElement) => {
     const data = new FormData(form);
@@ -62,7 +66,7 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
           }
           if (f.kind === "select") {
             return (
-              <div key={f.name} className="min-w-[140px] flex-1">
+              <div key={f.name} className={cn("min-w-[140px] flex-1", folded)}>
                 <Label htmlFor={id}>{f.label}</Label>
                 <Select
                   id={id}
@@ -81,7 +85,7 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
           }
           if (f.kind === "date") {
             return (
-              <div key={f.name} className="w-[148px]">
+              <div key={f.name} className={cn("w-[148px] max-sm:min-w-[130px] max-sm:flex-1", folded)}>
                 <Label htmlFor={id}>{f.label}</Label>
                 <Input id={id} name={f.name} type="date" defaultValue={values[f.name] ?? ""} className="font-mono text-[13px]" />
               </div>
@@ -92,11 +96,16 @@ export function FilterBar({ fields, values, className }: { fields: FilterField[]
         {/* Toggles and the actions sit together at the end of the row (and on the right when it wraps). */}
         <div className="ml-auto flex flex-wrap items-center gap-x-4 gap-y-2">
           {toggles.map((f) => (
-            <div key={f.name} className="flex h-10 items-center">
+            <div key={f.name} className={cn("flex h-10 items-center", folded)}>
               <Checkbox name={f.name} label={f.label} defaultChecked={values[f.name] === "1"} onChange={(e) => submit(e.currentTarget.form!)} />
             </div>
           ))}
           <div className="flex gap-2">
+            {fields.some((f) => f.kind !== "search") && (
+              <Button variant="outline" className="sm:hidden" aria-expanded={open} icon={<SlidersHorizontal className="h-4 w-4" />} onClick={() => setOpen((o) => !o)}>
+                {open ? "Fewer filters" : narrowing ? `Filters (${narrowing})` : "Filters"}
+              </Button>
+            )}
             {active && (
               <Button
                 variant="ghost"

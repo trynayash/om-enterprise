@@ -21,7 +21,13 @@ function initials(name: string) {
 const footerLink =
   "flex h-7 w-full items-center gap-2.5 rounded-md px-2.5 text-[13px] text-navy-300 transition-colors duration-150 hover:bg-white/[0.05] hover:text-white";
 
-export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user: { name: string; role: string }; badges?: Record<string, number> }) {
+/** A count beside a menu item; `quiet` ones are informational rather than waiting on someone. */
+export interface NavBadge {
+  count: number;
+  quiet?: boolean;
+}
+
+export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user: { name: string; role: string }; badges?: Record<string, NavBadge> }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const isActive = (href: string) => (href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`));
@@ -51,11 +57,11 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
       <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 pt-2.5" aria-label="Main">
         {groups.map((g) => (
           <div key={g.label} className="mt-3 first:mt-0">
-            <div className="label-mono px-2.5 pb-1 text-[10px] text-navy-400">{g.label}</div>
+            <div className="label-caps px-2.5 pb-1 text-[10px] text-navy-400">{g.label}</div>
             <ul>
               {g.items.map((i) => {
                 const active = isActive(i.href);
-                const count = badges?.[i.href];
+                const badge = badges?.[i.href];
                 return (
                   <li key={i.href}>
                     <Link
@@ -70,8 +76,15 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
                       {active && <span aria-hidden className="absolute inset-y-1.5 left-0 w-[2px] rounded-full bg-gold-400" />}
                       <NavIcon name={i.icon} className={cn("h-4 w-4 shrink-0 transition-colors duration-150", active ? "text-gold-400" : "text-navy-400 group-hover:text-navy-200")} />
                       <span className="min-w-0 flex-1 truncate">{i.label}</span>
-                      {count ? (
-                        <span className="min-w-5 rounded-[3px] bg-gold-500 px-1 text-center font-mono text-[10.5px] font-semibold leading-[18px] text-navy-950 tabular">{count}</span>
+                      {badge?.count ? (
+                        <span
+                          className={cn(
+                            "min-w-5 rounded-[3px] px-1 text-center text-[11px] font-semibold leading-[18px] tabular",
+                            badge.quiet ? "text-navy-300" : "bg-gold-500 text-navy-950",
+                          )}
+                        >
+                          {badge.count.toLocaleString("en-IN")}
+                        </span>
                       ) : null}
                     </Link>
                   </li>
@@ -88,7 +101,7 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
           </span>
           <div className="min-w-0">
             <div className="truncate text-[13px] font-semibold leading-tight text-white">{user.name}</div>
-            <div className="label-mono mt-0.5 truncate text-[10px] text-navy-400">{user.role}</div>
+            <div className="label-caps mt-0.5 truncate text-[10px] text-navy-400">{user.role}</div>
           </div>
         </div>
         <Link href="/account/password" onClick={close} className={footerLink}>

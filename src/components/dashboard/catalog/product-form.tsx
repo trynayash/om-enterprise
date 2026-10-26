@@ -166,7 +166,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
 
             <div>
               <div className="mb-1 flex items-center justify-between">
-                <span className="label-mono text-navy-600">Technical specifications</span>
+                <span className="label-caps text-navy-600">Technical specifications</span>
                 <Button size="sm" variant="ghost" icon={<Plus className="h-3.5 w-3.5" />} onClick={() => setSpecs([...specs, { label: "", value: "" }])}>
                   Add row
                 </Button>
@@ -207,7 +207,7 @@ export function ProductForm({ mode, product, categories, brands, units, taxClass
             </div>
 
             <div>
-              <span className="label-mono mb-1 block text-navy-600">Variant attributes</span>
+              <span className="label-caps mb-1 block text-navy-600">Variant attributes</span>
               <p className="mb-2.5 text-xs text-navy-500">What makes each variant different, e.g. Colour, Pack size, Capacity, Diameter, Class.</p>
               <div className="flex flex-wrap items-center gap-2">
                 {attrs.map((a) => (

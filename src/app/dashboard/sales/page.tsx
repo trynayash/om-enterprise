@@ -125,7 +125,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
         <EmptyState title="No sales found" description={str(sp, "training") ? "Try different filters." : "No real sales match these filters. Training (sample) sales are hidden unless you tick “Include training”."} />
       ) : (
         <TableWrap>
-          <table className="w-full min-w-[980px]">
+          <table className="stack-sm w-full min-w-[980px]">
             <thead>
               <tr>
                 <th className={th}>Sale</th>
@@ -142,7 +142,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
             <tbody>
               {data.items.map((s) => (
                 <tr key={s.id} className={rowHover}>
-                  <td className={tdText}>
+                  <td data-label="Sale" className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
                       <Link href={`/dashboard/sales/${s.id}`} className={codeLink}>
                         {s.saleNumber}
@@ -150,18 +150,18 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                       {s.isTraining && <TrainingBadge />}
                     </span>
                   </td>
-                  <td className={`${tdMuted} whitespace-nowrap`}>
+                  <td data-label="Date" className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={s.createdAt} />
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Customer" className={tdText}>
                     <div className="max-w-[200px] truncate">{s.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</div>
                     {s.customerMobile && <div className="font-mono text-xs text-navy-500">{s.customerMobile}</div>}
                   </td>
-                  <td className={tdNum}>{s.itemCount}</td>
-                  <td className={`${tdNum} font-semibold`}>
+                  <td data-label="Items" className={tdNum}>{s.itemCount}</td>
+                  <td data-label="Total" className={`${tdNum} font-semibold`}>
                     <Money value={s.grandTotal} />
                   </td>
-                  <td className={tdNum}>
+                  <td data-label="Paid" className={tdNum}>
                     <Money value={s.amountPaid} muted={s.amountPaid === "0.00"} />
                     {s.amountRefunded !== "0.00" && (
                       <div className="mt-0.5 text-xs text-violet-700">
@@ -169,7 +169,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                       </div>
                     )}
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Status" className={tdText}>
                     <div className="flex flex-col items-start gap-1">
                       {/* A completed sale is described by its payment state; otherwise by the sale state. */}
                       <StatusBadge status={s.status === "completed" ? s.paymentStatus : s.status} />
@@ -177,7 +177,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                       {s.approvalStatus === "pending" && <Badge tone="amber">Approval pending</Badge>}
                     </div>
                   </td>
-                  <td className={s.docNumber ? tdCode : tdText}>
+                  <td data-label="Bill" className={s.docNumber ? tdCode : tdText}>
                     {s.docNumber ? (
                       <div>
                         <div>{s.docNumber}</div>
@@ -187,7 +187,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                       <span className="text-navy-300">—</span>
                     )}
                   </td>
-                  {viewAll && <td className={tdMuted}>{s.createdByName}</td>}
+                  {viewAll && <td data-label="Staff" className={tdMuted}>{s.createdByName}</td>}
                 </tr>
               ))}
             </tbody>

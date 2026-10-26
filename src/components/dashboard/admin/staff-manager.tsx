@@ -88,7 +88,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
           }
         />
         <TableWrap className="rounded-none border-0 shadow-none">
-          <table className="w-full min-w-[860px]">
+          <table className="stack-sm w-full min-w-[860px]">
             <thead>
               <tr>
                 <th className={th}>Name</th>
@@ -103,7 +103,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
             <tbody>
               {staff.map((s) => (
                 <tr key={s.id} className={cn(rowHover, !s.isActive && "opacity-60")}>
-                  <td className={tdText}>
+                  <td data-label="Name" className={tdText}>
                     <div className="font-semibold">
                       {s.displayName} {s.id === me.id && <span className="text-xs font-normal text-navy-500">(you)</span>}
                     </div>
@@ -112,11 +112,11 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                       {s.mobile ? ` · ${s.mobile}` : ""}
                     </div>
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Role" className={tdText}>
                     <Badge tone={s.roleKey === "super_admin" ? "gold" : s.roleKey === "admin" ? "navy" : "neutral"}>{s.roleName}</Badge>
                     {s.overrides.length > 0 && <div className="mt-1 text-xs text-navy-500">{s.overrides.length} individual permission change(s)</div>}
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Status" className={tdText}>
                     <div className="flex flex-wrap items-center gap-1">
                     {!s.isActive ? (
                       <Badge tone="red">Deactivated</Badge>
@@ -136,14 +136,14 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                     )}
                     </div>
                   </td>
-                  <td className={tdNum}>
+                  <td data-label="Discount limit" className={tdNum}>
                     {s.roleKey === "super_admin" ? <span className="font-sans text-[13px] text-navy-500">No limit</span> : `${Number(s.discountLimitPercent ?? s.roleDiscountLimitPercent)}%`}
                     {s.discountLimitPercent !== null && s.roleKey !== "super_admin" && <div className="font-sans text-[11px] text-navy-500">custom</div>}
                   </td>
-                  <td className={tdNum}>
+                  <td data-label="Approval limit" className={tdNum}>
                     {s.roleKey === "super_admin" ? <span className="font-sans text-[13px] text-navy-500">No limit</span> : `${Number(s.approvalLimitPercent ?? s.roleApprovalLimitPercent)}%`}
                   </td>
-                  <td className={`${tdMuted} whitespace-nowrap`}>
+                  <td data-label="Last sign-in" className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={s.lastLoginAt} />
                   </td>
                   <td className={`${withPy(tdText, "py-1.5")} text-right`}>
@@ -408,7 +408,7 @@ function PermissionsDialog({ staff, role, catalogue, onClose, onSaved }: { staff
       <div className="space-y-5">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="label-mono mb-2 text-gold-700">{g.label}</div>
+            <div className="label-caps mb-2 text-gold-700">{g.label}</div>
             <div className="divide-y divide-navy-100 rounded-lg border border-navy-100">
               {g.permissions.map((p) => {
                 const v = state[p.key] ?? "default";
@@ -492,7 +492,7 @@ function RoleDialog({ role, catalogue, onClose, onSaved }: { role: Role; catalog
       <div className="grid gap-5 md:grid-cols-2">
         {catalogue.map((g) => (
           <div key={g.label}>
-            <div className="label-mono mb-2 text-gold-700">{g.label}</div>
+            <div className="label-caps mb-2 text-gold-700">{g.label}</div>
             <div className="space-y-1.5">
               {g.permissions.map((p) => (
                 <Checkbox

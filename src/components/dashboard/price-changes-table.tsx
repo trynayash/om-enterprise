@@ -16,7 +16,7 @@ type PriceChangeRow = Awaited<ReturnType<typeof priceChangeReport>>[number];
  */
 export function PriceChangesTable({ rows, showCost }: { rows: PriceChangeRow[]; showCost: boolean }) {
   return (
-    <table className="w-full min-w-[960px] table-fixed">
+    <table className="stack-sm w-full min-w-[960px] table-fixed">
       <colgroup>
         <col className="w-[10.5rem]" />
         <col />
@@ -38,16 +38,16 @@ export function PriceChangesTable({ rows, showCost }: { rows: PriceChangeRow[]; 
       <tbody>
         {rows.map((r) => (
           <tr key={r.id} className={rowHover}>
-            <td className={`${tdMuted} text-[13px]`}>
+            <td data-label="When" className={`${tdMuted} text-[13px]`}>
               <DateTime value={r.created_at} />
             </td>
-            <td className={tdText}>
+            <td data-label="Variant" className={tdText}>
               <div className="font-medium">{r.product}</div>
               <div className="mt-0.5 truncate font-mono text-[11.5px] text-navy-500">
                 {r.sku} <span className="font-sans">· {r.list_name}</span>
               </div>
             </td>
-            <td className={tdNum}>
+            <td data-label="Price" className={tdNum}>
               <div className="font-semibold">{formatINR(r.price)}</div>
               <div className="mt-0.5 whitespace-normal text-[12px] text-navy-500">
                 {r.previous_price ? (
@@ -66,7 +66,7 @@ export function PriceChangesTable({ rows, showCost }: { rows: PriceChangeRow[]; 
               </div>
             </td>
             {showCost && (
-              <td className={tdNum}>
+              <td data-label="Margin" className={tdNum}>
                 {r.previous_margin || r.new_margin ? (
                   `${r.previous_margin ? `${Number(r.previous_margin).toFixed(1)}%` : "—"} → ${r.new_margin ? `${Number(r.new_margin).toFixed(1)}%` : "—"}`
                 ) : (
@@ -74,14 +74,14 @@ export function PriceChangesTable({ rows, showCost }: { rows: PriceChangeRow[]; 
                 )}
               </td>
             )}
-            <td className={tdText}>
+            <td data-label="Status" className={tdText}>
               <StatusBadge status={r.status} />
               <div className="mt-1 text-xs leading-snug text-navy-500">
                 by {r.created_by}
                 {r.decided_by && r.decided_by !== r.created_by && <div>→ {r.decided_by}</div>}
               </div>
             </td>
-            <td className={`${tdMuted} text-[13px] leading-snug`}>{r.reason ? <ClampText text={r.reason} /> : <span className="text-navy-300">—</span>}</td>
+            <td data-label="Reason" className={`${tdMuted} text-[13px] leading-snug`}>{r.reason ? <ClampText text={r.reason} /> : <span className="text-navy-300">—</span>}</td>
           </tr>
         ))}
       </tbody>

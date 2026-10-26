@@ -16,7 +16,7 @@ export function NotFoundContent({
         <div className="blueprint flex h-32 w-44 items-center justify-center rounded-lg border border-navy-200">
           <TechnicalDrawing kind="box" animate className="h-[86%] w-[86%] text-navy-500" />
         </div>
-        <p className="label-mono mt-7 text-gold-700">Error 404 · not found</p>
+        <p className="label-caps mt-7 text-gold-700">Error 404 · not found</p>
         <h1 className="headline mt-3 text-[2.75rem] font-bold text-navy-950 sm:text-[3.25rem]">{title}</h1>
         <p className="mt-3 max-w-md text-[15px] leading-relaxed text-navy-500">{text}</p>
         <form action="/products" method="get" role="search" className="mt-8 flex w-full max-w-md gap-1.5 rounded-xl border border-navy-200 bg-white p-1.5 shadow-card">

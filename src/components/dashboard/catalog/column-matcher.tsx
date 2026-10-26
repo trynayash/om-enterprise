@@ -225,7 +225,7 @@ export function ColumnMatcher({
         </div>
 
         <div>
-          <div className="label-mono mb-2 text-navy-600">What&apos;s in the file</div>
+          <div className="label-caps mb-2 text-navy-600">What&apos;s in the file</div>
           <div className="max-h-[340px] overflow-auto rounded-lg border border-navy-100">
             <table className="w-max min-w-full text-left text-[12.5px]">
               <thead className="sticky top-0 z-[1] bg-paper">

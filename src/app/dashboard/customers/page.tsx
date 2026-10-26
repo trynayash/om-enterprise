@@ -65,7 +65,7 @@ async function Customers({ searchParams }: { searchParams: Promise<SearchParams>
         <EmptyState title={str(sp, "q") ? "No matching customers" : "No customers yet"} description="Customers are added when a bill records their details, or here." />
       ) : (
         <TableWrap>
-          <table className="w-full min-w-[760px]">
+          <table className="stack-sm w-full min-w-[760px]">
             <thead>
               <tr>
                 <th className={th}>Customer</th>
@@ -80,13 +80,13 @@ async function Customers({ searchParams }: { searchParams: Promise<SearchParams>
             <tbody>
               {data.items.map((c) => (
                 <tr key={c.id} className={rowHover}>
-                  <td className={tdText}>
+                  <td data-label="Customer" className={tdText}>
                     <Link href={`/dashboard/customers/${c.id}`} className={nameLink}>
                       {c.name}
                     </Link>
                     {c.businessName && <div className="mt-0.5 text-xs text-navy-500">{c.businessName}</div>}
                   </td>
-                  <td className={tdCode}>
+                  <td data-label="Mobile" className={tdCode}>
                     {c.mobile ? (
                       <a href={`tel:+91${c.mobile}`} className="underline-offset-[3px] hover:underline">
                         {c.mobile}
@@ -95,13 +95,13 @@ async function Customers({ searchParams }: { searchParams: Promise<SearchParams>
                       <span className="text-navy-300">—</span>
                     )}
                   </td>
-                  <td className={tdCode}>{c.gstin ?? <span className="text-navy-300">—</span>}</td>
-                  <td className={tdMuted}>{[c.city, stateName(c.stateCode)].filter(Boolean).join(", ") || <span className="text-navy-300">—</span>}</td>
-                  <td className={tdText}>
+                  <td data-label="GSTIN" className={tdCode}>{c.gstin ?? <span className="text-navy-300">—</span>}</td>
+                  <td data-label="Location" className={tdMuted}>{[c.city, stateName(c.stateCode)].filter(Boolean).join(", ") || <span className="text-navy-300">—</span>}</td>
+                  <td data-label="Type" className={tdText}>
                     <span className={c.customerType === "retail" ? "text-[13px] text-navy-500" : "text-[13px] font-medium text-navy-800"}>{TYPE_LABEL[c.customerType] ?? c.customerType}</span>
                   </td>
-                  <td className={tdNum}>{c.saleCount}</td>
-                  <td className={`${tdNum} font-semibold`}>
+                  <td data-label="Bills" className={tdNum}>{c.saleCount}</td>
+                  <td data-label="Lifetime value" className={`${tdNum} font-semibold`}>
                     <Money value={c.lifetimeValue} muted={c.lifetimeValue === "0"} />
                   </td>
                 </tr>

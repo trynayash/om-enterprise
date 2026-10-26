@@ -60,7 +60,7 @@ async function FooterWithData() {
             )}
           </div>
           <div>
-            <h2 className="label-mono text-gold-400">Catalogue</h2>
+            <h2 className="label-caps text-gold-400">Catalogue</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               {categories
                 .filter((c) => !c.parentId)
@@ -76,7 +76,7 @@ async function FooterWithData() {
             </ul>
           </div>
           <div>
-            <h2 className="label-mono text-gold-400">Pages</h2>
+            <h2 className="label-caps text-gold-400">Pages</h2>
             <ul className="mt-4 space-y-2.5 text-sm">
               <li>
                 <Link href="/products" className={footLink}>All products</Link>
@@ -93,7 +93,7 @@ async function FooterWithData() {
             </ul>
           </div>
           <div>
-            <h2 className="label-mono text-gold-400">Visit or call</h2>
+            <h2 className="label-caps text-gold-400">Visit or call</h2>
             <address className="mt-4 text-sm not-italic leading-relaxed text-navy-200">
               {addressLines(business).map((l) => (
                 <span key={l} className="block">

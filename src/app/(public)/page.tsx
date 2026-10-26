@@ -87,11 +87,7 @@ async function HeroCopy() {
         {business.district ? ` · ${business.district}` : ""} · Gujarat
       </Eyebrow>
       <h1 className="headline mt-5 animate-rise text-[3.25rem] font-bold text-navy-950 sm:text-[4.5rem] lg:text-[5.25rem]">
-        {words.join(" ")}{" "}
-        <span className="relative inline-block whitespace-nowrap">
-          {tail.join(" ")}
-          <span aria-hidden className="absolute -bottom-0.5 left-0 h-[0.09em] w-full origin-left animate-[draw-x_800ms_var(--ease-out-quart)_350ms_both] bg-gold-500" />
-        </span>
+        {words.join(" ")} <span className="whitespace-nowrap">{tail.join(" ")}</span>
       </h1>
       <p className="mt-6 max-w-xl animate-[rise_460ms_var(--ease-out-quart)_120ms_both] text-[17px] leading-relaxed text-navy-600">{website.heroSubtitle}</p>
     </>
@@ -134,8 +130,8 @@ async function CounterCard() {
   return (
     <aside className="relative animate-[rise_520ms_var(--ease-out-quart)_180ms_both] rounded-xl border border-navy-200 bg-white shadow-lift">
       <div className="flex items-center justify-between border-b border-navy-100 px-5 py-3.5">
-        <span className="label-mono text-navy-500">Brands at the counter</span>
-        <span className="label-mono text-gold-700">No. {String(brands.length).padStart(2, "0")}</span>
+        <span className="label-caps text-navy-500">Brands at the counter</span>
+        <span className="text-[13px] text-navy-500">{brands.length} brands</span>
       </div>
       <ol className="px-5 py-2">
         {brands.map((b) => (
@@ -144,7 +140,7 @@ async function CounterCard() {
               <span className="font-semibold text-navy-950 transition-colors group-hover:text-gold-700">{b.name}</span>
               <span aria-hidden className="leader" />
               <span className="font-mono text-[13px] text-navy-500 tabular">
-                {b.productCount} <span className="text-navy-400">items</span>
+                {b.productCount} <span className="text-navy-400">{b.productCount === 1 ? "item" : "items"}</span>
               </span>
             </Link>
           </li>
@@ -181,7 +177,6 @@ function CategoriesSection() {
     <section className="bg-white py-16 sm:py-24">
       <Container>
         <SectionHeading
-          index="01"
           eyebrow="Catalogue"
           title="Shop by category"
           description="From the first length of pipe to the last coat of paint. Choose a category to see every size we list."
@@ -247,7 +242,6 @@ function FeaturedSection() {
     <section className="border-y border-rule bg-paper py-16 sm:py-24">
       <Container>
         <SectionHeading
-          index="02"
           eyebrow="At the counter"
           title="Popular at the counter"
           description="The items customers ask for most often. Prices are confirmed at billing."
@@ -292,7 +286,7 @@ function OrderingSection() {
   return (
     <section className="bg-white py-16 sm:py-24">
       <Container>
-        <SectionHeading index="03" eyebrow="Ordering" title="Order the way that suits you" description="Browse here, then talk to a person. No account, no online payment." />
+        <SectionHeading eyebrow="Ordering" title="Order the way that suits you" description="Browse here, then talk to a person. No account, no online payment." />
         <ol className="grid border-t border-navy-900 md:grid-cols-3">
           {STEPS.map((s, i) => (
             <li key={s.title} className="flex flex-col border-b border-navy-100 py-7 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0">
@@ -332,7 +326,7 @@ async function ShopContent() {
   return (
     <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
       <div>
-        <Eyebrow index="04">The shop</Eyebrow>
+        <Eyebrow>The shop</Eyebrow>
         <h2 className="headline mt-3 text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">Visit {business.name}</h2>
         <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-navy-600">{business.about}</p>
         <div className="mt-7 flex flex-wrap gap-2.5">
@@ -344,7 +338,7 @@ async function ShopContent() {
       </div>
       <div className="rounded-xl border border-navy-200 bg-white">
         <div className="border-b border-navy-100 px-6 py-5">
-          <div className="label-mono text-navy-500">Address</div>
+          <div className="label-caps text-navy-500">Address</div>
           <address className="mt-2 text-[17px] not-italic leading-snug text-navy-950">
             {addressLines(business).map((l) => (
               <span key={l} className="block">
@@ -359,7 +353,7 @@ async function ShopContent() {
         <dl className="divide-y divide-navy-100 px-6">
           {business.phone && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-mono text-navy-500">Phone</dt>
+              <dt className="label-caps text-navy-500">Phone</dt>
               <dd>
                 <a href={telHref(business.phone)} className="link-draw font-mono text-[15px] text-navy-950">
                   {formatPhone(business.phone)}
@@ -369,19 +363,19 @@ async function ShopContent() {
           )}
           {business.whatsapp && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-mono text-navy-500">WhatsApp</dt>
+              <dt className="label-caps text-navy-500">WhatsApp</dt>
               <dd className="font-mono text-[15px] text-navy-950">{formatPhone(business.whatsapp)}</dd>
             </div>
           )}
           {business.email && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-mono text-navy-500">Email</dt>
+              <dt className="label-caps text-navy-500">Email</dt>
               <dd className="min-w-0 truncate text-[15px] text-navy-950">{business.email}</dd>
             </div>
           )}
           {business.openingHours && (
             <div className="flex items-center justify-between gap-4 py-3.5">
-              <dt className="label-mono text-navy-500">Hours</dt>
+              <dt className="label-caps text-navy-500">Hours</dt>
               <dd className="text-[15px] text-navy-950">{business.openingHours}</dd>
             </div>
           )}

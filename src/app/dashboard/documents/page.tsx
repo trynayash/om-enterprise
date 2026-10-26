@@ -104,7 +104,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
         <EmptyState title="No documents found" description={str(sp, "training") ? "Try different filters." : "Training (sample) documents are hidden unless you tick “Include training”."} />
       ) : (
         <TableWrap>
-          <table className="w-full min-w-[860px]">
+          <table className="stack-sm w-full min-w-[860px]">
             <thead>
               <tr>
                 <th className={th}>Number</th>
@@ -120,7 +120,7 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
             <tbody>
               {data.items.map((d) => (
                 <tr key={d.id} className={rowHover}>
-                  <td className={tdText}>
+                  <td data-label="Number" className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
                       <Link href={`/dashboard/documents/${d.id}`} className={`${codeLink} whitespace-nowrap`}>
                         {d.docNumber}
@@ -128,32 +128,32 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                       {d.isTraining && <TrainingBadge />}
                     </span>
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Type" className={tdText}>
                     <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-[13px] text-navy-700">
                       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${TYPE_DOT[d.docType] ?? "bg-navy-300"}`} />
                       {DOC_LABEL[d.docType] ?? d.docType}
                     </span>
                   </td>
-                  <td className={`${tdMuted} whitespace-nowrap`}>
+                  <td data-label="Issued" className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={d.issuedAt} />
                   </td>
-                  <td className={tdText}>{d.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
-                  <td className={tdText}>
+                  <td data-label="Customer" className={tdText}>{d.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
+                  <td data-label="Sale" className={tdText}>
                     <Link href={`/dashboard/sales/${d.saleId}`} className="font-mono text-[13px] text-navy-600 underline-offset-[3px] hover:text-navy-950 hover:underline">
                       {d.saleNumber}
                     </Link>
                   </td>
-                  <td className={`${tdNum} font-semibold`}>
+                  <td data-label="Amount" className={`${tdNum} font-semibold`}>
                     <span className={d.docType === "credit_note" ? "text-violet-700" : undefined}>
                       {d.docType === "credit_note" ? "− " : ""}
                       <Money value={d.grandTotal} />
                     </span>
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Status" className={tdText}>
                     {/* Issued is the normal state; only a cancellation is stamped. */}
                     {d.status === "issued" ? <span className="text-[13px] text-navy-500">Issued</span> : <StatusBadge status={d.status} />}
                   </td>
-                  <td className={tdMuted}>
+                  <td data-label="Issued by" className={tdMuted}>
                     {d.issuedByName}
                     {d.printCount > 0 && <div className="font-mono text-[11.5px] text-navy-400">Printed {d.printCount}×</div>}
                   </td>

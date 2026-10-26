@@ -166,7 +166,7 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
             autoFocus
             autoComplete="off"
             spellCheck={false}
-            placeholder="Search name, brand, size, SKU or scan barcode…"
+            placeholder="Search or scan an item…"
             className="h-14 w-full rounded-lg border border-navy-200 bg-white pl-12 pr-24 text-[17px] max-sm:pr-20 text-navy-950 placeholder:text-navy-400 transition-[border-color,box-shadow] duration-150 hover:border-navy-300 focus:border-navy-800 focus:outline-none focus:ring-[3px] focus:ring-gold-300/45"
             role="combobox"
             aria-expanded={visible.length > 0}
@@ -186,11 +186,13 @@ export function ProductSearch({ saleId, priceListId, units, taxCharged, onAdded,
         </div>
         {!q.trim() && (
           <p className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1.5 px-0.5 text-xs text-navy-500">
-            <span className="inline-flex items-center gap-1">
+            <span>By name, brand, size, SKU or barcode</span>
+            {/* Keyboard keys mean nothing on a touch screen; the scanner line still applies. */}
+            <span className="inline-flex items-center gap-1 pointer-coarse:hidden">
               <Kbd>↑</Kbd>
               <Kbd>↓</Kbd> move
             </span>
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex items-center gap-1 pointer-coarse:hidden">
               <Kbd>Enter</Kbd> choose
             </span>
             <span className="inline-flex items-center gap-1">
@@ -357,7 +359,7 @@ function AddPanel({
           }}
         >
           <div>
-            <label htmlFor="add-qty" className="label-mono mb-1.5 block text-navy-600">
+            <label htmlFor="add-qty" className="label-caps mb-1.5 block text-navy-600">
               Quantity
             </label>
             <div className="flex h-12 items-stretch overflow-hidden rounded-lg border border-navy-200 bg-white focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">
@@ -380,7 +382,7 @@ function AddPanel({
           </div>
           {unitOptions.length > 1 ? (
             <div>
-              <label htmlFor="add-unit" className="label-mono mb-1.5 block text-navy-600">
+              <label htmlFor="add-unit" className="label-caps mb-1.5 block text-navy-600">
                 Sell by
               </label>
               <select

@@ -54,7 +54,7 @@ export function FinalizeDialog({ data, onClose, run }: { data: SaleData; onClose
       <div className="space-y-4">
         {error && <Alert tone="danger">{error}</Alert>}
         <div className="rounded-lg bg-navy-950 px-5 py-6 text-center text-white">
-          <div className="label-mono text-gold-400">Amount payable</div>
+          <div className="label-caps text-gold-400">Amount payable</div>
           <div className="headline mt-2 text-[3.5rem] font-bold tabular sm:text-[4rem]">{formatINR(s.grandTotal)}</div>
           {discount.greaterThan(0) && (
             <div className="mt-2 text-sm text-navy-300">

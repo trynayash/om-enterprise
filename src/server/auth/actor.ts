@@ -96,7 +96,7 @@ export function requireSuperAdmin(actor: Actor | null | undefined): Actor {
 export function auditActorOf(actor: Actor): AuditActor {
   return {
     userId: actor.id,
-    label: `${actor.displayName} (${actor.roleKey})`,
+    label: `${actor.displayName} (${actor.roleName})`,
     ip: actor.ip ?? null,
     userAgent: actor.userAgent ?? null,
   };

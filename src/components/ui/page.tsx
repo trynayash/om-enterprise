@@ -6,10 +6,7 @@ export function PageHeader({ title, description, actions, eyebrow }: { title: Re
     <div className="mb-7 flex flex-wrap items-end justify-between gap-4 border-b border-navy-100 pb-5">
       <div className="min-w-0">
         {eyebrow && (
-          <div className="label-mono mb-2 flex items-center gap-2 text-gold-700">
-            <span aria-hidden className="h-px w-5 bg-gold-500" />
-            {eyebrow}
-          </div>
+          <div className="label-caps mb-1.5 text-gold-700">{eyebrow}</div>
         )}
         <h1 className="headline text-[2rem] font-bold text-navy-950 sm:text-[2.5rem]">{title}</h1>
         {description && <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-500">{description}</p>}
@@ -52,13 +49,13 @@ export function PageSkeleton() {
 
 export function Alert({ tone = "info", title, children, className }: { tone?: "info" | "warning" | "danger" | "success"; title?: ReactNode; children?: ReactNode; className?: string }) {
   const tones = {
-    info: "border-navy-200 border-l-navy-800 bg-navy-50/70 text-navy-800",
-    warning: "border-amber-200 border-l-amber-500 bg-amber-50/80 text-amber-950",
-    danger: "border-red-200 border-l-red-600 bg-red-50/80 text-red-950",
-    success: "border-emerald-200 border-l-emerald-600 bg-emerald-50/80 text-emerald-950",
+    info: "border-navy-200 bg-navy-50/70 text-navy-800",
+    warning: "border-amber-300 bg-amber-50 text-amber-950",
+    danger: "border-red-200 bg-red-50 text-red-950",
+    success: "border-emerald-200 bg-emerald-50 text-emerald-950",
   };
   return (
-    <div className={cn("rounded-lg border border-l-[3px] px-4 py-3 text-sm leading-relaxed", tones[tone], className)} role={tone === "danger" ? "alert" : "status"}>
+    <div className={cn("rounded-lg border px-4 py-3 text-sm leading-relaxed", tones[tone], className)} role={tone === "danger" ? "alert" : "status"}>
       {title && <div className="font-semibold">{title}</div>}
       {children && <div className={title ? "mt-0.5" : ""}>{children}</div>}
     </div>
@@ -71,5 +68,5 @@ export function TableWrap({ children, className }: { children: ReactNode; classN
   return <div className={cn("relative overflow-x-auto rounded-xl border border-navy-100 bg-white shadow-card", className)}>{children}</div>;
 }
 
-export const th = "label-mono whitespace-nowrap border-b border-navy-200 bg-paper/70 px-3 py-2.5 text-left text-navy-500";
+export const th = "label-caps whitespace-nowrap border-b border-navy-200 bg-paper/70 px-3 py-2.5 text-left text-navy-500";
 export const td = "border-b border-navy-100 px-3 py-3 align-top text-sm text-navy-900";

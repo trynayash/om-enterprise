@@ -104,7 +104,7 @@ export function ProductPurchase({
           if (values.length === 1) {
             return (
               <div key={attr} className="flex items-baseline gap-2">
-                <span className="label-mono text-navy-500">{attr}</span>
+                <span className="label-caps text-navy-500">{attr}</span>
                 <span className="font-mono text-sm text-navy-950">{values[0]}</span>
               </div>
             );
@@ -112,7 +112,7 @@ export function ProductPurchase({
           return (
             <fieldset key={attr}>
               <legend className="flex items-baseline gap-2">
-                <span className="label-mono text-navy-500">{attr}</span>
+                <span className="label-caps text-navy-500">{attr}</span>
                 <span key={selected.attributes[attr]} className="animate-fade-in font-mono text-sm text-navy-950">
                   {selected.attributes[attr]}
                 </span>
@@ -141,7 +141,7 @@ export function ProductPurchase({
         })
       ) : variants.length > 1 ? (
         <fieldset>
-          <legend className="label-mono text-navy-500">Choose an option</legend>
+          <legend className="label-caps text-navy-500">Choose an option</legend>
           <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
             {variants.map((v) => {
               const active = v.id === selected.id;
@@ -191,7 +191,7 @@ export function ProductPurchase({
 
         <div className="mt-6 flex flex-wrap items-end gap-3">
           <div>
-            <label htmlFor="qty" className="label-mono block text-navy-500">
+            <label htmlFor="qty" className="label-caps block text-navy-500">
               Quantity · {selected.unit.toLowerCase()}
             </label>
             <div className="mt-1.5 flex h-12 items-center overflow-hidden rounded-lg border border-navy-200 bg-white transition-[border-color,box-shadow] focus-within:border-navy-800 focus-within:ring-[3px] focus-within:ring-gold-300/45">

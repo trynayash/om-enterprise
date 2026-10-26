@@ -58,7 +58,7 @@ export function TotalsCard({ data }: { data: SaleData }) {
       </dl>
       <div className="bg-navy-950 px-5 pb-4 pt-3.5 text-white">
         <div className="flex items-end justify-between gap-4">
-          <div className="label-mono pb-2 text-gold-400">Grand total</div>
+          <div className="label-caps pb-2 text-gold-400">Grand total</div>
           <div className="headline text-[2.75rem] font-bold tabular sm:text-[3.25rem]" data-testid="grand-total">
             {/* Re-keyed on change so a new total fades in instead of snapping. */}
             <span key={s.grandTotal} className="inline-block animate-fade-in">

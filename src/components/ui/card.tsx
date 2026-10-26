@@ -23,13 +23,11 @@ export function CardBody({ children, className }: { children: ReactNode; classNa
 
 export function Stat({ label, value, hint, tone = "navy" }: { label: ReactNode; value: ReactNode; hint?: ReactNode; tone?: "navy" | "gold" | "green" | "red" }) {
   const tones = { navy: "text-navy-900", gold: "text-gold-700", green: "text-emerald-700", red: "text-red-700" };
-  const rules = { navy: "bg-navy-900", gold: "bg-gold-500", green: "bg-emerald-600", red: "bg-red-600" };
   return (
-    <Card className="relative overflow-hidden p-4">
-      <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", rules[tone])} />
-      <div className="label-mono text-navy-500">{label}</div>
-      <div className={cn("headline mt-2 text-[2rem] font-bold tabular", tones[tone])}>{value}</div>
-      {hint && <div className="mt-1.5 text-xs leading-snug text-navy-500">{hint}</div>}
+    <Card className="min-w-0 p-3.5 sm:p-4">
+      <div className="label-caps text-navy-500">{label}</div>
+      <div className={cn("headline mt-1.5 break-words text-[1.45rem] font-bold tabular sm:mt-2 sm:text-[2rem]", tones[tone])}>{value}</div>
+      {hint && <div className="mt-1 text-xs leading-snug text-navy-500 sm:mt-1.5">{hint}</div>}
     </Card>
   );
 }

@@ -21,7 +21,7 @@ export function istRange(sp: SP): { from?: Date; to?: Date } {
 
 export function Pager({ path, sp, page, pageSize, total }: { path: string; sp: SP; page: number; pageSize: number; total: number }) {
   const pages = Math.max(1, Math.ceil(total / pageSize));
-  if (pages <= 1) return <p className="label-mono text-center text-navy-400">{total} record{total === 1 ? "" : "s"}</p>;
+  if (pages <= 1) return <p className="label-caps text-center text-navy-400">{total} record{total === 1 ? "" : "s"}</p>;
   const href = (p: number) => {
     const qs = new URLSearchParams();
     for (const [k, v] of Object.entries(sp)) if (typeof v === "string" && v && k !== "page") qs.set(k, v);

@@ -170,7 +170,7 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
             )}
             <div className="mt-2 rounded-xl bg-navy-950 p-5 text-white">
               <div className="flex items-baseline justify-between gap-4">
-                <span className="label-mono text-navy-300">Indicative total</span>
+                <span className="label-caps text-navy-300">Indicative total</span>
                 <span className="font-mono text-2xl font-semibold tabular tracking-[-0.02em]">{loading && !priced ? "…" : priced ? formatPrice(priced.total) : "—"}</span>
               </div>
               <p className="mt-2 text-xs leading-relaxed text-navy-300">

@@ -99,7 +99,7 @@ export function CostPanel({
         <div className="rounded-lg border border-navy-100 bg-white p-4">
           <div className="flex flex-wrap items-end justify-between gap-2">
             <div>
-              <div className="label-mono text-navy-500">Current landed cost per {unitName}</div>
+              <div className="label-caps text-navy-500">Current landed cost per {unitName}</div>
               <div className="headline mt-1.5 text-[1.75rem] font-bold tabular">{formatINR(cost.landedCost)}</div>
             </div>
             <div className="text-xs text-navy-500">
@@ -202,7 +202,7 @@ export function CostPanel({
 function Row({ k, v }: { k: string; v: string }) {
   return (
     <div>
-      <dt className="label-mono text-[10px] text-navy-500">{k}</dt>
+      <dt className="label-caps text-[10px] text-navy-500">{k}</dt>
       <dd className="mt-0.5 font-mono text-[13px] font-medium tabular">{v}</dd>
     </div>
   );

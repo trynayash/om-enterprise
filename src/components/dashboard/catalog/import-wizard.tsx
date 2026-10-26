@@ -462,7 +462,7 @@ function Step({ n, title, done, children }: { n: number; title: string; done: bo
 function Mini({ label, value, tone }: { label: string; value: number; tone?: "red" | "amber" | "green" }) {
   return (
     <div className="rounded-lg border border-navy-100 bg-white px-4 py-3">
-      <div className="label-mono text-navy-500">{label}</div>
+      <div className="label-caps text-navy-500">{label}</div>
       <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone === "red" && "text-red-700", tone === "amber" && "text-amber-700", tone === "green" && "text-emerald-700")}>
         {value}
       </div>

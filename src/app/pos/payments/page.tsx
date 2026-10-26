@@ -94,7 +94,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
       ) : (
         <>
           <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-navy-600">
-            <span className="label-mono text-navy-500">Verified receipts on this page</span>
+            <span className="label-caps text-navy-500">Verified receipts on this page</span>
             <Money value={verifiedIn.toFixed(2)} className="font-mono font-semibold text-navy-950" />
             {trainingIn.greaterThan(0) && (
               <span className="basis-full text-[13px] text-navy-500">

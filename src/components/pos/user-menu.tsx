@@ -37,7 +37,7 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
         <span className="flex h-8 w-8 items-center justify-center rounded-md bg-navy-800 font-mono text-sm font-semibold text-gold-400 ring-1 ring-inset ring-white/10">
           {name.slice(0, 1).toUpperCase()}
         </span>
-        <span className="hidden text-left leading-tight sm:block">
+        <span className="hidden text-left leading-tight xl:block">
           <span className="block text-[13px] font-semibold">{name}</span>
           <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.08em] text-navy-400">{role}</span>
         </span>
@@ -45,9 +45,9 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
       </button>
       {open && (
         <div className="absolute right-0 z-40 mt-2 w-60 animate-sheet-in overflow-hidden rounded-lg border border-navy-100 bg-white py-1 text-navy-900 shadow-lift" onMouseLeave={() => setOpen(false)}>
-          <div className="border-b border-navy-100 px-4 pb-2.5 pt-2 sm:hidden">
+          <div className="border-b border-navy-100 px-4 pb-2.5 pt-2 xl:hidden">
             <div className="text-sm font-semibold">{name}</div>
-            <div className="label-mono mt-0.5 text-navy-500">{role}</div>
+            <div className="label-caps mt-0.5 text-navy-500">{role}</div>
           </div>
           {canDashboard && (
             <Link href="/dashboard" className={item}>

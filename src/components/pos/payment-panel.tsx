@@ -59,8 +59,7 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
     <section aria-label="Payment" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-navy-200 px-5 py-4">
         <div>
-          <div className="label-mono flex items-center gap-2 text-gold-700">
-            <span aria-hidden className="h-px w-4 bg-gold-500" />
+          <div className="label-caps text-gold-700">
             Step 4 · Take payment
           </div>
           <div className="mt-1.5 text-sm text-navy-500">
@@ -76,7 +75,7 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
           </div>
         </div>
         <div className="sm:text-right">
-          <div className="label-mono text-navy-500">Amount due</div>
+          <div className="label-caps text-navy-500">Amount due</div>
           <div className="headline mt-1 text-[2.5rem] font-bold text-navy-950 tabular sm:text-[2.75rem]" data-testid="amount-due">
             {formatINR(outstanding)}
           </div>
@@ -238,12 +237,12 @@ function QrCard({
           {expired && <div className="absolute inset-0 flex items-center justify-center font-mono text-base font-semibold tracking-[0.08em] text-red-700">QR EXPIRED</div>}
         </div>
         <div className="w-full min-w-0 flex-1 text-center md:text-left">
-          <div className="label-mono text-gold-700">Scan to pay</div>
+          <div className="label-caps text-gold-700">Scan to pay</div>
           <div className="headline mt-1.5 text-[3rem] font-bold text-navy-950 tabular sm:text-[3.75rem]" data-testid="qr-amount">
             {formatINR(payment.amount)}
           </div>
           <dl className="mx-auto mt-3 grid max-w-sm grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 text-left text-sm md:mx-0">
-            <dt className="label-mono pt-[3px] text-navy-500">Pay to</dt>
+            <dt className="label-caps pt-[3px] text-navy-500">Pay to</dt>
             <dd className="min-w-0 text-navy-800">
               {payment.provider === "upi_static" ? (
                 <>
@@ -254,11 +253,11 @@ function QrCard({
                 <>Razorpay dynamic QR · single use</>
               )}
             </dd>
-            <dt className="label-mono pt-[3px] text-navy-500">Note</dt>
+            <dt className="label-caps pt-[3px] text-navy-500">Note</dt>
             <dd className="font-mono text-[13px] text-navy-800">{saleNumber}</dd>
             {left !== null && !expired && (
               <>
-                <dt className="label-mono pt-[3px] text-navy-500">Valid for</dt>
+                <dt className="label-caps pt-[3px] text-navy-500">Valid for</dt>
                 <dd className="font-mono text-[13px] font-medium text-navy-900 tabular">
                   {Math.floor(left / 60)}:{String(left % 60).padStart(2, "0")}
                 </dd>
@@ -505,7 +504,7 @@ function PaymentList({ payments }: { payments: PaymentJson[] }) {
   if (!payments.length) return null;
   return (
     <div>
-      <div className="label-mono mb-1.5 text-navy-500">Payment records</div>
+      <div className="label-caps mb-1.5 text-navy-500">Payment records</div>
       <ul className="divide-y divide-navy-100 rounded-lg border border-navy-200">
         {payments
           .slice()

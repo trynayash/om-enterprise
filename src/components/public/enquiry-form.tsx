@@ -30,7 +30,7 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
     <div className="mx-auto max-w-xl animate-sheet-in overflow-hidden rounded-xl border border-navy-200 bg-white" role="status">
       <div className="flex items-center gap-2 border-b border-navy-100 bg-paper/70 px-6 py-3 sm:px-8">
         <CheckCircle2 className="h-4 w-4 text-emerald-600" strokeWidth={2} />
-        <span className="label-mono text-emerald-800">{label === "enquiry" ? "Enquiry" : "Order request"} received</span>
+        <span className="label-caps text-emerald-800">{label === "enquiry" ? "Enquiry" : "Order request"} received</span>
       </div>
       <div className="px-6 py-7 sm:px-8">
         <h2 className="headline text-[2.25rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}.</h2>
@@ -38,19 +38,19 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
           Your {label} <span className="font-mono font-extrabold text-navy-950">{done.orderNumber}</span> has been received.
         </p>
         <dl className="mt-6 grid grid-cols-[auto_1fr] border-t border-navy-900 text-sm">
-          <dt className="label-mono border-b border-navy-100 py-3 pr-6 text-navy-500">Contact</dt>
+          <dt className="label-caps border-b border-navy-100 py-3 pr-6 text-navy-500">Contact</dt>
           <dd className="border-b border-navy-100 py-3 text-navy-900">
             <span className="font-mono tabular">{done.mobile}</span> · {via}
           </dd>
           {done.indicativeTotal && (
             <>
-              <dt className="label-mono border-b border-navy-100 py-3 pr-6 text-navy-500">Indicative</dt>
+              <dt className="label-caps border-b border-navy-100 py-3 pr-6 text-navy-500">Indicative</dt>
               <dd className="border-b border-navy-100 py-3 text-navy-900">
                 <span className="font-mono font-semibold tabular">{formatPrice(done.indicativeTotal)}</span> <span className="text-navy-500">at today&apos;s prices</span>
               </dd>
             </>
           )}
-          <dt className="label-mono py-3 pr-6 text-navy-500">Next</dt>
+          <dt className="label-caps py-3 pr-6 text-navy-500">Next</dt>
           <dd className="py-3 text-navy-700">We&apos;ll confirm availability and the final amount, then arrange pickup or delivery.</dd>
         </dl>
         <div className="mt-6 flex flex-wrap gap-2.5">
@@ -143,7 +143,7 @@ export function EnquiryForm({
       {serverError && <Alert tone="danger">{serverError}</Alert>}
       {items.length > 0 && allowOrderRequest && (
         <fieldset>
-          <legend className="label-mono mb-2 text-navy-600">What would you like?</legend>
+          <legend className="label-caps mb-2 text-navy-600">What would you like?</legend>
           <div className="grid gap-2 sm:grid-cols-2">
             {(
               [
@@ -196,7 +196,7 @@ export function EnquiryForm({
         />
       </Field>
       <fieldset>
-        <legend className="label-mono mb-2 text-navy-600">Preferred contact</legend>
+        <legend className="label-caps mb-2 text-navy-600">Preferred contact</legend>
         <div className="flex flex-wrap gap-1.5">
           {(
             [

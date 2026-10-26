@@ -78,7 +78,7 @@ export function ReviewPublish({
         </ol>
 
         <div className="flex items-center justify-between border-y border-navy-100 py-2.5">
-          <span className="label-mono text-navy-500">Website</span>
+          <span className="label-caps text-navy-500">Website</span>
           {isPublished ? <Badge tone="green">Published</Badge> : <Badge>Not published</Badge>}
         </div>
 

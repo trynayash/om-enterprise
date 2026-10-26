@@ -143,7 +143,7 @@ export function UnitsCompatPanel({
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <section>
-        <h3 className="label-mono text-navy-600">Other selling units</h3>
+        <h3 className="label-caps text-navy-600">Other selling units</h3>
         <p className="mt-1.5 text-xs leading-relaxed text-navy-500">
           Base unit: <b>{baseUnit?.name ?? variant.unitCode}</b>. Only units listed here can be used at the counter — nothing is converted automatically.
         </p>
@@ -191,7 +191,7 @@ export function UnitsCompatPanel({
       </section>
 
       <section>
-        <h3 className="label-mono text-navy-600">Compatible items</h3>
+        <h3 className="label-caps text-navy-600">Compatible items</h3>
         <p className="mt-1.5 text-xs leading-relaxed text-navy-500">Link only items you know fit together (same system, size and class). Shown to staff and customers.</p>
         <ul className="mt-3 divide-y divide-navy-100 rounded-lg border border-navy-100 bg-white">
           {links.length === 0 && <li className="px-3 py-3 text-sm text-navy-500">No compatibility links.</li>}

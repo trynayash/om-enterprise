@@ -30,7 +30,7 @@ export default function AboutPage() {
 
       <section className="py-14 sm:py-20">
         <Container>
-          <SectionHeading index="01" eyebrow="How we work" title="At the counter" />
+          <SectionHeading eyebrow="How we work" title="At the counter" />
           <dl className="max-w-3xl border-t border-navy-900">
             {PRACTICES.map((p) => (
               <div key={p.title} className="grid gap-1 border-b border-navy-100 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6">
@@ -44,7 +44,7 @@ export default function AboutPage() {
 
       <section className="border-t border-rule bg-paper py-14 sm:py-20">
         <Container>
-          <SectionHeading index="02" eyebrow="What we stock" title="Product range" />
+          <SectionHeading eyebrow="What we stock" title="Product range" />
           <Suspense fallback={<Skeleton className="h-40 rounded-xl" />}>
             <RangeList />
           </Suspense>

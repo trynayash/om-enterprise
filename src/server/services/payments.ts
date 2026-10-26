@@ -16,7 +16,8 @@ import {
   type NormalizedPaymentEvent,
 } from "@/server/payments/providers";
 import { isValidUpiUtr } from "@/lib/india";
-import { D, m } from "@/lib/money";
+import { D, formatINR, m } from "@/lib/money";
+import { PAYMENT_METHOD_LABEL } from "@/lib/bill-layout";
 
 export type Payment = typeof payments.$inferSelect;
 type Method = Payment["method"];
@@ -280,7 +281,7 @@ export async function recordVerifiedPayment(actor: Actor, saleId: string, input:
       action: "payment.verified",
       entityType: "sale",
       entityId: saleId,
-      summary: `Confirmed ₹${row.amount} ${row.method.toUpperCase()}${reference ? ` (ref ${reference})` : ""} on ${sale.saleNumber} — ${input.verificationMethod.replace(/_/g, " ")}`,
+      summary: `Confirmed ${formatINR(row.amount)} ${PAYMENT_METHOD_LABEL[row.method] ?? row.method}${reference ? ` (ref ${reference})` : ""} on ${sale.saleNumber} — ${input.verificationMethod.replace(/_/g, " ")}`,
       data: {
         paymentId: row.id,
         amount: row.amount,

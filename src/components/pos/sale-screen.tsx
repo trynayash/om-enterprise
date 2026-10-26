@@ -28,6 +28,8 @@ import { TrainingBadge } from "@/components/staff/labels";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData } from "./types";
 
 const STEPS = ["Cart", "Agree amount", "Customer", "Payment", "Bill"] as const;
+/** One word per step on a phone, so the five fit a row. */
+const SHORT_STEP: Partial<Record<(typeof STEPS)[number], string>> = { "Agree amount": "Amount" };
 
 /**
  * The customer is asked once the amount is agreed and before any payment starts. A sale already being
@@ -188,7 +190,8 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                     {done ? <Check className="h-3.5 w-3.5 text-navy-900" strokeWidth={2.5} /> : String(i + 1).padStart(2, "0")}
                   </span>
                   <span className="sr-only sm:hidden">{i + 1}. </span>
-                  {label}
+                  <span className="sm:hidden">{SHORT_STEP[label] ?? label}</span>
+                  <span className="max-sm:hidden">{label}</span>
                 </span>
               </li>
             );
@@ -209,7 +212,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         {/* Left: active step + search + cart */}
         <div className="space-y-4">
           {finalized && (
-            <div id="step-panel" className="scroll-mt-20 space-y-4">
+            <div id="step-panel" className="scroll-mt-28 space-y-4 lg:scroll-mt-20">
               {asking || changingCustomer ? (
                 <CustomerStep data={data} config={config} run={run} onClose={changingCustomer ? () => setChangingCustomer(false) : undefined} />
               ) : (
@@ -229,7 +232,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
           <Cart data={data} me={me} config={config} units={units} editable={draft} run={run} />
           {quotations.length > 0 && (
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-lg border border-navy-200 bg-white px-4 py-3 text-sm">
-              <span className="label-mono text-navy-500">Quotations</span>
+              <span className="label-caps text-navy-500">Quotations</span>
               {quotations.map((q) => (
                 <Link key={q.id} href={`/pos/documents/${q.id}`} className="link-draw font-mono font-medium text-navy-950">
                   {q.docNumber}
@@ -243,7 +246,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         </div>
 
         {/* Right: totals + step panel */}
-        <div id="checkout" className="scroll-mt-20 space-y-4 lg:sticky lg:top-20">
+        <div id="checkout" className="scroll-mt-28 space-y-4 lg:sticky lg:top-20 lg:scroll-mt-20">
           <TotalsCard data={data} />
 
           {draft && (
@@ -297,7 +300,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                 <ul className="divide-y divide-navy-100 text-sm">
                   {bills.map((b) => (
                     <li key={b.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2 first:pt-0">
-                      <span className="label-mono text-navy-500">{DOC_TYPE_LABEL[b.docType]}</span>
+                      <span className="label-caps text-navy-500">{DOC_TYPE_LABEL[b.docType]}</span>
                       <span className="font-mono font-semibold text-navy-950">{b.docNumber}</span>
                       <StatusBadge status={b.status} className="ml-auto" />
                     </li>
@@ -326,7 +329,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
       {s.status !== "cancelled" && s.status !== "completed" && (
         <div data-bottom-bar className="no-print fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-navy-950 px-4 py-2.5 text-white lg:hidden">
           <div className="min-w-0">
-            <div className="label-mono text-gold-400">{finalized ? "Amount due" : "Total"}</div>
+            <div className="label-caps text-gold-400">{finalized ? "Amount due" : "Total"}</div>
             <div className="headline mt-1 text-[1.85rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
           </div>
           <a href={draft ? "#checkout" : "#step-panel"} className={buttonClass("gold", "lg", "shrink-0")}>

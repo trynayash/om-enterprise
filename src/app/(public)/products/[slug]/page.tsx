@@ -118,7 +118,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
           </div>
         </div>
         <div>
-          <div className="label-mono flex flex-wrap items-center gap-2">
+          <div className="label-caps flex flex-wrap items-center gap-2">
             {p.brand && (
               <Link href={`/products?brand=${encodeURIComponent(p.brandSlug ?? "")}`} className="text-gold-700 transition-colors hover:text-gold-600">
                 {p.brand}
@@ -155,12 +155,12 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
             <section className="mt-12">
               <div className="flex items-baseline justify-between border-b border-navy-900 pb-2">
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Specifications</h2>
-                <span className="label-mono text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
+                <span className="label-caps text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
               </div>
               <dl>
                 {specs.map((s, i) => (
                   <div key={`${s.label}-${i}`} className="grid grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-4 border-b border-navy-100 py-3 text-sm">
-                    <dt className="label-mono pt-0.5 text-navy-500">{s.label}</dt>
+                    <dt className="label-caps pt-0.5 text-navy-500">{s.label}</dt>
                     <dd className="text-navy-950">{s.value}</dd>
                   </div>
                 ))}

@@ -30,11 +30,6 @@ export default function OverviewPage() {
   );
 }
 
-function greeting(now: Date) {
-  const h = new Date(now.getTime() + 5.5 * 3600_000).getUTCHours();
-  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-}
-
 async function Overview() {
   const actor = await requirePageActor("dashboard.view");
   const now = new Date();
@@ -74,7 +69,7 @@ async function Overview() {
     <div className="space-y-6">
       <PageHeader
         eyebrow={todayLabel}
-        title={`${greeting(now)}, ${actor.displayName.split(" ")[0]}`}
+        title="Overview"
         description="Live figures from saved bills and verified payments. Training (sample) transactions are never included."
         actions={
           <>
@@ -118,11 +113,10 @@ async function Overview() {
       {canReports && today && month ? (
         <>
           <section aria-labelledby="today-h">
-            <h2 id="today-h" className="label-mono mb-3 flex items-center gap-3 text-navy-500">
+            <h2 id="today-h" className="label-caps mb-2.5 text-navy-500">
               Today
-              <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(today.netRevenue)} hint={`${today.bills.count} bill${today.bills.count === 1 ? "" : "s"} · GST ${formatINR(today.netTax)}`} />
               <Stat
                 label="Collections (cash flow)"
@@ -141,11 +135,10 @@ async function Overview() {
           </section>
 
           <section aria-labelledby="month-h">
-            <h2 id="month-h" className="label-mono mb-3 flex items-center gap-3 text-navy-500">
+            <h2 id="month-h" className="label-caps mb-2.5 text-navy-500">
               This month
-              <span aria-hidden className="h-px flex-1 bg-navy-100" />
             </h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
               <Stat label="Net sales (excl. GST)" value={formatINR(month.netRevenue)} hint={`Invoiced ${formatINR(month.netInvoiced)} incl. GST`} />
               <Stat label="Bills issued" value={month.bills.count.toLocaleString("en-IN")} hint={`Average bill ${formatINR(month.averageBill)}${month.creditNotes.count ? ` · ${plural(month.creditNotes.count, "credit note")}` : ""}`} />
               <Stat label="GST collected" value={formatINR(month.netTax)} hint="Output tax on bills, less credit notes" />
@@ -293,7 +286,7 @@ function ActionItems({
       icon: BadgeCheck,
       label: "Approvals waiting",
       value: pendingDiscounts + pendingPrices,
-      hint: `${pendingDiscounts} discount · ${pendingPrices} price change`,
+      hint: `${plural(pendingDiscounts, "discount")} · ${plural(pendingPrices, "price change")}`,
     },
     showOrders && { href: "/dashboard/orders", icon: Globe, label: "New website orders", value: newOrders, hint: "Enquiries & order requests to answer" },
     pendingPayments && {
@@ -321,7 +314,7 @@ function ActionItems({
                 <span
                   className={`min-w-7 rounded-[3px] px-1.5 py-0.5 text-center font-mono text-[13px] font-semibold tabular ${i.value ? "bg-gold-100 text-gold-700" : "text-navy-400"}`}
                 >
-                  {i.value}
+                  {i.value.toLocaleString("en-IN")}
                 </span>
               )}
               <ArrowRight className="h-4 w-4 shrink-0 text-navy-300 transition-transform duration-150 group-hover:translate-x-0.5 group-hover:text-navy-600" aria-hidden />

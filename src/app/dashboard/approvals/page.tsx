@@ -23,7 +23,7 @@ function SectionHeading({ id, title, count }: { id: string; title: string; count
       <h2 id={id} className="text-lg font-semibold tracking-[-0.01em] text-navy-950">
         {title}
       </h2>
-      <span className={`font-mono text-[13px] tabular ${count ? "font-semibold text-gold-700" : "text-navy-400"}`}>{count}</span>
+      <span className={`font-mono text-[13px] tabular ${count ? "font-semibold text-gold-700" : "text-navy-400"}`}>{count.toLocaleString("en-IN")}</span>
     </div>
   );
 }
@@ -31,7 +31,7 @@ function SectionHeading({ id, title, count }: { id: string; title: string; count
 function Fact({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <dt className="label-mono text-[10px] text-navy-500">{label}</dt>
+      <dt className="label-caps text-[10px] text-navy-500">{label}</dt>
       <dd className="mt-1 text-sm text-navy-900">{children}</dd>
     </div>
   );
@@ -133,14 +133,14 @@ async function Approvals({ searchParams }: { searchParams: Promise<SearchParams>
                     }
                     actions={
                       <div className="text-right">
-                        <div className="label-mono text-[10px] text-navy-500">Bill total</div>
+                        <div className="label-caps text-[10px] text-navy-500">Bill total</div>
                         <div className="mt-1 font-mono text-lg font-semibold tabular">{formatINR(d.grandTotal)}</div>
                       </div>
                     }
                   />
                   <CardBody className="space-y-4">
                     <p className="border-l-2 border-gold-500 pl-3 text-sm leading-relaxed text-navy-800">
-                      <span className="label-mono mr-2 text-[10px] text-navy-500">Reason</span>“{a.reason}”
+                      <span className="label-caps mr-2 text-[10px] text-navy-500">Reason</span>“{a.reason}”
                     </p>
                     {d.reasons?.length ? (
                       <ul className="flex flex-wrap gap-2">

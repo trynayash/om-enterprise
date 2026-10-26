@@ -6,20 +6,13 @@ export function Container({ children, className }: { children: ReactNode; classN
   return <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}>{children}</div>;
 }
 
-/** Section index label: "01 — Categories" in mono, with a brass rule that draws in on scroll. */
-export function Eyebrow({ index, children, inverted, className }: { index?: string; children: ReactNode; inverted?: boolean; className?: string }) {
-  return (
-    <div className={cn("label-mono flex items-center gap-3", inverted ? "text-gold-400" : "text-gold-700", className)}>
-      {index && <span className={inverted ? "text-navy-300" : "text-navy-400"}>{index}</span>}
-      <span aria-hidden className={cn("rule-draw h-px w-8", inverted ? "bg-gold-400/70" : "bg-gold-500")} />
-      <span>{children}</span>
-    </div>
-  );
+/** The small section name above a heading. */
+export function Eyebrow({ children, inverted, className }: { children: ReactNode; inverted?: boolean; className?: string }) {
+  return <div className={cn("label-caps flex items-center gap-2", inverted ? "text-gold-400" : "text-gold-700", className)}>{children}</div>;
 }
 
 export function SectionHeading({
   eyebrow,
-  index,
   title,
   description,
   action,
@@ -27,7 +20,6 @@ export function SectionHeading({
   inverted,
 }: {
   eyebrow?: ReactNode;
-  index?: string;
   title: ReactNode;
   description?: ReactNode;
   action?: ReactNode;
@@ -38,7 +30,7 @@ export function SectionHeading({
     <div className={cn("mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4", align === "center" && "flex-col items-center text-center")}>
       <div className={cn("max-w-2xl", align === "center" && "mx-auto")}>
         {eyebrow && (
-          <Eyebrow index={index} inverted={inverted} className={cn("mb-3", align === "center" && "justify-center")}>
+          <Eyebrow inverted={inverted} className={cn("mb-3", align === "center" && "justify-center")}>
             {eyebrow}
           </Eyebrow>
         )}

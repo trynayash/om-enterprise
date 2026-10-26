@@ -94,7 +94,7 @@ export function VariantsManager(props: VariantsManagerProps) {
             </CardBody>
           ) : (
             <div className="relative overflow-x-auto">
-              <table className="w-full min-w-[640px]">
+              <table className="stack-sm w-full min-w-[640px]">
                 <thead>
                   <tr>
                     <th className={th}>Variant</th>
@@ -124,7 +124,7 @@ export function VariantsManager(props: VariantsManagerProps) {
                         className={cn("cursor-pointer transition-colors duration-150", isSel ? "bg-gold-50/70" : "hover:bg-paper/60")}
                         aria-selected={isSel}
                       >
-                        <td className={cn(tdText, isSel && "shadow-[inset_3px_0_0_var(--color-gold-500)]")}>
+                        <td data-label="Variant" className={cn(tdText, isSel && "shadow-[inset_3px_0_0_var(--color-gold-500)]")}>
                           <div className="font-semibold leading-snug">{v.name}</div>
                           {extraAttrs.length > 0 && (
                             <div className="mt-0.5 text-xs text-navy-500">
@@ -142,12 +142,12 @@ export function VariantsManager(props: VariantsManagerProps) {
                             </div>
                           )}
                         </td>
-                        <td className={tdCode}>
+                        <td data-label="SKU" className={tdCode}>
                           {v.sku}
                           {v.barcode && <div className="text-navy-400">{v.barcode}</div>}
                         </td>
-                        <td className={tdMuted}>{unitName(v.unitCode)}</td>
-                        <td className={tdNum}>
+                        <td data-label="Unit" className={tdMuted}>{unitName(v.unitCode)}</td>
+                        <td data-label="Retail price" className={tdNum}>
                           {price ? (
                             <>
                               <div className="font-semibold">{formatINR(price.price)}</div>
@@ -160,7 +160,7 @@ export function VariantsManager(props: VariantsManagerProps) {
                           )}
                         </td>
                         {perms.canSeeCosts && (
-                          <td className={tdNum}>
+                          <td data-label="Cost · margin" className={tdNum}>
                             {cost ? (
                               <>
                                 <div>{formatINR(cost.landedCost)}</div>

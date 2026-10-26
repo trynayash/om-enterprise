@@ -85,11 +85,6 @@
   }
 }
 
-@keyframes draw-x {
-  from {
-    transform: scaleX(0);
-  }
-}
 
 @keyframes draw-stroke {
   from {
@@ -104,12 +99,13 @@
   line-height: 0.95;
 }
 
-/* Small uppercase labels in the monospace — section indexes, table heads, units. */
-@utility label-mono {
-  font-family: var(--font-mono);
+/* Small capitals for section names, table heads and units: the body face, lightly spaced. */
+@utility label-caps {
+  font-family: var(--font-sans);
   font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  line-height: 1.35;
   text-transform: uppercase;
 }
 
@@ -219,17 +215,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* A brass rule that draws across as its section scrolls into view (static where unsupported). */
-.rule-draw {
-  transform-origin: left;
-}
-@supports (animation-timeline: view()) {
-  .rule-draw {
-    animation: draw-x linear both;
-    animation-timeline: view();
-    animation-range: entry 10% cover 30%;
-  }
-}
 
 /* Technical drawings: strokes draw in once, one after another. */
 .drawing [data-draw] {
@@ -243,6 +228,80 @@
 .drawing [data-draw]:nth-child(6) { animation-delay: 350ms; }
 .drawing [data-draw]:nth-child(7) { animation-delay: 420ms; }
 .drawing [data-draw]:nth-child(n + 8) { animation-delay: 490ms; }
+
+/*
+ * Tables marked `stack-sm` become one block per row on a phone instead of scrolling sideways: the
+ * first cell heads the block, and every other cell shows its column name (`data-label`) on the left
+ * and its value on the right. A cell without a data-label (actions) keeps its content right-aligned.
+ */
+@media (width < 40rem) {
+  table.stack-sm {
+    display: block;
+    min-width: 0;
+  }
+  table.stack-sm > thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  table.stack-sm > tbody,
+  table.stack-sm > tfoot {
+    display: block;
+  }
+  table.stack-sm > tbody > tr,
+  table.stack-sm > tfoot > tr {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-navy-100);
+  }
+  /* Label in the first column; whatever the cell holds (a name and a number under it, badges)
+     stacks in the second, right-aligned. */
+  table.stack-sm > * > tr > td {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 1rem;
+    align-items: baseline;
+    justify-items: end;
+    min-width: 0;
+    padding: 0.1875rem 0;
+    border: 0;
+    text-align: right;
+    white-space: normal;
+  }
+  table.stack-sm > * > tr > td > * {
+    grid-column: 2;
+    min-width: 0;
+  }
+  table.stack-sm > * > tr > td::before {
+    content: attr(data-label);
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    justify-self: start;
+    color: var(--color-navy-500);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    text-align: left;
+    text-transform: none;
+  }
+  table.stack-sm > * > tr > td:first-child {
+    display: block;
+    justify-items: normal;
+    padding-bottom: 0.375rem;
+    text-align: left;
+  }
+  table.stack-sm > * > tr > td:first-child::before,
+  table.stack-sm > * > tr > td:not([data-label])::before {
+    content: none;
+  }
+  table.stack-sm > * > tr > td:empty {
+    display: none;
+  }
+}
 
 /* Toasts sit above a fixed bottom bar (the POS phone total bar) instead of covering it. */
 @media (width < 64rem) {

@@ -11,12 +11,13 @@ Use them before writing new styles.
 
 1. **Real content is the decoration.** Sizes, SKUs, standards, brands and prices carry the page.
    Never add filler sections, invented claims or stock "why choose us" icon grids.
-2. **One accent.** Brass-gold marks things (eyebrow rules, active nav, the single most important
-   action on a public page). Everything else is navy, ink greys and white/paper.
+2. **One accent.** Brass-gold marks things (section names above titles, active nav, the single most
+   important action on a public page). Everything else is navy, ink greys and white/paper.
 3. **Rules, not boxes.** Prefer hairline borders (`border-navy-100/200`, `border-rule` on paper) and
    ruled rows over floating cards with big shadows.
 4. **Type does the hierarchy.** Condensed `headline` for page titles and big numbers; Archivo text
-   for reading; `font-mono` / `label-mono` for anything read like a spec sheet.
+   for reading; `font-mono` for anything read like a spec sheet (SKUs, codes, money in tables);
+   `label-caps` for small section names and table heads.
 5. **Motion explains, never decorates.** Short, quiet, purposeful; always disabled by
    `prefers-reduced-motion` (handled globally).
 
@@ -25,7 +26,8 @@ Use them before writing new styles.
 | Use | Class |
 |---|---|
 | Page / hero titles, big figures | `headline font-bold` (Archivo at 78% width, tight leading) + size |
-| Section labels, table heads, form labels, units | `label-mono` (11px uppercase IBM Plex Mono) |
+| Section names, table heads, units | `label-caps` (11px Archivo capitals, lightly spaced) |
+| Form labels | `Label` / `Field`: 13px Archivo medium, written as typed ("Business name") |
 | SKUs, codes, sizes, quantities, prices in tables | `font-mono tabular` |
 | Body | default Archivo, `text-sm`/`text-base`, `leading-relaxed` for paragraphs |
 | Secondary text | `text-navy-500` (ink grey — never a bright blue) |
@@ -44,27 +46,35 @@ Use them before writing new styles.
   controls `rounded-lg`; badges 3px. No pill-shaped cards, no `rounded-3xl` panels.
 - Shadows: `shadow-card` (barely there) and `shadow-lift` (menus, dialogs). Nothing larger.
 - No gradient blobs, glows, glassmorphism, gradient text, emoji or sparkle icons.
+- No template flourishes: no numbered section indexes ("01 —"), no short rules before headings, no
+  coloured stripe down the edge of cards or alerts, no underline swooshes under headline words, no
+  "Good morning" greetings. Titles say what the page is.
 
 ## Components (`src/components/ui`)
 
 - `Button` / `LinkButton` — `primary` (navy), `gold` (one per view at most), `outline`, `ghost`,
   `danger`, `success`, `white` (on navy). Press feedback is built in.
-- `Card`, `CardHeader`, `CardBody`, `Stat` (big figure with a tone rule).
-- `PageHeader` — eyebrow (gold rule + mono label), condensed title, description, actions.
+- `Card`, `CardHeader`, `CardBody`, `Stat` (big figure; the tone colours the figure). Figure grids
+  are two to a row on a phone.
+- `PageHeader` — section name in gold capitals, condensed title, description, actions.
 - `TableWrap` + `th` / `td` — spec-sheet tables. Rows: `hover:bg-paper/60`. Numbers right-aligned
-  `text-right font-mono tabular`.
+  `text-right font-mono tabular`. Add `stack-sm` to the `<table>` and a `data-label` to each body
+  cell (none on an actions cell) and the table becomes one block per row on a phone instead of
+  scrolling sideways.
 - `Badge` / `StatusBadge` — small stamp with a status dot.
-- `Alert` — tinted panel with a 3px left rule.
-- `Field`, `Input`, `Select`, `Textarea`, `Checkbox`, `Label` — mono labels, navy focus border with
+- `Alert` — tinted panel with an even 1px border.
+- `Field`, `Input`, `Select`, `Textarea`, `Checkbox`, `Label` — plain labels, navy focus border with
   a soft brass ring.
+- Filter forms (`FilterBar`, `ProductFilters`, `ListFilters`) show only the search box on a phone until
+  "Filters" is tapped.
 - `Dialog`, `useToast` — animate in automatically.
 - `EmptyState` — engineering-paper (`blueprint`) panel.
 
 ## Utilities (`globals.css`)
 
-`headline`, `label-mono`, `blueprint` (grid paper), `leader` (dotted price-list leader),
+`headline`, `label-caps`, `blueprint` (grid paper), `leader` (dotted price-list leader),
 `link-draw` (underline draws in on hover), `stagger` (children rise in once; set `style={{ "--i": i }}`),
-`rule-draw` (a rule that draws across as it scrolls into view), `.drawing [data-draw]` (SVG strokes
+`.drawing [data-draw]` (SVG strokes
 draw in; set `--len` / `--d`), `animate-fade-in`, `animate-rise`, `animate-sheet-in`.
 
 ## Motion

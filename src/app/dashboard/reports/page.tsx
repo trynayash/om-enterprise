@@ -130,7 +130,7 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
   return (
     <div className="space-y-5">
       {empty && <Alert title="No sales recorded in this period">Figures will appear here as soon as bills are issued.</Alert>}
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 xl:grid-cols-4 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
         <Stat label="Net sales (excl. GST)" value={formatINR(s.netRevenue)} hint={`${s.bills.count} bills · avg ${formatINR(s.averageBill)}`} />
         <Stat label="GST collected (net)" value={formatINR(s.netTax)} hint="Output tax on bills − credit notes" />
         <Stat label="Total billed" value={formatINR(s.netInvoiced)} hint="Including GST, after credit notes" />
@@ -212,7 +212,7 @@ function ProfitCard({ profit }: { profit: Awaited<ReturnType<typeof reports.gros
 function Figure({ label, tone, children }: { label: string; tone?: string; children: React.ReactNode }) {
   return (
     <div className="lg:border-l lg:border-navy-100 lg:pl-5 lg:first:border-l-0 lg:first:pl-0">
-      <div className="label-mono text-navy-500">{label}</div>
+      <div className="label-caps text-navy-500">{label}</div>
       <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone ?? "text-navy-950")}>{children}</div>
     </div>
   );
@@ -358,7 +358,7 @@ async function Discounts({ actor, period, canExport, qs }: P) {
   const r = await reports.discountReport(actor, period);
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
         <Stat label="Total discount" value={formatINR(r.totalDiscount)} tone="gold" />
         <Stat label="Discounted bills" value={String(r.discountedBills)} />
         <Stat label="Needed approval" value={String(r.approvedCount)} hint="Above the cashier's limit" />

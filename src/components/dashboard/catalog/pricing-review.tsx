@@ -129,7 +129,7 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
         </label>
       </div>
       <div className="overflow-x-auto rounded-lg border border-navy-100">
-        <table className="w-full min-w-[720px]">
+        <table className="stack-sm w-full min-w-[720px]">
           <thead>
             <tr>
               <th className={th}>Variant</th>
@@ -142,7 +142,7 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
           <tbody>
             {visible.slice(0, shown).map((i) => (
               <tr key={i.variantId} className={rowHover}>
-                <td className={tdText}>
+                <td data-label="Variant" className={tdText}>
                   <Link href={`/dashboard/products/${i.productId}`} className={nameLink}>
                     {i.product}
                   </Link>
@@ -151,14 +151,14 @@ export function NeedsReviewList({ items, showCost, canImport }: { items: ReviewI
                     {i.isSample && <SampleBadge label="Sample" />}
                   </div>
                 </td>
-                <td className={tdNum}>{i.price ? formatINR(i.price) : <span className="text-navy-300">—</span>}</td>
-                {showCost && <td className={tdNum}>{i.landedCost ? formatINR(i.landedCost) : <span className="text-navy-300">—</span>}</td>}
+                <td data-label="Retail price" className={tdNum}>{i.price ? formatINR(i.price) : <span className="text-navy-300">—</span>}</td>
+                {showCost && <td data-label="Landed cost" className={tdNum}>{i.landedCost ? formatINR(i.landedCost) : <span className="text-navy-300">—</span>}</td>}
                 {showCost && (
-                  <td className={`${tdNum} font-semibold`}>
+                  <td data-label="Margin" className={`${tdNum} font-semibold`}>
                     <span className={i.marginPercent && Number(i.marginPercent) < 0 ? "text-red-700" : undefined}>{i.marginPercent ? `${Number(i.marginPercent).toFixed(1)}%` : <span className="font-normal text-navy-300">—</span>}</span>
                   </td>
                 )}
-                <td className={tdText}>
+                <td data-label="Needs attention" className={tdText}>
                   {/* Issues as quiet dotted notes — a column of badges on every row is mostly noise. */}
                   <ul className="space-y-0.5">
                     {i.issues.map((x) => (

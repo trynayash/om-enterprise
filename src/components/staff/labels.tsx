@@ -22,6 +22,13 @@ export function preferredContactLabel(v: string | null | undefined): string | nu
   return v ? (CONTACT[v] ?? `Prefers ${v}`) : null;
 }
 
+const ROLE_NAME: Record<string, string> = { super_admin: "Super Admin", admin: "Admin", sales: "Sales & Operations", accountant: "Accountant / Auditor" };
+
+/** Who did something, as saved in the audit trail; older entries carry the role key ("Kishan (super_admin)"). */
+export function actorLabel(label: string): string {
+  return label.replace(/\(([a-z_]+)\)$/, (whole, key: string) => (ROLE_NAME[key] ? `(${ROLE_NAME[key]})` : whole));
+}
+
 /** `plural(1, "line")` → "1 line"; `plural(6, "line")` → "6 lines". */
 export function plural(n: number | string, singular: string, many = `${singular}s`): string {
   const count = Number(n);

@@ -40,7 +40,7 @@ export function Cart({
   if (!lines.length) {
     return (
       <div className="blueprint flex flex-col items-center justify-center rounded-xl border border-navy-200 px-6 py-14 text-center">
-        <div className="label-mono text-navy-500">Cart · 0 items</div>
+        <div className="label-caps text-navy-500">Cart · 0 items</div>
         <div className="mt-2 text-base font-semibold text-navy-950">The cart is empty</div>
         <p className="mt-1 max-w-sm text-sm leading-relaxed text-navy-500">Search above and add the products the customer wants. Prices, discounts and GST are calculated automatically.</p>
       </div>
@@ -50,16 +50,16 @@ export function Cart({
   return (
     <section aria-label="Cart" className="@container overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="flex items-center justify-between gap-3 border-b border-navy-200 bg-paper/60 px-4 py-2.5 sm:px-5">
-        <h2 className="label-mono text-navy-700">
+        <h2 className="label-caps text-navy-700">
           Cart <span className="text-navy-300">·</span> {items.length} item{items.length === 1 ? "" : "s"}
         </h2>
         {taxCharged && <span className="hidden text-xs text-navy-500 @lg:inline">Rates as configured (incl./+ GST shown per line)</span>}
       </div>
       <div aria-hidden className="hidden grid-cols-[minmax(0,1fr)_12rem_8rem_7.5rem] gap-x-4 border-b border-navy-100 px-5 py-2 text-navy-400 @2xl:grid">
-        <span className="label-mono">Item</span>
-        <span className="label-mono">Qty</span>
-        <span className="label-mono text-right">Rate</span>
-        <span className="label-mono text-right">Amount</span>
+        <span className="label-caps">Item</span>
+        <span className="label-caps">Qty</span>
+        <span className="label-caps text-right">Rate</span>
+        <span className="label-caps text-right">Amount</span>
       </div>
       <ul className="divide-y divide-navy-100">
         {items.map((l) => (
@@ -281,7 +281,7 @@ function ChargeLine({ line: l, saleId, editable, taxCharged, run }: { line: Sale
     <li className="flex animate-[rise_320ms_var(--ease-out-quart)_both] flex-wrap items-center gap-x-4 gap-y-2 bg-paper/50 px-4 py-3 sm:px-5">
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-baseline gap-2">
-          <span className="label-mono text-navy-500">Charge</span>
+          <span className="label-caps text-navy-500">Charge</span>
           <span className="text-sm font-semibold text-navy-950">{l.productName}</span>
         </div>
         {((taxCharged && D(l.gstRate).greaterThan(0)) || l.hsnCode) && (

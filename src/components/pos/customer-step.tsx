@@ -52,8 +52,7 @@ export function CustomerStep({ data, config, run, onClose }: { data: SaleData; c
   return (
     <section aria-label="Customer details" className="animate-rise overflow-hidden rounded-xl border border-navy-200 bg-white shadow-card">
       <div className="border-b border-navy-200 px-5 py-4">
-        <div className="label-mono flex items-center gap-2 text-gold-700">
-          <span aria-hidden className="h-px w-4 bg-gold-500" />
+        <div className="label-caps text-gold-700">
           Step 3 · Customer
         </div>
         <h2 className="mt-1.5 text-lg font-semibold text-navy-950">Who is buying?</h2>
@@ -92,7 +91,7 @@ export function CustomerSummary({ data, onChange }: { data: SaleData; onChange: 
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-lg border border-navy-200 bg-white px-4 py-3 text-sm shadow-card" data-testid="customer-summary">
       <div className="flex min-w-0 items-center gap-2.5">
         <UserRound className="h-4 w-4 shrink-0 text-navy-400" aria-hidden />
-        <span className="label-mono text-navy-500">Customer</span>
+        <span className="label-caps text-navy-500">Customer</span>
         {c ? (
           <span className="min-w-0 truncate">
             <b className="font-semibold text-navy-950">{c.businessName ? `${c.businessName} (${c.name})` : c.name}</b>

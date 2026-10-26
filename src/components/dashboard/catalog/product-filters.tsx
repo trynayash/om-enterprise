@@ -1,9 +1,10 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
-import { Search, X } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input, Select } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
 import { categoryTree, type CategoryOption, type Option } from "./types";
 
 const STATUSES = [
@@ -32,6 +33,10 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
   };
 
   const hasFilters = ["q", "categoryId", "brandId", "status"].some((k) => params.get(k));
+  const narrowing = ["categoryId", "brandId", "status"].filter((k) => params.get(k) && params.get(k) !== "all").length;
+  // On a phone the three lists stay folded until "Filters" is tapped, so products show first.
+  const [open, setOpen] = useState(false);
+  const folded = !open && "max-sm:hidden";
 
   return (
     <form
@@ -53,7 +58,7 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
           aria-label="Search products"
         />
       </div>
-      <Select aria-label="Category" value={params.get("categoryId") ?? ""} onChange={(e) => apply({ categoryId: e.target.value })}>
+      <Select className={cn(folded)} aria-label="Category" value={params.get("categoryId") ?? ""} onChange={(e) => apply({ categoryId: e.target.value })}>
         <option value="">All categories</option>
         {categoryTree(categories).map((c) => (
           <option key={c.id} value={c.id}>
@@ -63,7 +68,7 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
           </option>
         ))}
       </Select>
-      <Select aria-label="Brand" value={params.get("brandId") ?? ""} onChange={(e) => apply({ brandId: e.target.value })}>
+      <Select className={cn(folded)} aria-label="Brand" value={params.get("brandId") ?? ""} onChange={(e) => apply({ brandId: e.target.value })}>
         <option value="">All brands</option>
         {brands.map((b) => (
           <option key={b.id} value={b.id}>
@@ -71,7 +76,7 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
           </option>
         ))}
       </Select>
-      <Select aria-label="Status" value={params.get("status") ?? "all"} onChange={(e) => apply({ status: e.target.value })}>
+      <Select className={cn(folded)} aria-label="Status" value={params.get("status") ?? "all"} onChange={(e) => apply({ status: e.target.value })}>
         {STATUSES.map((s) => (
           <option key={s.value} value={s.value}>
             {s.label}
@@ -79,6 +84,9 @@ export function ProductFilters({ categories, brands }: { categories: CategoryOpt
         ))}
       </Select>
       <div className="flex gap-2">
+        <Button variant="outline" className="sm:hidden" aria-expanded={open} icon={<SlidersHorizontal className="h-4 w-4" />} onClick={() => setOpen((o) => !o)}>
+          {open ? "Fewer filters" : narrowing ? `Filters (${narrowing})` : "Filters"}
+        </Button>
         {hasFilters && (
           <Button
             variant="ghost"

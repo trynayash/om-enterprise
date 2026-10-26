@@ -57,7 +57,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
       <div>
         <PageHeader eyebrow="Sales" title="Payments" description="Finalised sales where the agreed amount has not been fully received yet (training sales excluded)." />
         <Tabs view="pending" />
-        <div className="mb-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mb-5 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
           <Stat label="Sales awaiting payment" value={rows.length.toLocaleString("en-IN")} />
           <Stat label="Outstanding" value={formatINR(m(outstanding))} tone={rows.length ? "gold" : "navy"} hint="Agreed totals less money received" />
         </div>
@@ -65,7 +65,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
           <EmptyState title="Nothing outstanding" description="Every finalised sale has been paid in full." />
         ) : (
           <TableWrap>
-            <table className="w-full min-w-[720px]">
+            <table className="stack-sm w-full min-w-[720px]">
               <thead>
                 <tr>
                   <th className={th}>Sale</th>
@@ -80,25 +80,25 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
               <tbody>
                 {rows.map((r) => (
                   <tr key={r.id} className={rowHover}>
-                    <td className={tdText}>
+                    <td data-label="Sale" className={tdText}>
                       <Link href={`/dashboard/sales/${r.id}`} className={codeLink}>
                         {r.saleNumber}
                       </Link>
                     </td>
-                    <td className={`${tdMuted} whitespace-nowrap`}>
+                    <td data-label="Finalised" className={`${tdMuted} whitespace-nowrap`}>
                       <DateTime value={r.finalizedAt} />
                     </td>
-                    <td className={tdText}>{r.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
-                    <td className={tdNum}>
+                    <td data-label="Customer" className={tdText}>{r.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
+                    <td data-label="Agreed total" className={tdNum}>
                       <Money value={r.grandTotal} />
                     </td>
-                    <td className={tdNum}>
+                    <td data-label="Received" className={tdNum}>
                       <Money value={r.amountPaid} muted={r.amountPaid === "0.00"} />
                     </td>
-                    <td className={`${tdNum} font-semibold`}>
+                    <td data-label="Outstanding" className={`${tdNum} font-semibold`}>
                       <span className="text-amber-700">{formatINR(m(D(r.grandTotal).minus(D(r.amountPaid))))}</span>
                     </td>
-                    <td className={tdText}>
+                    <td data-label="Status" className={tdText}>
                       <StatusBadge status={r.status === "completed" ? "partially_paid" : D(r.amountPaid).isZero() ? "unpaid" : "partially_paid"} />
                       {r.status === "completed" && <div className="mt-1 text-xs text-navy-500">Billed on credit</div>}
                     </td>
@@ -193,7 +193,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
       />
       <Tabs view="history" />
       <FilterBar fields={fields} values={Object.fromEntries(["q", "status", "method", "direction", "from", "to", "training"].map((k) => [k, str(sp, k)]))} />
-      <div className="mb-5 grid gap-4 sm:grid-cols-3">
+      <div className="mb-5 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
         <Stat label="Verified received (shown)" value={formatINR(m(received))} tone="green" />
         <Stat label="Refunded (shown)" value={formatINR(m(refunded))} tone={refunded.isZero() ? "navy" : "red"} />
         <Stat label="Unverified QR requests (shown)" value={unverified.length.toLocaleString("en-IN")} tone={unverified.length ? "gold" : "navy"} hint="Not money received" />
@@ -202,7 +202,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
         <EmptyState title="No payments found" description={str(sp, "training") ? "Try different filters." : "Training (sample) payments are hidden unless you tick “Include training”."} />
       ) : (
         <TableWrap>
-          <table className="w-full min-w-[960px]">
+          <table className="stack-sm w-full min-w-[960px]">
             <thead>
               <tr>
                 <th className={th}>When</th>
@@ -218,10 +218,10 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
             <tbody>
               {data.items.map((p) => (
                 <tr key={p.id} className={rowHover}>
-                  <td className={`${tdMuted} whitespace-nowrap`}>
+                  <td data-label="When" className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={p.verifiedAt ?? p.createdAt} />
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Sale" className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
                       <Link href={`/dashboard/sales/${p.saleId}`} className={codeLink}>
                         {p.saleNumber}
@@ -229,24 +229,24 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                       {p.isTraining && <TrainingBadge />}
                     </span>
                   </td>
-                  <td className={tdText}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
-                  <td className={tdText}>
+                  <td data-label="Customer" className={tdText}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
+                  <td data-label="Method" className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
                       {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
                       {METHOD_LABEL[p.method] ?? p.method}
                     </span>
                     {p.provider === "razorpay" && <div className="text-xs text-navy-500">Razorpay</div>}
                   </td>
-                  <td className={tdCode}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
-                  <td className={`${tdMuted} text-xs`}>
+                  <td data-label="Reference" className={tdCode}>{p.reference ?? <span className="text-navy-300">—</span>}</td>
+                  <td data-label="Verification" className={`${tdMuted} text-xs`}>
                     {p.verificationMethod ? VERIFICATION_LABEL[p.verificationMethod] ?? p.verificationMethod : <span className="text-amber-700">Not verified</span>}
                     {p.verifiedByName && <div>by {p.verifiedByName}</div>}
                     {p.status === "reversed" && p.reversalReason && <div className="text-red-700">Reversed: {p.reversalReason}</div>}
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Status" className={tdText}>
                     <StatusBadge status={p.status} />
                   </td>
-                  <td className={`${tdNum} font-semibold`}>
+                  <td data-label="Amount" className={`${tdNum} font-semibold`}>
                     <span className={cn(p.direction === "refund" && "text-violet-700", p.status !== "successful" && "text-navy-400")}>
                       {p.direction === "refund" ? "− " : ""}
                       <Money value={p.amount} />

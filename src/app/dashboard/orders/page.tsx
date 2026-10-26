@@ -65,7 +65,7 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
         <EmptyState title="No website orders" description="Enquiries submitted on the website will appear here." />
       ) : (
         <TableWrap>
-          <table className="w-full min-w-[820px]">
+          <table className="stack-sm w-full min-w-[820px]">
             <thead>
               <tr>
                 <th className={th}>Request</th>
@@ -80,20 +80,20 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
             <tbody>
               {rows.map((o) => (
                 <tr key={o.id} className={o.status === "new" ? "bg-gold-50/50 transition-colors duration-150 hover:bg-gold-50" : rowHover}>
-                  <td className={tdText}>
+                  <td data-label="Request" className={tdText}>
                     <Link href={`/dashboard/orders/${o.id}`} className={codeLink}>
                       {o.orderNumber}
                     </Link>
                     <div className="mt-0.5 text-xs text-navy-500">{o.kind === "order_request" ? "Order request" : "Enquiry"}</div>
                   </td>
-                  <td className={`${tdMuted} whitespace-nowrap`}>
+                  <td data-label="Received" className={`${tdMuted} whitespace-nowrap`}>
                     <DateTime value={o.createdAt} />
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Customer" className={tdText}>
                     <div className="font-medium">{o.customerName}</div>
                     {o.city && <div className="text-xs text-navy-500">{o.city}</div>}
                   </td>
-                  <td className={tdText}>
+                  <td data-label="Contact" className={tdText}>
                     <div className="flex items-center gap-1.5">
                       <a href={`tel:+91${o.mobile}`} className="inline-flex items-center gap-1.5 font-mono text-[13px] tabular underline-offset-[3px] hover:underline" aria-label={`Call ${o.customerName}`}>
                         <Phone className="h-3.5 w-3.5 text-navy-400" aria-hidden />
@@ -105,9 +105,9 @@ async function Orders({ searchParams }: { searchParams: Promise<SearchParams> })
                     </div>
                     {o.preferredContact && <div className="text-xs text-navy-500">{preferredContactLabel(o.preferredContact)}</div>}
                   </td>
-                  <td className={tdNum}>{o.itemCount}</td>
-                  <td className={tdNum}>{o.indicativeTotal ? <Money value={o.indicativeTotal} /> : <span className="text-navy-300">—</span>}</td>
-                  <td className={tdText}>
+                  <td data-label="Items" className={tdNum}>{o.itemCount}</td>
+                  <td data-label="Indicative total" className={tdNum}>{o.indicativeTotal ? <Money value={o.indicativeTotal} /> : <span className="text-navy-300">—</span>}</td>
+                  <td data-label="Status" className={tdText}>
                     <StatusBadge status={o.status} />
                     {o.handledByName && <div className="mt-1 text-xs text-navy-500">{o.handledByName}</div>}
                   </td>

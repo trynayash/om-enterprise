@@ -35,7 +35,7 @@ export function PosNavLinks({ items, variant }: { items: PosNavItem[]; variant: 
       ref={strip}
       className={cn(
         "items-stretch text-sm",
-        mobile ? "scroll-fade-x relative flex h-11 overflow-x-auto border-t border-white/10 pl-1.5 md:hidden" : "ml-3 hidden md:flex",
+        mobile ? "scroll-fade-x relative flex h-11 overflow-x-auto border-t border-white/10 pl-1.5 lg:hidden" : "ml-3 hidden lg:flex",
       )}
       aria-label="POS"
     >

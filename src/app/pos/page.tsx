@@ -23,11 +23,6 @@ export default function PosHomePage() {
   );
 }
 
-function greeting() {
-  const h = new Date(Date.now() + 5.5 * 3600_000).getUTCHours();
-  return h < 12 ? "Good morning" : h < 17 ? "Good afternoon" : "Good evening";
-}
-
 async function PosHome() {
   const actor = await requirePageActor("sales.create");
   const cfg = await loadPosConfig();
@@ -43,13 +38,10 @@ async function PosHome() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="label-mono mb-2 flex items-center gap-2 text-gold-700">
-          <span aria-hidden className="h-px w-5 bg-gold-500" />
+        <div className="label-caps mb-1.5 text-gold-700">
           {new Date(Date.UTC(today.year, today.month - 1, today.day)).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })}
         </div>
-        <h1 className="headline text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">
-          {greeting()}, {actor.displayName.split(" ")[0]}
-        </h1>
+        <h1 className="headline text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">Point of sale</h1>
       </div>
 
       <TaxBanner registrationType={cfg.registrationType} />

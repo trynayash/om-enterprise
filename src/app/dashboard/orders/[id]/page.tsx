@@ -79,13 +79,13 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
               </div>
               {o.address && (
                 <div className="text-sm">
-                  <div className="label-mono mb-1 text-navy-500">Address</div>
+                  <div className="label-caps mb-1 text-navy-500">Address</div>
                   <div className="whitespace-pre-line">{o.address}</div>
                 </div>
               )}
               {o.message && (
                 <div className="rounded-lg border border-rule bg-paper/70 px-4 py-3 text-sm">
-                  <div className="label-mono text-navy-500">Message</div>
+                  <div className="label-caps text-navy-500">Message</div>
                   <div className="mt-1.5 whitespace-pre-line leading-relaxed">{o.message}</div>
                 </div>
               )}
@@ -129,7 +129,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             )}
             {o.indicativeTotal && (
               <CardBody className="flex items-baseline justify-end gap-3 bg-paper/50 text-sm">
-                <span className="label-mono text-navy-500">Indicative total</span>
+                <span className="label-caps text-navy-500">Indicative total</span>
                 <Money value={o.indicativeTotal} className="font-mono text-base font-semibold" />
               </CardBody>
             )}
@@ -152,7 +152,7 @@ async function OrderDetail({ params }: { params: Promise<{ id: string }> }) {
             </Card>
           )}
           <p className="px-1 text-xs leading-relaxed text-navy-500">
-            <span className="label-mono mr-1.5 text-navy-600">Privacy</span>
+            <span className="label-caps mr-1.5 text-navy-600">Privacy</span>
             Contact details are used only to respond to this request.
           </p>
         </div>

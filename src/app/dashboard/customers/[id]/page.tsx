@@ -88,7 +88,7 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1">
         <Stat label="Completed bills" value={completed.length.toLocaleString("en-IN")} hint={can(actor, "sales.view_all") ? "All staff" : "Your sales only"} />
         <Stat label="Billed value" value={formatINR(m(lifetime))} hint="Incl. GST, before returns" />
         <Stat label="Outstanding" value={formatINR(m(due.greaterThan(0) ? due : 0))} tone={due.greaterThan(0) ? "gold" : "navy"} />
@@ -116,7 +116,7 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
             </CardBody>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[600px]">
+              <table className="stack-sm w-full min-w-[600px]">
                 <thead>
                   <tr>
                     <th className={th}>Sale</th>
@@ -130,22 +130,22 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
                 <tbody>
                   {history.map((h) => (
                     <tr key={h.id} className={rowHover}>
-                      <td className={tdText}>
+                      <td data-label="Sale" className={tdText}>
                         <Link href={`/dashboard/sales/${h.id}`} className={codeLink}>
                           {h.saleNumber}
                         </Link>
                       </td>
-                      <td className={`${tdMuted} whitespace-nowrap`}>
+                      <td data-label="Date" className={`${tdMuted} whitespace-nowrap`}>
                         <DateTime value={h.createdAt} dateOnly />
                       </td>
-                      <td className={tdCode}>{h.docNumber ?? <span className="text-navy-300">—</span>}</td>
-                      <td className={tdText}>
+                      <td data-label="Bill" className={tdCode}>{h.docNumber ?? <span className="text-navy-300">—</span>}</td>
+                      <td data-label="Status" className={tdText}>
                         <StatusBadge status={h.status === "completed" ? h.paymentStatus : h.status} />
                       </td>
-                      <td className={`${tdNum} font-semibold`}>
+                      <td data-label="Total" className={`${tdNum} font-semibold`}>
                         <Money value={h.grandTotal} />
                       </td>
-                      <td className={tdNum}>
+                      <td data-label="Paid" className={tdNum}>
                         <Money value={h.amountPaid} />
                       </td>
                     </tr>
@@ -165,7 +165,7 @@ function Detail({ icon, label, value, mono }: { icon?: React.ReactNode; label: s
     <div className="flex gap-3 border-b border-navy-100 pb-3 last:border-0 last:pb-0">
       <span className="mt-0.5 w-4 shrink-0 text-navy-400">{icon}</span>
       <div className="min-w-0">
-        <div className="label-mono text-navy-500">{label}</div>
+        <div className="label-caps text-navy-500">{label}</div>
         <div className={mono ? "mt-0.5 break-all font-mono text-[13px]" : "mt-0.5"}>{value ?? <span className="text-navy-400">Not recorded</span>}</div>
       </div>
     </div>
