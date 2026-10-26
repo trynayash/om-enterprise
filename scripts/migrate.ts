@@ -8,12 +8,13 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 import * as schema from "../src/server/db/schema";
 import { bootstrap } from "../src/server/bootstrap";
+import { withExplicitSsl } from "../src/server/db/ssl";
 
 async function main() {
   // Schema changes go over a direct connection when the host also offers a pooled one (Neon).
   const url = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
-  const pool = new Pool({ connectionString: url, max: 2 });
+  const pool = new Pool({ connectionString: withExplicitSsl(url), max: 2 });
   try {
     const db = drizzle(pool, { schema });
     console.log("Applying migrations…");
