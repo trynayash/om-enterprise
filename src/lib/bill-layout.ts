@@ -11,6 +11,12 @@ export const stateLabel = (code: string | null | undefined, name: string | null 
 
 export const PAYMENT_METHOD_LABEL: Record<string, string> = { upi: "UPI", cash: "Cash", card: "Card", bank_transfer: "Bank transfer", cheque: "Cheque", other: "Other" };
 
+/**
+ * The label on the customer's copy, however it reaches them (email, WhatsApp, the share link): the
+ * same every time, even after the counter has printed the bill. A quotation carries none.
+ */
+export const customerCopyLabel = (docType: string) => (docType === "quotation" ? null : "Original for recipient");
+
 /** Colour and Material from a variant's attributes, whatever the shop called them ("Color", "Shade"). */
 export function colourAndMaterial(attributes: Record<string, string> | null | undefined): { colour: string | null; material: string | null } {
   let colour: string | null = null;

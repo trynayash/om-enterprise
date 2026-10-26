@@ -5,7 +5,8 @@ import { auditLogs, customers, sales } from "@/server/db/schema";
 import { getSettings, saveSettings } from "@/server/settings";
 import { addLine, createSale, finalizeSale } from "@/server/services/sales";
 import { recordVerifiedPayment } from "@/server/services/payments";
-import { cancelBill, issueBill, saveSaleCustomer } from "@/server/services/documents";
+import { cancelBill, issueBill, recordPrint, saveSaleCustomer } from "@/server/services/documents";
+import { readImportFile } from "@/lib/import-files";
 import { emailDocument, emailHistory, emailInfoFor, MAX_EMAILS_PER_DOCUMENT } from "@/server/services/document-email";
 import { getDocument } from "@/server/services/documents";
 import { gstinCheckChar } from "@/lib/india";
@@ -124,6 +125,20 @@ describe("emailing a bill", () => {
     expect(err.message).toMatch(/not set up/);
     expect((await emailInfoFor({ ...(await getDocument(real.sachin, real.doc.id)) }))?.ready).toBe(false);
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("labels the emailed PDF 'Original for recipient', even after the counter printed the bill and on a second email", async () => {
+    const { kishan, sachin, doc } = await issuedBill();
+    await recordPrint(kishan, doc.id, "pdf");
+    const fetchMock = resend();
+    await emailDocument(sachin, doc.id);
+    await emailDocument(sachin, doc.id);
+    for (const call of [0, 1]) {
+      const pdf = Buffer.from(sentBody(fetchMock, call).attachments[0].content, "base64");
+      const text = (await readImportFile("bill.pdf", new Uint8Array(pdf))).tables[0].rows.flat().join(" ");
+      expect(text).toContain("Original for recipient");
+      expect(text).not.toMatch(/Reprint/);
+    }
   });
 
   it("does not email a cancelled bill", async () => {

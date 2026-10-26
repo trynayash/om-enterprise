@@ -12,6 +12,7 @@ import { updateCustomer } from "@/server/services/customers";
 import { documentLabel } from "@/server/email/bill-email";
 import { formatINR } from "@/lib/money";
 import { normalizeMobile } from "@/lib/india";
+import { customerCopyLabel } from "@/lib/bill-layout";
 import type { DocSnapshot, DocumentWhatsAppInfo } from "@/lib/document-types";
 
 /** A bill can be sent on WhatsApp this many times; more is a mistake, not a customer who lost it. */
@@ -65,7 +66,7 @@ export async function whatsappDocument(actor: Actor, documentId: string, input: 
   if ((before?.count ?? 0) >= MAX_WHATSAPP_PER_DOCUMENT)
     throw conflict(`This bill has already been sent on WhatsApp ${MAX_WHATSAPP_PER_DOCUMENT} times. Download the PDF and send it yourself if it is needed again.`);
 
-  const pdf = await renderDocumentPdf(s, { status: doc.status, copyLabel: doc.printCount > 0 || before ? "Copy" : "Original for Recipient" });
+  const pdf = await renderDocumentPdf(s, { status: doc.status, copyLabel: customerCopyLabel(doc.docType) });
   const db = getDb();
   let sent: { id: string | null };
   try {

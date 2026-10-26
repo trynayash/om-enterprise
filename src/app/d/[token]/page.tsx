@@ -10,6 +10,7 @@ import { DocumentView } from "@/components/documents/document-view";
 import { LogoMark } from "@/components/ui/logo";
 import { Skeleton } from "@/components/ui/page";
 import { LinkButton, buttonClass } from "@/components/ui/button";
+import { customerCopyLabel } from "@/lib/bill-layout";
 import { PrintButton } from "./print-button";
 
 export const metadata: Metadata = {
@@ -102,7 +103,7 @@ async function SharedDocument({ params }: { params: PageProps<"/d/[token]">["par
       </header>
       <main className="mx-auto max-w-[210mm] px-2 py-5 sm:px-4 sm:py-10 print:p-0">
         <div className="animate-rise overflow-hidden rounded-md border border-navy-200 bg-white shadow-[0_1px_0_rgb(13_27_48/0.04),0_18px_40px_-24px_rgb(13_27_48/0.35)] print:animate-none print:rounded-none print:border-0 print:shadow-none">
-          <DocumentView snapshot={doc.snapshot} status={doc.status} cancelReason={doc.cancelReason} copyLabel="Customer copy" />
+          <DocumentView snapshot={doc.snapshot} status={doc.status} cancelReason={doc.cancelReason} copyLabel={customerCopyLabel(doc.docType)} />
         </div>
         <p className="no-print mt-4 text-center text-xs text-navy-500">This is a secure link to your document. Please don&apos;t share it with others.</p>
       </main>

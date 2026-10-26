@@ -8,7 +8,8 @@ import { auditLogs, customers } from "@/server/db/schema";
 import { getSettings } from "@/server/settings";
 import { addLine, createSale, finalizeSale } from "@/server/services/sales";
 import { recordVerifiedPayment } from "@/server/services/payments";
-import { issueBill, saveSaleCustomer } from "@/server/services/documents";
+import { issueBill, issueQuotation, recordPrint, saveSaleCustomer } from "@/server/services/documents";
+import { readImportFile } from "@/lib/import-files";
 import { MAX_WHATSAPP_PER_DOCUMENT, whatsappDocument, whatsappInfoFor } from "@/server/services/document-whatsapp";
 import { getDocument } from "@/server/services/documents";
 import { createCustomer } from "@/server/services/customers";
@@ -43,6 +44,8 @@ async function paidBill(seller: Actor, admin: Actor, customer: { name: string; m
 
 /** A mobile number no other test uses. */
 const randomMobile = () => `9${String(Math.floor(Math.random() * 1e9)).padStart(9, "0")}`;
+
+const pdfText = async (file: string) => (await readImportFile("bill.pdf", new Uint8Array(await readFile(file)))).tables[0].rows.flat().join(" ");
 
 const sent = async () => {
   const folders = await readdir(outbox);
@@ -98,6 +101,31 @@ describe("sending a bill on WhatsApp from the shop's number", () => {
     await whatsappDocument(sachin, doc.id, { to: "98765 11122", saveToCustomer: true });
     const [c] = await getDb().select().from(customers).where(eq(customers.name, name));
     expect(c.whatsapp).toBe("9876511122");
+  });
+
+  it("labels the customer's PDF 'Original for recipient' even after the counter printed it; a quotation has no label", async () => {
+    const owner = await makeUser("super_admin");
+    const sachin = await makeUser("sales");
+    const doc = await paidBill(sachin, owner, { name: `Label ${uid()}`, mobile: randomMobile() });
+    await recordPrint(owner, doc.id, "pdf");
+    await whatsappDocument(sachin, doc.id);
+    await whatsappDocument(sachin, doc.id);
+    const file = `${doc.docNumber.replace(/\//g, "-")}.pdf`;
+    const pdfs = (await sent()).filter((m) => m.filename === file);
+    expect(pdfs).toHaveLength(2);
+    for (const m of pdfs) {
+      const text = await pdfText(path.join(outbox, m.id, m.file));
+      expect(text).toContain("Original for recipient");
+      expect(text).not.toMatch(/Reprint|Copy/);
+    }
+
+    const item = await makeItem(owner, { price: "450", gst: "18" });
+    const draft = await createSale(sachin);
+    await addLine(sachin, draft.id, { variantId: item.variantId, quantity: "1" });
+    const quote = await issueQuotation(sachin, draft.id);
+    await whatsappDocument(sachin, quote.id, { to: randomMobile() });
+    const q = (await sent()).find((m) => m.filename === `${quote.docNumber.replace(/\//g, "-")}.pdf`);
+    expect(await pdfText(path.join(outbox, q.id, q.file))).not.toMatch(/Original for recipient|Reprint|Copy/);
   });
 
   it("allows five sends of one bill, and none of a practice bill or when WhatsApp is not set up", async () => {

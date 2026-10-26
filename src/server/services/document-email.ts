@@ -11,6 +11,7 @@ import { renderDocumentPdf } from "@/server/pdf/document-pdf";
 import { getDocument } from "@/server/services/documents";
 import { updateCustomer } from "@/server/services/customers";
 import { isValidEmail } from "@/lib/india";
+import { customerCopyLabel } from "@/lib/bill-layout";
 import type { DocumentEmailInfo, DocSnapshot } from "@/lib/document-types";
 
 /** A bill can be emailed this many times; more than that is a mistake or misuse, not a customer who lost it. */
@@ -62,11 +63,7 @@ export async function emailDocument(actor: Actor, documentId: string, input: { t
 
   const base = process.env.APP_BASE_URL?.replace(/\/$/, "");
   const viewUrl = doc.shareToken && base ? `${base}/d/${doc.shareToken}` : null;
-  const pdf = await renderDocumentPdf(s, {
-    status: doc.status,
-    cancelReason: doc.cancelReason,
-    copyLabel: doc.printCount > 0 || before ? `Reprint (copy ${doc.printCount + (before?.count ?? 0) + 1})` : "Original for recipient",
-  });
+  const pdf = await renderDocumentPdf(s, { status: doc.status, cancelReason: doc.cancelReason, copyLabel: customerCopyLabel(doc.docType) });
   const mail = billEmail(s, { viewUrl, logoUrl: base ? `${base}/brand/om-enterprise-logo-email.png` : null });
 
   const db = getDb();
