@@ -223,3 +223,20 @@ export function categoryTree<T extends CategoryOption>(cats: T[]): (T & { depth:
   for (const c of cats) if (!seen.has(c.id)) out.push({ ...c, depth: 0 });
   return out;
 }
+
+/** A category and every category under it, at any depth (for "in this category" filters). */
+export function categoryWithDescendants(cats: { id: string; parentId: string | null }[], rootId: string): string[] {
+  const byParent = new Map<string, string[]>();
+  for (const c of cats) if (c.parentId) byParent.set(c.parentId, [...(byParent.get(c.parentId) ?? []), c.id]);
+  const out: string[] = [];
+  const seen = new Set<string>();
+  const queue = [rootId];
+  while (queue.length) {
+    const id = queue.shift()!;
+    if (seen.has(id)) continue;
+    seen.add(id);
+    out.push(id);
+    queue.push(...(byParent.get(id) ?? []));
+  }
+  return out;
+}
