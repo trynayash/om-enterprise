@@ -67,7 +67,7 @@ export function useWhatsAppBill(documentId: string, docNumber: string, info: Doc
   // Without the shop's number connected: the PDF file through the phone's share sheet.
   const shareFile = async () => {
     try {
-      const res = await fetch(`/api/documents/${documentId}/pdf`, { credentials: "same-origin" });
+      const res = await fetch(`/api/documents/${documentId}/pdf?copy=customer`, { credentials: "same-origin" });
       if (!res.ok) throw new Error("Could not get the PDF. Try again.");
       const file = new File([await res.blob()], `${docNumber.replace(/\//g, "-")}.pdf`, { type: "application/pdf" });
       await navigator.share({ files: [file], text: message });

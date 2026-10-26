@@ -3,8 +3,12 @@
  * "24-Gujarat", how a payment is named, a variant's Colour and Material, and (when the bill is
  * issued) what the customer saved.
  */
-import type { DocLine } from "@/lib/document-types";
+import { DOC_TYPE_LABEL, type DocLine, type DocSnapshot } from "@/lib/document-types";
 import { D, m, type Dec } from "@/lib/money";
+
+/** "Bill of Supply" from "BILL OF SUPPLY", "Invoice-cum-Bill of Supply" from "INVOICE-CUM-BILL OF SUPPLY". */
+export const documentTitle = (s: Pick<DocSnapshot, "title" | "docType">) =>
+  s.title.toLowerCase().replace(/[a-z]+/g, (w, at: number) => (at > 0 && (w === "of" || w === "cum") ? w : w.charAt(0).toUpperCase() + w.slice(1))) || DOC_TYPE_LABEL[s.docType];
 
 /** "24-Gujarat", as GST forms write a state. */
 export const stateLabel = (code: string | null | undefined, name: string | null | undefined) => [code, name].filter(Boolean).join("-");

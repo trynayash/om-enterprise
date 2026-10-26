@@ -6,13 +6,14 @@ import "server-only";
  */
 import PDFDocument from "pdfkit";
 import type { DocSnapshot } from "@/lib/document-types";
+import { documentTitle } from "@/lib/bill-layout";
 import { FONT_FILES, LOGO_FILE, PAGE_H, PAGE_W, RULE_COLOR, TEXT_COLOR, layoutDocument, type SheetOptions } from "./bill-sheet";
 
 export type PdfOptions = SheetOptions;
 
 export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Promise<Buffer> {
   const pages = layoutDocument(snap, opts);
-  const doc = new PDFDocument({ size: [PAGE_W, PAGE_H], margin: 0, autoFirstPage: false, info: { Title: `${snap.title} ${snap.number}`, Author: snap.seller.name } });
+  const doc = new PDFDocument({ size: [PAGE_W, PAGE_H], margin: 0, autoFirstPage: false, info: { Title: `${documentTitle(snap)} ${snap.number}`, Author: snap.seller.name } });
   for (const [k, file] of Object.entries(FONT_FILES)) doc.registerFont(k, file);
   const chunks: Buffer[] = [];
   doc.on("data", (c: Buffer) => chunks.push(c));

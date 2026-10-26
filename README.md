@@ -428,7 +428,7 @@ A free Gmail account can send to about 500 recipients a day, which is far more t
 3. **Permanent key.** Business Settings → Users → **System users** → add one (Admin) → assign the app and the WhatsApp account → **Generate token** with `whatsapp_business_messaging` and `whatsapp_business_management`, set to never expire. Copy it once.
 4. **Message template.** WhatsApp Manager → Message templates → Create: category **Utility**, name `bill_pdf`, language **English**.
    - Header: **Document**.
-   - Body: `Hello {{1}}, thank you for shopping with OM ENTERPRISE. Your {{2}} for {{3}} is attached as a PDF. For any question, reply here or call 7621934414.`
+   - Body: `Hello {{1}}, thank you for shopping with OM ENTERPRISE. Your {{2}} for {{3}} is attached as a PDF. For any question, call or WhatsApp us on 7621934414.` (The app does not read replies sent to the bills number, so the message points customers to the shop's own number.)
    - Samples: `Ramesh Patel`, `Bill of Supply BS/26-27/00012`, `₹2,650.00`. Submit; Meta usually approves utility templates quickly.
 5. **Payment.** Add a payment method to the WhatsApp account. Meta charges a small fee for each bill message delivered (see Meta's current price list for India).
 6. **Server.** Set on the host (Vercel: Project → Settings → Environment Variables; the token *Sensitive*) and redeploy:

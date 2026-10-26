@@ -460,6 +460,22 @@ describe("customer asked before payment", () => {
     expect(other!.id).not.toBe(first!.id);
   });
 
+  it("a bill of supply to a GST-registered buyer needs the buyer's address (Rule 49)", async () => {
+    await setRegistration("composition");
+    try {
+      const kishan = await makeUser("super_admin");
+      const { sale } = await finalizedSale(kishan, kishan);
+      expect((await rejects(saveSaleCustomer(kishan, sale.id, { name: "Builder Co", gstin: BUYER_GSTIN }))).message).toMatch(/name, address and state/);
+      await saveSaleCustomer(kishan, sale.id, { name: "Builder Co", gstin: BUYER_GSTIN, billingAddress: "GIDC, Vadodara" });
+      await payInFull(kishan, sale.id);
+      const doc = await issueBill(kishan, sale.id);
+      expect(doc.docType).toBe("bill_of_supply");
+      expect((await getDocument(kishan, doc.id)).snapshot.buyer).toMatchObject({ gstin: BUYER_GSTIN, address: "GIDC, Vadodara" });
+    } finally {
+      await setRegistration("regular");
+    }
+  });
+
   it("a bill of supply asks for no address", async () => {
     await setRegistration("composition");
     try {

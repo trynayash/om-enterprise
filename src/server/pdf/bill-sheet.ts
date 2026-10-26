@@ -13,7 +13,7 @@ import path from "node:path";
 import PDFDocument from "pdfkit";
 import { DOC_TYPE_LABEL, type DocLine, type DocSnapshot } from "@/lib/document-types";
 import { D, formatINR, formatQty, m } from "@/lib/money";
-import { PAYMENT_METHOD_LABEL, stateLabel, youSavedOf } from "@/lib/bill-layout";
+import { PAYMENT_METHOD_LABEL, documentTitle, stateLabel, youSavedOf } from "@/lib/bill-layout";
 
 export const PAGE_W = 595.28;
 export const PAGE_H = 841.89;
@@ -174,10 +174,6 @@ const dateIN = (iso: string) => {
   return `${get("day")}-${get("month")}-${get("year")}`;
 };
 
-/** "Bill of Supply" from "BILL OF SUPPLY", "Invoice-cum-Bill of Supply" from "INVOICE-CUM-BILL OF SUPPLY". */
-const titleOf = (s: DocSnapshot) =>
-  s.title.toLowerCase().replace(/[a-z]+/g, (w, at: number) => (at > 0 && (w === "of" || w === "cum") ? w : w.charAt(0).toUpperCase() + w.slice(1))) || DOC_TYPE_LABEL[s.docType];
-
 /** Units as short codes in capitals ("PCS"); bills from before the code was kept show the name. */
 const unitText = (l: DocLine) => (l.unitCode ?? l.unit).toUpperCase();
 
@@ -285,7 +281,7 @@ function frame(p: Page, edges: number[]) {
 }
 
 function header(p: Page, s: DocSnapshot, opts: SheetOptions) {
-  p.text(titleOf(s), MID, 41.3, { size: 8.85, bold: true, align: "center" });
+  p.text(documentTitle(s), MID, 41.3, { size: 8.85, bold: true, align: "center" });
   if (opts.copyLabel) p.text(opts.copyLabel, BOX.r, 42.5, { align: "right" });
 
   // Seller, beside the logo

@@ -114,7 +114,7 @@ function partyFromCustomer(c: Customer | null): DocParty | null {
   };
 }
 
-/** Rule 46(d)/(e) recipient-detail checks for tax invoices; place-of-supply consistency. */
+/** Rule 46(d)/(e) recipient-detail checks for tax invoices, Rule 49(d) for bills of supply; place-of-supply consistency. */
 export function checkBuyerRequirements(args: {
   regType: Settings["tax"]["registrationType"];
   docType: DocType;
@@ -124,6 +124,9 @@ export function checkBuyerRequirements(args: {
   placeOfSupply: string;
 }) {
   const { regType, docType, buyer, taxableTotal, threshold, placeOfSupply } = args;
+  if (docType === "bill_of_supply" && buyer?.gstin && (!buyer.name || !buyer.address || !buyer.stateCode)) {
+    throw new AppError("VALIDATION", "GST-registered buyer: customer name, address and state are required on the bill", { field: "customer" });
+  }
   if (regType !== "regular" || docType !== "tax_invoice") return;
   const needFull = (why: string) => {
     if (!buyer?.name || !buyer.address || !buyer.stateCode) {

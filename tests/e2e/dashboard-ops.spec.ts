@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { login, makeTrainingBill, OWNER } from "./helpers";
+import { apiCall, login, makeTrainingBill, OWNER } from "./helpers";
 import { formatINR } from "../../src/lib/money";
 
 test.describe("dashboard operations", () => {
@@ -38,5 +38,10 @@ test.describe("dashboard operations", () => {
     expect(pdf.status()).toBe(200);
     expect(pdf.headers()["content-type"]).toBe("application/pdf");
     expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+
+    // The customer's copy (handed to WhatsApp on the counter phone) is not counted as a print.
+    const printed = (await apiCall<{ printCount: number }>(page, "GET", `/api/documents/${bill.documentId}`)).printCount;
+    expect((await page.request.get(`/api/documents/${bill.documentId}/pdf?copy=customer`)).status()).toBe(200);
+    expect((await apiCall<{ printCount: number }>(page, "GET", `/api/documents/${bill.documentId}`)).printCount).toBe(printed);
   });
 });

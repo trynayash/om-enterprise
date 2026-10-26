@@ -88,11 +88,12 @@ export function customerBody(form: BuyerForm, defaultState: string) {
 export function buyerRules(form: BuyerForm, config: PosConfig, taxableTotal: string) {
   const regular = config.registrationType === "regular";
   const overThreshold = D(taxableTotal).greaterThanOrEqualTo(D(config.b2cDetailsThreshold));
+  const registeredBuyer = !!form.gstin.trim() && (regular || config.registrationType === "composition");
   return {
     regular,
     overThreshold,
-    /** Name, address and state must all be given (Rule 46): a registered buyer, or a bill at or above the threshold. */
-    detailsRequired: regular && (overThreshold || !!form.gstin.trim()),
+    /** Name, address and state must all be given (Rules 46 and 49): a registered buyer, or a tax invoice at or above the threshold. */
+    detailsRequired: registeredBuyer || (regular && overThreshold),
     /** A bill with no customer details at all is allowed. */
     canSkip: !(regular && overThreshold),
   };

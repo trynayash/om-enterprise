@@ -88,13 +88,13 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
               shareToken={doc.status === "issued" ? doc.shareToken : null}
               businessName={s.seller.name}
               canShare={can(actor, "documents.share")}
-              showPdf={false}
+              showPdf={doc.docType === "quotation"}
               email={await emailInfoFor(doc)}
           whatsapp={await whatsappInfoFor(doc)}
             />
           </ClientOnly>
           <div className="flex flex-wrap items-center gap-2">
-            <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />
+            {doc.docType !== "quotation" && <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />}
             {actor.isSuperAdmin && doc.docType === "quotation" && (
               <DeleteRecord kind="quotation" id={doc.id} name={doc.docNumber} phrase={deletePhrase(actor.username)} consequences={[]} afterDelete="/dashboard/documents" />
             )}
