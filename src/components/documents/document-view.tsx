@@ -8,14 +8,13 @@
 import type { DocSnapshot } from "@/lib/document-types";
 import { formatINR, formatQty } from "@/lib/money";
 import { formatPhone } from "@/lib/india";
+import { discountPercent, optionalColumns, PAYMENT_METHOD_LABEL, showsPaymentTotals, stateLabel } from "@/lib/bill-layout";
 import { LogoMark } from "@/components/ui/logo";
 import { cn } from "@/components/ui/cn";
 
 function dt(iso: string) {
   return new Date(iso).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
 }
-
-const METHOD: Record<string, string> = { upi: "UPI", cash: "Cash", card: "Card", bank_transfer: "Bank transfer", cheque: "Cheque", other: "Other" };
 
 /** Small section label: brass mono caps. */
 function Caption({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -36,7 +35,10 @@ export function DocumentView({
   className?: string;
 }) {
   const inter = s.supplyType === "inter";
-  const num = "whitespace-nowrap px-2 py-2 text-right font-mono tabular";
+  const opt = optionalColumns(s.lines);
+  const num = "whitespace-nowrap px-1.5 py-2 text-right font-mono tabular";
+  // Inside the table only the Amount column carries ₹, so that every column fits on A4.
+  const plain = (v: string) => formatINR(v).replace("₹", "");
   return (
     <article className={cn("relative mx-auto w-full max-w-[210mm] overflow-hidden bg-white p-5 text-[13px] leading-normal text-navy-900 sm:p-10 print:p-0", className)}>
       {(s.watermark || status === "cancelled") && (
@@ -68,13 +70,14 @@ export function DocumentView({
               ))}
               <div>
                 Phone/WhatsApp: <span className="font-mono text-[11.5px]">{formatPhone(s.seller.phone)}</span>
-                {s.seller.email ? ` · ${s.seller.email}` : ""}
               </div>
+              {s.seller.email && <div className="break-all">Email: {s.seller.email}</div>}
               {s.seller.gstin && (
                 <div className="mt-0.5 font-semibold text-navy-950">
                   GSTIN: <span className="font-mono">{s.seller.gstin}</span>
                 </div>
               )}
+              <div>State: {stateLabel(s.seller.stateCode, s.seller.stateName)}</div>
             </div>
           </div>
         </div>
@@ -102,12 +105,14 @@ export function DocumentView({
                 </dd>
               </>
             )}
-            {s.showTax && (
+            {s.placeOfSupply.stateCode && (
               <>
                 <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Place of supply</dt>
-                <dd className="text-navy-950 sm:text-right">
-                  {s.placeOfSupply.stateName} <span className="font-mono">({s.placeOfSupply.stateCode})</span>
-                </dd>
+                <dd className="text-navy-950 sm:text-right">{stateLabel(s.placeOfSupply.stateCode, s.placeOfSupply.stateName)}</dd>
+              </>
+            )}
+            {s.showTax && (
+              <>
                 <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Reverse charge</dt>
                 <dd className="text-navy-950 sm:text-right">{s.reverseCharge ? "Yes" : "No"}</dd>
               </>
@@ -125,7 +130,8 @@ export function DocumentView({
         {s.buyer ? (
           <div className="mt-1 text-xs leading-relaxed text-navy-600">
             <div className="text-sm font-semibold text-navy-950">{s.buyer.businessName ? `${s.buyer.businessName} (${s.buyer.name})` : s.buyer.name}</div>
-            {[s.buyer.address, [s.buyer.city, s.buyer.pincode].filter(Boolean).join(" "), s.buyer.stateName ? `${s.buyer.stateName} (${s.buyer.stateCode})` : null].filter(Boolean).join(", ")}
+            {[s.buyer.address, [s.buyer.city, s.buyer.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
+            {s.buyer.stateCode && <div>State: {stateLabel(s.buyer.stateCode, s.buyer.stateName)}</div>}
             {(s.buyer.mobile || s.buyer.email) && (
               <div>
                 {s.buyer.mobile && (
@@ -162,14 +168,23 @@ export function DocumentView({
                     <span className="ml-1.5 inline-block border border-red-600 px-1 align-[1px] font-mono text-[8.5px] font-semibold leading-[1.35] tracking-[0.08em] text-red-700">SAMPLE</span>
                   )}
                 </div>
-                <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">{[l.hsn ? `HSN ${l.hsn}` : null, l.sku].filter(Boolean).join(" · ")}</div>
+                <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">
+                  {[l.hsn ? `HSN ${l.hsn}` : null, l.colour ? `Colour ${l.colour}` : null, l.material ? `Material ${l.material}` : null, l.sku].filter(Boolean).join(" · ")}
+                </div>
               </div>
               <div className="shrink-0 font-mono text-[13px] font-semibold tabular text-navy-950">{formatINR(l.total)}</div>
             </div>
             <div className="mt-1.5 font-mono text-[11.5px] tabular text-navy-600">
               {formatQty(l.quantity)} <span className="font-sans">{l.unit}</span> × {formatINR(l.unitPrice)}
               {s.showTax && <span className="font-sans text-navy-500"> {l.priceIncludesTax ? "incl. GST" : "excl. GST"}</span>}
-              {Number(l.discount) ? <> · disc. {formatINR(l.discount)}</> : null}
+              {Number(l.discount) ? (
+                <>
+                  {" "}
+                  · disc. {formatINR(l.discount)}
+                  {discountPercent(l) ? ` (${discountPercent(l)})` : ""}
+                </>
+              ) : null}
+              {l.mrp ? <> · MRP {formatINR(l.mrp)}</> : null}
             </div>
             {s.showTax && (
               <div className="mt-0.5 font-mono text-[11px] tabular text-navy-500">
@@ -187,38 +202,60 @@ export function DocumentView({
       <div className="mt-5 hidden overflow-x-auto sm:block print:block">
         <table className="w-full min-w-[600px] border-collapse text-xs">
           <thead>
-            <tr className="border-y-[1.5px] border-navy-950 text-left font-mono text-[10px] uppercase tracking-[0.08em] text-navy-700">
-              <th className="w-8 px-2 py-2 text-center font-medium">#</th>
-              <th className="min-w-[11rem] px-2 py-2 font-medium">Item{s.showTax ? " (HSN)" : ""}</th>
-              <th className="px-2 py-2 text-right font-medium">Qty</th>
-              <th className="px-2 py-2 text-right font-medium">Rate</th>
-              <th className="px-2 py-2 text-right font-medium">Disc.</th>
-              {s.showTax && <th className="px-2 py-2 text-right font-medium">Taxable</th>}
-              {s.showTax && <th className="px-2 py-2 text-right font-medium">{inter ? "IGST" : "CGST / SGST"}</th>}
-              <th className="px-2 py-2 text-right font-medium">Amount</th>
+            <tr className="border-y-[1.5px] border-navy-950 text-left font-mono text-[10px] uppercase tracking-[0.04em] text-navy-700">
+              <th className="w-8 px-1.5 py-2 text-center font-medium">#</th>
+              <th className="min-w-[9rem] px-1.5 py-2 font-medium">{s.showTax ? "Item (HSN)" : "Item name"}</th>
+              {!s.showTax && <th className="px-1.5 py-2 font-medium">HSN/SAC</th>}
+              {!s.showTax && opt.colour && <th className="px-1.5 py-2 font-medium">Colour</th>}
+              {!s.showTax && opt.material && <th className="px-1.5 py-2 font-medium">Material</th>}
+              {opt.mrp && <th className="px-1.5 py-2 text-right font-medium">MRP</th>}
+              <th className="px-1.5 py-2 text-right font-medium">Qty</th>
+              {!s.showTax && <th className="px-1.5 py-2 font-medium">Unit</th>}
+              <th className="px-1.5 py-2 text-right font-medium">{s.showTax ? "Rate" : "Price/Unit"}</th>
+              <th className="px-1.5 py-2 text-right font-medium">Discount</th>
+              {s.showTax && <th className="px-1.5 py-2 text-right font-medium">Taxable</th>}
+              {s.showTax && <th className="px-1.5 py-2 text-right font-medium">{inter ? "IGST" : "CGST / SGST"}</th>}
+              <th className="px-1.5 py-2 text-right font-medium">Amount</th>
             </tr>
           </thead>
           <tbody className="text-[11.5px]">
             {s.lines.map((l) => (
               <tr key={l.sl} className="border-b border-navy-200 align-top last:border-navy-950">
-                <td className="px-2 py-2 text-center font-mono text-navy-500">{l.sl}</td>
-                <td className="px-2 py-2">
+                <td className="px-1.5 py-2 text-center font-mono text-navy-500">{l.sl}</td>
+                <td className="px-1.5 py-2">
                   <div className="text-[12.5px] font-medium leading-snug text-navy-950">
                     {l.description}
                     {l.isSample && (
                       <span className="ml-1.5 inline-block border border-red-600 px-1 align-[1px] font-mono text-[8.5px] font-semibold leading-[1.35] tracking-[0.08em] text-red-700">SAMPLE</span>
                     )}
                   </div>
-                  <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">{[l.hsn ? `HSN ${l.hsn}` : null, l.sku].filter(Boolean).join(" · ")}</div>
+                  <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">
+                    {(s.showTax ? [l.hsn ? `HSN ${l.hsn}` : null, l.colour ? `Colour ${l.colour}` : null, l.material ? `Material ${l.material}` : null, l.sku] : [l.sku]).filter(Boolean).join(" · ")}
+                  </div>
                 </td>
+                {!s.showTax && <td className="px-1.5 py-2 font-mono text-navy-700">{l.hsn}</td>}
+                {!s.showTax && opt.colour && <td className="px-1.5 py-2 text-navy-800">{l.colour}</td>}
+                {!s.showTax && opt.material && <td className="px-1.5 py-2 text-navy-800">{l.material}</td>}
+                {opt.mrp && <td className={num}>{l.mrp ? plain(l.mrp) : ""}</td>}
                 <td className={num}>
-                  {formatQty(l.quantity)} <span className="font-sans text-navy-500">{l.unit}</span>
+                  {formatQty(l.quantity)}
+                  {s.showTax && <span className="font-sans text-navy-500"> {l.unit}</span>}
                 </td>
+                {!s.showTax && <td className="px-1.5 py-2 text-navy-700">{l.unit}</td>}
                 <td className={num}>
-                  {formatINR(l.unitPrice)}
+                  {plain(l.unitPrice)}
                   {s.showTax && <div className="font-sans text-[10px] text-navy-500">{l.priceIncludesTax ? "incl. GST" : "excl. GST"}</div>}
                 </td>
-                <td className={num}>{Number(l.discount) ? formatINR(l.discount) : <span className="text-navy-400">—</span>}</td>
+                <td className={num}>
+                  {Number(l.discount) ? (
+                    <>
+                      {plain(l.discount)}
+                      {discountPercent(l) && <div className="text-[10px] text-navy-500">({discountPercent(l)})</div>}
+                    </>
+                  ) : (
+                    <span className="text-navy-400">—</span>
+                  )}
+                </td>
                 {s.showTax && <td className={num}>{formatINR(l.taxableValue)}</td>}
                 {s.showTax && (
                   <td className={num}>
@@ -250,6 +287,10 @@ export function DocumentView({
       {/* Tax summary & payment | totals */}
       <div className="mt-6 grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto]">
         <div className="space-y-5 text-xs">
+          <div>
+            <Caption>Amount in words</Caption>
+            <div className="mt-1 font-semibold text-navy-950">{s.totals.amountInWords}</div>
+          </div>
           {s.showTax && s.taxSummary.length > 0 && (
             <div>
               <Caption>Tax summary (HSN-wise)</Caption>
@@ -291,11 +332,12 @@ export function DocumentView({
           )}
           {s.docType !== "quotation" && (
             <div>
-              <Caption>{s.docType === "credit_note" ? "Refund" : "Payment"}</Caption>
+              <Caption>{s.docType === "credit_note" ? "Refund" : "Payment mode"}</Caption>
               <div className="mt-1.5 space-y-0.5 text-navy-700">
                 {s.payments.map((p, i) => (
                   <div key={i}>
-                    {p.direction === "refund" ? "Refund" : "Received"} · {METHOD[p.method] ?? p.method}
+                    {p.direction === "refund" ? "Refund · " : ""}
+                    {PAYMENT_METHOD_LABEL[p.method] ?? p.method}
                     {p.reference ? (
                       <>
                         {" "}
@@ -329,7 +371,13 @@ export function DocumentView({
             <dt className="text-[13px] font-semibold uppercase tracking-[0.04em] text-navy-950">{s.docType === "credit_note" ? "Credit total" : "Grand total"}</dt>
             <dd className="headline text-[1.75rem] font-bold text-navy-950 tabular">{formatINR(s.totals.grandTotal)}</dd>
           </div>
-          <div className="mt-1.5 max-w-[290px] text-[11px] leading-snug text-navy-600 sm:ml-auto sm:text-right">{s.totals.amountInWords}</div>
+          {showsPaymentTotals(s) && (
+            <>
+              <Row k="Received" v={formatINR(s.amountPaid)} />
+              <Row k="Balance" v={formatINR(s.balanceDue)} />
+            </>
+          )}
+          {s.docType !== "credit_note" && Number(s.totals.youSaved) > 0 && <Row k={s.docType === "quotation" ? "You save" : "You saved"} v={formatINR(s.totals.youSaved)} />}
         </dl>
       </div>
 

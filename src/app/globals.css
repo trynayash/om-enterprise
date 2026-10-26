@@ -287,11 +287,9 @@
   body {
     background: #fff;
   }
+  /* Bills are always printed on A4, whatever the printer's default paper. */
   @page {
-    size: A4;
+    size: A4 portrait;
     margin: 12mm;
-  }
-  .print-thermal {
-    width: 72mm;
   }
 }

@@ -10,6 +10,7 @@ import PDFDocument from "pdfkit";
 import type { DocSnapshot } from "@/lib/document-types";
 import { formatINR, formatQty } from "@/lib/money";
 import { formatPhone } from "@/lib/india";
+import { discountPercent, optionalColumns, PAYMENT_METHOD_LABEL, showsPaymentTotals, stateLabel } from "@/lib/bill-layout";
 
 const NAVY = "#0D1B30";
 const GOLD = "#9E7518";
@@ -132,13 +133,13 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     .fillColor(GOLD)
     .text(snap.seller.tagline.toUpperCase(), L + 56, y + 22, { width: 270, characterSpacing: 1 });
   doc.font("R").fontSize(8).fillColor(GREY);
+  // The seller's lines stop short of the document number block on the right.
+  const sellerW = R - 200 - 10 - (L + 56);
   let hy = y + 34;
-  for (const line of snap.seller.addressLines) {
-    doc.text(line, L + 56, hy, { width: 270 });
-    hy += 10;
+  for (const line of [...snap.seller.addressLines, `Phone/WhatsApp: ${formatPhone(snap.seller.phone)}`, ...(snap.seller.email ? [`Email: ${snap.seller.email}`] : [])]) {
+    doc.text(line, L + 56, hy, { width: sellerW });
+    hy = doc.y + 0.5;
   }
-  doc.text(`Phone/WhatsApp: ${formatPhone(snap.seller.phone)}${snap.seller.email ? `  ·  ${snap.seller.email}` : ""}`, L + 56, hy, { width: 300 });
-  hy += 10;
   if (snap.seller.gstin) {
     doc
       .font("B")
@@ -146,6 +147,11 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
       .text(`GSTIN: ${snap.seller.gstin}`, L + 56, hy);
     hy += 10;
   }
+  doc
+    .font("R")
+    .fillColor(GREY)
+    .text(`State: ${stateLabel(snap.seller.stateCode, snap.seller.stateName)}`, L + 56, hy);
+  hy += 10;
 
   // Title block (right)
   const tx = R - 200;
@@ -162,7 +168,7 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   ];
   if (snap.validUntil) meta.push(["Valid until", dateIN(snap.validUntil)]);
   if (snap.original) meta.push(["Against", `${snap.original.number} (${dateIN(snap.original.issuedAt)})`]);
-  if (snap.showTax) meta.push(["Place of supply", `${snap.placeOfSupply.stateName} (${snap.placeOfSupply.stateCode})`]);
+  if (snap.placeOfSupply.stateCode) meta.push(["Place of supply", stateLabel(snap.placeOfSupply.stateCode, snap.placeOfSupply.stateName)]);
   if (snap.showTax) meta.push(["Reverse charge", snap.reverseCharge ? "Yes" : "No"]);
   for (const [k, v] of meta) {
     doc.font("R").fontSize(8).fillColor(GREY).text(k, tx, ty, { width: 70, lineBreak: false });
@@ -197,10 +203,14 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   y += 13;
   doc.font("R").fontSize(8).fillColor(GREY);
   if (b) {
-    const addr = [b.address, [b.city, b.pincode].filter(Boolean).join(" "), b.stateName ? `${b.stateName} (${b.stateCode})` : null].filter(Boolean).join(", ");
+    const addr = [b.address, [b.city, b.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ");
     if (addr) {
       doc.text(addr, L, y, { width: W * 0.6 });
       y = doc.y + 2;
+    }
+    if (b.stateCode) {
+      doc.text(`State: ${stateLabel(b.stateCode, b.stateName)}`, L, y);
+      y += 10;
     }
     const contact = [b.mobile ? `Mobile: ${b.mobile}` : null, b.email].filter(Boolean).join("  ·  ");
     if (contact) {
@@ -219,28 +229,38 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   y += 6;
 
   /* ---------- Lines table ---------- */
+  // Fixed widths for the figures; the item name takes what is left. Colour, Material and MRP appear
+  // only when some line on this bill has them. With GST columns the HSN, colour and material go
+  // under the item name instead, to leave the name room.
   type Col = { key: string; label: string; w: number; align: "left" | "right" | "center" };
+  const opt = optionalColumns(snap.lines);
   const cols: Col[] = snap.showTax
     ? [
-        { key: "sl", label: "#", w: 18, align: "center" },
-        { key: "desc", label: "Item (HSN)", w: 160, align: "left" },
-        { key: "qty", label: "Qty", w: 48, align: "right" },
+        { key: "sl", label: "#", w: 16, align: "center" },
+        { key: "desc", label: "Item (HSN)", w: 0, align: "left" },
+        ...(opt.mrp ? [{ key: "mrp", label: "MRP", w: 46, align: "right" } as Col] : []),
+        { key: "qty", label: "Qty", w: 44, align: "right" },
         { key: "rate", label: "Rate", w: 52, align: "right" },
-        { key: "disc", label: "Disc.", w: 42, align: "right" },
-        { key: "taxable", label: "Taxable", w: 56, align: "right" },
-        { key: "gst", label: snap.supplyType === "inter" ? "IGST" : "CGST / SGST", w: 82, align: "right" },
+        { key: "disc", label: "Discount", w: 48, align: "right" },
+        { key: "taxable", label: "Taxable", w: 54, align: "right" },
+        { key: "gst", label: snap.supplyType === "inter" ? "IGST" : "CGST / SGST", w: 76, align: "right" },
         { key: "total", label: "Amount", w: 58, align: "right" },
       ]
     : [
-        { key: "sl", label: "#", w: 22, align: "center" },
-        { key: "desc", label: "Item", w: 255, align: "left" },
-        { key: "qty", label: "Qty", w: 60, align: "right" },
-        { key: "rate", label: "Rate", w: 65, align: "right" },
-        { key: "disc", label: "Disc.", w: 55, align: "right" },
-        { key: "total", label: "Amount", w: 66, align: "right" },
+        { key: "sl", label: "#", w: 16, align: "center" },
+        { key: "desc", label: "Item name", w: 0, align: "left" },
+        { key: "hsn", label: "HSN/SAC", w: 46, align: "left" },
+        ...(opt.colour ? [{ key: "colour", label: "Colour", w: 44, align: "left" } as Col] : []),
+        ...(opt.material ? [{ key: "material", label: "Material", w: 44, align: "left" } as Col] : []),
+        ...(opt.mrp ? [{ key: "mrp", label: "MRP", w: 48, align: "right" } as Col] : []),
+        { key: "qty", label: "Qty", w: 34, align: "right" },
+        { key: "unit", label: "Unit", w: 30, align: "left" },
+        { key: "rate", label: "Price/Unit", w: 54, align: "right" },
+        { key: "disc", label: "Discount", w: 52, align: "right" },
+        { key: "total", label: "Amount", w: 58, align: "right" },
       ];
-  const scale = W / cols.reduce((a, c) => a + c.w, 0);
-  cols.forEach((c) => (c.w *= scale));
+  const descCol = cols.find((c) => c.key === "desc")!;
+  descCol.w = W - cols.reduce((a, c) => a + c.w, 0);
 
   const header = () => {
     doc.rect(L, y, W, 16).fill(NAVY);
@@ -256,7 +276,10 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
 
   const bottomLimit = doc.page.height - doc.page.margins.bottom - 40;
   snap.lines.forEach((l, idx) => {
-    const desc = `${l.description}${l.isSample ? " [SAMPLE]" : ""}${l.hsn ? `\nHSN ${l.hsn}` : ""}${l.sku ? `${l.hsn ? " · " : "\n"}${l.sku}` : ""}`;
+    const under = snap.showTax ? [l.hsn ? `HSN ${l.hsn}` : null, l.colour ? `Colour ${l.colour}` : null, l.material ? `Material ${l.material}` : null, l.sku] : [l.sku];
+    const subline = under.filter(Boolean).join(" · ");
+    const desc = `${l.description}${l.isSample ? " [SAMPLE]" : ""}${subline ? `\n${subline}` : ""}`;
+    const pct = discountPercent(l);
     const gstText = snap.showTax
       ? Number(l.gstRate) === 0
         ? "Exempt"
@@ -267,9 +290,14 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     const cells: Record<string, string> = {
       sl: String(l.sl),
       desc,
-      qty: `${formatQty(l.quantity)} ${l.unit}`,
+      hsn: l.hsn ?? "",
+      colour: l.colour ?? "",
+      material: l.material ?? "",
+      mrp: l.mrp ? formatINR(l.mrp).replace("₹", "") : "",
+      qty: snap.showTax ? `${formatQty(l.quantity)} ${l.unit}` : formatQty(l.quantity),
+      unit: l.unit,
       rate: `${formatINR(l.unitPrice).replace("₹", "")}${snap.showTax ? (l.priceIncludesTax ? "\n(incl.)" : "\n(excl.)") : ""}`,
-      disc: Number(l.discount) ? formatINR(l.discount).replace("₹", "") : "—",
+      disc: Number(l.discount) ? `${formatINR(l.discount).replace("₹", "")}${pct ? `\n(${pct})` : ""}` : "—",
       taxable: formatINR(l.taxableValue).replace("₹", ""),
       gst: gstText,
       total: formatINR(l.total).replace("₹", ""),
@@ -316,6 +344,11 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
   }
   if (Number(t.roundOff)) rows.push(["Round off", formatINR(t.roundOff)]);
   rows.push([snap.docType === "credit_note" ? "CREDIT TOTAL" : "GRAND TOTAL", formatINR(t.grandTotal), true]);
+  if (showsPaymentTotals(snap)) {
+    rows.push(["Received", formatINR(snap.amountPaid)]);
+    rows.push(["Balance", formatINR(snap.balanceDue)]);
+  }
+  if (snap.docType !== "credit_note" && Number(t.youSaved)) rows.push([snap.docType === "quotation" ? "You save" : "You saved", formatINR(t.youSaved)]);
 
   const totalsX = R - 210;
   let ry = y;
@@ -335,15 +368,17 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
       ry += 13;
     }
   }
-  doc
-    .font("R")
-    .fontSize(7.5)
-    .fillColor(GREY)
-    .text(t.amountInWords, totalsX - 4, ry, { width: 214, align: "right" });
-  ry = doc.y + 4;
 
-  // Left column: tax summary + payments
+  // Left column: amount in words, tax summary, payments
   let ly = y;
+  doc.font("B").fontSize(7.5).fillColor(GOLD).text("AMOUNT IN WORDS", L, ly);
+  ly += 11;
+  doc
+    .font("B")
+    .fontSize(8)
+    .fillColor(NAVY)
+    .text(t.amountInWords, L, ly, { width: W - 230 });
+  ly = doc.y + 8;
   if (snap.showTax && snap.taxSummary.length) {
     doc.font("B").fontSize(7.5).fillColor(GOLD).text("TAX SUMMARY (HSN-WISE)", L, ly);
     ly += 11;
@@ -373,11 +408,12 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
       .font("B")
       .fontSize(7.5)
       .fillColor(GOLD)
-      .text(snap.docType === "credit_note" ? "REFUND" : "PAYMENT", L, ly);
+      .text(snap.docType === "credit_note" ? "REFUND" : "PAYMENT MODE", L, ly);
     ly += 11;
     doc.font("R").fontSize(8).fillColor("#1F2937");
     for (const p of snap.payments) {
-      doc.text(`${p.direction === "refund" ? "Refund" : "Received"} · ${p.method.toUpperCase()}${p.reference ? ` · Ref ${p.reference}` : ""} · ${formatINR(p.amount)}`, L, ly, { width: W - 230 });
+      const method = PAYMENT_METHOD_LABEL[p.method] ?? p.method;
+      doc.text(`${p.direction === "refund" ? "Refund · " : ""}${method}${p.reference ? ` · Ref ${p.reference}` : ""} · ${formatINR(p.amount)}`, L, ly, { width: W - 230 });
       ly = doc.y + 1;
     }
     doc
