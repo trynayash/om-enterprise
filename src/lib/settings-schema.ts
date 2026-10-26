@@ -162,7 +162,7 @@ export const SETTINGS_DEFAULTS: Settings = {
     pincode: "391150",
     phone: "7621934414",
     whatsapp: "7621934414",
-    email: "sweronkush@gmail.com",
+    email: "omenterprise1119@gmail.com",
     gstin: "",
     pan: "",
     about:
