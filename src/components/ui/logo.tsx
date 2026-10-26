@@ -1,14 +1,9 @@
+import Image from "next/image";
 import { cn } from "./cn";
 
+/** The shop's round badge logo (public/brand, made by scripts/brand-assets.mjs). Size it with h-/w- classes. */
 export function LogoMark({ className, title = "OM Enterprise" }: { className?: string; title?: string }) {
-  return (
-    <svg viewBox="0 0 64 64" className={cn("shrink-0", className ?? "h-10 w-10")} role="img" aria-label={title}>
-      <rect width="64" height="64" rx="10" fill="#0D1B30" />
-      <path d="M12 29 L32 13 L52 29" fill="none" stroke="#C39222" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="23" cy="42" r="8" fill="none" stroke="#FFFFFF" strokeWidth="4.5" />
-      <path d="M35.5 50 V35 L42.5 44 L49.5 35 V50" fill="none" stroke="#FFFFFF" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  return <Image src="/brand/om-enterprise-logo.png" width={72} height={72} alt={title} className={cn("shrink-0 rounded-full", className ?? "h-10 w-10")} />;
 }
 
 export function Logo({ className, inverted, compact, size = "md" }: { className?: string; inverted?: boolean; compact?: boolean; size?: "sm" | "md" }) {

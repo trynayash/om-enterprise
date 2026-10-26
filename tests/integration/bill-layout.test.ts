@@ -71,25 +71,27 @@ describe("a bill laid out like the shop's own (Bill of Supply 729)", () => {
     expect(Buffer.from(pdf).toString("latin1")).toMatch(/\/MediaBox \[0 0 595\.28 841\.89\]/); // A4
     const text = (await readImportFile("bill.pdf", new Uint8Array(pdf))).tables[0].rows.flat().join(" ");
     for (const want of [
-      "HSN/SAC",
+      "HSN/ SAC",
       "Colour",
       "Material",
       "MRP",
       "Unit",
-      "Price/Unit",
-      "10,000.00",
-      "(7.22%)",
-      "(12%)",
+      "Price/ Unit",
+      "10000.00",
+      "(7.216%)",
+      "(12.0%)",
       "Black",
       "Pure",
-      "Place of supply",
+      "PCS",
+      "Place of Supply",
       "24-Gujarat",
       "Received",
       "Balance",
-      "You saved",
-      "₹1,600.00",
-      "PAYMENT MODE",
-      "AMOUNT IN WORDS",
+      "You Saved",
+      "₹ 1,600.00",
+      "Payment Mode",
+      "Invoice Amount In Words",
+      "Authorized Signatory",
     ]) {
       expect(text, want).toContain(want);
     }

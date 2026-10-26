@@ -106,7 +106,8 @@ describe("bills with Hindi and Gujarati text", () => {
       status: "issued",
     });
     const fonts = fontsIn(pdf);
-    expect(fonts).toEqual(expect.arrayContaining(["DejaVuSans", "NotoSansDevanagari-Bold", "NotoSansDevanagari-Regular", "NotoSansGujarati-Regular"]));
+    // Item and customer names are bold on the bill, so their Hindi and Gujarati letters are in the bold faces.
+    expect(fonts).toEqual(expect.arrayContaining(["Roboto-Regular", "Roboto-Bold", "NotoSansDevanagari-Bold", "NotoSansGujarati-Bold"]));
 
     // The text can be read back out of the PDF as real letters (extraction returns the vowel signs of
     // Hindi and Gujarati in the order they are drawn, so words are checked by their letters, not whole).
@@ -119,7 +120,7 @@ describe("bills with Hindi and Gujarati text", () => {
     expect(text).not.toMatch(/\uFFFD/);
   });
 
-  it("keeps using DejaVu only when there is no Hindi or Gujarati", async () => {
+  it("keeps to Roboto when there is no Hindi or Gujarati", async () => {
     const pdf = await renderDocumentPdf(snapshot([line(1, "Ball Valve 15 mm", "TL-011")], "Patel Hardware"), { status: "issued" });
     expect(fontsIn(pdf).filter((f) => f.startsWith("Noto"))).toEqual([]);
   });

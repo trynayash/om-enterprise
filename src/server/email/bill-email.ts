@@ -17,7 +17,7 @@ const escapeHtml = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;")
 /** What kind of document it is, as the customer would say it ("Bill of Supply", not "BILL OF SUPPLY"). */
 export const documentLabel = (s: Pick<DocSnapshot, "docType">) => DOC_TYPE_LABEL[s.docType];
 
-export function billEmail(s: DocSnapshot, opts: { viewUrl?: string | null } = {}): BillEmail {
+export function billEmail(s: DocSnapshot, opts: { viewUrl?: string | null; logoUrl?: string | null } = {}): BillEmail {
   const label = documentLabel(s);
   const shop = s.seller.name;
   const total = formatINR(s.totals.grandTotal);
@@ -47,6 +47,7 @@ export function billEmail(s: DocSnapshot, opts: { viewUrl?: string | null } = {}
   const p = "margin:0 0 14px";
   const html = [
     `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#0d1b30;max-width:540px">`,
+    ...(opts.logoUrl ? [`<p style="margin:0 0 18px"><img src="${escapeHtml(opts.logoUrl)}" width="72" height="72" alt="${escapeHtml(shop)}" style="display:block;border:0"></p>`] : []),
     `<p style="${p}">${escapeHtml(greeting)}</p>`,
     `<p style="${p}">Thank you for shopping with <b>${escapeHtml(shop)}</b>. Your ${escapeHtml(label.toLowerCase())} <b>${escapeHtml(s.number)}</b> for <b>${escapeHtml(total)}</b> is attached as a PDF.</p>`,
     ...(paid ? [`<p style="${p}">${escapeHtml(paid)}</p>`] : []),

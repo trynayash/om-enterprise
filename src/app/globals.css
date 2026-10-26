@@ -287,9 +287,19 @@
   body {
     background: #fff;
   }
-  /* Bills are always printed on A4, whatever the printer's default paper. */
+  /* Everything prints on A4, whatever the printer's default paper. */
   @page {
     size: A4 portrait;
     margin: 12mm;
+  }
+  /* A bill page is a whole A4 sheet with its margins drawn in: printed edge to edge, one per sheet
+     (the bill view sets the page margin to 0 while it is on the page). */
+  .bill-page {
+    width: 210mm;
+    height: 296.8mm;
+    break-after: page;
+  }
+  .bill-page:last-child {
+    break-after: auto;
   }
 }

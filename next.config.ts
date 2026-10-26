@@ -51,9 +51,11 @@ const nextConfig: NextConfig = {
       "./scripts/**",
     ],
   },
+  // Bill PDFs read their fonts and the logo from assets/ at runtime: every route that makes one.
   outputFileTracingIncludes: {
-    "/api/documents/[id]/pdf": ["./assets/fonts/**"],
-    "/d/[token]/pdf": ["./assets/fonts/**"],
+    "/api/documents/[id]/pdf": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
+    "/api/documents/[id]/email": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
+    "/d/[token]/pdf": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
   },
   turbopack: {
     rules: {

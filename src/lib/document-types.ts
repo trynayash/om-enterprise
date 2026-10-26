@@ -40,6 +40,8 @@ export interface DocLine {
   cessAmount: string;
   total: string;
   isSample: boolean;
+  /** The unit's short code ("pcs"); absent on bills issued before it was kept, which show `unit`. */
+  unitCode?: string;
   /** Maximum retail price per unit sold, from the price used; absent on bills issued before it was kept. */
   mrp?: string | null;
   /** The variant's Colour and Material attributes, when it has them. */

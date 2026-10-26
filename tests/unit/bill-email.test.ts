@@ -35,6 +35,13 @@ describe("billEmail", () => {
     expect(m.html).not.toContain("<a ");
   });
 
+  it("shows the shop's logo at the top when the site address is known, and none otherwise", () => {
+    const m = billEmail(bill(), { logoUrl: "https://shop.example/brand/om-enterprise-logo.png" });
+    expect(m.html.indexOf('<img src="https://shop.example/brand/om-enterprise-logo.png"')).toBeGreaterThan(0);
+    expect(m.html.indexOf("<img")).toBeLessThan(m.html.indexOf("Hello"));
+    expect(billEmail(bill()).html).not.toContain("<img");
+  });
+
   it("states a balance still due", () => {
     const m = billEmail(bill({ paymentStatus: "Partially paid", balanceDue: "100.00" }));
     expect(m.text).toContain("Balance due: ₹100.00.");

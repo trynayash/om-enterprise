@@ -174,6 +174,7 @@ function lineSnapshot(l: SaleLine, i: number, unitNames: Map<string, string>, ex
     hsn: l.hsnCode,
     quantity: D(l.quantity).toString(),
     unit: unitNames.get(l.unitCode) ?? l.unitCode,
+    unitCode: l.unitCode,
     unitPrice: l.unitPrice,
     priceIncludesTax: l.priceIncludesTax,
     discount: m(D(l.lineDiscountAmount).plus(D(l.cartDiscountShare))),
