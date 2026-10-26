@@ -16,6 +16,8 @@ import { ClientOnly } from "@/components/dashboard/ops/client-only";
 import { DOC_LABEL, loadOr404 } from "@/components/dashboard/ops/guard";
 import { BackLink } from "@/components/dashboard/back-link";
 import { TitleStamps } from "@/components/dashboard/title-stamps";
+import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
+import { deletePhrase } from "@/lib/delete-phrase";
 
 export const metadata = { title: "Document" };
 
@@ -91,7 +93,12 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
           whatsapp={await whatsappInfoFor(doc)}
             />
           </ClientOnly>
-          <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />
+          <div className="flex flex-wrap items-center gap-2">
+            <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />
+            {actor.isSuperAdmin && doc.docType === "quotation" && (
+              <DeleteRecord kind="quotation" id={doc.id} name={doc.docNumber} phrase={deletePhrase(actor.username)} consequences={[]} afterDelete="/dashboard/documents" />
+            )}
+          </div>
         </div>
         {doc.status === "cancelled" && (
           <Alert tone="danger" title="This document has been cancelled">

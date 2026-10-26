@@ -489,6 +489,20 @@ Implemented in `src/server/payments/providers.ts` against Razorpay's documentati
 
 ---
 
+## Deleting a sale or a quotation
+
+Only the Super Admin can delete, from the sale page, the bin icon on the Sales list, the counter's sale
+screen, or (for a quotation) the document page and the Documents list. The dialog says what will
+happen and the **Delete** button stays locked until the phrase `<username>-Deleting-This` (for the
+owner: `Kishan-Deleting-This`) is pasted in exactly; the server checks it again.
+
+Nothing is erased: sales, bills and payments can't be removed from the database, and a bill's number
+must stay accounted for under GST. A deleted sale is hidden from every list and report and can never
+change again; its open payment and discount requests are closed, its bills, quotations and credit
+notes are cancelled with the reason, money already received leaves the reports with it (refund the
+customer separately if needed), and the audit log keeps what was deleted, by whom and when. A bill
+can't be deleted on its own — delete its sale.
+
 ## Billing & GST
 
 > Based on research of the CGST Act and Rules: Rules 46, 46A, 49 and 53; s.10, s.15(3), s.31, s.32, s.34; Notification 78/2020; GST rates after 22 Sept 2025. **Confirm all of this with the shop's accountant** before issuing real bills.

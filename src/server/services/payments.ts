@@ -1,6 +1,6 @@
 import "server-only";
 import { alias } from "drizzle-orm/pg-core";
-import { and, desc, eq, gte, ilike, inArray, lte, or, sql, type SQL } from "drizzle-orm";
+import { and, desc, eq, gte, ilike, inArray, isNull, lte, or, sql, type SQL } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
 import { paymentEvents, payments, sales, users, customers, saleReturns } from "@/server/db/schema";
 import { audit, SYSTEM_ACTOR } from "@/server/audit";
@@ -24,7 +24,7 @@ type Method = Payment["method"];
 
 async function lockSale(tx: Tx, saleId: string) {
   const [s] = await tx.select().from(sales).where(eq(sales.id, saleId)).for("update");
-  if (!s) throw notFound("Sale");
+  if (!s || s.deletedAt) throw notFound("Sale");
   return s;
 }
 
@@ -547,6 +547,7 @@ export async function listPayments(actor: Actor, f: PaymentFilter) {
   if (f.from) where.push(gte(payments.createdAt, f.from));
   if (f.to) where.push(lte(payments.createdAt, f.to));
   if (!f.includeTraining) where.push(eq(sales.isTraining, false));
+  where.push(isNull(sales.deletedAt));
   if (f.q?.trim()) {
     const like = `%${f.q.trim()}%`;
     where.push(or(ilike(payments.reference, like), ilike(sales.saleNumber, like), ilike(customers.name, like), ilike(customers.mobile, like))!);
@@ -590,7 +591,7 @@ export async function listPayments(actor: Actor, f: PaymentFilter) {
 export async function pendingPayments(actor: Actor) {
   requirePermission(actor, ["payments.view", "payments.record"]);
   const db = getDb();
-  const where: SQL[] = [inArray(sales.status, ["finalized", "completed"]), sql`${sales.amountPaid} < ${sales.grandTotal}`, eq(sales.isTraining, false)];
+  const where: SQL[] = [inArray(sales.status, ["finalized", "completed"]), sql`${sales.amountPaid} < ${sales.grandTotal}`, eq(sales.isTraining, false), isNull(sales.deletedAt)];
   if (!can(actor, "sales.view_all")) where.push(eq(sales.createdBy, actor.id));
   return db
     .select({ id: sales.id, saleNumber: sales.saleNumber, status: sales.status, grandTotal: sales.grandTotal, amountPaid: sales.amountPaid, finalizedAt: sales.finalizedAt, customerName: customers.name })

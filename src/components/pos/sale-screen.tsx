@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowLeft, Ban, Check, CheckCircle2, Lock, LockOpen, Printer, Save } from "lucide-react";
 import { apiFetch, errorMessage } from "@/lib/api-client";
-import { D, formatINR } from "@/lib/money";
+import { D, formatINR, m } from "@/lib/money";
 import { Badge, StatusBadge } from "@/components/ui/badge";
 import { Button, LinkButton, buttonClass } from "@/components/ui/button";
 import { Alert } from "@/components/ui/page";
@@ -26,6 +26,9 @@ import { NewSaleButton } from "./new-sale-button";
 import { SaleStatusBadge } from "./sale-status";
 import { TrainingBadge } from "@/components/staff/labels";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData } from "./types";
+import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
+import { deleteConsequences } from "@/components/dashboard/ops/delete-consequences";
+import { deletePhrase } from "@/lib/delete-phrase";
 
 const STEPS = ["Cart", "Agree amount", "Customer", "Payment", "Bill"] as const;
 /** One word per step on a phone, so the five fit a row. */
@@ -161,6 +164,17 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
             <Button variant="ghost" size="sm" className="text-red-700 hover:bg-red-50" icon={<Ban className="h-4 w-4" />} onClick={() => setDialog("cancel")}>
               Cancel sale
             </Button>
+          )}
+          {me.isSuperAdmin && (
+            <DeleteRecord
+              kind="sale"
+              size="sm"
+              id={s.id}
+              name={s.saleNumber}
+              phrase={deletePhrase(me.username)}
+              consequences={deleteConsequences(data.documents, m(D(s.amountPaid).minus(D(s.amountRefunded))))}
+              afterDelete="/pos"
+            />
           )}
         </div>
       </div>

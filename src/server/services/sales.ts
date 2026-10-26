@@ -1,6 +1,6 @@
 import "server-only";
 import { createHash } from "node:crypto";
-import { and, asc, desc, eq, gte, ilike, inArray, lte, ne, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, isNull, lte, ne, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { getDb, type Tx } from "@/server/db/client";
 import {
@@ -19,7 +19,7 @@ import {
   brands,
 } from "@/server/db/schema";
 import { audit } from "@/server/audit";
-import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
+import { auditActorOf, can, requirePermission, requireSuperAdmin, type Actor } from "@/server/auth/actor";
 import { AppError, conflict, forbidden, invalid, notFound, precondition, toAppError } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { verifyApproverCredentials } from "@/server/services/auth";
@@ -33,6 +33,7 @@ import {
 import { calculateSale, type DiscountInput, type EngineLineInput, type TaxMode } from "@/lib/pricing/engine";
 import { D, m, r4 } from "@/lib/money";
 import { lineDescription } from "@/lib/line-description";
+import { deletePhrase } from "@/lib/delete-phrase";
 
 export type Sale = typeof sales.$inferSelect;
 export type SaleLine = typeof saleLines.$inferSelect;
@@ -47,7 +48,7 @@ function canSeeSale(actor: Actor, sale: Pick<Sale, "createdBy">) {
 
 async function lockSale(tx: Tx, saleId: string): Promise<Sale> {
   const [s] = await tx.select().from(sales).where(eq(sales.id, saleId)).for("update");
-  if (!s) throw notFound("Sale");
+  if (!s || s.deletedAt) throw notFound("Sale");
   return s;
 }
 
@@ -149,7 +150,7 @@ export async function getSale(actor: Actor, saleId: string) {
     .innerJoin(priceLists, eq(priceLists.id, sales.priceListId))
     .where(eq(sales.id, saleId));
   const row = rows[0];
-  if (!row) throw notFound("Sale");
+  if (!row || row.s.deletedAt) throw notFound("Sale");
   if (!canSeeSale(actor, row.s)) throw forbidden("You can only view your own sales");
   const showCost = can(actor, "costs.view");
   const lines = await db.select().from(saleLines).where(eq(saleLines.saleId, saleId)).orderBy(asc(saleLines.lineNo));
@@ -1133,6 +1134,65 @@ export async function reopenSale(actor: Actor, saleId: string, reason: string) {
   });
 }
 
+/**
+ * Deletes a sale (Super Admin only, confirmed with their delete phrase). Sales, bills and payments are
+ * never removed from the database, and bill numbers must stay used for GST, so a deleted sale is kept
+ * but hidden from every list and report and can never change again: its open payment requests and
+ * discount requests are closed, its bills, quotations and credit notes are cancelled with the reason,
+ * and one audit record keeps what was there.
+ */
+export async function deleteSale(actor: Actor, saleId: string, input: { confirm: string; reason?: string | null }) {
+  requireSuperAdmin(actor);
+  if (input.confirm.trim() !== deletePhrase(actor.username)) throw invalid(`Paste ${deletePhrase(actor.username)} exactly to confirm`);
+  const reason = input.reason?.trim().slice(0, 300) || "Deleted by the Super Admin";
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const [sale] = await tx.select().from(sales).where(eq(sales.id, saleId)).for("update");
+    if (!sale) throw notFound("Sale");
+    if (sale.deletedAt) throw conflict(`${sale.saleNumber} is already deleted`);
+    const now = new Date();
+    await tx
+      .update(payments)
+      .set({ status: "cancelled", failureReason: "Sale deleted", updatedAt: now })
+      .where(and(eq(payments.saleId, saleId), inArray(payments.status, ["pending", "initiated"])));
+    await tx
+      .update(approvalRequests)
+      .set({ status: "cancelled", decidedBy: actor.id, decidedAt: now, decisionNote: "Sale deleted" })
+      .where(and(eq(approvalRequests.saleId, saleId), eq(approvalRequests.status, "pending")));
+    const docs = await tx.select().from(documents).where(eq(documents.saleId, saleId)).orderBy(asc(documents.issuedAt)).for("update");
+    for (const d of docs.filter((d) => !d.deletedAt)) {
+      await tx
+        .update(documents)
+        .set({
+          ...(d.status === "issued" ? { status: "cancelled", cancelledAt: now, cancelledBy: actor.id, cancelReason: `Sale ${sale.saleNumber} deleted: ${reason}` } : {}),
+          deletedAt: now,
+          deletedBy: actor.id,
+          deleteReason: reason,
+        })
+        .where(eq(documents.id, d.id));
+    }
+    await tx.update(sales).set({ deletedAt: now, deletedBy: actor.id, deleteReason: reason }).where(eq(sales.id, saleId));
+    const received = D(sale.amountPaid).minus(D(sale.amountRefunded));
+    const cancelled = docs.filter((d) => d.status === "issued" && !d.deletedAt).map((d) => d.docNumber);
+    await audit(tx, auditActorOf(actor), {
+      action: "sale.deleted",
+      entityType: "sale",
+      entityId: sale.id,
+      summary: `Deleted ${sale.saleNumber} (₹${sale.grandTotal}${received.greaterThan(0) ? `, ₹${m(received)} received` : ""})${cancelled.length ? `; cancelled ${cancelled.join(", ")}` : ""}: ${reason}`,
+      data: {
+        saleNumber: sale.saleNumber,
+        status: sale.status,
+        grandTotal: sale.grandTotal,
+        received: m(received),
+        isTraining: sale.isTraining,
+        documents: docs.map((d) => ({ id: d.id, docNumber: d.docNumber, docType: d.docType, status: d.status })),
+        reason,
+      },
+    });
+    return { saleNumber: sale.saleNumber, cancelledDocuments: cancelled };
+  });
+}
+
 export async function cancelSale(actor: Actor, saleId: string, reason: string) {
   if (!reason.trim()) throw invalid("Please give a reason");
   const db = getDb();
@@ -1212,6 +1272,7 @@ export async function listSales(actor: Actor, f: SaleFilter) {
   if (f.from) where.push(gte(sales.createdAt, f.from));
   if (f.to) where.push(lte(sales.createdAt, f.to));
   if (!f.includeTraining) where.push(eq(sales.isTraining, false));
+  where.push(isNull(sales.deletedAt));
   if (f.hasItems) where.push(sql`exists (select 1 from sale_lines l where l.sale_id = ${sales.id} and l.line_type = 'item')`);
   const q = f.q?.trim();
   if (q) {

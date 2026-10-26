@@ -9,6 +9,9 @@ import { D, formatINR, m } from "@/lib/money";
 import { stateName } from "@/lib/india";
 import { Card, CardBody, CardHeader } from "@/components/ui/card";
 import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
+import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
+import { deleteConsequences } from "@/components/dashboard/ops/delete-consequences";
+import { deletePhrase } from "@/lib/delete-phrase";
 import { Badge, SampleBadge, StatusBadge } from "@/components/ui/badge";
 import { CASH_SALE, TrainingBadge, actorLabel } from "@/components/staff/labels";
 import { lineDescription, optionLabel } from "@/lib/line-description";
@@ -83,6 +86,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
           </>
         }
         actions={
+          <>
           <SaleActions
             saleId={sale.id}
             saleNumber={sale.saleNumber}
@@ -95,6 +99,10 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
             netPaid={m(netPaid)}
             lines={returnable}
           />
+          {actor.isSuperAdmin && (
+            <DeleteRecord kind="sale" id={sale.id} name={sale.saleNumber} phrase={deletePhrase(actor.username)} consequences={deleteConsequences(documents, m(netPaid))} afterDelete="/dashboard/sales" />
+          )}
+          </>
         }
       />
 

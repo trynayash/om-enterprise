@@ -14,7 +14,11 @@ import { FilterBar, type FilterField } from "@/components/dashboard/ops/filter-b
 import { Pagination } from "@/components/dashboard/ops/pagination";
 import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
 import { dayRange, num, str, type SearchParams } from "@/components/dashboard/ops/params";
-import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
+import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
+import { deleteConsequences } from "@/components/dashboard/ops/delete-consequences";
+import { deletePhrase } from "@/lib/delete-phrase";
+import { D, m } from "@/lib/money";
 
 export const metadata = { title: "Sales & bills" };
 
@@ -37,6 +41,7 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
   const actor = await requirePageActor(["sales.view_all", "sales.create"]);
   const sp = await searchParams;
   const viewAll = can(actor, "sales.view_all");
+  const phrase = deletePhrase(actor.username);
   const page = num(sp, "page", 1);
   const pageSize = 30;
   const { from, to } = dayRange(sp);
@@ -137,6 +142,11 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                 <th className={th}>Status</th>
                 <th className={th}>Bill</th>
                 {viewAll && <th className={th}>Staff</th>}
+                {actor.isSuperAdmin && (
+                  <th className={th}>
+                    <span className="sr-only">Delete</span>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -188,6 +198,21 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                     )}
                   </td>
                   {viewAll && <td data-label="Staff" className={tdMuted}>{s.createdByName}</td>}
+                  {actor.isSuperAdmin && (
+                    <td className={withPy(tdText, "py-2")}>
+                      <DeleteRecord
+                        compact
+                        kind="sale"
+                        id={s.id}
+                        name={s.saleNumber}
+                        phrase={phrase}
+                        consequences={deleteConsequences(
+                          s.docNumber ? [{ docType: "tax_invoice", docNumber: s.docNumber, status: s.docStatus ?? "issued" }] : [],
+                          m(D(s.amountPaid).minus(D(s.amountRefunded))),
+                        )}
+                      />
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -63,17 +63,17 @@ export async function salesSummary(actor: Actor, p: Period) {
       and d.issued_at >= ${p.from} and d.issued_at < ${p.to}`);
   const [cancelled] = await q<{ count: number; total: string }>(sql`
     select count(*)::int as count, coalesce(sum(d.grand_total),0)::text as total
-    from documents d where d.doc_type in ${BILL_TYPES} and d.status = 'cancelled' and not d.is_training
+    from documents d where d.doc_type in ${BILL_TYPES} and d.status = 'cancelled' and not d.is_training and d.deleted_at is null
       and d.cancelled_at >= ${p.from} and d.cancelled_at < ${p.to}`);
   const collections = await q<{ method: string; direction: string; count: number; amount: string }>(sql`
     select p.method, p.direction, count(*)::int as count, coalesce(sum(p.amount),0)::text as amount
     from payments p join sales s on s.id = p.sale_id
-    where p.status = 'successful' and not s.is_training and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
+    where p.status = 'successful' and not s.is_training and s.deleted_at is null and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
     group by p.method, p.direction order by p.method`);
   const [pending] = await q<{ count: number; amount: string }>(sql`
     select count(*)::int as count,
       coalesce(sum(s.grand_total - coalesce((select sum(r.grand_total) from sale_returns r where r.sale_id = s.id),0) - (s.amount_paid - s.amount_refunded)),0)::text as amount
-    from sales s where s.status in ('finalized','completed') and not s.is_training
+    from sales s where s.status in ('finalized','completed') and not s.is_training and s.deleted_at is null
       and s.grand_total - coalesce((select sum(r.grand_total) from sale_returns r where r.sale_id = s.id),0) - (s.amount_paid - s.amount_refunded) > 0`);
 
   const received = collections.filter((c) => c.direction === "in").reduce((a, c) => a.plus(D(c.amount)), D(0));
@@ -292,18 +292,18 @@ export async function paymentSummary(actor: Actor, p: Period) {
   const byMethod = await q<{ method: string; verification_method: string | null; direction: string; count: number; amount: string }>(sql`
     select p.method, p.verification_method, p.direction, count(*)::int as count, sum(p.amount)::text as amount
     from payments p join sales s on s.id = p.sale_id
-    where p.status = 'successful' and not s.is_training and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
+    where p.status = 'successful' and not s.is_training and s.deleted_at is null and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
     group by 1,2,3 order by 1,3`);
   const byDay = await q<{ day: string; received: string; refunded: string }>(sql`
     select to_char((p.verified_at at time zone 'Asia/Kolkata')::date, 'YYYY-MM-DD') as day,
       coalesce(sum(p.amount) filter (where p.direction = 'in'),0)::text as received,
       coalesce(sum(p.amount) filter (where p.direction = 'refund'),0)::text as refunded
     from payments p join sales s on s.id = p.sale_id
-    where p.status = 'successful' and not s.is_training and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
+    where p.status = 'successful' and not s.is_training and s.deleted_at is null and p.verified_at >= ${p.from} and p.verified_at < ${p.to}
     group by 1 order by 1`);
   const reversed = await q<{ count: number; amount: string }>(sql`
     select count(*)::int as count, coalesce(sum(p.amount),0)::text as amount from payments p join sales s on s.id = p.sale_id
-    where p.status = 'reversed' and not s.is_training and p.reversed_at >= ${p.from} and p.reversed_at < ${p.to}`);
+    where p.status = 'reversed' and not s.is_training and s.deleted_at is null and p.reversed_at >= ${p.from} and p.reversed_at < ${p.to}`);
   return { byMethod, byDay, reversed: reversed[0] };
 }
 

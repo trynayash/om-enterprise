@@ -14,6 +14,8 @@ import { CsvExportButton } from "@/components/dashboard/ops/csv-export";
 import { dayRange, num, str, type SearchParams } from "@/components/dashboard/ops/params";
 import { DOC_LABEL } from "@/components/dashboard/ops/guard";
 import { codeLink, rowHover, tdMuted, tdNum, tdText, th, thNum } from "@/components/dashboard/table";
+import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
+import { deletePhrase } from "@/lib/delete-phrase";
 
 export const metadata = { title: "Documents" };
 
@@ -37,6 +39,7 @@ export default function DocumentsPage({ searchParams }: PageProps<"/dashboard/do
 
 async function Documents({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const actor = await requirePageActor(["documents.reprint", "documents.issue", "sales.view_all"]);
+  const phrase = deletePhrase(actor.username);
   const sp = await searchParams;
   const page = num(sp, "page", 1);
   const pageSize = 50;
@@ -115,6 +118,11 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                 <th className={thNum}>Amount</th>
                 <th className={th}>Status</th>
                 <th className={th}>Issued by</th>
+                {actor.isSuperAdmin && (
+                  <th className={th}>
+                    <span className="sr-only">Delete</span>
+                  </th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -157,6 +165,11 @@ async function Documents({ searchParams }: { searchParams: Promise<SearchParams>
                     {d.issuedByName}
                     {d.printCount > 0 && <div className="tabular text-[11.5px] text-navy-400">Printed {d.printCount}×</div>}
                   </td>
+                  {actor.isSuperAdmin && (
+                    <td className={tdText}>
+                      {d.docType === "quotation" && <DeleteRecord compact kind="quotation" id={d.id} name={d.docNumber} phrase={phrase} consequences={[]} />}
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

@@ -730,6 +730,10 @@ export const sales = pgTable(
     cancelledAt: ts("cancelled_at"),
     cancelledBy: uuid("cancelled_by").references(() => users.id),
     cancelReason: text("cancel_reason"),
+    /** Deleted by the Super Admin: hidden from every list and report, kept for the audit trail; never changes again. */
+    deletedAt: ts("deleted_at"),
+    deletedBy: uuid("deleted_by").references(() => users.id),
+    deleteReason: text("delete_reason"),
   },
   (t) => [
     index("sales_status_idx").on(t.status, t.createdAt),
@@ -1003,6 +1007,10 @@ export const documents = pgTable(
     cancelledAt: ts("cancelled_at"),
     cancelledBy: uuid("cancelled_by").references(() => users.id),
     cancelReason: text("cancel_reason"),
+    /** A quotation deleted by the Super Admin (or any document of a deleted sale): hidden, kept for the audit trail. */
+    deletedAt: ts("deleted_at"),
+    deletedBy: uuid("deleted_by").references(() => users.id),
+    deleteReason: text("delete_reason"),
     shareToken: text("share_token").unique(),
     printCount: integer("print_count").notNull().default(0),
     lastPrintedAt: ts("last_printed_at"),

@@ -1,5 +1,5 @@
 import "server-only";
-import { and, desc, eq, ilike, or, sql } from "drizzle-orm";
+import { and, desc, eq, ilike, isNull, or, sql } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
 import { customers, sales } from "@/server/db/schema";
 import { audit, diff } from "@/server/audit";
@@ -152,7 +152,7 @@ export async function getCustomer(actor: Actor, id: string) {
       docNumber: sql<string | null>`(select d.doc_number from documents d where d.sale_id = "sales"."id" and d.doc_type not in ('quotation','credit_note') order by d.issued_at desc limit 1)`,
     })
     .from(sales)
-    .where(and(eq(sales.customerId, id), eq(sales.isTraining, false), scope))
+    .where(and(eq(sales.customerId, id), eq(sales.isTraining, false), isNull(sales.deletedAt), scope))
     .orderBy(desc(sales.createdAt))
     .limit(100);
   return { customer: c, history };
@@ -165,8 +165,8 @@ export async function listCustomers(actor: Actor, q?: string, page = 1, pageSize
   const rows = await db
     .select({
       c: customers,
-      saleCount: sql<number>`(select count(*)::int from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training)`,
-      lifetime: sql<string>`(select coalesce(sum(s.grand_total),0)::text from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training)`,
+      saleCount: sql<number>`(select count(*)::int from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training and s.deleted_at is null)`,
+      lifetime: sql<string>`(select coalesce(sum(s.grand_total),0)::text from sales s where s.customer_id = "customers"."id" and s.status = 'completed' and not s.is_training and s.deleted_at is null)`,
       total: sql<number>`count(*) over ()::int`,
     })
     .from(customers)

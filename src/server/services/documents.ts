@@ -1,8 +1,9 @@
 import "server-only";
 import { randomBytes } from "node:crypto";
-import { and, asc, desc, eq, gte, ilike, inArray, lte, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, inArray, isNull, lte, or, sql, type SQL } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
 import { lineDescription } from "@/lib/line-description";
+import { deletePhrase } from "@/lib/delete-phrase";
 import {
   customers,
   documents,
@@ -20,7 +21,7 @@ import {
   variantUnitConversions,
 } from "@/server/db/schema";
 import { audit } from "@/server/audit";
-import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
+import { auditActorOf, can, requirePermission, requireSuperAdmin, type Actor } from "@/server/auth/actor";
 import { AppError, conflict, forbidden, invalid, notFound, precondition } from "@/server/errors";
 import { getAllSettings } from "@/server/settings";
 import { createCustomer, updateCustomer, type CustomerInput } from "@/server/services/customers";
@@ -50,7 +51,7 @@ function canSeeSale(actor: Actor, sale: { createdBy: string }) {
 
 async function lockSale(tx: Tx, saleId: string): Promise<Sale> {
   const [s] = await tx.select().from(sales).where(eq(sales.id, saleId)).for("update");
-  if (!s) throw notFound("Sale");
+  if (!s || s.deletedAt) throw notFound("Sale");
   return s;
 }
 
@@ -640,6 +641,42 @@ export async function cancelBill(
   });
 }
 
+/**
+ * Deletes a quotation (Super Admin only, confirmed with their delete phrase). It is kept for the
+ * audit trail but hidden everywhere, and its share link stops working. Bills are not deleted on
+ * their own: a bill's number must stay accounted for, so its sale is deleted instead.
+ */
+export async function deleteQuotation(actor: Actor, documentId: string, input: { confirm: string; reason?: string | null }) {
+  requireSuperAdmin(actor);
+  if (input.confirm.trim() !== deletePhrase(actor.username)) throw invalid(`Paste ${deletePhrase(actor.username)} exactly to confirm`);
+  const reason = input.reason?.trim().slice(0, 300) || "Deleted by the Super Admin";
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const [doc] = await tx.select().from(documents).where(eq(documents.id, documentId)).for("update");
+    if (!doc) throw notFound("Document");
+    if (doc.docType !== "quotation") throw invalid("Only a quotation can be deleted on its own. To remove a bill, delete its sale.");
+    if (doc.deletedAt) throw conflict(`${doc.docNumber} is already deleted`);
+    const now = new Date();
+    await tx
+      .update(documents)
+      .set({
+        ...(doc.status === "issued" ? { status: "cancelled", cancelledAt: now, cancelledBy: actor.id, cancelReason: `Deleted: ${reason}` } : {}),
+        deletedAt: now,
+        deletedBy: actor.id,
+        deleteReason: reason,
+      })
+      .where(eq(documents.id, documentId));
+    await audit(tx, auditActorOf(actor), {
+      action: "document.deleted",
+      entityType: "document",
+      entityId: doc.id,
+      summary: `Deleted quotation ${doc.docNumber} (₹${doc.grandTotal}): ${reason}`,
+      data: { saleId: doc.saleId, docNumber: doc.docNumber, grandTotal: doc.grandTotal, status: doc.status, reason },
+    });
+    return { docNumber: doc.docNumber };
+  });
+}
+
 /* ------------------------------------------------------------------ */
 /* Returns → credit note                                               */
 /* ------------------------------------------------------------------ */
@@ -856,7 +893,7 @@ export async function getDocument(actor: Actor, documentId: string) {
     .innerJoin(sales, eq(sales.id, documents.saleId))
     .innerJoin(users, eq(users.id, documents.issuedBy))
     .where(eq(documents.id, documentId));
-  if (!row) throw notFound("Document");
+  if (!row || row.d.deletedAt) throw notFound("Document");
   if (!canSeeSale(actor, { createdBy: row.saleCreatedBy })) throw forbidden();
   return { ...row.d, snapshot: row.d.snapshot as DocSnapshot, issuedByName: row.issuedByName };
 }
@@ -865,7 +902,7 @@ export async function getDocumentByShareToken(token: string) {
   if (!/^[A-Za-z0-9_-]{20,64}$/.test(token)) return null;
   const db = getDb();
   const [d] = await db.select().from(documents).where(eq(documents.shareToken, token));
-  if (!d) return null;
+  if (!d || d.deletedAt) return null;
   const settings = await getAllSettings();
   if (!settings.documents.shareLinksEnabled) return null;
   return { id: d.id, docNumber: d.docNumber, docType: d.docType, status: d.status, issuedAt: d.issuedAt, snapshot: d.snapshot as DocSnapshot, cancelReason: d.cancelReason };
@@ -930,6 +967,7 @@ export async function listDocuments(actor: Actor, f: DocumentFilter) {
   if (f.from) where.push(gte(documents.issuedAt, f.from));
   if (f.to) where.push(lte(documents.issuedAt, f.to));
   if (!f.includeTraining) where.push(eq(documents.isTraining, false));
+  where.push(isNull(documents.deletedAt));
   if (f.q?.trim()) {
     const like = `%${f.q.trim()}%`;
     where.push(or(ilike(documents.docNumber, like), ilike(sales.saleNumber, like), ilike(customers.name, like), ilike(customers.mobile, like))!);
