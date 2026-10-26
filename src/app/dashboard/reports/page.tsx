@@ -164,7 +164,7 @@ async function Overview({ actor, period, showProfit, canExport, qs }: P & { show
                 {s.collections.byMethod.map((r) => (
                   <tr key={`${r.method}-${r.direction}`} className={rowHover}>
                     <td className={tdText}>{METHOD_LABEL[r.method] ?? r.method}</td>
-                    <td className={tdText}>{r.direction === "in" ? "Received" : <Badge tone="purple">Refund</Badge>}</td>
+                    <td className={tdText}>{r.direction === "in" ? "Received" : <Badge>Refund</Badge>}</td>
                     <td className={tdNum}>{r.count}</td>
                     <td className={`${tdNum} font-semibold`}>{formatINR(r.amount)}</td>
                   </tr>
@@ -213,7 +213,7 @@ function Figure({ label, tone, children }: { label: string; tone?: string; child
   return (
     <div className="lg:border-l lg:border-navy-100 lg:pl-5 lg:first:border-l-0 lg:first:pl-0">
       <div className="label-caps text-navy-500">{label}</div>
-      <div className={cn("headline mt-1.5 text-[1.75rem] font-bold tabular", tone ?? "text-navy-950")}>{children}</div>
+      <div className={cn("headline mt-1.5 text-[1.375rem] font-bold tabular sm:text-[1.5rem]", tone ?? "text-navy-950")}>{children}</div>
     </div>
   );
 }

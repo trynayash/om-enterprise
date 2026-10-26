@@ -112,8 +112,8 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                   </div>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <StatusBadge status={p.status} />
-                    {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
-                    <Badge tone="navy">{METHOD[p.method] ?? p.method}</Badge>
+                    {p.direction === "refund" && <Badge>Refund</Badge>}
+                    <Badge>{METHOD[p.method] ?? p.method}</Badge>
                     {p.isTraining && <TrainingBadge />}
                   </div>
                   <div className="mt-1.5 text-xs text-navy-500">
@@ -160,7 +160,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SP> }) {
                     <td className={td}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                     <td className={td}>
                       <span className="flex flex-wrap items-center gap-1.5">
-                        {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
+                        {p.direction === "refund" && <Badge>Refund</Badge>}
                         {METHOD[p.method] ?? p.method}
                       </span>
                     </td>

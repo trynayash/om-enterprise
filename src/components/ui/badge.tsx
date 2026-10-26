@@ -2,18 +2,22 @@ import type { ReactNode } from "react";
 import { cn } from "./cn";
 
 export type Tone = "neutral" | "navy" | "gold" | "green" | "red" | "amber" | "blue" | "purple";
+// Four colours only: grey for information, green for done, amber for waiting or needs a look, red for
+// stopped or failed. The older tone names stay accepted and map onto these.
+const NEUTRAL = "bg-navy-50 text-navy-700 ring-navy-100";
+const AMBER = "bg-amber-50 text-amber-800 ring-amber-200/70";
 const tones: Record<Tone, string> = {
-  neutral: "bg-navy-50 text-navy-600 ring-navy-100",
-  navy: "bg-navy-100 text-navy-800 ring-navy-200",
-  gold: "bg-gold-50 text-gold-700 ring-gold-200",
+  neutral: NEUTRAL,
+  navy: NEUTRAL,
+  gold: AMBER,
   green: "bg-emerald-50 text-emerald-800 ring-emerald-200/70",
   red: "bg-red-50 text-red-800 ring-red-200/70",
-  amber: "bg-amber-50 text-amber-800 ring-amber-200/70",
-  blue: "bg-sky-50 text-sky-800 ring-sky-200/70",
-  purple: "bg-violet-50 text-violet-800 ring-violet-200/70",
+  amber: AMBER,
+  blue: NEUTRAL,
+  purple: NEUTRAL,
 };
 
-/** A small stamp with a status dot. */
+/** A small status label with a dot. */
 export function Badge({ tone = "neutral", children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
   return (
     <span className={cn("inline-flex items-center gap-1.5 whitespace-nowrap rounded-[3px] px-1.5 py-[3px] text-[11.5px] font-medium leading-none ring-1 ring-inset", tones[tone], className)}>
@@ -24,9 +28,9 @@ export function Badge({ tone = "neutral", children, className }: { tone?: Tone; 
 }
 
 /** Shown on every demonstration product, price and training transaction. */
-export function SampleBadge({ className, label = "SAMPLE DATA" }: { className?: string; label?: string }) {
+export function SampleBadge({ className, label = "Sample data" }: { className?: string; label?: string }) {
   return (
-    <span className={cn("inline-flex items-center rounded-[3px] bg-red-700 px-1.5 py-[3px] font-mono text-[10px] font-semibold uppercase leading-none tracking-[0.08em] text-white", className)} title="Demonstration data — not a real product, price or transaction">
+    <span className={cn("inline-flex items-center whitespace-nowrap rounded-[3px] bg-red-50 px-1.5 py-[3px] text-xs font-medium leading-none text-red-800 ring-1 ring-inset ring-red-200", className)} title="Demonstration data — not a real product, price or transaction">
       {label}
     </span>
   );
@@ -42,8 +46,8 @@ const STATUS: Record<string, [string, Tone]> = {
   unpaid: ["Unpaid", "amber"],
   partially_paid: ["Part paid", "amber"],
   paid: ["Paid", "green"],
-  partially_refunded: ["Part refunded", "purple"],
-  refunded: ["Refunded", "purple"],
+  partially_refunded: ["Part refunded", "neutral"],
+  refunded: ["Refunded", "neutral"],
   // payment record
   pending: ["Pending", "neutral"],
   initiated: ["QR shown — not verified", "amber"],
@@ -60,9 +64,9 @@ const STATUS: Record<string, [string, Tone]> = {
   // documents
   issued: ["Issued", "green"],
   // website orders
-  new: ["New", "gold"],
-  contacted: ["Contacted", "blue"],
-  quoted: ["Quoted", "blue"],
+  new: ["New", "amber"],
+  contacted: ["Contacted", "neutral"],
+  quoted: ["Quoted", "neutral"],
   converted: ["Converted", "green"],
   closed: ["Closed", "neutral"],
   spam: ["Spam", "red"],

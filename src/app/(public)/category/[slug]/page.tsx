@@ -44,8 +44,6 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
   if (!category) notFound();
   const parent = category.parentId ? categories.find((c) => c.id === category.parentId) : null;
   const children = categories.filter((c) => c.parentId === category.id);
-  const top = categories.filter((c) => !c.parentId);
-  const position = top.findIndex((c) => c.id === (parent?.id ?? category.id)) + 1;
   const query = parseCatalogueQuery(await searchParams);
 
   return (
@@ -57,15 +55,11 @@ async function CategoryContent({ params, searchParams }: Pick<PageProps<"/catego
           ...(parent ? [{ href: `/category/${parent.slug}`, label: parent.name }] : []),
           { label: category.name },
         ]}
-        eyebrow={
-          <>
-            Category {position > 0 ? String(position).padStart(2, "0") : ""} · {category.productCount} {category.productCount === 1 ? "item" : "items"}
-          </>
-        }
+        eyebrow={`${category.productCount} ${category.productCount === 1 ? "item" : "items"}`}
         title={category.name}
         description={category.description}
         aside={
-          <div className="blueprint hidden h-36 w-56 shrink-0 rounded-lg border border-navy-200 md:flex md:items-center md:justify-center">
+          <div className="hidden h-36 w-56 shrink-0 rounded-lg border border-navy-200 bg-white md:flex md:items-center md:justify-center">
             <TechnicalDrawing kind={CATEGORY_DRAWING[category.icon ?? ""] ?? "box"} animate className="h-[88%] w-[88%]" />
           </div>
         }

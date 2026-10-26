@@ -78,7 +78,7 @@ export function CategoriesManager({ categories, canCreate, canEdit, canConfigure
                     </Badge>
                   )}
                   {(c.minMarginPercent || c.targetMarginPercent) && (
-                    <Badge tone="gold">
+                    <Badge>
                       {c.targetMarginPercent ? `target ${Number(c.targetMarginPercent)}%` : ""}
                       {c.targetMarginPercent && c.minMarginPercent ? " · " : ""}
                       {c.minMarginPercent ? `min ${Number(c.minMarginPercent)}%` : ""}

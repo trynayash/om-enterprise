@@ -14,14 +14,14 @@ export default function GlobalError({ error, retry }: { error: unknown; retry: (
   return (
     <html lang="en-IN">
       <body
-        style={{ margin: 0, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f6f4ee", color: "#0d1b30", fontFamily: "Arial, Helvetica, sans-serif" }}
+        style={{ margin: 0, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#f6f4ee", color: "#0d1b30", fontFamily: 'Roboto, "Segoe UI", Arial, Helvetica, sans-serif' }}
       >
         <main style={{ maxWidth: 440, padding: "32px 20px" }}>
-          <p style={{ margin: 0, fontSize: 12, letterSpacing: "0.12em", textTransform: "uppercase", color: "#5b6474" }}>OM ENTERPRISE</p>
+          <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "#5b6474" }}>OM ENTERPRISE</p>
           <h1 style={{ margin: "10px 0 0", fontSize: 28, lineHeight: 1.2 }}>The site didn&apos;t load</h1>
           <p style={{ margin: "10px 0 0", fontSize: 15, lineHeight: 1.55, color: "#5b6474" }}>This is usually a brief connection problem. Try again in a moment.</p>
           {reference && (
-            <p style={{ margin: "16px 0 0", fontFamily: "monospace", fontSize: 12, color: "#5b6474" }}>
+            <p style={{ margin: "16px 0 0", fontSize: 12, fontVariantNumeric: "tabular-nums", color: "#5b6474" }}>
               Reference <span style={{ color: "#0d1b30" }}>{reference}</span>
             </p>
           )}

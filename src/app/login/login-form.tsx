@@ -66,7 +66,7 @@ export function LoginForm() {
   if (challenge) {
     return (
       <form onSubmit={submitSecret} className="mt-6 animate-fade-in space-y-4" noValidate>
-        <div className="rounded-md border border-navy-200 border-l-[3px] border-l-emerald-600 bg-paper/70 px-4 py-3 text-sm leading-relaxed text-navy-800">
+        <div className="rounded-md border border-emerald-200 bg-emerald-50/70 px-4 py-3 text-sm leading-relaxed text-navy-800">
           Password accepted for <b className="font-semibold text-navy-950">{username}</b>. Enter your secret key to finish signing in.
         </div>
         {error && <Alert tone="danger">{error}</Alert>}

@@ -17,7 +17,7 @@ export function SignInCard({ title, description, badge }: { title: string; descr
         </>
       }
     >
-      <h1 className="headline text-[2.25rem] font-bold text-navy-950">{title}</h1>
+      <h1 className="headline text-[1.625rem] font-bold text-navy-950">{title}</h1>
       <p className="mt-2 text-sm leading-relaxed text-navy-500">{description}</p>
       <Suspense>
         <LoginForm />

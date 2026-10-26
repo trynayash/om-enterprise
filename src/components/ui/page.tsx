@@ -5,10 +5,8 @@ export function PageHeader({ title, description, actions, eyebrow }: { title: Re
   return (
     <div className="mb-7 flex flex-wrap items-end justify-between gap-4 border-b border-navy-100 pb-5">
       <div className="min-w-0">
-        {eyebrow && (
-          <div className="label-caps mb-1.5 text-gold-700">{eyebrow}</div>
-        )}
-        <h1 className="headline text-[2rem] font-bold text-navy-950 sm:text-[2.5rem]">{title}</h1>
+        {eyebrow && <div className="mb-1 text-[13px] text-navy-500">{eyebrow}</div>}
+        <h1 className="headline text-[1.625rem] font-bold text-navy-950 sm:text-[1.875rem]">{title}</h1>
         {description && <p className="mt-2 max-w-2xl text-sm leading-relaxed text-navy-500">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -18,7 +16,7 @@ export function PageHeader({ title, description, actions, eyebrow }: { title: Re
 
 export function EmptyState({ title, description, action, icon }: { title: ReactNode; description?: ReactNode; action?: ReactNode; icon?: ReactNode }) {
   return (
-    <div className="blueprint flex flex-col items-center justify-center rounded-xl border border-navy-200 px-6 py-14 text-center">
+    <div className="flex flex-col items-center justify-center rounded-xl border border-navy-100 bg-paper/60 px-6 py-14 text-center">
       {icon && <div className="mb-3 text-navy-400">{icon}</div>}
       <div className="text-base font-semibold text-navy-900">{title}</div>
       {description && <p className="mt-1 max-w-md text-sm leading-relaxed text-navy-500">{description}</p>}

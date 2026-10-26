@@ -232,7 +232,7 @@ async function Payments({ searchParams }: { searchParams: Promise<SearchParams> 
                   <td data-label="Customer" className={tdText}>{p.customerName ?? <span className="text-navy-400">{CASH_SALE}</span>}</td>
                   <td data-label="Method" className={tdText}>
                     <span className="flex flex-wrap items-center gap-1.5">
-                      {p.direction === "refund" && <Badge tone="purple">Refund</Badge>}
+                      {p.direction === "refund" && <Badge>Refund</Badge>}
                       {METHOD_LABEL[p.method] ?? p.method}
                     </span>
                     {p.provider === "razorpay" && <div className="text-xs text-navy-500">Razorpay</div>}

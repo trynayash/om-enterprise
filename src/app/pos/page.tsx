@@ -38,10 +38,10 @@ async function PosHome() {
   return (
     <div className="space-y-6">
       <div>
-        <div className="label-caps mb-1.5 text-gold-700">
+        <div className="mb-1 text-[13px] text-navy-500">
           {new Date(Date.UTC(today.year, today.month - 1, today.day)).toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" })}
         </div>
-        <h1 className="headline text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">Point of sale</h1>
+        <h1 className="headline text-[1.625rem] font-bold text-navy-950 sm:text-[1.875rem]">Point of sale</h1>
       </div>
 
       <TaxBanner registrationType={cfg.registrationType} />
@@ -117,7 +117,7 @@ function Shortcut({ href, icon, title, text, badge }: { href: string; icon: Reac
         <span className="min-w-0 flex-1">
           <span className="flex flex-wrap items-center gap-2">
             <span className="text-[15px] font-semibold text-navy-950">{title}</span>
-            {badge && <Badge tone="gold">{badge}</Badge>}
+            {badge && <Badge tone="amber">{badge}</Badge>}
           </span>
           <span className="mt-0.5 block text-[13px] text-navy-500">{text}</span>
         </span>

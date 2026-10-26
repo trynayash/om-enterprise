@@ -234,7 +234,7 @@ export function ColumnMatcher({
                   {Array.from({ length: Math.min(width, MAX_PREVIEW_COLS) }, (_, i) => (
                     <th key={i} className="border-b border-navy-100 px-2 py-1.5 font-mono text-[11px] font-medium text-navy-500">
                       {letter(i)}
-                      {fieldOf(i) && <span className="ml-1.5 rounded bg-gold-100 px-1 py-px font-sans text-[10.5px] text-gold-700">{fieldOf(i)}</span>}
+                      {fieldOf(i) && <span className="ml-1.5 rounded bg-gold-100 px-1 py-px font-sans text-[11px] text-gold-700">{fieldOf(i)}</span>}
                     </th>
                   ))}
                 </tr>

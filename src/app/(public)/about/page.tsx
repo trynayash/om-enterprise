@@ -31,7 +31,7 @@ export default function AboutPage() {
       <section className="py-14 sm:py-20">
         <Container>
           <SectionHeading eyebrow="How we work" title="At the counter" />
-          <dl className="max-w-3xl border-t border-navy-900">
+          <dl className="max-w-3xl border-t border-navy-200">
             {PRACTICES.map((p) => (
               <div key={p.title} className="grid gap-1 border-b border-navy-100 py-4 sm:grid-cols-[13rem_1fr] sm:gap-6">
                 <dt className="text-[15px] font-semibold text-navy-950">{p.title}</dt>
@@ -76,17 +76,15 @@ async function RangeList() {
   const { categories } = await getSiteData();
   const top = categories.filter((c) => !c.parentId);
   return (
-    <ol className="grid gap-x-10 sm:grid-cols-2">
-      {top.map((c, i) => (
+    <ul className="grid gap-x-10 sm:grid-cols-2">
+      {top.map((c) => (
         <li key={c.slug}>
-          <Link href={`/category/${c.slug}`} className="group flex items-baseline gap-3 border-b border-rule py-3.5">
-            <span className="font-mono text-[11px] text-navy-400 transition-colors group-hover:text-gold-700">{String(i + 1).padStart(2, "0")}</span>
-            <span className="font-medium text-navy-950">{c.name}</span>
-            <span aria-hidden className="leader" />
-            <span className="font-mono text-[12px] text-navy-500 tabular">{c.productCount} items</span>
+          <Link href={`/category/${c.slug}`} className="group flex items-baseline justify-between gap-4 border-b border-rule py-3.5">
+            <span className="font-medium text-navy-950 transition-colors group-hover:text-gold-700">{c.name}</span>
+            <span className="shrink-0 font-mono text-[12px] text-navy-500 tabular">{c.productCount} items</span>
           </Link>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }

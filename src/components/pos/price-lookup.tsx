@@ -100,14 +100,13 @@ export function PriceLookup({ categories, units, taxCharged }: { categories: { i
                 <ul className="divide-y divide-navy-100">
                   {vs.map((v) => (
                     <li key={v.variantId} className="px-4 py-2.5">
-                      <div className="flex items-baseline">
+                      <div className="flex items-baseline justify-between gap-4">
                         {/* A product sold in one form has a "Standard" placeholder option: its SKU names the row instead. */}
                         {optionLabel(v.variantName) ? (
                           <span className="min-w-0 text-sm font-medium text-navy-900">{v.variantName}</span>
                         ) : (
                           <span className="min-w-0 font-mono text-[13px] text-navy-700">{v.sku}</span>
                         )}
-                        <span aria-hidden className="leader" />
                         {v.price ? (
                           <span className="shrink-0 font-mono text-[15px] font-semibold text-navy-950 tabular">{formatINR(v.price)}</span>
                         ) : (

@@ -76,7 +76,7 @@ export function PaymentPanel({ data, config, me, run }: { data: SaleData; config
         </div>
         <div className="sm:text-right">
           <div className="label-caps text-navy-500">Amount due</div>
-          <div className="headline mt-1 text-[2.5rem] font-bold text-navy-950 tabular sm:text-[2.75rem]" data-testid="amount-due">
+          <div className="headline mt-1 text-[2rem] font-bold text-navy-950 tabular sm:text-[2.25rem]" data-testid="amount-due">
             {formatINR(outstanding)}
           </div>
         </div>
@@ -234,11 +234,11 @@ function QrCard({
           ) : (
             <div className="flex aspect-square items-center justify-center text-sm text-navy-500">QR unavailable</div>
           )}
-          {expired && <div className="absolute inset-0 flex items-center justify-center font-mono text-base font-semibold tracking-[0.08em] text-red-700">QR EXPIRED</div>}
+          {expired && <div className="absolute inset-0 flex items-center justify-center text-base font-semibold text-red-700">QR expired</div>}
         </div>
         <div className="w-full min-w-0 flex-1 text-center md:text-left">
           <div className="label-caps text-gold-700">Scan to pay</div>
-          <div className="headline mt-1.5 text-[3rem] font-bold text-navy-950 tabular sm:text-[3.75rem]" data-testid="qr-amount">
+          <div className="headline mt-1.5 text-[2.25rem] font-bold text-navy-950 tabular sm:text-[2.75rem]" data-testid="qr-amount">
             {formatINR(payment.amount)}
           </div>
           <dl className="mx-auto mt-3 grid max-w-sm grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1 text-left text-sm md:mx-0">
@@ -264,7 +264,7 @@ function QrCard({
               </>
             )}
           </dl>
-          <div className="mt-4 rounded-md border-l-[3px] border-amber-500 bg-amber-50 px-3 py-2 text-left text-[13px] leading-relaxed text-amber-950">
+          <div className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-left text-[13px] leading-relaxed text-amber-950">
             <b>Not paid yet.</b> {pd.instructions ?? "Check the shop's UPI app for the exact amount before confirming."}
           </div>
           {auto && (
@@ -384,7 +384,7 @@ function VerifyForm({
   };
 
   return (
-    <div className={cn("space-y-4", intent && "animate-fade-in rounded-lg border border-emerald-300 border-l-[3px] border-l-emerald-600 bg-emerald-50/40 p-4")}>
+    <div className={cn("space-y-4", intent && "animate-fade-in rounded-lg border border-emerald-300 bg-emerald-50/40 p-4")}>
       {intent && (
         <div className="text-[15px] font-semibold text-emerald-950">
           Verify the UPI payment for <span className="font-mono">{formatINR(intent.amount)}</span>
@@ -459,7 +459,7 @@ function VerifyForm({
               value={reference}
               inputMode={method === "upi" ? "numeric" : "text"}
               onChange={(e) => setReference(method === "upi" ? e.target.value.replace(/\D/g, "").slice(0, 12) : e.target.value)}
-              className="h-12 font-mono text-lg tracking-wider"
+              className="h-12 font-mono text-lg"
               autoFocus={!!intent}
               aria-invalid={!!ref && !refValid}
             />

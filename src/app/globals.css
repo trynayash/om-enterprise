@@ -2,9 +2,8 @@
 
 /*
  * OM Enterprise design tokens. See DESIGN.md.
- * Brand: navy, white, gold — set like a printed trade catalogue: ink navy type on white or
- * warm paper, brass-gold used sparingly for markers and rules, monospace for anything that is
- * read like a spec sheet (SKUs, sizes, quantities, money).
+ * Brand: navy, white, gold — ink navy type on white or warm paper, brass-gold used sparingly.
+ * One type family (Roboto, the same as the printed bill); numbers use tabular figures.
  */
 @theme {
   /* Ink navy: brand navy at 800–950; the lighter steps are muted ink greys, never bright blue. */
@@ -35,8 +34,10 @@
   --color-paper-deep: #ece8df;
   --color-rule: #ddd8cc;
 
-  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --font-sans: var(--font-roboto), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  /* No second face: `font-mono` is the same family with tabular figures, so numbers line up. */
+  --font-mono: var(--font-roboto), ui-sans-serif, system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono--font-feature-settings: "tnum";
 
   /* Crisp corners: tighter than Tailwind's defaults, applied everywhere. */
   --radius-sm: 3px;
@@ -92,40 +93,26 @@
   }
 }
 
-/* Condensed display type for headlines: Archivo's width axis, tightened. */
+/* Page titles and big figures: bold, slightly tightened. */
 @utility headline {
-  font-stretch: 78%;
-  letter-spacing: -0.012em;
-  line-height: 0.95;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
 }
 
-/* Small capitals for section names, table heads and units: the body face, lightly spaced. */
+/* Small labels for table heads, figure names and section names: sentence case, written as read. */
 @utility label-caps {
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.045em;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: normal;
   line-height: 1.35;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
-/* Engineering-paper grid behind technical drawings. */
+/* Plain paper fill behind drawings and empty states. */
 @utility blueprint {
   background-color: var(--color-paper);
-  background-image:
-    linear-gradient(to right, rgb(13 27 48 / 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(13 27 48 / 0.055) 1px, transparent 1px);
-  background-size: 16px 16px;
-  background-position: -1px -1px;
-}
-
-/* Dotted leader between a label and its value, as in a printed price list. */
-@utility leader {
-  flex: 1 1 auto;
-  min-width: 1rem;
-  margin-inline: 0.5rem;
-  border-bottom: 1px dotted var(--color-navy-300);
-  transform: translateY(-0.3em);
 }
 
 /* Underline that draws in from the left on hover. */

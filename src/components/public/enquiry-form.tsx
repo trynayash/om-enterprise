@@ -33,11 +33,11 @@ export function EnquirySuccess({ done, whatsapp }: { done: EnquiryDone; whatsapp
         <span className="label-caps text-emerald-800">{label === "enquiry" ? "Enquiry" : "Order request"} received</span>
       </div>
       <div className="px-6 py-7 sm:px-8">
-        <h2 className="headline text-[2.25rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}.</h2>
+        <h2 className="headline text-[1.75rem] font-bold text-navy-950">Thank you, {done.name.split(" ")[0]}.</h2>
         <p className="mt-2 text-[15px] leading-relaxed text-navy-600">
           Your {label} <span className="font-mono font-extrabold text-navy-950">{done.orderNumber}</span> has been received.
         </p>
-        <dl className="mt-6 grid grid-cols-[auto_1fr] border-t border-navy-900 text-sm">
+        <dl className="mt-6 grid grid-cols-[auto_1fr] border-t border-navy-200 text-sm">
           <dt className="label-caps border-b border-navy-100 py-3 pr-6 text-navy-500">Contact</dt>
           <dd className="border-b border-navy-100 py-3 text-navy-900">
             <span className="font-mono tabular">{done.mobile}</span> · {via}

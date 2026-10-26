@@ -6,9 +6,9 @@ export function Container({ children, className }: { children: ReactNode; classN
   return <div className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8", className)}>{children}</div>;
 }
 
-/** The small section name above a heading. */
+/** The small line above a heading (a place, a count). */
 export function Eyebrow({ children, inverted, className }: { children: ReactNode; inverted?: boolean; className?: string }) {
-  return <div className={cn("label-caps flex items-center gap-2", inverted ? "text-gold-400" : "text-gold-700", className)}>{children}</div>;
+  return <div className={cn("flex items-center gap-2 text-[13px] font-medium", inverted ? "text-gold-400" : "text-gold-700", className)}>{children}</div>;
 }
 
 export function SectionHeading({
@@ -30,11 +30,11 @@ export function SectionHeading({
     <div className={cn("mb-8 flex flex-wrap items-end justify-between gap-x-6 gap-y-4", align === "center" && "flex-col items-center text-center")}>
       <div className={cn("max-w-2xl", align === "center" && "mx-auto")}>
         {eyebrow && (
-          <Eyebrow inverted={inverted} className={cn("mb-3", align === "center" && "justify-center")}>
+          <Eyebrow inverted={inverted} className={cn("mb-2", align === "center" && "justify-center")}>
             {eyebrow}
           </Eyebrow>
         )}
-        <h2 className={cn("headline text-[2.25rem] font-bold sm:text-[2.75rem]", inverted ? "text-white" : "text-navy-950")}>{title}</h2>
+        <h2 className={cn("headline text-[1.625rem] font-bold sm:text-[2rem]", inverted ? "text-white" : "text-navy-950")}>{title}</h2>
         {description && <p className={cn("mt-3 text-[15px] leading-relaxed", inverted ? "text-navy-200" : "text-navy-500")}>{description}</p>}
       </div>
       {action}
@@ -42,7 +42,7 @@ export function SectionHeading({
   );
 }
 
-/** Header band for inner pages: paper background, breadcrumbs, condensed title. */
+/** Header band for inner pages: paper background, breadcrumbs, title. */
 export function PageIntro({
   crumbs,
   eyebrow,
@@ -64,8 +64,8 @@ export function PageIntro({
         {crumbs && <Breadcrumbs items={crumbs} />}
         <div className={cn("flex flex-wrap items-end justify-between gap-6", crumbs && "mt-6")}>
           <div className="max-w-3xl">
-            {eyebrow && <Eyebrow className="mb-3">{eyebrow}</Eyebrow>}
-            <h1 className="headline animate-rise text-[2.75rem] font-bold text-navy-950 sm:text-[3.5rem]">{title}</h1>
+            {eyebrow && <Eyebrow className="mb-2">{eyebrow}</Eyebrow>}
+            <h1 className="headline animate-rise text-[2rem] font-bold text-navy-950 sm:text-[2.5rem]">{title}</h1>
             {description && <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-navy-600">{description}</p>}
           </div>
           {aside}

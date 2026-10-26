@@ -39,7 +39,7 @@ export function PosUserMenu({ name, role, canDashboard }: { name: string; role: 
         </span>
         <span className="hidden text-left leading-tight xl:block">
           <span className="block text-[13px] font-semibold">{name}</span>
-          <span className="mt-0.5 block font-mono text-[10px] uppercase tracking-[0.08em] text-navy-400">{role}</span>
+          <span className="mt-0.5 block text-xs text-navy-400">{role}</span>
         </span>
         <ChevronDown className={cn("h-4 w-4 text-navy-400 transition-transform duration-200", open && "rotate-180")} />
       </button>

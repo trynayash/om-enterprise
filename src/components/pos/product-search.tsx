@@ -262,7 +262,7 @@ function Kbd({ children, className }: { children: React.ReactNode; className?: s
   return (
     <kbd
       className={cn(
-        "inline-flex h-5 min-w-5 items-center justify-center rounded-[3px] border border-navy-200 bg-paper px-1 font-mono text-[10.5px] font-medium leading-none text-navy-600 shadow-[inset_0_-1px_0_var(--color-navy-200)]",
+        "inline-flex h-5 min-w-5 items-center justify-center rounded-[3px] border border-navy-200 bg-paper px-1 font-mono text-[11px] font-medium leading-none text-navy-600 shadow-[inset_0_-1px_0_var(--color-navy-200)]",
         className,
       )}
     >
@@ -347,7 +347,7 @@ function AddPanel({
       </div>
 
       {!r.price ? (
-        <p className="mt-3 rounded-md border-l-[3px] border-red-600 bg-red-50 px-3 py-2 text-sm font-medium text-red-900">
+        <p className="mt-3 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-900">
           No selling price is configured for this item. An authorised admin must set a price before it can be sold.
         </p>
       ) : (

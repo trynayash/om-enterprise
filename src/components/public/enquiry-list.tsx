@@ -90,9 +90,9 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
   return (
     <div className="grid gap-8 lg:grid-cols-[1.25fr_1fr]">
       <section aria-labelledby="list-heading">
-        <h2 id="list-heading" className="flex items-center gap-2 border-b border-navy-900 pb-2.5 text-lg font-semibold tracking-[-0.01em] text-navy-950">
+        <h2 id="list-heading" className="flex items-center gap-2 border-b border-navy-200 pb-2.5 text-lg font-semibold tracking-[-0.01em] text-navy-950">
           <ClipboardList className="h-[18px] w-[18px] text-gold-600" /> Your enquiry list
-          {list.count > 0 && <span className="ml-auto font-mono text-[12px] font-normal text-navy-500">{String(list.count).padStart(2, "0")} items</span>}
+          {list.count > 0 && <span className="ml-auto text-[13px] font-normal text-navy-500 tabular">{list.count} {list.count === 1 ? "item" : "items"}</span>}
         </h2>
         {list.items.length === 0 ? (
           <div className="blueprint mt-5 rounded-xl border border-navy-200 p-10 text-center">
@@ -161,7 +161,7 @@ export function EnquiryList({ whatsapp, priceNote, enquiriesEnabled }: { whatsap
               })}
             </ul>
             {unavailable.length > 0 && (
-              <div className="mt-3 flex items-start gap-2 rounded-lg border border-amber-200 border-l-[3px] border-l-amber-500 bg-amber-50/80 px-4 py-3 text-sm text-amber-950">
+              <div className="mt-3 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50/80 px-4 py-3 text-sm text-amber-950">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
                 <span>
                   {unavailable.length === 1 ? "One item is" : `${unavailable.length} items are`} no longer listed online. Remove {unavailable.length === 1 ? "it" : "them"} before sending, or ask us about it in the message.

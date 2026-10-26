@@ -15,7 +15,6 @@ export default function ProductsPage({ searchParams }: PageProps<"/products">) {
     <>
       <PageIntro
         crumbs={[{ href: "/", label: "Home" }, { label: "Products" }]}
-        eyebrow="Catalogue"
         title="Product catalogue"
         description="Every size we list, with its SKU. Add items to your enquiry list — we confirm availability and the final bill amount when you contact us or visit the shop."
       />

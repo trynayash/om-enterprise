@@ -20,7 +20,7 @@ export async function PosTopBar() {
       <div className="mx-auto flex h-14 max-w-[1500px] items-stretch gap-3 px-3 sm:px-5">
         <Link href="/pos" className="flex shrink-0 items-center gap-2.5 pr-1">
           <LogoMark className="h-8 w-8" />
-          <span className="hidden text-[13px] font-bold tracking-[0.1em] [font-stretch:108%] sm:inline">OM ENTERPRISE</span>
+          <span className="hidden text-[13px] font-bold sm:inline">OM ENTERPRISE</span>
           <span aria-hidden className="hidden h-4 w-px bg-white/20 sm:block" />
           <span className="label-caps text-gold-400">POS</span>
         </Link>

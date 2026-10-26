@@ -148,7 +148,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
             <SaleStatusBadge status={s.status} paymentStatus={s.paymentStatus} />
             {s.status === "completed" && <StatusBadge status={s.paymentStatus} />}
             {s.isTraining && <TrainingBadge />}
-            {s.source === "website_order" && <Badge tone="blue">From website order</Badge>}
+            {s.source === "website_order" && <Badge>From website order</Badge>}
           </div>
         </div>
         <div className="ml-auto flex flex-wrap gap-2">
@@ -186,8 +186,8 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
                     done ? "text-navy-700" : current ? "font-semibold text-navy-950" : "text-navy-400",
                   )}
                 >
-                  <span aria-hidden className={cn("hidden font-mono text-[11px] tabular sm:inline", current ? "text-gold-700" : "text-navy-400")}>
-                    {done ? <Check className="h-3.5 w-3.5 text-navy-900" strokeWidth={2.5} /> : String(i + 1).padStart(2, "0")}
+                  <span aria-hidden className={cn("hidden font-mono text-xs tabular sm:inline", current ? "text-gold-700" : "text-navy-400")}>
+                    {done ? <Check className="h-3.5 w-3.5 text-navy-900" strokeWidth={2.5} /> : i + 1}
                   </span>
                   <span className="sr-only sm:hidden">{i + 1}. </span>
                   <span className="sm:hidden">{SHORT_STEP[label] ?? label}</span>
@@ -330,7 +330,7 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
         <div data-bottom-bar className="no-print fixed inset-x-0 bottom-0 z-20 flex items-center justify-between gap-3 border-t border-white/10 bg-navy-950 px-4 py-2.5 text-white lg:hidden">
           <div className="min-w-0">
             <div className="label-caps text-gold-400">{finalized ? "Amount due" : "Total"}</div>
-            <div className="headline mt-1 text-[1.85rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
+            <div className="headline mt-0.5 text-[1.625rem] font-bold tabular">{formatINR(finalized ? outstanding.toFixed(2) : s.grandTotal)}</div>
           </div>
           <a href={draft ? "#checkout" : "#step-panel"} className={buttonClass("gold", "lg", "shrink-0")}>
             {draft ? "Checkout" : asking ? "Customer" : finalized && outstanding.greaterThan(0) ? "Take payment" : "Bill"} <ArrowDown className="h-4 w-4" />

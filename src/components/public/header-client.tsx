@@ -43,25 +43,23 @@ const navItem = (active: boolean) =>
     active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
   );
 
-/** Categories set like a printed index: number · name · dotted leader · count. */
+/** Categories as a ruled list: name on the left, product count on the right. */
 function CategoryIndex({ categories, onPick, dense }: { categories: HeaderCategory[]; onPick?: () => void; dense?: boolean }) {
   return (
-    <ol className={cn("grid", dense ? "gap-0" : "gap-x-8 sm:grid-cols-2")}>
-      {categories.map((c, i) => (
+    <ul className={cn("grid", dense ? "gap-0" : "gap-x-8 sm:grid-cols-2")}>
+      {categories.map((c) => (
         <li key={c.slug}>
           <Link
             href={`/category/${c.slug}`}
             onClick={onPick}
-            className="group flex items-baseline gap-3 border-b border-navy-100 py-2.5 text-sm text-navy-900 transition-colors hover:text-navy-950"
+            className="group flex items-baseline justify-between gap-4 border-b border-navy-100 py-2.5 text-sm text-navy-900 transition-colors hover:text-navy-950"
           >
-            <span className="font-mono text-[11px] text-navy-400 transition-colors group-hover:text-gold-700">{String(i + 1).padStart(2, "0")}</span>
-            <span className="font-medium">{c.name}</span>
-            <span aria-hidden className="leader" />
-            <span className="font-mono text-[12px] text-navy-500 tabular">{c.productCount}</span>
+            <span className="font-medium transition-colors group-hover:text-gold-700">{c.name}</span>
+            <span className="shrink-0 font-mono text-[12px] text-navy-500 tabular">{c.productCount}</span>
           </Link>
         </li>
       ))}
-    </ol>
+    </ul>
   );
 }
 
@@ -105,8 +103,8 @@ function NavLinks({ pathname, categories }: { pathname: string | null; categorie
         {open && top.length > 0 && (
           <div className="absolute left-1/2 top-full z-50 w-[620px] -translate-x-1/2 pt-2">
             <div className="animate-sheet-in rounded-xl border border-navy-200 bg-white p-5 shadow-lift">
-              <div className="label-caps mb-2 flex items-center justify-between text-navy-400">
-                <span>Catalogue index</span>
+              <div className="label-caps mb-2 flex items-center justify-between text-navy-500">
+                <span>Categories</span>
                 <span>Products</span>
               </div>
               <CategoryIndex categories={top} onPick={() => setOpen(false)} />
@@ -146,7 +144,7 @@ function EnquiryButton() {
       {count > 0 && (
         <span
           key={count}
-          className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] animate-sheet-in items-center justify-center rounded-[4px] bg-navy-900 px-1 font-mono text-[10.5px] font-semibold text-white ring-2 ring-white"
+          className="absolute -right-0.5 -top-0.5 flex h-[18px] min-w-[18px] animate-sheet-in items-center justify-center rounded-[4px] bg-navy-900 px-1 font-mono text-[11px] font-semibold text-white ring-2 ring-white"
         >
           {count}
         </span>
@@ -294,7 +292,7 @@ export function HeaderClient({ categories, whatsapp, phone, addressShort }: Head
               </nav>
               {top.length > 0 && (
                 <div className="mt-7">
-                  <div className="label-caps mb-1 text-gold-700">Categories</div>
+                  <div className="label-caps mb-1 text-navy-500">Categories</div>
                   <CategoryIndex categories={top} onPick={() => setMenuOpen(false)} dense />
                 </div>
               )}

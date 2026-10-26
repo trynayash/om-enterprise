@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
 import { Spinner, buttonClass } from "@/components/ui/button";
 
-/** Big "NEW SALE" key / button: creates a draft sale and opens it. */
+/** The "New sale" key / button: creates a draft sale and opens it. */
 export function NewSaleButton({ variant = "tile", className }: { variant?: "tile" | "button"; className?: string }) {
   const router = useRouter();
   const toast = useToast();
@@ -29,7 +29,7 @@ export function NewSaleButton({ variant = "tile", className }: { variant?: "tile
       </button>
     );
   }
-  // The counter's one big key: flat brass, condensed type, a hairline under the title.
+  // The counter's one big key: flat brass, a plain title and one line under it.
   return (
     <button
       type="button"
@@ -37,18 +37,16 @@ export function NewSaleButton({ variant = "tile", className }: { variant?: "tile
       disabled={busy}
       data-testid="new-sale"
       className={cn(
-        "group flex min-h-52 flex-col justify-between gap-10 rounded-xl bg-gold-500 p-6 text-left text-navy-950 shadow-[inset_0_-2px_0_rgb(0_0_0/0.16)] transition-[background-color,transform] duration-150 ease-out hover:bg-gold-400 active:translate-y-px active:bg-gold-600 disabled:opacity-70 sm:p-7",
+        "group flex min-h-40 flex-col justify-between gap-6 rounded-xl bg-gold-500 p-5 text-left text-navy-950 shadow-[inset_0_-2px_0_rgb(0_0_0/0.16)] transition-[background-color,transform] duration-150 ease-out hover:bg-gold-400 active:translate-y-px active:bg-gold-600 disabled:opacity-70 sm:p-6",
         className,
       )}
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-navy-950 text-gold-400 transition-transform duration-200 ease-out group-hover:scale-[1.04]">
-        {busy ? <Spinner className="h-5 w-5" /> : <Plus className="h-6 w-6" strokeWidth={2.25} />}
+      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-navy-950 text-gold-400 transition-transform duration-200 ease-out group-hover:scale-[1.04]">
+        {busy ? <Spinner className="h-5 w-5" /> : <Plus className="h-5 w-5" strokeWidth={2.25} />}
       </span>
       <span className="block">
-        <span className="headline block text-[3.25rem] font-bold sm:text-[4.5rem]">NEW SALE</span>
-        <span className="mt-4 block border-t border-navy-950/15 pt-3 text-sm font-medium text-navy-950/75">
-          Start billing a customer — prices &amp; totals are automatic
-        </span>
+        <span className="block text-[2rem] font-semibold leading-tight tracking-[-0.015em]">New sale</span>
+        <span className="mt-1.5 block text-sm text-navy-950/75">Start billing a customer — prices &amp; totals are automatic</span>
       </span>
     </button>
   );

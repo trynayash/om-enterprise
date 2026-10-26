@@ -43,7 +43,7 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
   return (
     <form onSubmit={submit} className="space-y-4">
       <div>
-        <h1 className="headline text-[2.25rem] font-bold text-navy-950">{setup ? "Protect your account" : "Secret key"}</h1>
+        <h1 className="headline text-[1.625rem] font-bold text-navy-950">{setup ? "Protect your account" : "Secret key"}</h1>
         <p className="mt-2 text-sm leading-relaxed text-navy-500">
           A secret key is a second code, asked after your password every time you sign in. Even someone who learns your password can&apos;t get in without it.
         </p>
@@ -51,8 +51,8 @@ export function SecretKeyForm({ hasKey, setAt, setup, home }: { hasKey: boolean;
 
       <div
         className={cn(
-          "flex items-center gap-2.5 rounded-md border border-l-[3px] px-3.5 py-2.5 text-sm",
-          hasKey ? "border-emerald-200 border-l-emerald-600 bg-emerald-50/70 text-emerald-950" : "border-amber-200 border-l-amber-500 bg-amber-50/70 text-amber-950",
+          "flex items-center gap-2.5 rounded-md border px-3.5 py-2.5 text-sm",
+          hasKey ? "border-emerald-200 bg-emerald-50/70 text-emerald-950" : "border-amber-200 bg-amber-50/70 text-amber-950",
         )}
       >
         {hasKey ? (

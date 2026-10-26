@@ -59,8 +59,8 @@ async function SharedDocument({ params }: { params: PageProps<"/d/[token]">["par
     return (
       <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
         <LogoMark className="h-12 w-12" />
-        <div className="blueprint mt-8 w-full max-w-md rounded-xl border border-navy-200 px-6 py-10 text-center">
-          <h1 className="headline text-[2rem] font-bold text-navy-950">{limited ? "Please try again shortly" : "This link isn't available"}</h1>
+        <div className="mt-8 w-full max-w-md rounded-xl border border-navy-200 bg-paper/60 px-6 py-10 text-center">
+          <h1 className="headline text-[1.625rem] font-bold text-navy-950">{limited ? "Please try again shortly" : "This link isn't available"}</h1>
           <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-navy-600">
             {limited
               ? "Too many requests came from this device. Wait a few minutes and reload the page."
@@ -81,13 +81,13 @@ async function SharedDocument({ params }: { params: PageProps<"/d/[token]">["par
           <div className="flex min-w-0 items-center gap-3">
             <LogoMark className="h-9 w-9" />
             <div className="min-w-0 leading-tight">
-              <div className="text-[13px] font-bold tracking-[0.08em] text-navy-950 [font-stretch:108%]">{doc.snapshot.seller.name}</div>
+              <div className="text-[13px] font-bold text-navy-950">{doc.snapshot.seller.name}</div>
               <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-navy-500">
                 <span>
                   {doc.snapshot.title} <span className="font-mono text-navy-700">{doc.docNumber}</span>
                 </span>
                 {doc.status === "cancelled" && (
-                  <span className="rounded-[3px] border border-red-600 px-1 font-mono text-[10px] font-semibold uppercase tracking-[0.08em] text-red-700">Cancelled</span>
+                  <span className="rounded-[3px] bg-red-50 px-1.5 py-px text-xs font-medium text-red-800 ring-1 ring-inset ring-red-200">Cancelled</span>
                 )}
               </div>
             </div>

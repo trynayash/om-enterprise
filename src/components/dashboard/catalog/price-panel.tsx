@@ -174,8 +174,8 @@ export function PricePanel({
               )}
             >
               {l.name}
-              {l.isDefault && <span className="label-caps ml-1.5 text-[9.5px] text-gold-700">default</span>}
-              {!l.isActive && <span className="ml-1.5 text-[11px] font-normal text-navy-400">(not in use)</span>}
+              {l.isDefault && <span className="ml-1.5 text-xs font-normal text-navy-500">(default)</span>}
+              {!l.isActive && <span className="ml-1.5 text-xs font-normal text-navy-400">(not in use)</span>}
             </button>
           ))}
         </div>
@@ -187,12 +187,12 @@ export function PricePanel({
         <InfoTile label={`Current ${list?.name ?? ""} price`}>
           {cur ? (
             <>
-              <div className="headline text-[1.75rem] font-bold tabular">{formatINR(cur.price)}</div>
+              <div className="headline text-[1.5rem] font-bold tabular">{formatINR(cur.price)}</div>
               <div className="text-xs text-navy-500">
                 per {unitName} · {cur.priceIncludesTax ? `incl. ${taxLabel}` : `excl. ${taxLabel}`}
                 {cur.mrp ? ` · MRP ${formatINR(cur.mrp)}` : ""}
               </div>
-              <div className="mt-1 text-[11px] text-navy-500">
+              <div className="mt-1 text-xs text-navy-500">
                 since <DateTime value={cur.effectiveFrom} />
               </div>
             </>
@@ -203,7 +203,7 @@ export function PricePanel({
         <InfoTile label={regType === "regular" ? "Excl. GST (revenue)" : "Revenue per unit"}>
           {curInfo ? (
             <>
-              <div className="headline text-2xl font-bold tabular">{formatINR(curInfo.exclusive)}</div>
+              <div className="headline text-xl font-bold tabular">{formatINR(curInfo.exclusive)}</div>
               <div className="text-xs text-navy-500">
                 {regType === "regular"
                   ? `GST ${Number(ctx.gstRate)}%${Number(ctx.cessRate) ? ` + cess ${Number(ctx.cessRate)}%` : ""}`
@@ -219,12 +219,12 @@ export function PricePanel({
         {showCost && (
           <>
             <InfoTile label="Landed cost">
-              {landedCost ? <div className="headline text-2xl font-bold tabular">{formatINR(landedCost)}</div> : <div className="text-sm font-medium text-amber-700">Unknown — record a cost</div>}
+              {landedCost ? <div className="headline text-xl font-bold tabular">{formatINR(landedCost)}</div> : <div className="text-sm font-medium text-amber-700">Unknown — record a cost</div>}
             </InfoTile>
             <InfoTile label="Gross margin · markup">
               {curInfo?.margin ? (
                 <>
-                  <div className={cn("headline text-2xl font-bold tabular", curInfo.belowCost ? "text-red-700" : curInfo.belowFloor ? "text-amber-700" : "text-emerald-700")}>{curInfo.margin.toFixed(1)}%</div>
+                  <div className={cn("headline text-xl font-bold tabular", curInfo.belowCost ? "text-red-700" : curInfo.belowFloor ? "text-amber-700" : "text-emerald-700")}>{curInfo.margin.toFixed(1)}%</div>
                   <div className="text-xs text-navy-500">markup {curInfo.markup?.toFixed(1) ?? "—"}% on cost</div>
                 </>
               ) : (
@@ -247,7 +247,7 @@ export function PricePanel({
       {(listPending.length > 0 || listScheduled.length > 0) && (
         <div className="space-y-2">
           {listPending.map((v) => (
-            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-l-[3px] border-amber-200 border-l-amber-500 bg-amber-50/70 px-4 py-3">
+            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/70 px-4 py-3">
               <div className="text-sm">
                 <div className="flex items-center gap-2 font-semibold text-amber-900">
                   <Clock className="h-4 w-4" /> Awaiting approval: {v.previousPrice ? `${formatINR(v.previousPrice)} → ` : ""}
@@ -271,12 +271,12 @@ export function PricePanel({
             </div>
           ))}
           {listScheduled.map((v) => (
-            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-l-[3px] border-sky-200 border-l-sky-600 bg-sky-50/70 px-4 py-3">
+            <div key={v.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-navy-200 bg-navy-50/70 px-4 py-3">
               <div className="text-sm">
-                <div className="flex items-center gap-2 font-semibold text-sky-900">
+                <div className="flex items-center gap-2 font-semibold text-navy-900">
                   <CalendarClock className="h-4 w-4" /> Scheduled: {formatINR(v.price)} from <DateTime value={v.effectiveFrom} />
                 </div>
-                <div className="text-xs text-sky-800">“{v.reason}”</div>
+                <div className="text-xs text-navy-600">“{v.reason}”</div>
               </div>
               {perms.canApprovePrices && (
                 <Button size="sm" variant="outline" loading={busy === v.id} onClick={() => cancel(v)}>

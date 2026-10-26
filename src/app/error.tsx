@@ -14,7 +14,7 @@ export default function PageError({ error, retry }: { error: unknown; retry: () 
 
   return (
     <PaperSheet stamp={<SheetStamp>Error</SheetStamp>}>
-      <h1 className="headline text-[2.25rem] font-bold text-navy-950">This page didn&apos;t load</h1>
+      <h1 className="headline text-[1.625rem] font-bold text-navy-950">This page didn&apos;t load</h1>
       <p className="mt-2 text-sm leading-relaxed text-navy-500">This is usually a brief connection problem. Try again in a moment.</p>
       {reference && (
         <p className="mt-4 font-mono text-[11.5px] text-navy-500">

@@ -145,7 +145,7 @@ async function ProductContent({ params }: { params: PageProps<"/dashboard/produc
       />
 
       {p.isSample && (
-        <div className="mb-6 rounded-lg border border-l-[3px] border-red-200 border-l-red-600 bg-red-50/80 px-4 py-3 text-sm leading-relaxed text-red-950">
+        <div className="mb-6 rounded-lg border border-red-200 bg-red-50/80 px-4 py-3 text-sm leading-relaxed text-red-950">
           <b>Sample / demonstration product.</b> Its details and prices are placeholders, not real catalogue data. Sales that include it are training sales with separate numbering and are excluded from reports.
         </div>
       )}

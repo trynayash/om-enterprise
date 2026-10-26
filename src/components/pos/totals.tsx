@@ -15,12 +15,9 @@ type Run = (fn: () => Promise<unknown>, success?: string) => Promise<boolean>;
 
 function Row({ label, value, tone }: { label: string; value: string; tone?: "green" | "muted" }) {
   return (
-    <div className="flex items-baseline py-[3px] text-sm">
-      <dt className={cn("flex min-w-0 flex-1 items-baseline", tone === "muted" ? "text-navy-500" : "text-navy-700")}>
-        <span className="min-w-0">{label}</span>
-        <span aria-hidden className="leader" />
-      </dt>
-      <dd className={cn("font-mono tabular", tone === "green" ? "font-medium text-emerald-700" : tone === "muted" ? "text-navy-600" : "text-navy-950")}>{value}</dd>
+    <div className="flex items-baseline justify-between gap-4 py-[3px] text-sm">
+      <dt className={cn("min-w-0", tone === "muted" ? "text-navy-500" : "text-navy-700")}>{label}</dt>
+      <dd className={cn("shrink-0 font-mono tabular", tone === "green" ? "font-medium text-emerald-700" : tone === "muted" ? "text-navy-600" : "text-navy-950")}>{value}</dd>
     </div>
   );
 }
@@ -39,7 +36,7 @@ export function TotalsCard({ data }: { data: SaleData }) {
         {D(s.cartDiscountTotal).greaterThan(0) && <Row label={`Bill discount${s.cartDiscountReason ? ` (${s.cartDiscountReason})` : ""}`} value={`− ${formatINR(s.cartDiscountTotal)}`} tone="green" />}
         {D(s.chargesTotal).greaterThan(0) && <Row label="Charges" value={formatINR(s.chargesTotal)} />}
         {taxCharged ? (
-          <div className="mt-2 border-t border-dashed border-navy-200 pt-2">
+          <div className="mt-2 border-t border-navy-100 pt-2">
             <Row label="Taxable value" value={formatINR(s.taxableTotal)} tone="muted" />
             {s.taxMode === "intra" ? (
               <>
@@ -52,14 +49,14 @@ export function TotalsCard({ data }: { data: SaleData }) {
             {D(s.cessTotal).greaterThan(0) && <Row label="Cess" value={formatINR(s.cessTotal)} tone="muted" />}
           </div>
         ) : (
-          <p className="mt-2 border-t border-dashed border-navy-200 pt-2 text-xs text-navy-500">GST is not charged on this bill (registration type).</p>
+          <p className="mt-2 border-t border-navy-100 pt-2 text-xs text-navy-500">GST is not charged on this bill (registration type).</p>
         )}
         {!D(s.roundOff).isZero() && <Row label="Round off" value={formatINR(s.roundOff)} tone="muted" />}
       </dl>
       <div className="bg-navy-950 px-5 pb-4 pt-3.5 text-white">
         <div className="flex items-end justify-between gap-4">
-          <div className="label-caps pb-2 text-gold-400">Grand total</div>
-          <div className="headline text-[2.75rem] font-bold tabular sm:text-[3.25rem]" data-testid="grand-total">
+          <div className="label-caps pb-1.5 text-gold-400">Grand total</div>
+          <div className="headline text-[2rem] font-bold tabular sm:text-[2.25rem]" data-testid="grand-total">
             {/* Re-keyed on change so a new total fades in instead of snapping. */}
             <span key={s.grandTotal} className="inline-block animate-fade-in">
               {formatINR(s.grandTotal)}

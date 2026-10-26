@@ -16,7 +16,6 @@ export default function EnquiryPage() {
     <>
       <PageIntro
         crumbs={[{ href: "/", label: "Home" }, { label: "Enquiry list" }]}
-        eyebrow="Your list"
         title="Enquiry & order request"
         description="Review your list and send it to us. We'll confirm stock, the final bill amount and pickup or delivery — usually on WhatsApp."
       />

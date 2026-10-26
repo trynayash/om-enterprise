@@ -57,7 +57,7 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
       <nav className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-3 pt-2.5" aria-label="Main">
         {groups.map((g) => (
           <div key={g.label} className="mt-3 first:mt-0">
-            <div className="label-caps px-2.5 pb-1 text-[10px] text-navy-400">{g.label}</div>
+            <div className="label-caps px-2.5 pb-1 text-navy-400">{g.label}</div>
             <ul>
               {g.items.map((i) => {
                 const active = isActive(i.href);
@@ -101,7 +101,7 @@ export function SidebarNav({ groups, user, badges }: { groups: NavGroup[]; user:
           </span>
           <div className="min-w-0">
             <div className="truncate text-[13px] font-semibold leading-tight text-white">{user.name}</div>
-            <div className="label-caps mt-0.5 truncate text-[10px] text-navy-400">{user.role}</div>
+            <div className="label-caps mt-0.5 truncate text-navy-400">{user.role}</div>
           </div>
         </div>
         <Link href="/account/password" onClick={close} className={footerLink}>

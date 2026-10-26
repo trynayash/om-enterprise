@@ -302,7 +302,7 @@ export function BuyerFields({
                 value={form.gstin}
                 onChange={(e) => setForm((f) => ({ ...f, gstin: e.target.value.toUpperCase().replace(/\s/g, "") }))}
                 maxLength={15}
-                className="font-mono uppercase tracking-wider"
+                className="font-mono uppercase"
                 autoComplete="off"
               />
             </Field>

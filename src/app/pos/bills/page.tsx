@@ -10,6 +10,7 @@ import { Badge, StatusBadge } from "@/components/ui/badge";
 import { CASH_SALE, TrainingBadge } from "@/components/staff/labels";
 import { SaleStatusBadge } from "@/components/pos/sale-status";
 import { DateTime, Money } from "@/components/ui/money";
+import { PAYMENT_METHOD_LABEL } from "@/lib/bill-layout";
 import { EmptyState, PageHeader, PageSkeleton, TableWrap, td, th } from "@/components/ui/page";
 
 export const metadata = { title: "Recent bills" };
@@ -142,7 +143,7 @@ async function Bills({ searchParams }: { searchParams: Promise<SP> }) {
                     </td>
                     <td className={`${td} text-right`}>
                       <Money value={s.amountPaid} muted className="font-mono" />
-                      {s.paymentMethods && <div className="label-caps mt-0.5 text-[10px] text-navy-400">{s.paymentMethods.replace(/_/g, " ")}</div>}
+                      {s.paymentMethods && <div className="mt-0.5 text-xs text-navy-400">{s.paymentMethods.split(", ").map((m) => PAYMENT_METHOD_LABEL[m] ?? m.replace(/_/g, " ")).join(", ")}</div>}
                     </td>
                     <td className={td}>
                       <div className="flex flex-wrap gap-1">

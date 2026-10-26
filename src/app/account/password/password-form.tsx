@@ -39,7 +39,7 @@ export function PasswordForm() {
   return (
     <form onSubmit={submit} className="space-y-4">
       <div>
-        <h1 className="headline text-[2.25rem] font-bold text-navy-950">{required ? "Set your own password" : "Change password"}</h1>
+        <h1 className="headline text-[1.625rem] font-bold text-navy-950">{required ? "Set your own password" : "Change password"}</h1>
         <p className="mt-2 text-sm leading-relaxed text-navy-500">
           {required ? "You signed in with a temporary password. Choose a new one to continue." : "Other devices will be signed out."}
         </p>

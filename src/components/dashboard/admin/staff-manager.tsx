@@ -130,7 +130,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                       <Badge tone="green">Active</Badge>
                     )}
                     {s.hasSecretKey && (
-                      <Badge tone="blue">
+                      <Badge>
                         <ShieldCheck className="h-3 w-3" /> Secret key
                       </Badge>
                     )}
@@ -191,7 +191,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                   )}
                 </div>
                 <p className="mt-1.5 flex-1 text-xs leading-relaxed text-navy-500">{r.description}</p>
-                <div className="mt-3 border-t border-dotted border-navy-200 pt-2.5 font-mono text-[11.5px] leading-relaxed text-navy-600">
+                <div className="mt-3 border-t border-navy-100 pt-2.5 font-mono text-[11.5px] leading-relaxed text-navy-600">
                   {r.key === "super_admin" ? "All permissions, no limits" : `${r.permissions.length} permissions · discount ${Number(r.defaultDiscountLimitPercent)}% · approves up to ${Number(r.defaultApprovalLimitPercent)}%`}
                 </div>
               </div>

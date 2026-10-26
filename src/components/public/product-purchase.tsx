@@ -223,7 +223,7 @@ export function ProductPurchase({
         </div>
         {!qty && <p className="mt-2 text-xs text-red-700">{decimals ? `Up to ${decimals} decimal places allowed.` : "Whole numbers only."}</p>}
         {qty && unitAmount && Number(qty) !== 1 && (
-          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-dashed border-navy-200 pt-3 font-mono text-[13px] tabular text-navy-500">
+          <p className="mt-4 flex items-baseline justify-between gap-3 border-t border-navy-100 pt-3 font-mono text-[13px] tabular text-navy-500">
             <span>
               {formatQty(qty)} {selected.unit.toLowerCase()} × {formatPrice(unitAmount)}
             </span>

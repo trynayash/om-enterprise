@@ -69,7 +69,7 @@ export function ReviewPublish({
               <li key={s.key} aria-current={current ? "step" : undefined}>
                 <span aria-hidden className={`block h-[3px] rounded-full ${i <= stepIndex ? (i === 2 ? "bg-emerald-600" : "bg-navy-900") : "bg-navy-100"}`} />
                 <span className={`mt-1.5 flex items-center gap-1 text-[11.5px] font-semibold leading-tight ${current ? "text-navy-900" : i < stepIndex ? "text-navy-600" : "text-navy-400"}`}>
-                  {done ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden /> : <span className="font-mono text-[10.5px] font-medium">{i + 1}</span>}
+                  {done ? <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" aria-hidden /> : <span className="font-mono text-[11px] font-medium">{i + 1}</span>}
                   {s.label}
                 </span>
               </li>

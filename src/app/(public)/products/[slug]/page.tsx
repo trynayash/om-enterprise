@@ -95,7 +95,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
       </div>
       {p.isSample && (
         <Container className="mt-5">
-          <div className="flex items-start gap-3 rounded-lg border border-red-200 border-l-[3px] border-l-red-600 bg-red-50/80 px-4 py-3 text-sm text-red-950" role="note">
+          <div className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50/80 px-4 py-3 text-sm text-red-950" role="note">
             <AlertTriangle className="mt-0.5 h-[18px] w-[18px] shrink-0 text-red-600" />
             <div>
               <span className="font-semibold">Demonstration product — not real product information.</span> Prices, specifications and availability shown
@@ -107,13 +107,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
       <Container className="grid gap-10 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-12">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <div className="relative">
-            <ProductGallery
-              images={p.images.map((i) => ({ url: i.url, alt: i.alt }))}
-              name={p.name}
-              kind={drawingKind(p.name, p.categoryIcon)}
-              variants={p.variants.map((v) => ({ id: v.id, name: v.name, sku: v.sku, attributes: v.attributes }))}
-              variantAttributes={p.variantAttributes}
-            />
+            <ProductGallery images={p.images.map((i) => ({ url: i.url, alt: i.alt }))} name={p.name} kind={drawingKind(p.name, p.categoryIcon)} />
             {p.isSample && <SampleBadge className="absolute left-3 top-3" />}
           </div>
         </div>
@@ -129,7 +123,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
               {p.category}
             </Link>
           </div>
-          <h1 className="headline mt-3 animate-rise text-[2.5rem] font-bold text-navy-950 sm:text-[3.25rem]">
+          <h1 className="headline mt-2 animate-rise text-[1.875rem] font-bold text-navy-950 sm:text-[2.25rem]">
             <KeepCodes text={p.name} />
           </h1>
           {p.description && <p className="mt-5 whitespace-pre-line text-[15px] leading-relaxed text-navy-600">{p.description}</p>}
@@ -153,7 +147,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
 
           {specs.length > 0 && (
             <section className="mt-12">
-              <div className="flex items-baseline justify-between border-b border-navy-900 pb-2">
+              <div className="flex items-baseline justify-between border-b border-navy-200 pb-2">
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Specifications</h2>
                 <span className="label-caps text-navy-400">{specs.length} {specs.length === 1 ? "item" : "items"}</span>
               </div>
@@ -180,7 +174,7 @@ async function ProductContent({ params }: { params: PageProps<"/products/[slug]"
 
           {p.compatible.length > 0 && (
             <section className="mt-12">
-              <div className="flex items-center gap-2 border-b border-navy-900 pb-2">
+              <div className="flex items-center gap-2 border-b border-navy-200 pb-2">
                 <Link2 className="h-[18px] w-[18px] text-gold-600" />
                 <h2 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">Compatible items</h2>
               </div>

@@ -21,7 +21,7 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
   if (!needed) {
     if (sale.approvalStatus === "approved" && latest?.status === "approved") {
       return (
-        <div className="flex items-start gap-3 rounded-lg border border-emerald-200 border-l-[3px] border-l-emerald-600 bg-emerald-50/80 px-4 py-3 text-sm leading-relaxed text-emerald-950">
+        <div className="flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm leading-relaxed text-emerald-950">
           <BadgeCheck className="mt-0.5 h-[18px] w-[18px] shrink-0 text-emerald-700" />
           <div>
             <div className="font-semibold">Discount approved by {latest.decidedByName ?? "manager"}</div>
@@ -40,7 +40,7 @@ export function ApprovalCard({ data, config, run }: { data: SaleData; config: Po
   const rejected = sale.approvalStatus === "rejected" || latest?.status === "rejected";
 
   return (
-    <section aria-label="Approval required" className="animate-rise rounded-lg border border-amber-300 border-l-[3px] border-l-amber-500 bg-amber-50/80 p-4">
+    <section aria-label="Approval required" className="animate-rise rounded-lg border border-amber-300 bg-amber-50/80 p-4">
       <div className="flex items-start gap-3">
         <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
         <div className="min-w-0 flex-1">

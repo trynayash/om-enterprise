@@ -14,22 +14,22 @@ export const metadata = { title: "Audit log" };
 
 const ACTION_TONE: [RegExp, Tone][] = [
   [/^auth\.(login_failed|account_locked|approver_check_failed)|webhook_rejected|reversed|cancel|_rejected|deactivate/, "red"],
-  [/^(price|cost)\./, "gold"],
+  [/^(price|cost)\./, "amber"],
   [/^(discount|payment)\./, "green"],
-  [/^(user|role|settings)\./, "purple"],
+  [/^(user|role|settings)\./, "navy"],
   [/^document\./, "navy"],
 ];
 
 // The action code is set in mono with a coloured dot, not a badge on every row.
 const DOT: Record<Tone, string> = {
   red: "bg-red-600",
-  gold: "bg-gold-500",
+  gold: "bg-amber-500",
   green: "bg-emerald-600",
-  purple: "bg-violet-600",
-  navy: "bg-navy-800",
+  purple: "bg-navy-700",
+  navy: "bg-navy-700",
   neutral: "bg-navy-300",
   amber: "bg-amber-500",
-  blue: "bg-sky-600",
+  blue: "bg-navy-700",
 };
 
 function toneFor(action: string): Tone {

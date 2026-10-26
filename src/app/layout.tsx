@@ -2,31 +2,16 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-// Self-hosted from npm (OFL) — no network access needed at build time.
-// Archivo: an industrial grotesque with a width axis (condensed display, normal text).
-const archivo = localFont({
+// Self-hosted from npm (OFL) — no network access needed at build time, and the CSP allows
+// fonts from this origin only. One family for everything, the same as the printed bill.
+// Latin-ext comes first: it supplies the rupee sign (U+20B9).
+const roboto = localFont({
   src: [
-    { path: "../../node_modules/@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2", style: "normal" },
-    { path: "../../node_modules/@fontsource-variable/archivo/files/archivo-latin-ext-wdth-normal.woff2", style: "normal" },
+    { path: "../../node_modules/@fontsource-variable/roboto/files/roboto-latin-ext-wght-normal.woff2", style: "normal" },
+    { path: "../../node_modules/@fontsource-variable/roboto/files/roboto-latin-wght-normal.woff2", style: "normal" },
   ],
   weight: "100 900",
-  declarations: [{ prop: "font-stretch", value: "62% 125%" }],
-  variable: "--font-archivo",
-  display: "swap",
-});
-
-// IBM Plex Mono: SKUs, sizes, quantities and money — anything read like a spec sheet.
-// Latin-ext comes first so the Latin faces win for ordinary text; it supplies the ₹ sign.
-const plexMono = localFont({
-  src: [
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-500-normal.woff2", weight: "500", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-ext-600-normal.woff2", weight: "600", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2", weight: "400", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2", weight: "500", style: "normal" },
-    { path: "../../node_modules/@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-600-normal.woff2", weight: "600", style: "normal" },
-  ],
-  variable: "--font-plex-mono",
+  variable: "--font-roboto",
   display: "swap",
 });
 
@@ -46,7 +31,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en-IN" className={`${archivo.variable} ${plexMono.variable} h-full antialiased`}>
+    <html lang="en-IN" className={`${roboto.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

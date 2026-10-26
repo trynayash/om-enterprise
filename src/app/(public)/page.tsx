@@ -29,7 +29,6 @@ export default function HomePage() {
 function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-rule bg-paper">
-      <div aria-hidden className="blueprint absolute inset-y-0 right-0 hidden w-[42%] opacity-60 [mask-image:linear-gradient(to_left,black,transparent)] lg:block" />
       <Container className="relative grid gap-12 py-12 sm:py-16 lg:grid-cols-[1.25fr_0.75fr] lg:items-end lg:gap-16 lg:py-20">
         <div>
           <Suspense fallback={<HeroCopySkeleton />}>
@@ -69,8 +68,8 @@ function HeroCopySkeleton() {
   return (
     <div className="space-y-3">
       <div className="h-3 w-48 animate-pulse rounded-sm bg-navy-100" />
-      <div className="h-16 w-4/5 animate-pulse rounded-md bg-navy-100" />
-      <div className="h-16 w-3/5 animate-pulse rounded-md bg-navy-100" />
+      <div className="h-11 w-4/5 animate-pulse rounded-md bg-navy-100" />
+      <div className="h-11 w-3/5 animate-pulse rounded-md bg-navy-100" />
       <div className="h-5 w-full max-w-lg animate-pulse rounded-sm bg-navy-100" />
     </div>
   );
@@ -86,10 +85,10 @@ async function HeroCopy() {
         {business.city}
         {business.district ? ` · ${business.district}` : ""} · Gujarat
       </Eyebrow>
-      <h1 className="headline mt-5 animate-rise text-[3.25rem] font-bold text-navy-950 sm:text-[4.5rem] lg:text-[5.25rem]">
+      <h1 className="headline mt-3 animate-rise text-[2.375rem] font-bold text-navy-950 sm:text-[2.875rem] lg:text-[3.25rem]">
         {words.join(" ")} <span className="whitespace-nowrap">{tail.join(" ")}</span>
       </h1>
-      <p className="mt-6 max-w-xl animate-[rise_460ms_var(--ease-out-quart)_120ms_both] text-[17px] leading-relaxed text-navy-600">{website.heroSubtitle}</p>
+      <p className="mt-4 max-w-xl animate-[rise_460ms_var(--ease-out-quart)_120ms_both] text-[17px] leading-relaxed text-navy-600">{website.heroSubtitle}</p>
     </>
   );
 }
@@ -133,20 +132,19 @@ async function CounterCard() {
         <span className="label-caps text-navy-500">Brands at the counter</span>
         <span className="text-[13px] text-navy-500">{brands.length} brands</span>
       </div>
-      <ol className="px-5 py-2">
+      <ul className="divide-y divide-navy-100 px-5 py-1">
         {brands.map((b) => (
           <li key={b.slug}>
-            <Link href={`/products?brand=${encodeURIComponent(b.slug)}`} className="group flex items-baseline py-2.5 text-[15px]">
+            <Link href={`/products?brand=${encodeURIComponent(b.slug)}`} className="group flex items-baseline justify-between gap-4 py-2.5 text-[15px]">
               <span className="font-semibold text-navy-950 transition-colors group-hover:text-gold-700">{b.name}</span>
-              <span aria-hidden className="leader" />
-              <span className="font-mono text-[13px] text-navy-500 tabular">
+              <span className="shrink-0 font-mono text-[13px] text-navy-500 tabular">
                 {b.productCount} <span className="text-navy-400">{b.productCount === 1 ? "item" : "items"}</span>
               </span>
             </Link>
           </li>
         ))}
-      </ol>
-      <div className="flex items-center justify-between gap-3 rounded-b-xl border-t border-navy-100 bg-paper/70 px-5 py-3 font-mono text-[12px] text-navy-500">
+      </ul>
+      <div className="flex items-center justify-between gap-3 rounded-b-xl border-t border-navy-100 bg-paper/70 px-5 py-3 text-[13px] text-navy-500">
         <span>
           <span className="text-navy-900 tabular">{total}</span> products · <span className="text-navy-900 tabular">{top.length}</span> categories
         </span>
@@ -177,7 +175,6 @@ function CategoriesSection() {
     <section className="bg-white py-16 sm:py-24">
       <Container>
         <SectionHeading
-          eyebrow="Catalogue"
           title="Shop by category"
           description="From the first length of pipe to the last coat of paint. Choose a category to see every size we list."
           action={
@@ -215,16 +212,13 @@ async function CategoryGrid() {
           style={{ ["--i" as string]: i }}
           className="group relative flex flex-col bg-white p-3.5 shadow-[inset_-1px_-1px_0_var(--color-navy-100)] transition-colors duration-200 hover:bg-paper/60 sm:p-5"
         >
-          <div className="flex items-baseline justify-between font-mono text-[11px]">
-            <span className="text-navy-400 transition-colors group-hover:text-gold-700">{String(i + 1).padStart(2, "0")}</span>
-            <span className="text-navy-500 tabular">
-              {c.productCount} {c.productCount === 1 ? "item" : "items"}
-            </span>
-          </div>
-          <div className="blueprint my-3 flex aspect-[5/3] items-center justify-center rounded-md border border-navy-100 sm:my-4">
+          <div className="blueprint mb-3 flex aspect-[5/3] items-center justify-center rounded-md sm:mb-4">
             <TechnicalDrawing kind={CATEGORY_DRAWING[c.icon ?? ""] ?? "box"} className="h-[86%] w-[86%] transition-transform duration-500 ease-out group-hover:scale-[1.05]" />
           </div>
           <h3 className="text-[15px] font-semibold leading-snug tracking-[-0.01em] text-navy-950 sm:text-[17px]">{c.name}</h3>
+          <p className="mt-0.5 text-[13px] text-navy-500 tabular">
+            {c.productCount} {c.productCount === 1 ? "item" : "items"}
+          </p>
           {c.description && <p className="mt-1.5 hidden text-[13px] leading-relaxed text-navy-500 sm:line-clamp-2">{c.description}</p>}
           <ArrowRight aria-hidden className="absolute bottom-5 right-5 h-4 w-4 -translate-x-1 text-navy-300 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:text-navy-900 group-hover:opacity-100" />
         </Link>
@@ -242,7 +236,6 @@ function FeaturedSection() {
     <section className="border-y border-rule bg-paper py-16 sm:py-24">
       <Container>
         <SectionHeading
-          eyebrow="At the counter"
           title="Popular at the counter"
           description="The items customers ask for most often. Prices are confirmed at billing."
           action={
@@ -286,12 +279,11 @@ function OrderingSection() {
   return (
     <section className="bg-white py-16 sm:py-24">
       <Container>
-        <SectionHeading eyebrow="Ordering" title="Order the way that suits you" description="Browse here, then talk to a person. No account, no online payment." />
-        <ol className="grid border-t border-navy-900 md:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <li key={s.title} className="flex flex-col border-b border-navy-100 py-7 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0">
-              <span className="headline text-[3.5rem] font-bold text-gold-500 tabular">{String(i + 1).padStart(2, "0")}</span>
-              <h3 className="mt-3 text-lg font-semibold tracking-[-0.01em] text-navy-950">{s.title}</h3>
+        <SectionHeading title="Order the way that suits you" description="Browse here, then talk to a person. No account, no online payment." />
+        <ol className="grid border-t border-navy-200 md:grid-cols-3">
+          {STEPS.map((s) => (
+            <li key={s.title} className="flex flex-col border-b border-navy-100 py-6 md:border-b-0 md:border-r md:px-7 md:first:pl-0 md:last:border-r-0">
+              <h3 className="text-lg font-semibold tracking-[-0.01em] text-navy-950">{s.title}</h3>
               <p className="mt-2 max-w-sm text-sm leading-relaxed text-navy-500">{s.text}</p>
               <Link href={s.href} className="group mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-navy-950">
                 <span className="link-draw">{s.cta}</span> <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
@@ -326,8 +318,7 @@ async function ShopContent() {
   return (
     <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
       <div>
-        <Eyebrow>The shop</Eyebrow>
-        <h2 className="headline mt-3 text-[2.25rem] font-bold text-navy-950 sm:text-[2.75rem]">Visit {business.name}</h2>
+        <h2 className="headline text-[1.625rem] font-bold text-navy-950 sm:text-[2rem]">Visit {business.name}</h2>
         <p className="mt-4 max-w-xl text-[15px] leading-relaxed text-navy-600">{business.about}</p>
         <div className="mt-7 flex flex-wrap gap-2.5">
           <LinkButton href="/enquiry">Send an enquiry</LinkButton>

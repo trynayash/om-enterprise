@@ -140,12 +140,12 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                       </div>
                       <div className="mt-1 flex flex-wrap gap-1">
                         {l.priceSource === "override" && <Badge tone="amber">Price changed: {l.overrideReason}</Badge>}
-                        {l.priceSource === "quantity_tier" && <Badge tone="blue">Quantity price</Badge>}
-                        {l.priceSource === "quotation" && <Badge tone="blue">Quoted price</Badge>}
-                        {l.lineDiscountReason && <Badge tone="gold">{l.lineDiscountReason}</Badge>}
+                        {l.priceSource === "quantity_tier" && <Badge>Quantity price</Badge>}
+                        {l.priceSource === "quotation" && <Badge>Quoted price</Badge>}
+                        {l.lineDiscountReason && <Badge tone="amber">{l.lineDiscountReason}</Badge>}
                         {canSeeCosts && l.belowCost && <Badge tone="red">Below cost</Badge>}
                         {canSeeCosts && !l.belowCost && l.belowMarginFloor && <Badge tone="amber">Below margin floor</Badge>}
-                        {ret && <Badge tone="purple">Returned {ret}</Badge>}
+                        {ret && <Badge>Returned {ret}</Badge>}
                       </div>
                     </td>
                     <td data-label="Qty" className={tdNum}>
@@ -229,7 +229,7 @@ async function SaleDetail({ params }: { params: Promise<{ id: string }> }) {
                         </td>
                         <td data-label="Method" className={tdText}>
                           <span className="flex flex-wrap items-center gap-1.5">
-                            {p.direction === "refund" ? <Badge tone="purple">Refund</Badge> : null} {METHOD_LABEL[p.method] ?? p.method}
+                            {p.direction === "refund" ? <Badge>Refund</Badge> : null} {METHOD_LABEL[p.method] ?? p.method}
                           </span>
                           {p.provider === "razorpay" && <div className="text-xs text-navy-500">Razorpay QR</div>}
                         </td>

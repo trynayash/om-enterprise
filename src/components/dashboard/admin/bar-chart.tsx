@@ -96,7 +96,7 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
             {ticks.map((t) => (
               <g key={t} aria-hidden>
                 <line x1={padL} x2={width - padR} y1={y(t)} y2={y(t)} className={t === 0 ? "stroke-navy-400" : "stroke-navy-100"} strokeWidth={1} shapeRendering="crispEdges" />
-                <text x={padL - 8} y={y(t) + 3.5} textAnchor="end" className="fill-navy-500 font-mono text-[10px] tabular">
+                <text x={padL - 8} y={y(t) + 3.5} textAnchor="end" className="fill-navy-500 font-mono text-[11px] tabular">
                   {compact(t)}
                 </text>
               </g>
@@ -124,7 +124,7 @@ export function BarChart({ data, title, height = 220 }: { data: { label: string;
                   {labelled(i) && (
                     <>
                       <line x1={x + barW / 2} x2={x + barW / 2} y1={base} y2={base + 4} className="stroke-navy-400" strokeWidth={1} shapeRendering="crispEdges" />
-                      <text x={x + barW / 2} y={height - 6} textAnchor={i === data.length - 1 ? "end" : "middle"} className={isToday ? "fill-gold-700 font-mono text-[10px] font-medium" : "fill-navy-500 font-mono text-[10px]"}>
+                      <text x={x + barW / 2} y={height - 6} textAnchor={i === data.length - 1 ? "end" : "middle"} className={isToday ? "fill-gold-700 font-mono text-[11px] font-medium" : "fill-navy-500 font-mono text-[11px]"}>
                         {isToday ? "Today" : dayLabel(d.label)}
                       </text>
                     </>

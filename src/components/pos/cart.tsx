@@ -172,9 +172,9 @@ function CartLine({
           </div>
           {(l.priceSource === "quantity_tier" || l.priceSource === "quotation" || overridden || l.lineDiscountType || (showCostFlags && (l.belowCost || l.belowMarginFloor))) && (
             <div className="mt-1.5 flex flex-wrap gap-1">
-              {l.priceSource === "quantity_tier" && <Badge tone="gold">Bulk price</Badge>}
-              {l.priceSource === "quotation" && <Badge tone="blue">Quoted price</Badge>}
-              {overridden && <Badge tone="purple">Price changed{l.overrideReason ? `: ${l.overrideReason}` : ""}</Badge>}
+              {l.priceSource === "quantity_tier" && <Badge>Bulk price</Badge>}
+              {l.priceSource === "quotation" && <Badge>Quoted price</Badge>}
+              {overridden && <Badge tone="amber">Price changed{l.overrideReason ? `: ${l.overrideReason}` : ""}</Badge>}
               {l.lineDiscountType && (
                 <Badge tone="green">
                   −{l.lineDiscountType === "percent" ? `${D(l.lineDiscountValue).toString()}%` : formatINR(l.lineDiscountValue)}

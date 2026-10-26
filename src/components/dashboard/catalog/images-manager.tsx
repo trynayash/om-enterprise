@@ -82,7 +82,7 @@ export function ImagesManager({ productId, productName, images, canEdit }: { pro
               <li key={img.id} className="group relative overflow-hidden rounded-lg border border-navy-100 bg-white">
                 {/* eslint-disable-next-line @next/next/no-img-element -- served by our own upload route */}
                 <img src={img.url} alt={img.alt ?? productName} className="aspect-square w-full object-contain" loading="lazy" />
-                {i === 0 && <span className="label-caps absolute left-1.5 top-1.5 rounded-[3px] bg-navy-900 px-1.5 py-0.5 text-[9.5px] text-white">Main</span>}
+                {i === 0 && <span className="absolute left-1.5 top-1.5 rounded-[3px] bg-navy-900 px-1.5 py-0.5 text-[11px] font-medium text-white">Main</span>}
                 {canEdit && (
                   <div className="absolute inset-x-0 bottom-0 flex justify-between border-t border-navy-100 bg-white/95 p-0.5">
                     <span className="flex">

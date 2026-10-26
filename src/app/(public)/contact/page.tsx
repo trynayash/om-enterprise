@@ -17,7 +17,6 @@ export default function ContactPage() {
     <>
       <PageIntro
         crumbs={[{ href: "/", label: "Home" }, { label: "Contact" }]}
-        eyebrow="Contact"
         title="Contact us"
         description="Visit the shop, call, or send us a message and we'll reply by phone or WhatsApp."
       />
@@ -49,7 +48,7 @@ async function ContactContent() {
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_1.3fr] lg:gap-12">
       <div>
-        <ul className="border-t border-navy-900">
+        <ul className="border-t border-navy-200">
           {lines.map((c) => (
             <li key={c.title}>
               <a

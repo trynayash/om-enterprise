@@ -12,14 +12,10 @@ export function Logo({ className, inverted, compact, size = "md" }: { className?
     <span className={cn("inline-flex items-center", sm ? "gap-2.5" : "gap-3", className)}>
       <LogoMark className={sm ? "h-9 w-9" : undefined} />
       <span className="whitespace-nowrap leading-none">
-        <span
-          className={cn("block font-bold [font-stretch:108%]", sm ? "text-[15px] tracking-[0.06em]" : "text-[19px] tracking-[0.07em]", inverted ? "text-white" : "text-navy-950")}
-        >
-          OM ENTERPRISE
-        </span>
+        <span className={cn("block font-bold", sm ? "text-[15px]" : "text-[18px]", inverted ? "text-white" : "text-navy-950")}>OM ENTERPRISE</span>
         {!compact && (
-          <span className={cn("mt-1.5 block font-mono font-medium uppercase", sm ? "text-[8.5px] tracking-[0.1em]" : "text-[9.5px] tracking-[0.14em]", inverted ? "text-gold-400" : "text-gold-700")}>
-            Your Complete Building Solution
+          <span className={cn("mt-1 block text-[11px] font-medium", inverted ? "text-gold-400" : "text-gold-700")}>
+            Your complete building solution
           </span>
         )}
       </span>

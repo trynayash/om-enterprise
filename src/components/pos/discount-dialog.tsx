@@ -122,18 +122,14 @@ export function DiscountDialog({
         </Field>
         {valid && !D(value).isZero() && (
           <dl className="animate-fade-in rounded-lg border border-navy-200 bg-paper/60 px-4 py-3 text-sm">
-            <div className="flex items-baseline">
-              <dt className="flex flex-1 items-baseline text-navy-600">
+            <div className="flex items-baseline justify-between gap-4">
+              <dt className="text-navy-600">
                 Discount <span className="ml-1 font-mono text-xs text-navy-500">({pct.toFixed(2)}%)</span>
-                <span aria-hidden className="leader" />
               </dt>
               <dd className="font-mono text-emerald-700 tabular">− {formatINR(amount)}</dd>
             </div>
-            <div className="mt-1 flex items-baseline">
-              <dt className="flex flex-1 items-baseline font-semibold text-navy-950">
-                New amount
-                <span aria-hidden className="leader" />
-              </dt>
+            <div className="mt-1 flex items-baseline justify-between gap-4">
+              <dt className="font-semibold text-navy-950">New amount</dt>
               <dd className="font-mono font-semibold text-navy-950 tabular">{formatINR(base.minus(amount))}</dd>
             </div>
           </dl>
