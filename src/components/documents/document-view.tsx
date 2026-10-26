@@ -1,28 +1,48 @@
 /**
- * HTML rendering of an issued document — from its frozen snapshot ONLY.
- * Print-ready on A4 (browser print). Used by the POS, dashboard and customer share links.
- *
- * Set like a printed trade invoice: ink rules instead of filled bars (browsers drop background
- * colours when printing by default, so nothing here relies on a fill to be legible).
+ * An issued document as it prints: the same A4 sheet as its PDF, drawn from the same layout
+ * (server/pdf/bill-sheet.ts) as SVG, in the same fonts. It scales to the width it is given on
+ * screen and prints at exactly A4 (see globals.css), from its frozen snapshot ONLY.
+ * Used by the POS, the dashboard and customer share links.
  */
+import localFont from "next/font/local";
 import type { DocSnapshot } from "@/lib/document-types";
-import { formatINR, formatQty } from "@/lib/money";
-import { formatPhone } from "@/lib/india";
-import { discountPercent, optionalColumns, PAYMENT_METHOD_LABEL, showsPaymentTotals, stateLabel } from "@/lib/bill-layout";
-import { LogoMark } from "@/components/ui/logo";
+import { layoutDocument, PAGE_H, PAGE_W, type FontKey } from "@/server/pdf/bill-sheet";
 import { cn } from "@/components/ui/cn";
 
-function dt(iso: string) {
-  return new Date(iso).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
-}
+const roboto = localFont({
+  src: [
+    { path: "../../../assets/fonts/Roboto-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../../../assets/fonts/Roboto-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  display: "block",
+});
+// Only fetched by a browser when a bill has Hindi or Gujarati on it.
+const devanagari = localFont({
+  src: [
+    { path: "../../../assets/fonts/NotoSansDevanagari-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../../../assets/fonts/NotoSansDevanagari-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  preload: false,
+});
+const gujarati = localFont({
+  src: [
+    { path: "../../../assets/fonts/NotoSansGujarati-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../../../assets/fonts/NotoSansGujarati-Bold.ttf", weight: "700", style: "normal" },
+  ],
+  preload: false,
+});
 
-/** Small section label: brass mono caps. */
-function Caption({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("font-mono text-[10px] font-medium uppercase tracking-[0.12em] text-gold-700", className)}>{children}</div>;
-}
+const FAMILY: Record<FontKey, string> = {
+  R: roboto.style.fontFamily,
+  B: roboto.style.fontFamily,
+  DV: devanagari.style.fontFamily,
+  DVB: devanagari.style.fontFamily,
+  GJ: gujarati.style.fontFamily,
+  GJB: gujarati.style.fontFamily,
+};
 
 export function DocumentView({
-  snapshot: s,
+  snapshot,
   status = "issued",
   cancelReason,
   copyLabel,
@@ -34,394 +54,51 @@ export function DocumentView({
   copyLabel?: string | null;
   className?: string;
 }) {
-  const inter = s.supplyType === "inter";
-  const opt = optionalColumns(s.lines);
-  const num = "whitespace-nowrap px-1.5 py-2 text-right font-mono tabular";
-  // Inside the table only the Amount column carries ₹, so that every column fits on A4.
-  const plain = (v: string) => formatINR(v).replace("₹", "");
+  const pages = layoutDocument(snapshot, { status, cancelReason, copyLabel });
   return (
-    <article className={cn("relative mx-auto w-full max-w-[210mm] overflow-hidden bg-white p-5 text-[13px] leading-normal text-navy-900 sm:p-10 print:p-0", className)}>
-      {(s.watermark || status === "cancelled") && (
-        <div aria-hidden className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-12 px-6">
-          {s.watermark && (
-            <div className="headline max-w-[34rem] -rotate-[24deg] text-center text-[1.75rem] font-bold uppercase leading-tight tracking-[0.04em] text-red-600/[0.14] sm:text-[2.75rem]">
-              {s.watermark}
-            </div>
-          )}
-          {status === "cancelled" && (
-            <div className="-rotate-[24deg] border-[6px] border-red-600/25 px-8 py-2 font-mono text-5xl font-semibold uppercase tracking-[0.16em] text-red-600/25 sm:text-6xl">
-              Cancelled
-            </div>
-          )}
-        </div>
-      )}
-      {s.declarationTop && <p className="mb-4 text-center font-mono text-[11px] font-semibold uppercase tracking-[0.08em] text-navy-900">{s.declarationTop}</p>}
-
-      {/* Seller | document */}
-      <header className="grid gap-6 border-b-2 border-navy-950 pb-5 sm:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="flex gap-3.5">
-          <LogoMark className="h-14 w-14" />
-          <div className="min-w-0">
-            <div className="text-[20px] font-bold leading-none tracking-[0.06em] text-navy-950 [font-stretch:108%]">{s.seller.name}</div>
-            <div className="mt-1.5 font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-gold-700">{s.seller.tagline}</div>
-            <div className="mt-2.5 text-xs leading-relaxed text-navy-600">
-              {s.seller.addressLines.map((l) => (
-                <div key={l}>{l}</div>
-              ))}
-              <div>
-                Phone/WhatsApp: <span className="font-mono text-[11.5px]">{formatPhone(s.seller.phone)}</span>
-              </div>
-              {s.seller.email && <div className="break-all">Email: {s.seller.email}</div>}
-              {s.seller.gstin && (
-                <div className="mt-0.5 font-semibold text-navy-950">
-                  GSTIN: <span className="font-mono">{s.seller.gstin}</span>
-                </div>
-              )}
-              <div>State: {stateLabel(s.seller.stateCode, s.seller.stateName)}</div>
-            </div>
-          </div>
-        </div>
-        <div className="sm:text-right">
-          <div className="headline text-[1.9rem] font-bold uppercase text-navy-950">{s.title}</div>
-          {s.subtitle && <div className="mt-1 max-w-[17rem] text-xs leading-snug text-navy-500 sm:ml-auto">{s.subtitle}</div>}
-          <dl className="mt-3 grid grid-cols-[auto_auto] gap-x-4 gap-y-1 text-xs sm:justify-end">
-            <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">No.</dt>
-            <dd className="font-mono font-semibold text-navy-950 sm:text-right">{s.number}</dd>
-            <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Date</dt>
-            <dd className="font-mono text-navy-950 sm:text-right">{dt(s.issuedAt)}</dd>
-            <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Sale ref.</dt>
-            <dd className="font-mono text-navy-950 sm:text-right">{s.saleNumber}</dd>
-            {s.validUntil && (
-              <>
-                <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Valid until</dt>
-                <dd className="font-mono text-navy-950 sm:text-right">{dt(s.validUntil)}</dd>
-              </>
-            )}
-            {s.original && (
-              <>
-                <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Against</dt>
-                <dd className="font-mono text-navy-950 sm:text-right">
-                  {s.original.number} ({dt(s.original.issuedAt)})
-                </dd>
-              </>
-            )}
-            {s.placeOfSupply.stateCode && (
-              <>
-                <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Place of supply</dt>
-                <dd className="text-navy-950 sm:text-right">{stateLabel(s.placeOfSupply.stateCode, s.placeOfSupply.stateName)}</dd>
-              </>
-            )}
-            {s.showTax && (
-              <>
-                <dt className="pt-px font-mono text-[10px] uppercase tracking-[0.08em] text-navy-500 sm:text-left">Reverse charge</dt>
-                <dd className="text-navy-950 sm:text-right">{s.reverseCharge ? "Yes" : "No"}</dd>
-              </>
-            )}
-          </dl>
-          {copyLabel && (
-            <div className="mt-3 inline-block border border-navy-900 px-2 py-[3px] font-mono text-[9.5px] font-medium uppercase tracking-[0.14em] text-navy-900">{copyLabel}</div>
-          )}
-        </div>
-      </header>
-
-      {/* Buyer */}
-      <section className="mt-5">
-        <Caption>{s.docType === "quotation" ? "Quotation for" : "Bill to"}</Caption>
-        {s.buyer ? (
-          <div className="mt-1 text-xs leading-relaxed text-navy-600">
-            <div className="text-sm font-semibold text-navy-950">{s.buyer.businessName ? `${s.buyer.businessName} (${s.buyer.name})` : s.buyer.name}</div>
-            {[s.buyer.address, [s.buyer.city, s.buyer.pincode].filter(Boolean).join(" ")].filter(Boolean).join(", ")}
-            {s.buyer.stateCode && <div>State: {stateLabel(s.buyer.stateCode, s.buyer.stateName)}</div>}
-            {(s.buyer.mobile || s.buyer.email) && (
-              <div>
-                {s.buyer.mobile && (
-                  <>
-                    Mobile: <span className="font-mono text-[11.5px]">{s.buyer.mobile}</span>
-                  </>
-                )}
-                {s.buyer.mobile && s.buyer.email && "  ·  "}
-                {s.buyer.email && <span className="break-all">{s.buyer.email}</span>}
-              </div>
-            )}
-            {s.buyer.gstin && (
-              <div className="font-semibold text-navy-950">
-                GSTIN: <span className="font-mono">{s.buyer.gstin}</span>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="mt-1 text-sm font-semibold text-navy-950">Cash sale</div>
-        )}
-        {s.reason && <div className="mt-1.5 text-xs text-navy-600">Reason: {s.reason}</div>}
-      </section>
-
-      {/* Lines: a stacked list on phones (the table needs ~600px), the table everywhere else and in print. */}
-      <ol className="mt-5 border-y-[1.5px] border-navy-950 sm:hidden print:hidden">
-        {s.lines.map((l) => (
-          <li key={l.sl} className="border-b border-navy-200 py-3 last:border-b-0">
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <div className="text-[13px] font-medium leading-snug text-navy-950">
-                  <span className="mr-1.5 font-mono text-[11px] text-navy-400">{l.sl}</span>
-                  {l.description}
-                  {l.isSample && (
-                    <span className="ml-1.5 inline-block border border-red-600 px-1 align-[1px] font-mono text-[8.5px] font-semibold leading-[1.35] tracking-[0.08em] text-red-700">SAMPLE</span>
-                  )}
-                </div>
-                <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">
-                  {[l.hsn ? `HSN ${l.hsn}` : null, l.colour ? `Colour ${l.colour}` : null, l.material ? `Material ${l.material}` : null, l.sku].filter(Boolean).join(" · ")}
-                </div>
-              </div>
-              <div className="shrink-0 font-mono text-[13px] font-semibold tabular text-navy-950">{formatINR(l.total)}</div>
-            </div>
-            <div className="mt-1.5 font-mono text-[11.5px] tabular text-navy-600">
-              {formatQty(l.quantity)} <span className="font-sans">{l.unit}</span> × {formatINR(l.unitPrice)}
-              {s.showTax && <span className="font-sans text-navy-500"> {l.priceIncludesTax ? "incl. GST" : "excl. GST"}</span>}
-              {Number(l.discount) ? (
-                <>
-                  {" "}
-                  · disc. {formatINR(l.discount)}
-                  {discountPercent(l) ? ` (${discountPercent(l)})` : ""}
-                </>
-              ) : null}
-              {l.mrp ? <> · MRP {formatINR(l.mrp)}</> : null}
-            </div>
-            {s.showTax && (
-              <div className="mt-0.5 font-mono text-[11px] tabular text-navy-500">
-                Taxable {formatINR(l.taxableValue)} ·{" "}
-                {Number(l.gstRate) === 0
-                  ? "Exempt"
-                  : inter
-                    ? `IGST ${l.igstRate}% ${formatINR(l.igstAmount)}`
-                    : `CGST ${l.cgstRate}% ${formatINR(l.cgstAmount)} · SGST ${l.sgstRate}% ${formatINR(l.sgstAmount)}`}
-              </div>
-            )}
-          </li>
-        ))}
-      </ol>
-      <div className="mt-5 hidden overflow-x-auto sm:block print:block">
-        <table className="w-full min-w-[600px] border-collapse text-xs">
-          <thead>
-            <tr className="border-y-[1.5px] border-navy-950 text-left font-mono text-[10px] uppercase tracking-[0.04em] text-navy-700">
-              <th className="w-8 px-1.5 py-2 text-center font-medium">#</th>
-              <th className="min-w-[9rem] px-1.5 py-2 font-medium">{s.showTax ? "Item (HSN)" : "Item name"}</th>
-              {!s.showTax && <th className="px-1.5 py-2 font-medium">HSN/SAC</th>}
-              {!s.showTax && opt.colour && <th className="px-1.5 py-2 font-medium">Colour</th>}
-              {!s.showTax && opt.material && <th className="px-1.5 py-2 font-medium">Material</th>}
-              {opt.mrp && <th className="px-1.5 py-2 text-right font-medium">MRP</th>}
-              <th className="px-1.5 py-2 text-right font-medium">Qty</th>
-              {!s.showTax && <th className="px-1.5 py-2 font-medium">Unit</th>}
-              <th className="px-1.5 py-2 text-right font-medium">{s.showTax ? "Rate" : "Price/Unit"}</th>
-              <th className="px-1.5 py-2 text-right font-medium">Discount</th>
-              {s.showTax && <th className="px-1.5 py-2 text-right font-medium">Taxable</th>}
-              {s.showTax && <th className="px-1.5 py-2 text-right font-medium">{inter ? "IGST" : "CGST / SGST"}</th>}
-              <th className="px-1.5 py-2 text-right font-medium">Amount</th>
-            </tr>
-          </thead>
-          <tbody className="text-[11.5px]">
-            {s.lines.map((l) => (
-              <tr key={l.sl} className="border-b border-navy-200 align-top last:border-navy-950">
-                <td className="px-1.5 py-2 text-center font-mono text-navy-500">{l.sl}</td>
-                <td className="px-1.5 py-2">
-                  <div className="text-[12.5px] font-medium leading-snug text-navy-950">
-                    {l.description}
-                    {l.isSample && (
-                      <span className="ml-1.5 inline-block border border-red-600 px-1 align-[1px] font-mono text-[8.5px] font-semibold leading-[1.35] tracking-[0.08em] text-red-700">SAMPLE</span>
-                    )}
-                  </div>
-                  <div className="mt-0.5 font-mono text-[10.5px] text-navy-500">
-                    {(s.showTax ? [l.hsn ? `HSN ${l.hsn}` : null, l.colour ? `Colour ${l.colour}` : null, l.material ? `Material ${l.material}` : null, l.sku] : [l.sku]).filter(Boolean).join(" · ")}
-                  </div>
-                </td>
-                {!s.showTax && <td className="px-1.5 py-2 font-mono text-navy-700">{l.hsn}</td>}
-                {!s.showTax && opt.colour && <td className="px-1.5 py-2 text-navy-800">{l.colour}</td>}
-                {!s.showTax && opt.material && <td className="px-1.5 py-2 text-navy-800">{l.material}</td>}
-                {opt.mrp && <td className={num}>{l.mrp ? plain(l.mrp) : ""}</td>}
-                <td className={num}>
-                  {formatQty(l.quantity)}
-                  {s.showTax && <span className="font-sans text-navy-500"> {l.unit}</span>}
-                </td>
-                {!s.showTax && <td className="px-1.5 py-2 text-navy-700">{l.unit}</td>}
-                <td className={num}>
-                  {plain(l.unitPrice)}
-                  {s.showTax && <div className="font-sans text-[10px] text-navy-500">{l.priceIncludesTax ? "incl. GST" : "excl. GST"}</div>}
-                </td>
-                <td className={num}>
-                  {Number(l.discount) ? (
-                    <>
-                      {plain(l.discount)}
-                      {discountPercent(l) && <div className="text-[10px] text-navy-500">({discountPercent(l)})</div>}
-                    </>
-                  ) : (
-                    <span className="text-navy-400">—</span>
-                  )}
-                </td>
-                {s.showTax && <td className={num}>{formatINR(l.taxableValue)}</td>}
-                {s.showTax && (
-                  <td className={num}>
-                    {Number(l.gstRate) === 0 ? (
-                      <span className="font-sans">Exempt</span>
-                    ) : inter ? (
-                      <>
-                        <span className="text-navy-500">{l.igstRate}%</span> {formatINR(l.igstAmount)}
-                      </>
-                    ) : (
-                      <>
-                        <div>
-                          <span className="text-navy-500">{l.cgstRate}%</span> {formatINR(l.cgstAmount)}
-                        </div>
-                        <div>
-                          <span className="text-navy-500">{l.sgstRate}%</span> {formatINR(l.sgstAmount)}
-                        </div>
-                      </>
-                    )}
-                  </td>
-                )}
-                <td className={cn(num, "font-semibold text-navy-950")}>{formatINR(l.total)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Tax summary & payment | totals */}
-      <div className="mt-6 grid gap-8 sm:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="space-y-5 text-xs">
-          <div>
-            <Caption>Amount in words</Caption>
-            <div className="mt-1 font-semibold text-navy-950">{s.totals.amountInWords}</div>
-          </div>
-          {s.showTax && s.taxSummary.length > 0 && (
-            <div>
-              <Caption>Tax summary (HSN-wise)</Caption>
-              <table className="mt-1.5 border-collapse font-mono text-[11px] tabular">
-                <thead>
-                  <tr className="border-b border-navy-300 text-[10px] uppercase tracking-[0.06em] text-navy-500">
-                    <th className="py-1 pr-5 text-left font-medium">HSN</th>
-                    <th className="py-1 pr-5 text-right font-medium">Rate</th>
-                    <th className="py-1 pr-5 text-right font-medium">Taxable</th>
-                    {inter ? (
-                      <th className="py-1 text-right font-medium">IGST</th>
-                    ) : (
-                      <>
-                        <th className="py-1 pr-5 text-right font-medium">CGST</th>
-                        <th className="py-1 text-right font-medium">SGST</th>
-                      </>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="text-navy-800">
-                  {s.taxSummary.map((r) => (
-                    <tr key={`${r.hsn}-${r.gstRate}`} className="border-b border-navy-100">
-                      <td className="py-1 pr-5">{r.hsn ?? "—"}</td>
-                      <td className="py-1 pr-5 text-right">{r.gstRate}%</td>
-                      <td className="py-1 pr-5 text-right">{formatINR(r.taxableValue)}</td>
-                      {inter ? (
-                        <td className="py-1 text-right">{formatINR(r.igst)}</td>
-                      ) : (
-                        <>
-                          <td className="py-1 pr-5 text-right">{formatINR(r.cgst)}</td>
-                          <td className="py-1 text-right">{formatINR(r.sgst)}</td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {s.docType !== "quotation" && (
-            <div>
-              <Caption>{s.docType === "credit_note" ? "Refund" : "Payment mode"}</Caption>
-              <div className="mt-1.5 space-y-0.5 text-navy-700">
-                {s.payments.map((p, i) => (
-                  <div key={i}>
-                    {p.direction === "refund" ? "Refund · " : ""}
-                    {PAYMENT_METHOD_LABEL[p.method] ?? p.method}
-                    {p.reference ? (
-                      <>
-                        {" "}
-                        · Ref <span className="font-mono">{p.reference}</span>
-                      </>
-                    ) : (
-                      ""
-                    )}{" "}
-                    · <span className="font-mono font-semibold text-navy-950">{formatINR(p.amount)}</span>
-                  </div>
-                ))}
-                <div className="font-semibold text-navy-950">
-                  Status: {s.paymentStatus}
-                  {Number(s.balanceDue) ? ` · Balance due ${formatINR(s.balanceDue)}` : ""}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <dl className="text-[13px] sm:min-w-[270px]">
-          <Row k="Gross amount" v={formatINR(s.totals.gross)} />
-          {Number(s.totals.lineDiscount) > 0 && <Row k="Item discounts" v={`− ${formatINR(s.totals.lineDiscount)}`} />}
-          {Number(s.totals.cartDiscount) > 0 && <Row k="Bill discount" v={`− ${formatINR(s.totals.cartDiscount)}`} />}
-          {s.showTax && <Row k="Taxable value" v={formatINR(s.totals.taxable)} />}
-          {s.showTax && Number(s.totals.cgst) > 0 && <Row k="CGST" v={formatINR(s.totals.cgst)} />}
-          {s.showTax && Number(s.totals.sgst) > 0 && <Row k="SGST" v={formatINR(s.totals.sgst)} />}
-          {s.showTax && Number(s.totals.igst) > 0 && <Row k="IGST" v={formatINR(s.totals.igst)} />}
-          {s.showTax && Number(s.totals.cess) > 0 && <Row k="Cess" v={formatINR(s.totals.cess)} />}
-          {Number(s.totals.roundOff) !== 0 && <Row k="Round off" v={formatINR(s.totals.roundOff)} />}
-          <div className="mt-2 flex items-baseline justify-between gap-6 border-y-[1.5px] border-navy-950 py-2">
-            <dt className="text-[13px] font-semibold uppercase tracking-[0.04em] text-navy-950">{s.docType === "credit_note" ? "Credit total" : "Grand total"}</dt>
-            <dd className="headline text-[1.75rem] font-bold text-navy-950 tabular">{formatINR(s.totals.grandTotal)}</dd>
-          </div>
-          {showsPaymentTotals(s) && (
-            <>
-              <Row k="Received" v={formatINR(s.amountPaid)} />
-              <Row k="Balance" v={formatINR(s.balanceDue)} />
-            </>
-          )}
-          {s.docType !== "credit_note" && Number(s.totals.youSaved) > 0 && <Row k={s.docType === "quotation" ? "You save" : "You saved"} v={formatINR(s.totals.youSaved)} />}
-        </dl>
-      </div>
-
-      <footer className="mt-8 grid gap-6 border-t border-navy-200 pt-4 text-xs sm:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="space-y-3 text-navy-700">
-          {s.terms.length > 0 && (
-            <div>
-              <Caption>Terms</Caption>
-              <ol className="mt-1 list-decimal space-y-0.5 pl-4 leading-relaxed marker:font-mono marker:text-navy-400">
-                {s.terms.map((t) => (
-                  <li key={t}>{t}</li>
-                ))}
-              </ol>
-            </div>
-          )}
-          {s.bankDetails && (
-            <div>
-              <Caption>Bank details</Caption>
-              <div className="mt-1 whitespace-pre-line font-mono text-[11px] leading-relaxed">{s.bankDetails}</div>
-            </div>
-          )}
-          <div className="text-navy-500">Prepared by {s.issuedBy}. Computer-generated document.</div>
-          {status === "cancelled" && cancelReason && <div className="font-semibold text-red-700">Cancelled: {cancelReason}</div>}
-        </div>
-        <div className="self-end text-right">
-          {/* The signing rule spans the signatory label, whatever its length. */}
-          <div className="inline-block min-w-48 pt-12">
-            <div className="border-t border-navy-400 pt-1.5 font-semibold text-navy-950">{s.signatoryLabel}</div>
-          </div>
-        </div>
-      </footer>
-      {s.footerNote && <p className="mt-6 text-center text-xs font-medium text-gold-700">{s.footerNote}</p>}
-    </article>
-  );
-}
-
-function Row({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="flex items-baseline py-[3px]">
-      <dt className="flex flex-1 items-baseline text-navy-600">
-        {k}
-        <span aria-hidden className="leader" />
-      </dt>
-      <dd className="font-mono text-[12.5px] text-navy-950 tabular">{v}</dd>
+    <div className={cn("bill-sheets space-y-3 print:space-y-0", className)}>
+      {/* Only where a bill is shown: its sheet already carries the margins, so the paper has none. */}
+      <style href="bill-print-page" precedence="default">
+        {"@media print { @page { size: A4 portrait; margin: 0; } }"}
+      </style>
+      {pages.map((draws, i) => (
+        <svg
+          key={i}
+          viewBox={`0 0 ${PAGE_W} ${PAGE_H}`}
+          className="bill-page block h-auto w-full bg-white"
+          aria-label={pages.length > 1 ? `${snapshot.title} ${snapshot.number}, page ${i + 1} of ${pages.length}` : `${snapshot.title} ${snapshot.number}`}
+        >
+          <rect width={PAGE_W} height={PAGE_H} fill="#ffffff" />
+          {draws.map((d, j) => {
+            if (d.k === "line") return <line key={j} x1={d.x1} y1={d.y1} x2={d.x2} y2={d.y2} stroke="#000000" strokeWidth={d.width} />;
+            if (d.k === "logo") return <image key={j} href="/brand/om-enterprise-logo.png" x={d.x} y={d.y} width={d.size} height={d.size} />;
+            if (d.k === "text")
+              return (
+                <text
+                  key={j}
+                  x={d.x}
+                  y={d.y + d.ascent * d.size}
+                  fontSize={d.size}
+                  fontWeight={d.font.endsWith("B") ? 700 : 400}
+                  fontFamily={FAMILY[d.font]}
+                  fill="#000000"
+                  style={{ whiteSpace: "pre" }}
+                >
+                  {d.text}
+                </text>
+              );
+            const h = d.size * 1.17;
+            return (
+              <g key={j} transform={`rotate(-30 ${d.cx} ${d.cy})`} fill="#C0392B" fillOpacity={0.14} stroke="#C0392B" strokeOpacity={0.14}>
+                <text x={d.cx} y={d.cy} textAnchor="middle" dominantBaseline="central" fontSize={d.size} fontWeight={700} fontFamily={FAMILY.B} stroke="none">
+                  {d.text}
+                </text>
+                {d.framed && <rect x={d.cx - d.w / 2 - 10} y={d.cy - h / 2 - 6} width={d.w + 20} height={h + 10} fill="none" strokeWidth={4} />}
+              </g>
+            );
+          })}
+        </svg>
+      ))}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { colourAndMaterial, discountPercent, optionalColumns, stateLabel, youSavedOf } from "@/lib/bill-layout";
+import { colourAndMaterial, stateLabel, youSavedOf } from "@/lib/bill-layout";
 import type { DocLine } from "@/lib/document-types";
 
 const line = (over: Partial<DocLine>): DocLine => ({
@@ -32,13 +32,6 @@ const tank = line({ unitPrice: "9700.00", discount: "700.00", total: "9000.00", 
 const base = line({ sl: 2, unitPrice: "2500.00", discount: "300.00", total: "2200.00", mrp: "2800.00", colour: "Black" });
 
 describe("what the bill prints beside the figures", () => {
-  it("gives the discount as a share of the price before discount, as the shop's bill does", () => {
-    expect(discountPercent(tank)).toBe("7.22%");
-    expect(discountPercent(base)).toBe("12%");
-    expect(discountPercent(line({}))).toBeNull();
-    expect(discountPercent(line({ unitPrice: "50.00", quantity: "4", discount: "20.00" }))).toBe("10%");
-  });
-
   it("works out 'You saved' from MRP, as on bill 729 (₹12,800 MRP, ₹11,200 paid)", () => {
     expect(youSavedOf([tank, base])).toBe("1600.00");
   });
@@ -65,13 +58,5 @@ describe("what the bill prints beside the figures", () => {
     expect(colourAndMaterial({ Shade: "Sky Blue" })).toEqual({ colour: "Sky Blue", material: null });
     expect(colourAndMaterial({ Colour: "  " })).toEqual({ colour: null, material: null });
     expect(colourAndMaterial(null)).toEqual({ colour: null, material: null });
-  });
-
-  it("shows Colour, Material and MRP columns only when some item on the bill has them", () => {
-    expect(optionalColumns([tank, base])).toEqual({ mrp: true, colour: true, material: true });
-    expect(optionalColumns([line({})])).toEqual({ mrp: false, colour: false, material: false });
-    // A bill issued before these were kept has none of the fields at all.
-    const { mrp: _mrp, colour: _colour, material: _material, ...old } = tank;
-    expect(optionalColumns([old as DocLine])).toEqual({ mrp: false, colour: false, material: false });
   });
 });
