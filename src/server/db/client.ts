@@ -2,6 +2,7 @@ import "server-only";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { Pool, types } from "pg";
 import * as schema from "./schema";
+import { withExplicitSsl } from "./ssl";
 
 // Keep NUMERIC as string (exact) — never let money become a JS float.
 types.setTypeParser(types.builtins.NUMERIC, (v) => v);
@@ -21,7 +22,7 @@ function createPool() {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
   return new Pool({
-    connectionString: url,
+    connectionString: withExplicitSsl(url),
     max: Number(process.env.DB_POOL_MAX ?? 10),
     idleTimeoutMillis: 30_000,
   });
