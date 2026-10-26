@@ -1,7 +1,7 @@
 # OM ENTERPRISE — Business Management, Smart POS Billing, Payments & Inventory-ready System
 
 **OM ENTERPRISE** · *Your Complete Building Solution*
-Opp. Shardha Dhaba 2, Bodeli Road, Naswadi, Gujarat 391150 · WhatsApp 7621934414 · sweronkush@gmail.com
+Opp. Shardha Dhaba 2, Bodeli Road, Naswadi, Gujarat 391150 · WhatsApp 7621934414 · omenterprise1119@gmail.com
 
 One connected system for the shop:
 
