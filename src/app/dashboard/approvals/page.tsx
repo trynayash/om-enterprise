@@ -14,6 +14,8 @@ import { DecisionButtons } from "@/components/dashboard/ops/decision-buttons";
 import { TitleStamps } from "@/components/dashboard/title-stamps";
 import { tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { lineDescription } from "@/lib/line-description";
+import { Pagination } from "@/components/dashboard/ops/pagination";
+import { num, type SearchParams } from "@/components/dashboard/ops/params";
 
 function SectionHeading({ id, title, count }: { id: string; title: string; count: number }) {
   return (
@@ -37,10 +39,13 @@ function Fact({ label, children }: { label: string; children: React.ReactNode })
 
 export const metadata = { title: "Approvals" };
 
-export default function ApprovalsPage() {
+/** Price changes shown per page (an imported price list can bring a thousand at once). */
+const PRICES_PAGE = 25;
+
+export default function ApprovalsPage({ searchParams }: PageProps<"/dashboard/approvals">) {
   return (
     <Suspense fallback={<PageSkeleton />}>
-      <Approvals />
+      <Approvals searchParams={searchParams} />
     </Suspense>
   );
 }
@@ -73,12 +78,14 @@ interface ApprovalDetails {
   }[];
 }
 
-async function Approvals() {
+async function Approvals({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const actor = await requirePageActor(["discounts.approve", "prices.approve"]);
+  const sp = await searchParams;
   const canDiscounts = can(actor, "discounts.approve");
   const canPrices = can(actor, "prices.approve");
   const discounts = canDiscounts ? await listPendingApprovals(actor) : [];
   const prices = canPrices ? await listPendingPriceChanges(actor) : [];
+  const pricesPage = Math.min(num(sp, "prices", 1), Math.max(1, Math.ceil(prices.length / PRICES_PAGE)));
   const showCost = can(actor, "costs.view");
   const mayBelowCost = can(actor, "pricing.sell_below_cost");
 
@@ -227,7 +234,7 @@ async function Approvals() {
           {prices.length === 0 ? (
             <EmptyState title="No price changes waiting" description="Price changes proposed by admins without approval rights appear here before they take effect." />
           ) : (
-            prices.map((p) => {
+            prices.slice((pricesPage - 1) * PRICES_PAGE, pricesPage * PRICES_PAGE).map((p) => {
               const v = p.version;
               const change = v.previousPrice && D(v.previousPrice).greaterThan(0) ? D(v.price).minus(D(v.previousPrice)).div(D(v.previousPrice)).times(100) : null;
               return (
@@ -278,6 +285,7 @@ async function Approvals() {
               );
             })
           )}
+          <Pagination total={prices.length} page={pricesPage} pageSize={PRICES_PAGE} sp={sp} basePath="/dashboard/approvals" param="prices" anchor="price-h" />
         </section>
       )}
     </div>

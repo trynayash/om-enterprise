@@ -1,8 +1,9 @@
 # Real product catalogue (data files)
 
 One JSON file per brand group, loaded by `npm run import:products` (`scripts/import-products.ts`).
-The import is **idempotent by SKU**: products whose first SKU already exists are skipped, so it is
-safe to run on every deploy. Nothing here is sample data.
+The import is **idempotent by SKU**: products and sizes (variants) whose SKU already exists are left
+as they are, and a new SKU added to an existing product becomes a new size of it, so it is safe to
+run on every deploy. Nothing here is sample data.
 
 ## Rules for anyone editing these files
 
@@ -89,7 +90,7 @@ Pipes: use the unit the price list prices in (usually per metre `m`, or per `len
 ### SKU prefixes
 
 `BRG-` Berger · `TRF-` Truflo by Hindware · `FNX-` Finolex · `UMG-` Umiya Gold · `AGL-` AGL ·
-`BLU-` Blues · `ARS-` Aris · `PLB-` Plumber
+`BLU-` Blues · `ARS-` Aris · `PLB-` Plumber · `NSL-` NeoSeal
 
 ### Common HSN codes (rates must still be confirmed by the shop's accountant)
 

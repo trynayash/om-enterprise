@@ -28,6 +28,7 @@ import path from "node:path";
 import { z } from "zod";
 
 const DATA_DIR = process.env.CATALOG_DIR ?? path.join(process.cwd(), "data", "catalog");
+const LANES = 16;
 const IMAGE_TIMEOUT_MS = 20_000;
 const IMAGE_MAX_BYTES = 6 * 1024 * 1024;
 
@@ -132,6 +133,10 @@ async function main() {
   const refreshContent = process.argv.includes("--refresh-content");
   const items = await loadFiles();
 
+  // Products are imported LANES at a time, each lane on its own connection: on a hosted build the
+  // database can be far away (every query a round trip of ~0.2 s), and a big price list means tens of
+  // thousands of queries. The pool is sized for the lanes before it is first created.
+  process.env.DB_POOL_MAX = String(Math.max(Number(process.env.DB_POOL_MAX ?? 10), LANES + 1));
   const { getDb, getPool } = await import("../src/server/db/client");
   const schema = await import("../src/server/db/schema");
   const { and, eq, sql } = await import("drizzle-orm");
@@ -361,22 +366,24 @@ async function main() {
     }
   }
 
-  // A few products at a time (the database may be far from the build machine). Products whose names
-  // give the same URL slug share a lane, so they never race for the same slug.
-  const laneCount = Math.max(1, Math.min(4, Number(process.env.DB_POOL_MAX ?? 10) - 1));
-  const lanes: Loaded[][] = Array.from({ length: laneCount }, () => []);
+  // Each lane takes the next waiting group as soon as it is free, biggest first, so no lane is left
+  // with most of the work. Products whose names give the same URL slug form one group and are
+  // imported one after the other, so they never race for the same slug.
+  const groups = new Map<string, Loaded[]>();
   for (const item of items) {
     const key = item.product.name.toLowerCase().replace(/[^a-z0-9]+/g, "");
-    let h = 0;
-    for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-    lanes[h % laneCount].push(item);
+    groups.set(key, [...(groups.get(key) ?? []), item]);
   }
+  const work = (g: Loaded[]) => g.reduce((n, i) => n + (isNew(i) ? i.product.variants.length : 0), 0);
+  const queue = [...groups.values()].sort((a, b) => work(b) - work(a));
   let done = 0;
   await Promise.all(
-    lanes.map(async (lane) => {
-      for (const item of lane) {
-        await importOne(item);
-        if (++done % 10 === 0 || done === items.length) console.log(`  … ${done}/${items.length} products processed`);
+    Array.from({ length: LANES }, async () => {
+      for (let group = queue.shift(); group; group = queue.shift()) {
+        for (const item of group) {
+          await importOne(item);
+          if (++done % 10 === 0 || done === items.length) console.log(`  … ${done}/${items.length} products processed`);
+        }
       }
     }),
   );

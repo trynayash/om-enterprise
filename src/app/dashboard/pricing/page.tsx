@@ -17,6 +17,8 @@ export const metadata = { title: "Price review" };
 
 /** Price changes shown per page; the research notes behind a price can run to a paragraph each. */
 const CHANGES_PAGE = 50;
+/** Prices waiting for approval shown per page (an imported price list can bring a thousand at once). */
+const WAITING_PAGE = 25;
 
 export default function PricingPage({ searchParams }: PageProps<"/dashboard/pricing">) {
   return (
@@ -35,6 +37,8 @@ async function PricingContent({ searchParams }: { searchParams: Promise<SearchPa
   // Typed loosely so this works whether or not the service takes the actor (for redaction).
   const pendingFor: (a: Actor) => ReturnType<typeof listPendingPriceChanges> = listPendingPriceChanges;
   const pending = canAny(actor, ["prices.edit", "prices.approve"]) ? await pendingFor(actor) : [];
+  const waitingPage = Math.min(num(sp, "waiting", 1), Math.max(1, Math.ceil(pending.length / WAITING_PAGE)));
+  const waiting = pending.slice((waitingPage - 1) * WAITING_PAGE, waitingPage * WAITING_PAGE);
   const to = new Date(istStartOfDay(new Date()).getTime() + 86400_000);
   const from = new Date(to.getTime() - 30 * 86400_000);
   const recent = canAny(actor, ["reports.view", "prices.edit"]) ? await priceChangeReport(actor, { from, to }) : [];
@@ -51,12 +55,17 @@ async function PricingContent({ searchParams }: { searchParams: Promise<SearchPa
       />
 
       <Card>
-        <CardHeader title={`Waiting for approval (${pending.length})`} description="Price changes proposed by admins. They take effect only after approval." />
+        <div id="waiting" className="scroll-mt-6">
+          <CardHeader
+            title={`Waiting for approval (${pending.length.toLocaleString("en-IN")})`}
+            description="Price changes proposed by admins or brought in with a price list. They take effect only after approval."
+          />
+        </div>
         <CardBody className={pending.length ? "p-0" : undefined}>
           <PendingPriceChanges
             canApprove={can(actor, "prices.approve")}
             showCost={showCost}
-            items={pending.map((p) => ({
+            items={waiting.map((p) => ({
               id: p.version.id,
               productId: p.productId,
               productName: p.productName,
@@ -74,6 +83,11 @@ async function PricingContent({ searchParams }: { searchParams: Promise<SearchPa
               previousMarginPercent: showCost ? p.version.previousMarginPercent : null,
             }))}
           />
+          {pending.length > WAITING_PAGE && (
+            <div className="px-5 pb-4">
+              <Pagination total={pending.length} page={waitingPage} pageSize={WAITING_PAGE} sp={sp} basePath="/dashboard/pricing" param="waiting" anchor="waiting" />
+            </div>
+          )}
         </CardBody>
       </Card>
 
