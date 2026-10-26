@@ -10,7 +10,7 @@ import { apiFetch } from "@/lib/api-client";
 import { D, formatINR } from "@/lib/money";
 import { STATES, isValidEmail, normalizeMobile, stateName } from "@/lib/india";
 import { Button } from "@/components/ui/button";
-import { Field, Input, Label, Select, Textarea } from "@/components/ui/field";
+import { Checkbox, Field, Input, Label, Select, Textarea } from "@/components/ui/field";
 import { cn } from "@/components/ui/cn";
 import type { PosConfig } from "./types";
 
@@ -18,6 +18,7 @@ export interface CustomerRow {
   id: string;
   name: string;
   mobile: string | null;
+  whatsapp: string | null;
   email: string | null;
   businessName: string | null;
   gstin: string | null;
@@ -31,6 +32,10 @@ export interface BuyerForm {
   id: string | null;
   name: string;
   mobile: string;
+  /** The mobile number is also the customer's WhatsApp (the usual case). */
+  whatsappSame: boolean;
+  /** Their WhatsApp number when it is a different one. */
+  whatsapp: string;
   email: string;
   businessName: string;
   gstin: string;
@@ -45,6 +50,8 @@ export function formFrom(c: CustomerRow | null, defaultState: string): BuyerForm
     id: c?.id ?? null,
     name: c?.name ?? "",
     mobile: c?.mobile ?? "",
+    whatsappSame: !c?.whatsapp,
+    whatsapp: c?.whatsapp ?? "",
     email: c?.email ?? "",
     businessName: c?.businessName ?? "",
     gstin: c?.gstin ?? "",
@@ -66,6 +73,7 @@ export function customerBody(form: BuyerForm, defaultState: string) {
     id: form.id,
     name: form.name.trim(),
     mobile: form.mobile.trim() || null,
+    whatsapp: form.whatsappSame ? null : form.whatsapp.trim() || null,
     email: form.email.trim() || null,
     businessName: form.businessName.trim() || null,
     gstin: form.gstin.trim() || null,
@@ -94,6 +102,8 @@ export function buyerRules(form: BuyerForm, config: PosConfig, taxableTotal: str
 export function contactProblem(form: BuyerForm): string | null {
   if (!form.name.trim()) return "Enter the customer's name.";
   if (!normalizeMobile(form.mobile)) return form.mobile.trim() ? "That mobile number is not a valid 10-digit Indian number." : "Enter the customer's mobile number.";
+  if (!form.whatsappSame && !normalizeMobile(form.whatsapp))
+    return form.whatsapp.trim() ? "That WhatsApp number is not a valid 10-digit Indian number." : "Enter the customer's WhatsApp number, or tick that the mobile is on WhatsApp.";
   if (form.email.trim() && !isValidEmail(form.email.trim())) return "That email address does not look right.";
   return null;
 }
@@ -243,12 +253,25 @@ export function BuyerFields({
         <Field label="Customer name" htmlFor="c-name" required className="sm:col-span-2">
           <Input id="c-name" value={form.name} onChange={set("name")} maxLength={120} autoComplete="off" autoFocus />
         </Field>
-        <Field label="Mobile" htmlFor="c-mobile" required={mobileRequired} hint="10-digit number — the bill is shared on WhatsApp to this number">
+        <Field label="Mobile" htmlFor="c-mobile" required={mobileRequired} hint="10-digit number">
           <Input id="c-mobile" className="font-mono" inputMode="tel" value={form.mobile} onChange={set("mobile")} maxLength={16} autoComplete="off" />
         </Field>
-        <Field label="Email" htmlFor="c-email" hint="Optional">
+        <Field label="Email" htmlFor="c-email" hint="Optional — the bill can be emailed here">
           <Input id="c-email" type="email" value={form.email} onChange={set("email")} maxLength={120} autoComplete="off" />
         </Field>
+        <div className="sm:col-span-2">
+          <Checkbox
+            id="c-wa-same"
+            label="This mobile number is also on WhatsApp — the bill is sent there"
+            checked={form.whatsappSame}
+            onChange={(e) => setForm((f) => ({ ...f, whatsappSame: e.target.checked }))}
+          />
+        </div>
+        {!form.whatsappSame && (
+          <Field label="WhatsApp number" htmlFor="c-whatsapp" required hint="The number the bill is sent to on WhatsApp">
+            <Input id="c-whatsapp" className="font-mono" inputMode="tel" value={form.whatsapp} onChange={set("whatsapp")} maxLength={16} autoComplete="off" autoFocus />
+          </Field>
+        )}
       </div>
 
       <div className="overflow-hidden rounded-lg border border-navy-200">

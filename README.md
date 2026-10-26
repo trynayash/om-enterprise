@@ -394,6 +394,37 @@ A free Gmail account can send to about 500 recipients a day, which is far more t
 
 **Alternatives.** With a domain of its own, [Resend](https://resend.com) works instead: verify the domain there, create a sending-only API key, and set `RESEND_API_KEY` and `EMAIL_FROM=OM ENTERPRISE <bills@your-domain>`. If both are set, SMTP is used. For development and tests, `EMAIL_OUTBOX_DIR=./storage/outbox` (with `EMAIL_FROM`) writes each message to a folder instead of sending anything — one folder per message with `message.json` and the PDF; the e2e and walkthrough runs use it. The SMTP sending is tested against a real local mail server (`tests/unit/send-mail.test.ts`).
 
+## Sending bills on WhatsApp
+
+**At the counter** the customer step asks for the WhatsApp number: the box *"This mobile number is also on WhatsApp"* is ticked by default; untick it to enter a different WhatsApp number. It is kept on the customer (Dashboard → Customers also has it) and on the bill.
+
+**WhatsApp** on the bill page then works in one of two ways:
+
+- **From the shop's number, automatically** (once it is connected, below): one click sends the bill's PDF from the shop's WhatsApp number straight to the customer's WhatsApp, with a short message. The page says where it goes ("WhatsApp sends the PDF to +91 98765 43210 from the shop's number"); **send to another number** sends it elsewhere and can keep that number on the customer. A bill can be sent up to 5 times; every send and every failed send is in the audit log. Never a cancelled document or a practice bill.
+- **Until then, from this device:** the button opens WhatsApp (on the phone or computer in use, signed in as the shop) in the customer's chat, with the bill's link already typed; staff press send. On phones a second option, **send the PDF file instead**, hands the PDF itself to WhatsApp through the phone's share menu (WhatsApp then asks which chat).
+
+**Connecting the shop's number** (once; done by the owner in Meta's tools, then three settings on the server). Implemented against the WhatsApp Cloud API's published request format; **it has not been tried against a live WhatsApp business account yet**, so send a first bill to your own number to check.
+
+1. **Number.** Decide which number sends bills. A number used in the ordinary WhatsApp app has to leave that app to join the business platform; a number on the **WhatsApp Business** app can usually stay on the phone as well ("coexistence") — Meta's setup screen says which applies. If in doubt, use a second number for bills.
+2. **Accounts.** At business.facebook.com create (or use) the shop's Meta Business account. At developers.facebook.com create an app of type *Business* and add **WhatsApp** to it; add the number under WhatsApp → API Setup and verify it by SMS. Meta shows the number's **Phone number ID** there.
+3. **Permanent key.** Business Settings → Users → **System users** → add one (Admin) → assign the app and the WhatsApp account → **Generate token** with `whatsapp_business_messaging` and `whatsapp_business_management`, set to never expire. Copy it once.
+4. **Message template.** WhatsApp Manager → Message templates → Create: category **Utility**, name `bill_pdf`, language **English**.
+   - Header: **Document**.
+   - Body: `Hello {{1}}, thank you for shopping with OM ENTERPRISE. Your {{2}} for {{3}} is attached as a PDF. For any question, reply here or call 7621934414.`
+   - Samples: `Ramesh Patel`, `Bill of Supply BS/26-27/00012`, `₹2,650.00`. Submit; Meta usually approves utility templates quickly.
+5. **Payment.** Add a payment method to the WhatsApp account. Meta charges a small fee for each bill message delivered (see Meta's current price list for India).
+6. **Server.** Set on the host (Vercel: Project → Settings → Environment Variables; the token *Sensitive*) and redeploy:
+
+   | Variable | Value |
+   | --- | --- |
+   | `WHATSAPP_TOKEN` | the permanent token from step 3 (secret, never commit it) |
+   | `WHATSAPP_PHONE_NUMBER_ID` | the Phone number ID from step 2 (an id, not the phone number) |
+   | `WHATSAPP_TEMPLATE` | `bill_pdf` |
+   | `WHATSAPP_TEMPLATE_LANGUAGE` | the template's language code if not `en` (e.g. `en_US`) |
+   | `WHATSAPP_API_VERSION` | only to override the Graph API version (default `v23.0`) |
+
+What the customer receives: the template's message with the PDF of the bill (named after the bill number, e.g. `BS-26-27-00012.pdf`). If WhatsApp refuses (expired key, template not approved, number not on WhatsApp), the counter sees the reason in plain words and nothing is sent. For development and tests, `WHATSAPP_OUTBOX_DIR=./storage/whatsapp-outbox` writes each message (`message.json` and the PDF) to a folder instead of sending.
+
 ---
 
 ## Payments

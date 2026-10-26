@@ -6,7 +6,7 @@
  */
 import localFont from "next/font/local";
 import type { DocSnapshot } from "@/lib/document-types";
-import { layoutDocument, PAGE_H, PAGE_W, type FontKey } from "@/server/pdf/bill-sheet";
+import { layoutDocument, PAGE_H, PAGE_W, RULE_COLOR, TEXT_COLOR, type FontKey } from "@/server/pdf/bill-sheet";
 import { cn } from "@/components/ui/cn";
 
 const roboto = localFont({
@@ -31,6 +31,9 @@ const gujarati = localFont({
   ],
   preload: false,
 });
+
+// A large copy from the image optimiser, so the logo stays sharp when the bill is zoomed or printed.
+const LOGO_URL = `/_next/image?url=${encodeURIComponent("/brand/om-enterprise-logo.png")}&w=1080&q=75`;
 
 const FAMILY: Record<FontKey, string> = {
   R: roboto.style.fontFamily,
@@ -70,8 +73,8 @@ export function DocumentView({
         >
           <rect width={PAGE_W} height={PAGE_H} fill="#ffffff" />
           {draws.map((d, j) => {
-            if (d.k === "line") return <line key={j} x1={d.x1} y1={d.y1} x2={d.x2} y2={d.y2} stroke="#000000" strokeWidth={d.width} />;
-            if (d.k === "logo") return <image key={j} href="/brand/om-enterprise-logo.png" x={d.x} y={d.y} width={d.size} height={d.size} />;
+            if (d.k === "line") return <line key={j} x1={d.x1} y1={d.y1} x2={d.x2} y2={d.y2} stroke={RULE_COLOR} strokeWidth={d.width} />;
+            if (d.k === "logo") return <image key={j} href={LOGO_URL} x={d.x} y={d.y} width={d.size} height={d.size} />;
             if (d.k === "text")
               return (
                 <text
@@ -81,7 +84,7 @@ export function DocumentView({
                   fontSize={d.size}
                   fontWeight={d.font.endsWith("B") ? 700 : 400}
                   fontFamily={FAMILY[d.font]}
-                  fill="#000000"
+                  fill={TEXT_COLOR}
                   style={{ whiteSpace: "pre" }}
                 >
                   {d.text}

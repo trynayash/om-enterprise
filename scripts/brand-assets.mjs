@@ -3,10 +3,12 @@
  * the round badge cut out of its black square, with transparent corners.
  *   node scripts/brand-assets.mjs
  * Outputs (committed):
- *   public/brand/om-enterprise-logo.png   512 px, for the website, POS and dashboard
- *   assets/brand/om-enterprise-logo.jpg   360 px on white, drawn on bill PDFs (small: every PDF carries it)
- *   src/app/icon.png                      128 px, the browser tab icon
- *   src/app/apple-icon.png                180 px on white, for phone home screens (iOS shows no transparency)
+ *   public/brand/om-enterprise-logo.png        full size (1254 px), the source of every logo on the site; pages
+ *                                              get small copies from the image optimiser, the bill page a sharp large one
+ *   public/brand/om-enterprise-logo-email.png  144 px, for the top of bill emails (mail apps download it as is)
+ *   assets/brand/om-enterprise-logo.jpg        full size on white, drawn on bill PDFs so they print sharp at any size
+ *   src/app/icon.png                           128 px, the browser tab icon
+ *   src/app/apple-icon.png                     180 px on white, for phone home screens (iOS shows no transparency)
  */
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -26,13 +28,10 @@ const round = await sharp(source)
   .png()
   .toBuffer();
 
-for (const [file, px] of [
-  ["public/brand/om-enterprise-logo.png", 512],
-  ["src/app/icon.png", 128],
-]) {
-  await sharp(round).resize(px, px).png({ compressionLevel: 9 }).toFile(path.join(root, file));
-}
-await sharp(round).resize(360, 360).flatten({ background: "#ffffff" }).jpeg({ quality: 88, mozjpeg: true }).toFile(path.join(root, "assets/brand/om-enterprise-logo.jpg"));
+await sharp(round).png({ compressionLevel: 9 }).toFile(path.join(root, "public/brand/om-enterprise-logo.png"));
+await sharp(round).resize(144, 144).png({ compressionLevel: 9 }).toFile(path.join(root, "public/brand/om-enterprise-logo-email.png"));
+await sharp(round).resize(128, 128).png({ compressionLevel: 9 }).toFile(path.join(root, "src/app/icon.png"));
+await sharp(round).flatten({ background: "#ffffff" }).jpeg({ quality: 92, mozjpeg: true, chromaSubsampling: "4:4:4" }).toFile(path.join(root, "assets/brand/om-enterprise-logo.jpg"));
 await sharp(round)
   .resize(164, 164)
   .extend({ top: 8, bottom: 8, left: 8, right: 8, background: "#ffffff" })

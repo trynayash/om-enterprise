@@ -30,6 +30,9 @@ export const FONT_FILES: Record<FontKey, string> = {
   GJB: path.join(FONT_DIR, "NotoSansGujarati-Bold.ttf"),
 };
 export const LOGO_FILE = path.join(process.cwd(), "assets", "brand", "om-enterprise-logo.jpg");
+/** The shop's bill rules its boxes in mid grey; the text is black. */
+export const RULE_COLOR = "#808080";
+export const TEXT_COLOR = "#000000";
 
 /** One thing drawn on a page. Text `x`/`y` are its left edge and the top of its line box. */
 export type Draw =
@@ -303,8 +306,10 @@ function header(p: Page, s: DocSnapshot, opts: SheetOptions) {
     `State: ${stateLabel(s.seller.stateCode, s.seller.stateName)}`,
   ];
   // Five lines 9 pt apart, as on the shop's bill; a longer address closes them up to fit.
+  // The shop's bill: 69.2, 78.2, 87.2, 96.2 and 105.9 (the state line sits a little lower).
   const gap = lines.length <= 5 ? 9 : (HEAD.b - 3.5 - metrics("R").height * SELLER - 69.2) / (lines.length - 1);
-  lines.forEach((t, i) => p.text(t, 65.6, 69.2 + i * gap, { size: i === 0 && oneLine ? addressSize : SELLER, width: textW }));
+  const tops = lines.map((_, i) => (lines.length <= 5 && i === lines.length - 1 ? 69.2 + (i - 1) * 9 + 9.7 : 69.2 + i * gap));
+  lines.forEach((t, i) => p.text(t, 65.6, tops[i], { size: i === 0 && oneLine ? addressSize : SELLER, width: textW }));
 
   // Number and date | place of supply and one more fact the document needs | declarations
   const kind = s.docType === "quotation" ? "Quotation No." : s.docType === "credit_note" ? "Credit Note No." : "Invoice No.";

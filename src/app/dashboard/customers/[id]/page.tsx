@@ -60,7 +60,7 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
                 <a href={`tel:+91${c.mobile}`} className={buttonClass("outline")}>
                   <Phone className="h-4 w-4" /> Call
                 </a>
-                <a href={whatsappLink(c.mobile, `Namaste ${c.name}, this is OM ENTERPRISE, Naswadi.`)} target="_blank" rel="noopener noreferrer" className={buttonClass("success")}>
+                <a href={whatsappLink(c.whatsapp ?? c.mobile, `Namaste ${c.name}, this is OM ENTERPRISE, Naswadi.`)} target="_blank" rel="noopener noreferrer" className={buttonClass("success")}>
                   <MessageCircle className="h-4 w-4" /> WhatsApp
                 </a>
               </>
@@ -71,6 +71,7 @@ async function CustomerDetail({ params }: { params: Promise<{ id: string }> }) {
                   id: c.id,
                   name: c.name,
                   mobile: c.mobile,
+                  whatsapp: c.whatsapp,
                   email: c.email,
                   businessName: c.businessName,
                   gstin: c.gstin,

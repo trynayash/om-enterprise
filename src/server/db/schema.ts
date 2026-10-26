@@ -634,6 +634,8 @@ export const customers = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     mobile: text("mobile"),
+    /** The number bills go to on WhatsApp: the mobile, another number, or null for none. */
+    whatsapp: text("whatsapp"),
     email: text("email"),
     businessName: text("business_name"),
     gstin: text("gstin"),

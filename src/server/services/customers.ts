@@ -10,6 +10,8 @@ import { isValidEmail, isValidPincode, isValidStateCode, normalizeMobile, stateN
 export interface CustomerInput {
   name: string;
   mobile?: string | null;
+  /** The number bills go to on WhatsApp when it is not the mobile; empty means the mobile. */
+  whatsapp?: string | null;
   email?: string | null;
   businessName?: string | null;
   gstin?: string | null;
@@ -30,6 +32,13 @@ export function cleanCustomer(input: CustomerInput) {
     mobile = normalizeMobile(input.mobile);
     if (!mobile) throw invalid("Enter a valid 10-digit Indian mobile number");
   }
+  let whatsapp: string | null = null;
+  if (input.whatsapp?.trim()) {
+    whatsapp = normalizeMobile(input.whatsapp);
+    if (!whatsapp) throw invalid("Enter a valid 10-digit WhatsApp number");
+    // Kept only when it differs from the mobile: empty means "the mobile is on WhatsApp".
+    if (whatsapp === mobile) whatsapp = null;
+  }
   const email = input.email?.trim() || null;
   if (email && !isValidEmail(email)) throw invalid("Enter a valid email address");
   let gstin: string | null = null;
@@ -49,6 +58,7 @@ export function cleanCustomer(input: CustomerInput) {
   return {
     name: name.slice(0, 120),
     mobile,
+    whatsapp,
     email,
     businessName: input.businessName?.trim() || null,
     gstin,

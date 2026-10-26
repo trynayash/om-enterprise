@@ -14,6 +14,7 @@ export interface CustomerFormValue {
   id?: string;
   name: string;
   mobile: string | null;
+  whatsapp: string | null;
   email: string | null;
   businessName: string | null;
   gstin: string | null;
@@ -28,6 +29,7 @@ export interface CustomerFormValue {
 const EMPTY: CustomerFormValue = {
   name: "",
   mobile: "",
+  whatsapp: "",
   email: "",
   businessName: "",
   gstin: "",
@@ -54,6 +56,7 @@ export function CustomerFormButton({ customer }: { customer?: CustomerFormValue 
     const body = {
       name: v.name,
       mobile: v.mobile || null,
+      whatsapp: v.whatsapp || null,
       email: v.email || null,
       businessName: v.businessName || null,
       gstin: v.gstin || null,
@@ -116,6 +119,9 @@ export function CustomerFormButton({ customer }: { customer?: CustomerFormValue 
             </Field>
             <Field label="Mobile" htmlFor="c-mobile" hint="10-digit Indian mobile">
               <Input id="c-mobile" inputMode="tel" value={v.mobile ?? ""} onChange={(e) => set("mobile", e.target.value)} maxLength={16} />
+            </Field>
+            <Field label="WhatsApp" htmlFor="c-whatsapp" hint="Only if it is not the mobile number">
+              <Input id="c-whatsapp" inputMode="tel" value={v.whatsapp ?? ""} onChange={(e) => set("whatsapp", e.target.value)} maxLength={16} />
             </Field>
             <Field label="Business name" htmlFor="c-biz">
               <Input id="c-biz" value={v.businessName ?? ""} onChange={(e) => set("businessName", e.target.value)} maxLength={160} />

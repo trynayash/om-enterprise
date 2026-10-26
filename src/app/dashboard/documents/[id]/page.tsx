@@ -4,6 +4,7 @@ import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getDocument } from "@/server/services/documents";
 import { emailInfoFor } from "@/server/services/document-email";
+import { whatsappInfoFor } from "@/server/services/document-whatsapp";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
 import { Alert, PageHeader, PageSkeleton } from "@/components/ui/page";
@@ -83,11 +84,11 @@ async function DocumentDetail({ params }: { params: Promise<{ id: string }> }) {
               title={s.title}
               grandTotal={s.totals.grandTotal}
               shareToken={doc.status === "issued" ? doc.shareToken : null}
-              customerMobile={s.buyer?.mobile}
               businessName={s.seller.name}
               canShare={can(actor, "documents.share")}
               showPdf={false}
               email={await emailInfoFor(doc)}
+          whatsapp={await whatsappInfoFor(doc)}
             />
           </ClientOnly>
           <PdfCopySelector documentId={doc.id} printCount={doc.printCount} />

@@ -118,6 +118,12 @@ test.describe("POS counter", () => {
     await sachin.locator("#c-mobile").fill("98765 43210");
     await sachin.locator("#c-email").fill("ramesh.e2e@example.com");
     await expect(goOn).toBeEnabled();
+    // The bill goes to the mobile on WhatsApp unless the customer gives another number.
+    await expect(sachin.locator("#c-wa-same")).toBeChecked();
+    await sachin.locator("#c-wa-same").uncheck();
+    await expect(goOn).toBeDisabled();
+    await sachin.locator("#c-whatsapp").fill("98250 12345");
+    await expect(goOn).toBeEnabled();
     await goOn.click();
     await expect(sachin.getByTestId("customer-summary")).toContainText("Ramesh Patel (e2e)");
 
@@ -157,6 +163,11 @@ test.describe("POS counter", () => {
     const pdf = await sachin.request.get(`/api/documents/${documentId}/pdf`);
     expect(pdf.status()).toBe(200);
     expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
+
+    // ---- 10a. WhatsApp goes to the number the customer gave. Without the shop's number connected
+    // (as here), it opens that chat on this device with the bill's link.
+    await expect(sachin.getByTestId("whatsapp-note")).toContainText("98250 12345");
+    await expect(sachin.getByTestId("whatsapp-bill")).toHaveAttribute("href", /^https:\/\/wa\.me\/919825012345\?text=/);
 
     // ---- 10b. One click emails the bill, as a PDF, to the address taken before the QR.
     await expect(sachin.getByTestId("email-note")).toContainText("ramesh.e2e@example.com");

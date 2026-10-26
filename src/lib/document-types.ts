@@ -14,6 +14,8 @@ export interface DocParty {
   stateName: string | null;
   pincode: string | null;
   mobile: string | null;
+  /** Where the bill goes on WhatsApp (the mobile unless the customer gave another); absent on older bills. */
+  whatsapp?: string | null;
   email: string | null;
   gstin: string | null;
 }
@@ -132,6 +134,18 @@ export interface DocumentEmailInfo {
   /** Why this document can't be emailed (a practice bill), if so. */
   blocked?: string;
   /** The last time it was emailed (ISO time), and how many times in all. */
+  last: { to: string; at: string; count: number } | null;
+}
+
+/** What a page needs to know about sending a document on WhatsApp (worked out on the server). */
+export interface DocumentWhatsAppInfo {
+  /** The shop's WhatsApp number is connected, so the bill can be sent from it directly. */
+  ready: boolean;
+  /** The customer's WhatsApp number on the bill, if any (10 digits). */
+  to: string | null;
+  /** Why this document can't be sent (a practice bill), if so. */
+  blocked?: string;
+  /** The last time it was sent (ISO time), and how many times in all. */
   last: { to: string; at: string; count: number } | null;
 }
 

@@ -107,6 +107,7 @@ function partyFromCustomer(c: Customer | null): DocParty | null {
     stateName: stateName(c.stateCode),
     pincode: c.pincode,
     mobile: c.mobile,
+    whatsapp: c.whatsapp ?? c.mobile,
     email: c.email,
     gstin: c.gstin,
   };
@@ -285,7 +286,7 @@ async function createOrReuseCustomer(actor: Actor, input: CustomerInput, tx: Tx)
       .orderBy(asc(customers.createdAt))
       .limit(1);
     if (same) {
-      const fields = ["email", "businessName", "gstin", "billingAddress", "city", "stateCode", "pincode"] as const;
+      const fields = ["whatsapp", "email", "businessName", "gstin", "billingAddress", "city", "stateCode", "pincode"] as const;
       const fill: Partial<Record<(typeof fields)[number], string>> = {};
       for (const f of fields) {
         const typed = input[f]?.trim();

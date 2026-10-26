@@ -55,6 +55,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/documents/[id]/pdf": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
     "/api/documents/[id]/email": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
+    "/api/documents/[id]/whatsapp": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
     "/d/[token]/pdf": ["./assets/fonts/**", "./assets/brand/om-enterprise-logo.jpg"],
   },
   turbopack: {

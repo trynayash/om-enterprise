@@ -57,7 +57,7 @@ export function CustomerStep({ data, config, run, onClose }: { data: SaleData; c
           Step 3 · Customer
         </div>
         <h2 className="mt-1.5 text-lg font-semibold text-navy-950">Who is buying?</h2>
-        <p className="mt-0.5 text-sm text-navy-500">The bill is made out to them and can be sent to their mobile on WhatsApp. Take this before showing the QR.</p>
+        <p className="mt-0.5 text-sm text-navy-500">The bill is made out to them and can be sent to them on WhatsApp. Take this before showing the QR.</p>
       </div>
       <div className="space-y-4 p-4 sm:p-5">
         {error && <Alert tone="danger">{error}</Alert>}

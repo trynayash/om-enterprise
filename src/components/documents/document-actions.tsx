@@ -1,13 +1,13 @@
 "use client";
 import { useState, useSyncExternalStore } from "react";
-import { Copy, Download, MessageCircle, Printer } from "lucide-react";
+import { Copy, Download, Printer } from "lucide-react";
 import { Button, buttonClass } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { apiFetch, errorMessage } from "@/lib/api-client";
 import { formatINR } from "@/lib/money";
-import { whatsappLink } from "@/lib/india";
-import type { DocumentEmailInfo } from "@/lib/document-types";
+import type { DocumentEmailInfo, DocumentWhatsAppInfo } from "@/lib/document-types";
 import { useEmailBill } from "./email-bill";
+import { useWhatsAppBill } from "./whatsapp-bill";
 
 /** Print / PDF / share controls for an issued document. */
 export function DocumentActions({
@@ -16,24 +16,25 @@ export function DocumentActions({
   title,
   grandTotal,
   shareToken,
-  customerMobile,
   businessName = "OM ENTERPRISE",
   canShare = true,
   showPdf = true,
   email,
+  whatsapp,
 }: {
   documentId: string;
   docNumber: string;
   title: string;
   grandTotal: string;
   shareToken: string | null;
-  customerMobile?: string | null;
   businessName?: string;
   canShare?: boolean;
   /** Off where the page has its own PDF control (the dashboard's copy selector). */
   showPdf?: boolean;
   /** Emailing the document to the customer; left out where it does not apply. */
   email?: DocumentEmailInfo;
+  /** Sending it on WhatsApp; left out where it does not apply. */
+  whatsapp?: DocumentWhatsAppInfo;
 }) {
   const toast = useToast();
   const mail = useEmailBill(documentId, canShare ? email : undefined);
@@ -59,6 +60,7 @@ export function DocumentActions({
   };
 
   const message = `${businessName}: your ${title.toLowerCase()} ${docNumber} for ${formatINR(grandTotal)}.${shareUrl ? ` View / download: ${shareUrl}` : ""} Thank you!`;
+  const wa = useWhatsAppBill(documentId, docNumber, canShare ? whatsapp : undefined, message);
 
   return (
     <div className="no-print flex flex-wrap items-center gap-2">
@@ -71,12 +73,14 @@ export function DocumentActions({
         </a>
       )}
       {mail.button}
-      {canShare && shareUrl && (
+      {wa.button && (
         <>
           <span aria-hidden className="mx-1 hidden h-6 w-px bg-navy-200 sm:block" />
-          <a className={buttonClass("success")} href={whatsappLink(customerMobile || "", message)} target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="h-4 w-4" /> WhatsApp
-          </a>
+          {wa.button}
+        </>
+      )}
+      {canShare && shareUrl && (
+        <>
           <Button
             variant="ghost"
             icon={<Copy className="h-4 w-4" />}
@@ -90,7 +94,9 @@ export function DocumentActions({
         </>
       )}
       {mail.note}
+      {wa.note}
       {mail.dialog}
+      {wa.dialog}
     </div>
   );
 }

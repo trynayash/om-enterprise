@@ -158,6 +158,7 @@ export const costInput = z.object({
 export const customerInput = z.object({
   name: z.string().trim().min(1).max(120),
   mobile: z.string().trim().max(20).optional().nullable(),
+  whatsapp: z.string().trim().max(20).optional().nullable(),
   email: z.string().trim().max(120).optional().nullable(),
   businessName: optionalText(160),
   gstin: z.string().trim().max(20).optional().nullable(),

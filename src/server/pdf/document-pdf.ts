@@ -6,7 +6,7 @@ import "server-only";
  */
 import PDFDocument from "pdfkit";
 import type { DocSnapshot } from "@/lib/document-types";
-import { FONT_FILES, LOGO_FILE, PAGE_H, PAGE_W, layoutDocument, type SheetOptions } from "./bill-sheet";
+import { FONT_FILES, LOGO_FILE, PAGE_H, PAGE_W, RULE_COLOR, TEXT_COLOR, layoutDocument, type SheetOptions } from "./bill-sheet";
 
 export type PdfOptions = SheetOptions;
 
@@ -22,9 +22,9 @@ export async function renderDocumentPdf(snap: DocSnapshot, opts: PdfOptions): Pr
     doc.addPage({ size: [PAGE_W, PAGE_H], margin: 0 });
     for (const d of draws) {
       if (d.k === "line") {
-        doc.moveTo(d.x1, d.y1).lineTo(d.x2, d.y2).lineWidth(d.width).strokeColor("#000000").stroke();
+        doc.moveTo(d.x1, d.y1).lineTo(d.x2, d.y2).lineWidth(d.width).strokeColor(RULE_COLOR).stroke();
       } else if (d.k === "text") {
-        doc.font(d.font).fontSize(d.size).fillColor("#000000").text(d.text, d.x, d.y, { lineBreak: false });
+        doc.font(d.font).fontSize(d.size).fillColor(TEXT_COLOR).text(d.text, d.x, d.y, { lineBreak: false });
       } else if (d.k === "logo") {
         doc.image(LOGO_FILE, d.x, d.y, { width: d.size, height: d.size });
       } else {

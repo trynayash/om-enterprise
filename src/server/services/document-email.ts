@@ -67,7 +67,7 @@ export async function emailDocument(actor: Actor, documentId: string, input: { t
     cancelReason: doc.cancelReason,
     copyLabel: doc.printCount > 0 || before ? `Reprint (copy ${doc.printCount + (before?.count ?? 0) + 1})` : "Original for recipient",
   });
-  const mail = billEmail(s, { viewUrl, logoUrl: base ? `${base}/brand/om-enterprise-logo.png` : null });
+  const mail = billEmail(s, { viewUrl, logoUrl: base ? `${base}/brand/om-enterprise-logo-email.png` : null });
 
   const db = getDb();
   let sent: { id: string | null };

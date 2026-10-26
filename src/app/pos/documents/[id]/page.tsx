@@ -6,6 +6,7 @@ import { requirePageActor } from "@/server/auth/session";
 import { can } from "@/server/auth/actor";
 import { getDocument } from "@/server/services/documents";
 import { emailInfoFor } from "@/server/services/document-email";
+import { whatsappInfoFor } from "@/server/services/document-whatsapp";
 import { toAppError } from "@/server/errors";
 import { DocumentView } from "@/components/documents/document-view";
 import { DocumentActions } from "@/components/documents/document-actions";
@@ -66,10 +67,10 @@ async function DocumentLoader({ params }: { params: Promise<{ id: string }> }) {
           title={s.title}
           grandTotal={s.totals.grandTotal}
           shareToken={doc.shareToken}
-          customerMobile={s.buyer?.mobile ?? null}
           businessName={s.seller.name}
           canShare={can(actor, "documents.share")}
           email={await emailInfoFor(doc)}
+          whatsapp={await whatsappInfoFor(doc)}
         />
       </div>
       <div className="animate-rise overflow-hidden rounded-md border border-navy-200 bg-white shadow-[0_1px_0_rgb(13_27_48/0.04),0_18px_40px_-24px_rgb(13_27_48/0.35)] print:animate-none print:rounded-none print:border-0 print:shadow-none">
