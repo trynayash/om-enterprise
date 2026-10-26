@@ -7,6 +7,7 @@ import {
   customers,
   documents,
   payments,
+  productVariants,
   saleLines,
   saleReturnLines,
   saleReturns,
@@ -15,6 +16,8 @@ import {
   stockMovements,
   units,
   users,
+  variantPrices,
+  variantUnitConversions,
 } from "@/server/db/schema";
 import { audit } from "@/server/audit";
 import { auditActorOf, can, requirePermission, type Actor } from "@/server/auth/actor";
@@ -26,6 +29,7 @@ import { recalculate } from "@/server/services/sales";
 import { computeTax } from "@/lib/pricing/engine";
 import { amountInWords, D, m, r0, r2 } from "@/lib/money";
 import { financialYear, formatDocNumber, normalizeMobile, stateName } from "@/lib/india";
+import { colourAndMaterial, youSavedOf } from "@/lib/bill-layout";
 import {
   COMPOSITION_DECLARATION,
   TRAINING_WATERMARK,
@@ -137,7 +141,31 @@ export function checkBuyerRequirements(args: {
   }
 }
 
-function lineSnapshot(l: SaleLine, i: number, unitNames: Map<string, string>): DocLine {
+type LineExtras = Pick<DocLine, "mrp" | "colour" | "material">;
+
+/**
+ * What a bill prints beside each item that the sale line itself doesn't hold: the MRP of the price
+ * that was used (per unit sold, so a box of 10 shows ten times the piece MRP) and the variant's
+ * Colour and Material.
+ */
+async function lineExtras(tx: Tx, lines: SaleLine[]): Promise<Map<string, LineExtras>> {
+  const items = lines.filter((l) => l.lineType === "item" && l.variantId);
+  const variantIds = [...new Set(items.map((l) => l.variantId!))];
+  const versionIds = [...new Set(items.map((l) => l.priceVersionId).filter((v): v is string => !!v))];
+  if (!variantIds.length) return new Map();
+  const variants = await tx.select({ id: productVariants.id, attributes: productVariants.attributes }).from(productVariants).where(inArray(productVariants.id, variantIds));
+  const versions = versionIds.length ? await tx.select({ id: variantPrices.id, mrp: variantPrices.mrp }).from(variantPrices).where(inArray(variantPrices.id, versionIds)) : [];
+  const conversions = await tx.select().from(variantUnitConversions).where(inArray(variantUnitConversions.variantId, variantIds));
+  const out = new Map<string, LineExtras>();
+  for (const l of items) {
+    const mrp = versions.find((v) => v.id === l.priceVersionId)?.mrp;
+    const factor = conversions.find((c) => c.variantId === l.variantId && c.unitCode === l.unitCode)?.factor ?? 1;
+    out.set(l.id, { mrp: mrp && Number(mrp) > 0 ? m(D(mrp).times(D(factor))) : null, ...colourAndMaterial(variants.find((v) => v.id === l.variantId)?.attributes) });
+  }
+  return out;
+}
+
+function lineSnapshot(l: SaleLine, i: number, unitNames: Map<string, string>, extras?: LineExtras): DocLine {
   return {
     sl: i + 1,
     kind: l.lineType,
@@ -160,6 +188,9 @@ function lineSnapshot(l: SaleLine, i: number, unitNames: Map<string, string>): D
     cessAmount: l.cessAmount,
     total: l.lineTotal,
     isSample: l.isSample,
+    mrp: extras?.mrp ?? null,
+    colour: extras?.colour ?? null,
+    material: extras?.material ?? null,
   };
 }
 
@@ -330,7 +361,8 @@ export async function issueQuotation(actor: Actor, saleId: string, customer?: (C
     const prefix = s.isTraining ? settings.documents.prefixes.training : settings.documents.prefixes.quotation;
     const { seq, fy, docNumber } = await allocateDocNumber(tx, seriesKey, prefix, now);
     const unitNames = await unitNameMap(tx);
-    const docLines = lines.map((l, i) => lineSnapshot(l, i, unitNames));
+    const extras = await lineExtras(tx, lines);
+    const docLines = lines.map((l, i) => lineSnapshot(l, i, unitNames, extras.get(l.id)));
     const snapshot: DocSnapshot = {
       ...baseSnapshot(settings, s, docLines, buyer, actor, now, fy, docNumber),
       docType: "quotation",
@@ -423,6 +455,7 @@ function baseSnapshot(
       roundOff: sale.roundOff,
       grandTotal: sale.grandTotal,
       amountInWords: amountInWords(sale.grandTotal),
+      youSaved: youSavedOf(lines),
     },
     terms: settings.documents.terms,
     signatoryLabel: settings.documents.signatoryLabel,
@@ -494,7 +527,8 @@ export async function issueBill(
     const prefix = sale.isTraining ? settings.documents.prefixes.training : settings.documents.prefixes[docType];
     const { seq, fy, docNumber } = await allocateDocNumber(tx, seriesKey, prefix, now);
     const unitNames = await unitNameMap(tx);
-    const docLines = lines.map((l, i) => lineSnapshot(l, i, unitNames));
+    const extras = await lineExtras(tx, lines);
+    const docLines = lines.map((l, i) => lineSnapshot(l, i, unitNames, extras.get(l.id)));
     const pays = await paymentsSnapshot(tx, saleId);
     const snapshot: DocSnapshot = {
       ...baseSnapshot(settings, sale, docLines, buyer, actor, now, fy, docNumber),

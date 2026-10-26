@@ -40,6 +40,11 @@ export interface DocLine {
   cessAmount: string;
   total: string;
   isSample: boolean;
+  /** Maximum retail price per unit sold, from the price used; absent on bills issued before it was kept. */
+  mrp?: string | null;
+  /** The variant's Colour and Material attributes, when it has them. */
+  colour?: string | null;
+  material?: string | null;
 }
 
 export interface DocSnapshot {
@@ -101,6 +106,8 @@ export interface DocSnapshot {
     roundOff: string;
     grandTotal: string;
     amountInWords: string;
+    /** What the customer saved against MRP or by discounts; absent on bills issued before it was kept. */
+    youSaved?: string;
   };
   payments: { method: string; reference: string | null; amount: string; at: string; verification: string | null; direction: "in" | "refund" }[];
   paymentStatus: string;

@@ -1,7 +1,7 @@
 # OM ENTERPRISE — Business Management, Smart POS Billing, Payments & Inventory-ready System
 
 **OM ENTERPRISE** · *Your Complete Building Solution*
-Opp. Shardha Dhaba 2, Bodeli Road, Naswadi, Gujarat 391150 · WhatsApp 7621934414 · omenterprise1119@gmail.com
+Nr. Shivani Showroom, Bodeli Road, Naswadi, Gujarat 391150 · WhatsApp 7621934414 · omenterprise1119@gmail.com
 
 One connected system for the shop:
 
@@ -361,6 +361,7 @@ Price for target margin m (0 < m < 1) = landed cost / (1 − m)
 8. **Verify payment.** This is automatic only with a gateway webhook. Otherwise staff check the merchant app and record the 12-digit UTR and explicit confirmation. Split payments are supported.
 9. **Generate the bill** for the customer already taken (still changeable here). The document type comes from the GST registration — a **Bill of Supply** (with the composition declaration and no tax) for a composition dealer — and the number is allocated gaplessly.
 10. **Saved and searchable.** On the bill page: **Print** (A4), **PDF**, **Email** (one click, to the address taken in step 6), **WhatsApp** (a private link) and **Copy link**.
+11. **What the bill shows**, laid out like the shop's earlier bills: HSN/SAC, Qty, Unit, Price/Unit, the discount with its percentage, and Amount on every line; MRP, Colour and Material when an item has them (MRP from the price used, set in the product's price panel; Colour and Material from the variant's attributes of those names); Place of supply; amount in words; payment mode; Received, Balance and **You saved** (MRP less what was paid, or the discount where there is no MRP). The PDF and printouts are always A4 portrait. Bills issued before 26 Oct 2026 keep what they were issued with, so they show no MRP, Colour or Material.
 
 Returns create credit notes against the original bill and record refunds. Cancelling a bill (goods not supplied) requires the refund to be recorded first, and keeps the cancelled document and its number.
 

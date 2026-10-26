@@ -4,9 +4,10 @@
  * the shop's initial product categories and a default stock location.
  *
  * Safe to run on every deploy: existing rows are never overwritten, so changes the
- * Super Admin makes later (role permissions, settings, categories) are preserved.
+ * Super Admin makes later (role permissions, settings, categories) are preserved. The one
+ * exception is correctBusinessDetails below, which only touches untouched first-setup values.
  */
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { DEFAULT_ROLES } from "@/lib/permissions";
 import { SETTINGS_DEFAULTS } from "@/lib/settings-schema";
@@ -47,6 +48,38 @@ export const INITIAL_CATEGORIES = [
   { slug: "plumbing-accessories", name: "Plumbing Accessories", icon: "wrench", description: "Solvent cement, teflon tape, clamps, connectors and tools." },
   { slug: "other-building-materials", name: "Other Building Materials", icon: "brick", description: "Other construction and hardware essentials." },
 ];
+
+/** The shop's address as first set up, before the shop's own bill showed the right one. */
+const OLD_DEFAULT_ADDRESS = "Opp. Shardha Dhaba 2, Bodeli Road";
+
+/**
+ * The address and GSTIN printed on the shop's own bill (Bill of Supply 729, 18 Oct 2026) replace the
+ * first-setup address, and fill the GSTIN if it is empty. Only while the address is still the
+ * first-setup one: once it has been changed, by this or by the owner in Settings, nothing here
+ * touches the shop's details again.
+ */
+async function correctBusinessDetails(tx: Parameters<Parameters<Db["transaction"]>[0]>[0]): Promise<boolean> {
+  const [row] = await tx.select().from(schema.settings).where(eq(schema.settings.section, "business"));
+  const stored = (row?.value ?? {}) as Record<string, unknown>;
+  if (stored.addressLine1 !== OLD_DEFAULT_ADDRESS) return false;
+  const changes: Record<string, { from: unknown; to: string }> = { addressLine1: { from: stored.addressLine1, to: SETTINGS_DEFAULTS.business.addressLine1 } };
+  if (!stored.gstin) changes.gstin = { from: stored.gstin ?? "", to: SETTINGS_DEFAULTS.business.gstin };
+  const next = { ...stored, ...Object.fromEntries(Object.entries(changes).map(([k, c]) => [k, c.to])) };
+  await tx
+    .update(schema.settings)
+    .set({ value: next, version: sql`${schema.settings.version} + 1`, updatedAt: new Date() })
+    .where(eq(schema.settings.section, "business"));
+  await tx.insert(schema.auditLogs).values({
+    actorUserId: null,
+    actorLabel: "system",
+    action: "settings.update",
+    entityType: "settings",
+    entityId: "business",
+    summary: changes.gstin ? "Shop address and GSTIN set from the shop's own bill" : "Shop address set from the shop's own bill",
+    data: { changes },
+  });
+  return true;
+}
 
 export async function bootstrap(db: Db): Promise<{ created: string[] }> {
   const created: string[] = [];
@@ -99,6 +132,7 @@ export async function bootstrap(db: Db): Promise<{ created: string[] }> {
       const res = await tx.insert(schema.settings).values({ section, value }).onConflictDoNothing().returning();
       if (res.length) created.push(`settings:${section}`);
     }
+    if (await correctBusinessDetails(tx)) created.push("settings:business (shop details from the shop's own bill)");
 
     const [{ count }] = await tx.select({ count: sql<number>`count(*)::int` }).from(schema.categories);
     if (count === 0) {

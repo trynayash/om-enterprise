@@ -9,7 +9,7 @@ import { addressLines, getSiteData, mapsHref, telHref } from "@/components/publi
 
 export const metadata: Metadata = {
   title: "Contact us",
-  description: "Call, WhatsApp, email or visit OM ENTERPRISE, Opp. Shardha Dhaba 2, Bodeli Road, Naswadi, Gujarat 391150.",
+  description: "Call, WhatsApp, email or visit OM ENTERPRISE, Nr. Shivani Showroom, Bodeli Road, Naswadi, Gujarat 391150.",
 };
 
 export default function ContactPage() {

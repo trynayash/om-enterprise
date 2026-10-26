@@ -154,7 +154,7 @@ export const SETTINGS_DEFAULTS: Settings = {
   business: {
     name: "OM ENTERPRISE",
     tagline: "Your Complete Building Solution",
-    addressLine1: "Opp. Shardha Dhaba 2, Bodeli Road",
+    addressLine1: "Nr. Shivani Showroom, Bodeli Road",
     addressLine2: "",
     city: "Naswadi",
     district: "Chhota Udaipur",
@@ -163,7 +163,7 @@ export const SETTINGS_DEFAULTS: Settings = {
     phone: "7621934414",
     whatsapp: "7621934414",
     email: "omenterprise1119@gmail.com",
-    gstin: "",
+    gstin: "24CSLPM5670H1ZF",
     pan: "",
     about:
       "OM ENTERPRISE supplies building materials for homes, shops and construction projects in and around Naswadi — paints, water tanks, bathware and sanitary fittings, CPVC, PVC, UPVC and SWR pipes and fittings, plumbing accessories and more, all under one roof.",

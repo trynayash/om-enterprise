@@ -7,7 +7,7 @@ function bill(over: Partial<{ docType: string; buyerName: string | null; payment
   return {
     docType: over.docType ?? "bill_of_supply",
     number: "BS/26-27/00003",
-    seller: { name: over.shop ?? "OM ENTERPRISE", addressLines: ["Opp. Shardha Dhaba 2, Bodeli Road", "Naswadi, Gujarat 391150"], phone: over.phone ?? "+91 76219 34414", email: "shop@example.com" },
+    seller: { name: over.shop ?? "OM ENTERPRISE", addressLines: ["Nr. Shivani Showroom, Bodeli Road", "Naswadi, Gujarat 391150"], phone: over.phone ?? "+91 76219 34414", email: "shop@example.com" },
     buyer: over.buyerName === null ? null : { name: over.buyerName ?? "Ramesh Patel" },
     totals: { grandTotal: "265.00" },
     paymentStatus: over.paymentStatus ?? "Paid",
@@ -24,7 +24,7 @@ describe("billEmail", () => {
     expect(m.text).toContain("Payment received in full.");
     expect(m.text).toContain("View it online: https://shop.example/d/abc123");
     expect(m.text).toContain("reply to this email or call us on +91 76219 34414");
-    expect(m.text.split("\n").slice(-4)).toEqual(["OM ENTERPRISE", "Opp. Shardha Dhaba 2, Bodeli Road", "Naswadi, Gujarat 391150", "+91 76219 34414"]);
+    expect(m.text.split("\n").slice(-4)).toEqual(["OM ENTERPRISE", "Nr. Shivani Showroom, Bodeli Road", "Naswadi, Gujarat 391150", "+91 76219 34414"]);
   });
 
   it("leaves out the link, the greeting's name and the payment line when there is nothing to say", () => {

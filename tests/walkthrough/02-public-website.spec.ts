@@ -9,7 +9,7 @@ test("02 · Public website: catalogue, search, product, enquiry & order request"
   await say(page, "Home page: brand, address, phone and WhatsApp at the top.");
   await check(page, "Home page heading", () => expect(page.getByRole("heading", { level: 1 })).toContainText("Everything you need"));
   await check(page, "WhatsApp link to 7621934414", () => expect(page.locator('a[href^="https://wa.me/917621934414"]').first()).toBeAttached());
-  await check(page, "Address shown", () => expect(page.getByText("Opp. Shardha Dhaba 2, Bodeli Road").filter({ visible: true }).first()).toBeVisible());
+  await check(page, "Address shown", () => expect(page.getByText("Nr. Shivani Showroom, Bodeli Road").filter({ visible: true }).first()).toBeVisible());
 
   await say(page, "Shop by category: every category the shop sells.");
   await page.getByRole("heading", { name: "Shop by category" }).scrollIntoViewIfNeeded();
