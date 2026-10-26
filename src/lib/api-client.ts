@@ -16,14 +16,22 @@ export class ApiError extends Error {
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export async function apiFetch<T = unknown>(path: string, opts: { method?: Method; body?: unknown; signal?: AbortSignal } = {}): Promise<T> {
-  const res = await fetch(path, {
-    method: opts.method ?? (opts.body === undefined ? "GET" : "POST"),
-    headers: opts.body === undefined ? { Accept: "application/json" } : { "Content-Type": "application/json", Accept: "application/json" },
-    body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
-    credentials: "same-origin",
-    signal: opts.signal,
-    cache: "no-store",
-  });
+  let res: Response;
+  try {
+    res = await fetch(path, {
+      method: opts.method ?? (opts.body === undefined ? "GET" : "POST"),
+      headers: opts.body === undefined ? { Accept: "application/json" } : { "Content-Type": "application/json", Accept: "application/json" },
+      body: opts.body === undefined ? undefined : JSON.stringify(opts.body),
+      credentials: "same-origin",
+      signal: opts.signal,
+      cache: "no-store",
+    });
+  } catch (err) {
+    // A request the caller cancelled is not a failure to report.
+    if (err instanceof DOMException && err.name === "AbortError") throw err;
+    // The browser's own wording ("Failed to fetch", "Load failed") means nothing at a counter.
+    throw new ApiError(0, "NETWORK", "Could not reach the server. Check the internet connection and try again.", null);
+  }
   let json: { ok?: boolean; data?: T; error?: { code: string; message: string; details: Record<string, unknown> | null } } = {};
   try {
     json = await res.json();

@@ -198,6 +198,8 @@ There is **no default administrator password**.
   - Staff: the Super Admin clears it in Staff & access (shield-off icon).
   - The Super Admin's own key: run `npm run reset-login-secret -- Kishan` on the server (with Docker: `docker compose --env-file .env.production run --rm tools npm run reset-login-secret -- Kishan`). It signs out all of that account's sessions.
 - **Forgotten Super Admin password** with no other Super Admin: create a second owner with `npm run create-super-admin -- --additional`, sign in as them and reset Kishan's password from Staff & access.
+- **Forgotten Super Admin password or key on Vercel** (no command line): in the Vercel project, Settings → Environment Variables, add `SA_RESET_USERNAME` (e.g. `Kishan`) and `SA_RESET_PASSWORD` (a new temporary password: 12+ characters, mixed; mark it *Sensitive*), and `SA_RESET_CLEAR_SECRET_KEY=true` if the secret key is forgotten too, then redeploy. The deploy (`npm run reset-owner-password`, see `scripts/reset-owner-password.ts`) sets that password, unlocks the account, signs its sessions out and, if asked, removes the secret key; the build log says "Owner password reset: applied". Sign in at `/admin` with the temporary password and choose a new one, then **delete the three variables**. It applies once per password given, so leaving them in place never overwrites the password the owner chose; a problem (a weak password, an unknown name) is shown in the build log and never stops the deploy. Only a Super Admin can be recovered this way, and the audit log records it (without the password).
+- **Locked out after wrong passwords:** the sign-in says "Account temporarily locked … try again in N min"; it clears by itself, or by the recovery above.
 
 ---
 

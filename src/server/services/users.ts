@@ -1,7 +1,8 @@
 import "server-only";
+import { createHash } from "node:crypto";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
-import { rolePermissions, roles, sessions, userPermissionOverrides, users } from "@/server/db/schema";
+import { auditLogs, loginChallenges, rolePermissions, roles, sessions, userPermissionOverrides, users } from "@/server/db/schema";
 import { audit } from "@/server/audit";
 import { auditActorOf, can, requirePermission, requireSuperAdmin, type Actor } from "@/server/auth/actor";
 import { checkPasswordStrength, hashPassword } from "@/server/auth/password";
@@ -424,5 +425,68 @@ export async function createInitialSuperAdmin(input: {
       summary: `Created Super Admin "${input.username}" via command line`,
     });
     return u;
+  });
+}
+
+/**
+ * Recovery for a hosted deployment with no command line (Vercel): gives a Super Admin who has forgotten
+ * their password a new temporary one (to be changed at the next sign-in), unlocks the account, signs its
+ * sessions out and, when asked, removes a forgotten secret key. Driven by the deployment's own settings
+ * (see scripts/reset-owner-password.ts), which is the same trust boundary as the command line.
+ *
+ * It applies once per password given: the same settings left in place on a later deploy do nothing, so
+ * the owner's own new password is never overwritten. Only a Super Admin can be reset this way.
+ */
+export async function resetOwnerPassword(input: { username: string; password: string; clearSecretKey?: boolean }): Promise<{ status: "applied" | "already_applied"; clearedSecretKey: boolean }> {
+  const security = await getSettings("security");
+  const weak = checkPasswordStrength(input.password, { minLength: Math.max(12, security.minPasswordLength), username: input.username });
+  if (weak) throw invalid(`The new password is not accepted: ${weak}`);
+  const clear = !!input.clearSecretKey;
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const [row] = await tx
+      .select({ u: users, roleKey: roles.key })
+      .from(users)
+      .innerJoin(roles, eq(roles.id, users.roleId))
+      .where(sql`lower(${users.username}) = lower(${input.username.trim()})`);
+    if (!row) throw notFound(`Account "${input.username}"`);
+    if (row.roleKey !== "super_admin") throw forbidden("Only a Super Admin account can be recovered this way. A Super Admin resets other staff under Staff & access.");
+    const u = row.u;
+    const fingerprint = createHash("sha256").update(`${u.id}\n${input.password}\n${clear}`).digest("hex");
+    const [done] = await tx
+      .select({ id: auditLogs.id })
+      .from(auditLogs)
+      .where(and(eq(auditLogs.action, "auth.owner_password_reset"), eq(auditLogs.entityId, u.id), sql`${auditLogs.data}->>'fingerprint' = ${fingerprint}`))
+      .limit(1);
+    if (done) return { status: "already_applied" as const, clearedSecretKey: false };
+
+    await tx
+      .update(users)
+      .set({
+        passwordHash: await hashPassword(input.password),
+        mustChangePassword: true,
+        passwordChangedAt: new Date(),
+        failedLoginCount: 0,
+        lockedUntil: null,
+        isActive: true,
+        ...(clear ? { loginSecretHash: null, loginSecretSetAt: null } : {}),
+        updatedAt: new Date(),
+      })
+      .where(eq(users.id, u.id));
+    await tx.delete(loginChallenges).where(eq(loginChallenges.userId, u.id));
+    await revokeUserSessions(tx, u.id);
+    await audit(
+      tx,
+      { userId: null, label: "deploy:reset-owner-password" },
+      {
+        action: "auth.owner_password_reset",
+        entityType: "user",
+        entityId: u.id,
+        summary: `Reset the password of "${u.username}" from the deployment settings (must be changed at the next sign-in)${clear ? "; secret key removed" : ""}`,
+        // The fingerprint lets a repeat of the same settings be recognised; it cannot be turned back into the password.
+        data: { fingerprint, clearedSecretKey: clear },
+      },
+    );
+    return { status: "applied" as const, clearedSecretKey: clear && !!u.loginSecretHash };
   });
 }
