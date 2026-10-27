@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { KeyRound, Lock, Pencil, Plus, ShieldCheck, ShieldOff, UserCheck, UserX } from "lucide-react";
+import { Hash, KeyRound, Lock, Pencil, Plus, ShieldCheck, ShieldOff, UserCheck, UserX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -13,6 +13,7 @@ import { DateTime } from "@/components/ui/money";
 import { useToast } from "@/components/ui/toast";
 import { cn } from "@/components/ui/cn";
 import { apiFetch, errorMessage } from "@/lib/api-client";
+import { pinAllowedFor, pinProblem } from "@/lib/staff-pin";
 
 type Staff = {
   id: string;
@@ -31,6 +32,7 @@ type Staff = {
   lastLoginAt: string | null;
   lockedUntil: string | null;
   hasSecretKey: boolean;
+  hasPin: boolean;
   overrides: { permission: string; effect: "grant" | "deny" }[];
 };
 type Role = { key: string; name: string; description: string | null; permissions: string[]; defaultDiscountLimitPercent: string; defaultApprovalLimitPercent: string };
@@ -48,6 +50,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
   const toast = useToast();
   const [editing, setEditing] = useState<Staff | "new" | null>(null);
   const [resetFor, setResetFor] = useState<Staff | null>(null);
+  const [pinFor, setPinFor] = useState<Staff | null>(null);
   const [permsFor, setPermsFor] = useState<Staff | null>(null);
   const [roleEdit, setRoleEdit] = useState<Role | null>(null);
   const assignableRoles = me.isSuperAdmin ? roles : roles.filter((r) => r.key === "sales");
@@ -134,6 +137,11 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                         <ShieldCheck className="h-3 w-3" /> Secret key
                       </Badge>
                     )}
+                    {s.hasPin && (
+                      <Badge>
+                        <Hash className="h-3 w-3" /> PIN
+                      </Badge>
+                    )}
                     </div>
                   </td>
                   <td data-label="Discount limit" className={tdNum}>
@@ -151,6 +159,9 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
                       <div className="flex justify-end gap-1">
                         <Button size="sm" variant="ghost" title="Edit" onClick={() => setEditing(s)} icon={<Pencil className="h-4 w-4" />} />
                         <Button size="sm" variant="ghost" title="Reset password" onClick={() => setResetFor(s)} icon={<KeyRound className="h-4 w-4" />} />
+                        {pinAllowedFor(s.roleKey) && !s.hasSecretKey && (
+                          <Button size="sm" variant="ghost" title={s.hasPin ? "Change or remove counter PIN" : "Give a counter PIN"} onClick={() => setPinFor(s)} icon={<Hash className="h-4 w-4" />} />
+                        )}
                         {me.isSuperAdmin && s.roleKey !== "super_admin" && (
                           <Button size="sm" variant="ghost" title="Individual permissions" onClick={() => setPermsFor(s)} icon={<ShieldCheck className="h-4 w-4" />} />
                         )}
@@ -202,6 +213,7 @@ export function StaffManager({ staff, roles, catalogue, me }: { staff: Staff[]; 
 
       {editing && <StaffDialog staff={editing === "new" ? null : editing} roles={assignableRoles} me={me} onClose={() => setEditing(null)} onSaved={() => router.refresh()} />}
       {resetFor && <ResetDialog staff={resetFor} onClose={() => setResetFor(null)} />}
+      {pinFor && <PinDialog staff={pinFor} onClose={() => setPinFor(null)} onSaved={() => router.refresh()} />}
       {permsFor && <PermissionsDialog staff={permsFor} role={roles.find((r) => r.key === permsFor.roleKey)!} catalogue={catalogue} onClose={() => setPermsFor(null)} onSaved={() => router.refresh()} />}
       {roleEdit && <RoleDialog role={roleEdit} catalogue={catalogue} onClose={() => setRoleEdit(null)} onSaved={() => router.refresh()} />}
     </div>
@@ -357,6 +369,58 @@ function ResetDialog({ staff, onClose }: { staff: Staff; onClose: () => void }) 
       {error && <Alert tone="danger" className="mb-3">{error}</Alert>}
       <Field label="Temporary password" hint="Share it privately. It must be changed at the next sign-in.">
         <Input value={pw} onChange={(e) => setPw(e.target.value)} className="tabular" />
+      </Field>
+    </Dialog>
+  );
+}
+
+/** A counter PIN for Sales and Accountant staff: they sign in with username + PIN instead of the password. */
+function PinDialog({ staff, onClose, onSaved }: { staff: Staff; onClose: () => void; onSaved: () => void }) {
+  const toast = useToast();
+  const [pin, setPin] = useState("");
+  const [busy, setBusy] = useState<"set" | "clear" | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const problem = pin ? pinProblem(pin) : null;
+  const run = async (kind: "set" | "clear") => {
+    setBusy(kind);
+    setError(null);
+    try {
+      await apiFetch(`/api/admin/staff/${staff.id}/pin`, kind === "set" ? { method: "PUT", body: { pin } } : { method: "DELETE", body: {} });
+      toast(kind === "set" ? `PIN saved. ${staff.displayName} can now sign in with @${staff.username} and the PIN.` : `PIN removed for ${staff.displayName}`);
+      onSaved();
+      onClose();
+    } catch (err) {
+      setError(errorMessage(err));
+    } finally {
+      setBusy(null);
+    }
+  };
+  return (
+    <Dialog
+      open
+      onClose={onClose}
+      title={`Counter PIN — ${staff.displayName}`}
+      description="On the sign-in page they tap “Sign in with PIN”, then enter their username and this PIN. They still choose their own password once, at their first sign-in. Five wrong tries lock the account for a while."
+      size="sm"
+      footer={
+        <>
+          {staff.hasPin && (
+            <Button variant="ghost" className="mr-auto text-red-700" loading={busy === "clear"} disabled={!!busy} onClick={() => run("clear")}>
+              Remove PIN
+            </Button>
+          )}
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={() => run("set")} loading={busy === "set"} disabled={!!busy || !pin || !!problem}>
+            {staff.hasPin ? "Change PIN" : "Save PIN"}
+          </Button>
+        </>
+      }
+    >
+      {error && <Alert tone="danger" className="mb-3">{error}</Alert>}
+      <Field label={staff.hasPin ? "New PIN" : "PIN"} htmlFor="staff-pin" hint="4 to 6 digits. Tell it to them privately." error={problem}>
+        <Input id="staff-pin" inputMode="numeric" autoComplete="off" maxLength={6} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} className="h-12 tabular text-lg tracking-[0.3em]" autoFocus />
       </Field>
     </Dialog>
   );

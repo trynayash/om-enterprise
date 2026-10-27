@@ -88,6 +88,9 @@ export const users = pgTable(
     /** Optional second sign-in step: scrypt hash of the user's secret key (null = not set). */
     loginSecretHash: text("login_secret_hash"),
     loginSecretSetAt: ts("login_secret_set_at"),
+    /** Counter staff only: scrypt hash of a 4–6 digit PIN to sign in with instead of the password (null = none). */
+    pinHash: text("pin_hash"),
+    pinSetAt: ts("pin_set_at"),
     createdAt: ts("created_at").notNull().defaultNow(),
     createdBy: uuid("created_by"),
     updatedAt: ts("updated_at").notNull().defaultNow(),

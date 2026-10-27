@@ -11,6 +11,7 @@ import { getSettings } from "@/server/settings";
 import { AppError, conflict, forbidden, invalid, notFound } from "@/server/errors";
 import { isPermission, SUPER_ADMIN_ONLY, type Permission } from "@/lib/permissions";
 import { D } from "@/lib/money";
+import { pinAllowedFor, pinProblem } from "@/lib/staff-pin";
 
 export interface StaffRow {
   id: string;
@@ -30,6 +31,7 @@ export interface StaffRow {
   createdAt: Date;
   lockedUntil: Date | null;
   hasSecretKey: boolean;
+  hasPin: boolean;
   overrides: { permission: string; effect: "grant" | "deny" }[];
 }
 
@@ -64,6 +66,7 @@ export async function listStaff(actor: Actor): Promise<StaffRow[]> {
     createdAt: u.createdAt,
     lockedUntil: u.lockedUntil,
     hasSecretKey: u.loginSecretHash !== null,
+    hasPin: u.pinHash !== null,
     overrides: overrides.filter((o) => o.userId === u.id).map((o) => ({ permission: o.permission, effect: o.effect })),
   }));
 }
@@ -297,6 +300,43 @@ export async function resetStaffPassword(actor: Actor, userId: string, temporary
       entityId: userId,
       summary: `Reset password for "${u.username}" (must change at next sign-in)`,
     });
+  });
+}
+
+/**
+ * Gives a counter staff member (Sales or Accountant) a PIN to sign in with, or replaces it. Managed like
+ * a password reset: the same people may do it, for the same accounts.
+ */
+export async function setStaffPin(actor: Actor, userId: string, pin: string) {
+  const weak = pinProblem(pin);
+  if (weak) throw invalid(weak);
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const { u, r } = await targetUser(tx, userId);
+    assertCanManageTarget(actor, r.key, userId);
+    await assertMayManageElevated(tx, actor, u, r);
+    if (!pinAllowedFor(r.key)) throw forbidden("Only Sales and Accountant accounts can sign in with a PIN; administrators use their password");
+    if (u.loginSecretHash) throw conflict("This account has a secret key, so it signs in with its password and key, not a PIN");
+    const now = new Date();
+    await tx.update(users).set({ pinHash: await hashPassword(pin), pinSetAt: now, failedLoginCount: 0, lockedUntil: null, updatedAt: now }).where(eq(users.id, userId));
+    await audit(tx, auditActorOf(actor), {
+      action: "user.pin_set",
+      entityType: "user",
+      entityId: userId,
+      summary: `${u.pinHash ? "Changed" : "Set"} the counter PIN for "${u.username}"`,
+    });
+  });
+}
+
+/** Removes a staff member's PIN: they sign in with their password again. */
+export async function clearStaffPin(actor: Actor, userId: string) {
+  const db = getDb();
+  return db.transaction(async (tx) => {
+    const { u, r } = await targetUser(tx, userId);
+    assertCanManageTarget(actor, r.key, userId);
+    if (!u.pinHash) return;
+    await tx.update(users).set({ pinHash: null, pinSetAt: null, updatedAt: new Date() }).where(eq(users.id, userId));
+    await audit(tx, auditActorOf(actor), { action: "user.pin_cleared", entityType: "user", entityId: userId, summary: `Removed the counter PIN for "${u.username}"` });
   });
 }
 

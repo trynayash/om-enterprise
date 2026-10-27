@@ -55,11 +55,13 @@ test.describe("owner sign-in at /admin", () => {
     expect(blocked.status()).toBe(401);
     await kishan.fill("#secret-key", secret);
     await kishan.getByRole("button", { name: "Verify and sign in" }).click();
-    await kishan.waitForURL(/\/dashboard$/);
+    // The owner's sign-in opens the owner's phone app.
+    await kishan.waitForURL(/\/admin\/app$/);
+    await expect(kishan.getByRole("heading", { name: /Namaste/ })).toBeVisible();
 
-    // Already signed in: /admin goes straight to the dashboard.
+    // Already signed in: /admin goes straight to the owner app.
     await kishan.goto("/admin");
-    await kishan.waitForURL(/\/dashboard$/);
+    await kishan.waitForURL(/\/admin\/app$/);
     await ctx.close();
   });
 });

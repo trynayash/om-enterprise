@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { redirect } from "next/navigation";
 import { getCurrentActor } from "@/server/auth/session";
+import { can } from "@/server/auth/actor";
 import { landingPath } from "@/lib/nav";
 import { SignInCard } from "../login/sign-in-card";
 import { SheetStamp } from "@/components/ui/paper-sheet";
@@ -12,6 +13,7 @@ const card = (
     title="Admin sign in"
     description="For the owner and administrators. If you've set a secret key, you'll be asked for it after your password."
     badge={<SheetStamp strong>Admin</SheetStamp>}
+    next="/admin/app"
   />
 );
 
@@ -30,6 +32,6 @@ export default function AdminPage() {
 
 async function RedirectIfSignedIn() {
   const actor = await getCurrentActor();
-  if (actor) redirect(actor.mustChangePassword ? "/account/password?required=1" : landingPath(actor.permissions, actor.isSuperAdmin));
+  if (actor) redirect(actor.mustChangePassword ? "/account/password?required=1" : can(actor, "dashboard.view") ? "/admin/app" : landingPath(actor.permissions, actor.isSuperAdmin));
   return null;
 }

@@ -57,6 +57,13 @@
       "when": 1793046991787,
       "tag": "0007_sale_document_delete",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793085785561,
+      "tag": "0008_staff_pin",
+      "breakpoints": true
     }
   ]
 }

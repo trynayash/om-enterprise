@@ -2,13 +2,14 @@ import "server-only";
 import { createHash, randomBytes } from "node:crypto";
 import { and, eq, gt, isNull, ne, sql } from "drizzle-orm";
 import { getDb, type Tx } from "@/server/db/client";
-import { loginChallenges, sessions, users } from "@/server/db/schema";
+import { loginChallenges, roles, sessions, users } from "@/server/db/schema";
 import { audit, type AuditActor } from "@/server/audit";
 import { AppError, invalid } from "@/server/errors";
 import { getSettings } from "@/server/settings";
 import { checkPasswordStrength, getDummyHash, hashPassword, verifyPassword } from "@/server/auth/password";
 import { loadActor, requireSuperAdmin, type Actor, auditActorOf } from "@/server/auth/actor";
 import { enforceRateLimit } from "@/server/rate-limit";
+import { pinAllowedFor } from "@/lib/staff-pin";
 
 export function hashToken(token: string): string {
   return createHash("sha256").update(token).digest("hex");
@@ -156,6 +157,50 @@ export async function login(username: string, password: string, client: ClientIn
     return { kind: "secret_required", challenge, expiresAt };
   }
   return { kind: "session", ...(await startSession(user, client, "Signed in")) };
+}
+
+const GENERIC_PIN_ERROR = "Invalid username or PIN";
+
+/**
+ * Sign-in with a counter PIN instead of the password: Sales and Accountant accounts only, and never one
+ * with a secret key. A wrong PIN counts towards the same lockout as a wrong password.
+ */
+export async function loginWithPin(username: string, pin: string, client: ClientInfo): Promise<{ token: string; expiresAt: Date; actor: Actor }> {
+  const db = getDb();
+  const uname = username.trim();
+  await enforceLoginIpLimit(client);
+
+  const [row] = await db
+    .select({ user: users, roleKey: roles.key })
+    .from(users)
+    .innerJoin(roles, eq(roles.id, users.roleId))
+    .where(sql`lower(${users.username}) = lower(${uname})`);
+  const user = row?.user;
+  const anon: AuditActor = { userId: user?.id ?? null, label: `login:${uname.slice(0, 40)}`, ip: client.ip, userAgent: client.userAgent };
+  const usable = !!user && !!user.pinHash && pinAllowedFor(row.roleKey) && !user.loginSecretHash;
+
+  if (!usable) {
+    await verifyPassword(pin, await getDummyHash()); // equalise timing
+    await db.transaction((tx) =>
+      audit(tx, anon, { action: "auth.login_failed", entityType: user ? "user" : undefined, entityId: user?.id, summary: "PIN sign-in failed: no PIN for this account" }),
+    );
+    throw new AppError("UNAUTHENTICATED", GENERIC_PIN_ERROR);
+  }
+
+  const now = new Date();
+  if (user.lockedUntil && user.lockedUntil > now) {
+    const mins = Math.ceil((user.lockedUntil.getTime() - now.getTime()) / 60000);
+    throw new AppError("RATE_LIMITED", `Account temporarily locked after failed attempts. Try again in ${mins} min.`);
+  }
+  const ok = await verifyPassword(pin, user.pinHash!);
+  if (!ok || !user.isActive) {
+    await db.transaction(async (tx) => {
+      if (!ok) await registerWrongPassword(tx, user, anon, "PIN sign-in failed: wrong PIN");
+      else await audit(tx, anon, { action: "auth.login_failed", entityType: "user", entityId: user.id, summary: "Sign-in refused: account deactivated" });
+    });
+    throw new AppError("UNAUTHENTICATED", GENERIC_PIN_ERROR);
+  }
+  return startSession(user, client, "Signed in with PIN");
 }
 
 /** Step 2 of sign-in for accounts with a secret key. Wrong keys count towards account lockout. */

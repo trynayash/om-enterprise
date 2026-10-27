@@ -17,7 +17,7 @@ import { dayRange, num, str, type SearchParams } from "@/components/dashboard/op
 import { codeLink, rowHover, tdCode, tdMuted, tdNum, tdText, th, thNum, withPy } from "@/components/dashboard/table";
 import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
 import { deleteConsequences } from "@/components/dashboard/ops/delete-consequences";
-import { deletePhrase } from "@/lib/delete-phrase";
+import { deleteBlockedReason, deletePhrase } from "@/lib/delete-phrase";
 import { D, m } from "@/lib/money";
 
 export const metadata = { title: "Sales & bills" };
@@ -206,10 +206,8 @@ async function SalesList({ searchParams }: { searchParams: Promise<SearchParams>
                         id={s.id}
                         name={s.saleNumber}
                         phrase={phrase}
-                        consequences={deleteConsequences(
-                          s.docNumber ? [{ docType: "tax_invoice", docNumber: s.docNumber, status: s.docStatus ?? "issued" }] : [],
-                          m(D(s.amountPaid).minus(D(s.amountRefunded))),
-                        )}
+                        consequences={deleteConsequences(s.docNumber ? [{ docType: "tax_invoice", docNumber: s.docNumber, status: s.docStatus ?? "issued" }] : [])}
+                        blocked={deleteBlockedReason(m(D(s.amountPaid).minus(D(s.amountRefunded))), s.isTraining)}
                       />
                     </td>
                   )}

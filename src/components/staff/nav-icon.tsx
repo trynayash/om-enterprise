@@ -11,6 +11,7 @@ import {
   Receipt,
   Settings,
   Shield,
+  Smartphone,
   Store,
   Tags,
   Upload,
@@ -35,6 +36,7 @@ const ICONS: Record<string, LucideIcon> = {
   boxes: Boxes,
   chart: ChartColumn,
   shield: Shield,
+  smartphone: Smartphone,
   settings: Settings,
   history: History,
 };

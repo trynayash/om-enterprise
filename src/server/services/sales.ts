@@ -33,7 +33,7 @@ import {
 import { calculateSale, type DiscountInput, type EngineLineInput, type TaxMode } from "@/lib/pricing/engine";
 import { D, m, r4 } from "@/lib/money";
 import { lineDescription } from "@/lib/line-description";
-import { deletePhrase } from "@/lib/delete-phrase";
+import { deleteBlockedReason, deletePhrase } from "@/lib/delete-phrase";
 
 export type Sale = typeof sales.$inferSelect;
 export type SaleLine = typeof saleLines.$inferSelect;
@@ -1150,6 +1150,9 @@ export async function deleteSale(actor: Actor, saleId: string, input: { confirm:
     const [sale] = await tx.select().from(sales).where(eq(sales.id, saleId)).for("update");
     if (!sale) throw notFound("Sale");
     if (sale.deletedAt) throw conflict(`${sale.saleNumber} is already deleted`);
+    // Money received is turnover the shop has to account for: it is refunded through the bill first.
+    const blocked = deleteBlockedReason(m(D(sale.amountPaid).minus(D(sale.amountRefunded))), sale.isTraining);
+    if (blocked) throw conflict(`${sale.saleNumber}: ${blocked}`);
     const now = new Date();
     await tx
       .update(payments)

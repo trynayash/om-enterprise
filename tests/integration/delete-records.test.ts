@@ -1,12 +1,11 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "@/server/db/client";
-import { auditLogs, documents, payments, sales } from "@/server/db/schema";
+import { auditLogs, documents, sales } from "@/server/db/schema";
 import { getSettings } from "@/server/settings";
 import { addLine, createSale, deleteSale, finalizeSale, getSale, listSales } from "@/server/services/sales";
 import { recordVerifiedPayment } from "@/server/services/payments";
-import { deleteQuotation, getDocument, issueBill, issueQuotation, listDocuments, saveSaleCustomer, setShareLink, getDocumentByShareToken } from "@/server/services/documents";
-import { salesSummary } from "@/server/services/reports";
+import { cancelBill, deleteQuotation, getDocument, issueBill, issueQuotation, listDocuments, saveSaleCustomer, setShareLink, getDocumentByShareToken } from "@/server/services/documents";
 import { deletePhrase } from "@/lib/delete-phrase";
 import type { Actor } from "@/server/auth/actor";
 import { dbErrorMessage, makeItem, makeUser, rejects, setRegistration } from "./helpers";
@@ -69,31 +68,24 @@ describe("deleting a sale", () => {
     expect((await rejects(deleteSale(owner, sale.id, { confirm: confirm() }))).message).toMatch(/already deleted/);
   });
 
-  it("cancels the bill, drops its money from the reports, and locks the sale for good", async () => {
-    const from = new Date(Date.now() - 60_000);
+  it("refuses a paid sale; once its bill is cancelled and the money refunded, it can go and stays locked", async () => {
     const { sale, bill } = await paidBill();
-    const period = { from, to: new Date(Date.now() + 60_000) };
-    const before = await salesSummary(owner, period);
-    const res = await deleteSale(owner, sale.id, { confirm: confirm() });
-    expect(res.cancelledDocuments).toEqual([bill.docNumber]);
+    expect((await rejects(deleteSale(owner, sale.id, { confirm: confirm() }))).message).toMatch(/has been received for this sale, so it can't be deleted/);
+    expect((await getSale(owner, sale.id)).sale.id).toBe(sale.id);
 
+    await cancelBill(owner, bill.id, { reason: "Goods returned", refund: { method: "cash" } });
+    const res = await deleteSale(owner, sale.id, { confirm: confirm() });
+    expect(res.cancelledDocuments).toEqual([]);
     const [d] = await getDb().select().from(documents).where(eq(documents.id, bill.id));
-    expect(d.status).toBe("cancelled");
-    expect(d.cancelReason).toMatch(new RegExp(`Sale ${sale.saleNumber} deleted`));
-    const after = await salesSummary(owner, period);
-    expect(Number(before.collections.received) - Number(after.collections.received)).toBe(Number(bill.grandTotal));
-    expect(after.bills.count).toBe(before.bills.count - 1);
-    expect(after.cancelledBills.count).toBe(before.cancelledBills.count);
+    expect(d).toMatchObject({ status: "cancelled", cancelReason: "Goods returned" });
 
     // The database refuses any later change to the sale or its lines, and still refuses deletes.
     expect(await dbErrorMessage(getDb().update(sales).set({ notes: "edited" }).where(eq(sales.id, sale.id)))).toMatch(/deleted/);
     expect(await dbErrorMessage(getDb().delete(sales).where(eq(sales.id, sale.id)))).toMatch(/not permitted/);
-    const [p] = await getDb().select().from(payments).where(eq(payments.saleId, sale.id));
-    expect(p.status).toBe("successful");
 
     const logs = await getDb().select().from(auditLogs).where(and(eq(auditLogs.entityId, sale.id), eq(auditLogs.action, "sale.deleted")));
     expect(logs).toHaveLength(1);
-    expect(logs[0].summary).toMatch(new RegExp(`Deleted ${sale.saleNumber}.*received.*cancelled ${bill.docNumber.replace(/\//g, "\\/")}`));
+    expect(logs[0].summary).toMatch(new RegExp(`^Deleted ${sale.saleNumber} `));
   });
 });
 

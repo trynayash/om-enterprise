@@ -135,6 +135,17 @@ export const inventorySchema = z.object({
   deductStockOnSale: z.boolean(),
 });
 
+/** What the owner is sent by email: the evening summary and a note when staff ask for approval. */
+export const alertsSchema = z.object({
+  ownerEmail: z
+    .string()
+    .trim()
+    .max(120)
+    .refine((v) => v === "" || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), "Enter a valid email address"),
+  dailySummary: z.boolean(),
+  approvalAlerts: z.boolean(),
+});
+
 export const SETTINGS_SCHEMAS = {
   business: businessSchema,
   tax: taxSchema,
@@ -145,6 +156,7 @@ export const SETTINGS_SCHEMAS = {
   security: securitySchema,
   website: websiteSchema,
   inventory: inventorySchema,
+  alerts: alertsSchema,
 } as const;
 
 export type SettingsSection = keyof typeof SETTINGS_SCHEMAS;
@@ -240,6 +252,11 @@ export const SETTINGS_DEFAULTS: Settings = {
     enabled: false,
     deductStockOnSale: false,
   },
+  alerts: {
+    ownerEmail: "",
+    dailySummary: true,
+    approvalAlerts: true,
+  },
 };
 
 /** Which permission is required to edit each section. "super_admin" = Super Admin only. */
@@ -253,6 +270,7 @@ export const SETTINGS_EDIT_PERMISSION: Record<SettingsSection, string> = {
   security: "super_admin",
   website: "settings.business",
   inventory: "super_admin",
+  alerts: "super_admin",
 };
 
 export function parseSection<K extends SettingsSection>(section: K, stored: unknown): Settings[K] {

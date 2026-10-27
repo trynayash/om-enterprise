@@ -23,6 +23,7 @@ export function DeleteRecord({
   afterDelete,
   compact,
   size = "md",
+  blocked,
 }: {
   kind: "sale" | "quotation";
   id: string;
@@ -36,6 +37,8 @@ export function DeleteRecord({
   /** A small icon button, for a row in a list. */
   compact?: boolean;
   size?: "sm" | "md";
+  /** Why this can't be deleted (a paid sale); the dialog then explains instead of asking for the phrase. */
+  blocked?: string | null;
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -100,45 +103,55 @@ export function DeleteRecord({
         onClose={close}
         size="md"
         title={`${label}?`}
-        description="Only the Super Admin can do this. It can't be undone."
+        description={blocked ? undefined : "Only the Super Admin can do this. It can't be undone."}
         footer={
-          <>
-            <Button variant="ghost" onClick={close} disabled={busy}>
-              Keep it
+          blocked ? (
+            <Button variant="ghost" onClick={close}>
+              Close
             </Button>
-            <Button variant="danger" loading={busy} disabled={!matches} icon={<Trash2 className="h-4 w-4" />} onClick={submit}>
-              Delete {name}
-            </Button>
-          </>
+          ) : (
+            <>
+              <Button variant="ghost" onClick={close} disabled={busy}>
+                Keep it
+              </Button>
+              <Button variant="danger" loading={busy} disabled={!matches} icon={<Trash2 className="h-4 w-4" />} onClick={submit}>
+                Delete {name}
+              </Button>
+            </>
+          )
         }
       >
-        <div className="space-y-4 text-sm text-navy-800">
-          {error && <Alert tone="danger">{error}</Alert>}
-          <ul className="list-disc space-y-1 pl-5 leading-relaxed">
-            <li>{kind === "sale" ? `${name} disappears from sales, bills, payments, customers and reports.` : `${name} disappears from the sale and the documents list, and its share link stops working.`}</li>
-            {consequences.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-            <li>A record of what was deleted, by whom and when stays in the audit log.</li>
-          </ul>
-          <div>
-            <p className="text-navy-700">To confirm, copy this and paste it below:</p>
-            <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-navy-200 bg-paper px-3 py-2">
-              <span className="select-all break-all font-semibold text-navy-950" data-testid="delete-phrase">
-                {phrase}
-              </span>
-              <Button size="sm" variant="outline" icon={<Copy className="h-3.5 w-3.5" />} onClick={copy}>
-                Copy
-              </Button>
+        {blocked ? (
+          <Alert tone="warning">{blocked}</Alert>
+        ) : (
+          <div className="space-y-4 text-sm text-navy-800">
+            {error && <Alert tone="danger">{error}</Alert>}
+            <ul className="list-disc space-y-1 pl-5 leading-relaxed">
+              <li>{kind === "sale" ? `${name} disappears from sales, bills, payments, customers and reports.` : `${name} disappears from the sale and the documents list, and its share link stops working.`}</li>
+              {consequences.map((c) => (
+                <li key={c}>{c}</li>
+              ))}
+              <li>A record of what was deleted, by whom and when stays in the audit log.</li>
+            </ul>
+            <div>
+              <p className="text-navy-700">To confirm, copy this and paste it below:</p>
+              <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-navy-200 bg-paper px-3 py-2">
+                <span className="select-all break-all font-semibold text-navy-950" data-testid="delete-phrase">
+                  {phrase}
+                </span>
+                <Button size="sm" variant="outline" icon={<Copy className="h-3.5 w-3.5" />} onClick={copy}>
+                  Copy
+                </Button>
+              </div>
             </div>
+            <Field label="Paste it here" htmlFor={`delete-${id}`} error={typed && !matches ? "It doesn't match yet — it must be exactly the same." : null}>
+              <Input id={`delete-${id}`} value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" spellCheck={false} autoFocus />
+            </Field>
+            <Field label="Reason (optional)" htmlFor={`delete-reason-${id}`} hint="Recorded in the audit log.">
+              <Textarea id={`delete-reason-${id}`} value={reason} onChange={(e) => setReason(e.target.value)} maxLength={300} rows={2} />
+            </Field>
           </div>
-          <Field label="Paste it here" htmlFor={`delete-${id}`} error={typed && !matches ? "It doesn't match yet — it must be exactly the same." : null}>
-            <Input id={`delete-${id}`} value={typed} onChange={(e) => setTyped(e.target.value)} autoComplete="off" spellCheck={false} autoFocus />
-          </Field>
-          <Field label="Reason (optional)" htmlFor={`delete-reason-${id}`} hint="Recorded in the audit log.">
-            <Textarea id={`delete-reason-${id}`} value={reason} onChange={(e) => setReason(e.target.value)} maxLength={300} rows={2} />
-          </Field>
-        </div>
+        )}
       </Dialog>
     </>
   );

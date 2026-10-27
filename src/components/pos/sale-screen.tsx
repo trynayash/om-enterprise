@@ -28,7 +28,7 @@ import { TrainingBadge } from "@/components/staff/labels";
 import { hasPerm, type Me, type PosConfig, type PosUnit, type SaleData } from "./types";
 import { DeleteRecord } from "@/components/dashboard/ops/delete-record";
 import { deleteConsequences } from "@/components/dashboard/ops/delete-consequences";
-import { deletePhrase } from "@/lib/delete-phrase";
+import { deleteBlockedReason, deletePhrase } from "@/lib/delete-phrase";
 
 const STEPS = ["Cart", "Agree amount", "Customer", "Payment", "Bill"] as const;
 /** One word per step on a phone, so the five fit a row. */
@@ -172,7 +172,8 @@ export function SaleScreen({ initial, config, me, units }: { initial: SaleData; 
               id={s.id}
               name={s.saleNumber}
               phrase={deletePhrase(me.username)}
-              consequences={deleteConsequences(data.documents, m(D(s.amountPaid).minus(D(s.amountRefunded))))}
+              consequences={deleteConsequences(data.documents)}
+              blocked={deleteBlockedReason(m(D(s.amountPaid).minus(D(s.amountRefunded))), s.isTraining)}
               afterDelete="/pos"
             />
           )}

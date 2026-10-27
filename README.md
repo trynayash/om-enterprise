@@ -489,6 +489,38 @@ Implemented in `src/server/payments/providers.ts` against Razorpay's documentati
 
 ---
 
+## Owner app on the phone (/admin/app)
+
+Signing in at **/admin** opens the owner's phone app at **/admin/app** (anyone who sees the
+Overview can use it; the sidebar links to it as "Owner app (phone)"). One column and big buttons:
+
+- **New sale** (the counter), **Approvals** (discount requests with Approve / Reject, plus links to
+  price changes and website orders), **Today's money** (received, by cash / UPI / card…, bills,
+  discounts, cancelled bills, what is unpaid, today's bills; also yesterday) and **Find** (one box
+  for a bill or sale number, a customer's name or mobile, or a product's name or SKU).
+- **Getting started** for the Super Admin: GST type, UPI ID, imported prices to approve, staff
+  accounts, the owner's email; email and WhatsApp sending are shown as done when the server has
+  them. It disappears once the required steps are done.
+- **English / ગુજરાતી / हिन्दी** at the top, remembered on the phone. Only this app is translated.
+- **Install**: on Android Chrome the page offers "Install"; on iPhone, Share → Add to Home Screen.
+  The icon opens straight to /admin/app, full screen.
+
+**Owner alerts** (Settings → Owner alerts, Super Admin): the owner's email, an **evening summary**
+at about 8:30 pm (bills, money received by method, discounts, cancelled bills, what is waiting) and
+an **email when staff ask for a discount approval**, with a link to approve it in the app. They
+are sent from the shop's email (see "Sending bills by email"). The evening summary is a Vercel
+cron job (`vercel.json`, 15:00 UTC) calling `/api/cron/daily-summary`, which only runs with the
+`CRON_SECRET` environment variable set on the project (Vercel sends it automatically).
+
+**Counter PIN** (Staff & access → the # button, Sales and Accountant accounts only): staff sign in
+at /login with "Sign in with PIN", their username and a 4–6 digit PIN. Obvious PINs (1111, 1234…)
+are refused, five wrong tries lock the account like wrong passwords do, and the username is
+remembered on the device. The Super Admin and administrators always use their password (and
+secret key). Staff still choose their own password once, at their first sign-in.
+
+**Settings** shows what the owner changes day to day; rarely used fields are under "More settings"
+in each section, and Price changes, Security and Inventory are listed under "Advanced".
+
 ## Deleting a sale or a quotation
 
 Only the Super Admin can delete, from the sale page, the bin icon on the Sales list, the counter's sale
@@ -499,9 +531,12 @@ owner: `Kishan-Deleting-This`) is pasted in exactly; the server checks it again.
 Nothing is erased: sales, bills and payments can't be removed from the database, and a bill's number
 must stay accounted for under GST. A deleted sale is hidden from every list and report and can never
 change again; its open payment and discount requests are closed, its bills, quotations and credit
-notes are cancelled with the reason, money already received leaves the reports with it (refund the
-customer separately if needed), and the audit log keeps what was deleted, by whom and when. A bill
+notes are cancelled with the reason, and the audit log keeps what was deleted, by whom and when. A bill
 can't be deleted on its own — delete its sale.
+
+A sale with money received can't be deleted: that money is turnover the shop declares. Cancel its
+bill with a refund first (the bill page → Cancel bill), then delete the sale. Practice (training)
+sales can always be deleted.
 
 ## Billing & GST
 

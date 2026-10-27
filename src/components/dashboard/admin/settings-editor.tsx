@@ -15,13 +15,15 @@ import { TabStrip } from "@/components/staff/tab-strip";
 
 export type SectionKey = keyof Settings;
 
-type FieldSpec =
+/** `advanced`: rarely changed; kept behind "More settings" so each section shows what the owner actually uses. */
+type FieldSpec = { advanced?: boolean } & (
   | { key: string; label: string; type: "text" | "textarea" | "email" | "url"; hint?: string; wide?: boolean; placeholder?: string }
   | { key: string; label: string; type: "number"; hint?: string; min?: number; max?: number }
   | { key: string; label: string; type: "decimal"; hint?: string; blankAllowed?: boolean }
   | { key: string; label: string; type: "checkbox"; hint?: string }
   | { key: string; label: string; type: "select"; options: { value: string; label: string }[]; hint?: string; numeric?: boolean }
-  | { key: string; label: string; type: "list"; hint?: string };
+  | { key: string; label: string; type: "list"; hint?: string }
+);
 
 const SECTIONS: Record<SectionKey, { title: string; description: string; fields: FieldSpec[] }> = {
   business: {
@@ -29,7 +31,7 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
     description: "Printed on bills and shown on the website.",
     fields: [
       { key: "name", label: "Business name", type: "text" },
-      { key: "tagline", label: "Tagline", type: "text" },
+      { key: "tagline", label: "Tagline", type: "text", advanced: true },
       { key: "addressLine1", label: "Address line 1", type: "text", wide: true },
       { key: "addressLine2", label: "Address line 2", type: "text", wide: true },
       { key: "city", label: "City / town", type: "text" },
@@ -40,22 +42,23 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
       { key: "whatsapp", label: "WhatsApp number", type: "text" },
       { key: "email", label: "Email", type: "email" },
       { key: "gstin", label: "GSTIN", type: "text", hint: "Required before issuing GST tax invoices. Checked for format and check digit." },
-      { key: "pan", label: "PAN", type: "text" },
+      { key: "pan", label: "PAN", type: "text", advanced: true },
       { key: "openingHours", label: "Opening hours", type: "text", hint: "Shown on the website. Leave blank to hide.", placeholder: "e.g. Mon–Sat 9:00 am – 8:00 pm" },
-      { key: "mapUrl", label: "Google Maps link", type: "url", wide: true },
-      { key: "about", label: "About the business", type: "textarea", wide: true },
+      { key: "mapUrl", label: "Google Maps link", type: "url", wide: true, advanced: true },
+      { key: "about", label: "About the business", type: "textarea", wide: true, advanced: true },
     ],
   },
   tax: {
     title: "GST & tax",
     description: "Decides which billing document is issued and how tax is calculated. Confirm with your accountant before changing.",
     fields: [
-      { key: "pricesIncludeTaxByDefault", label: "New prices include GST by default", type: "checkbox" },
-      { key: "roundOff", label: "Round bill total", type: "select", options: [{ value: "nearest_rupee", label: "To the nearest rupee (shows a round-off line)" }, { value: "none", label: "No rounding (paise)" }] },
+      { key: "pricesIncludeTaxByDefault", label: "New prices include GST by default", type: "checkbox", advanced: true },
+      { key: "roundOff", label: "Round bill total", type: "select", advanced: true, options: [{ value: "nearest_rupee", label: "To the nearest rupee (shows a round-off line)" }, { value: "none", label: "No rounding (paise)" }] },
       {
         key: "hsnMinDigits",
         label: "Minimum HSN digits on tax invoices",
         type: "select",
+        advanced: true,
         numeric: true,
         options: [
           { value: "4", label: "4 digits (turnover up to ₹5 crore)" },
@@ -63,9 +66,9 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
           { value: "8", label: "8 digits" },
         ],
       },
-      { key: "b2cDetailsThreshold", label: "Unregistered buyer details required from (₹)", type: "decimal", hint: "Rule 46(e): name, address and state are mandatory at or above this taxable value." },
+      { key: "b2cDetailsThreshold", label: "Unregistered buyer details required from (₹)", type: "decimal", hint: "Rule 46(e): name, address and state are mandatory at or above this taxable value.", advanced: true },
       { key: "confirmedBy", label: "Confirmed with (accountant)", type: "text" },
-      { key: "confirmedNote", label: "Notes", type: "textarea", wide: true },
+      { key: "confirmedNote", label: "Notes", type: "textarea", wide: true, advanced: true },
     ],
   },
   documents: {
@@ -73,11 +76,11 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
     description: "Numbering, terms and the text printed on bills, quotations and credit notes.",
     fields: [
       { key: "quotationValidityDays", label: "Quotation valid for (days)", type: "number", min: 1, max: 90 },
-      { key: "signatoryLabel", label: "Signatory line", type: "text", wide: true },
+      { key: "signatoryLabel", label: "Signatory line", type: "text", wide: true, advanced: true },
       { key: "footerNote", label: "Footer note", type: "text", wide: true },
       { key: "terms", label: "Terms & conditions (one per line)", type: "list", hint: "Agree these with your accountant. Leave empty to print none." },
       { key: "bankDetails", label: "Bank details (printed on bills)", type: "textarea", wide: true },
-      { key: "shareLinksEnabled", label: "Allow customer share links (view/download a bill via a private link)", type: "checkbox" },
+      { key: "shareLinksEnabled", label: "Allow customer share links (view/download a bill via a private link)", type: "checkbox", advanced: true },
     ],
   },
   payments: {
@@ -87,10 +90,10 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
       { key: "upiEnabled", label: "Show UPI QR codes with the exact bill amount", type: "checkbox" },
       { key: "upiVpa", label: "Shop UPI ID", type: "text", placeholder: "shopname@bank" },
       { key: "upiPayeeName", label: "Payee name shown in UPI apps", type: "text" },
-      { key: "upiMerchantCode", label: "Merchant category code (MCC)", type: "text", hint: "Only if this UPI ID is a verified merchant account with an MCC. Leave blank otherwise." },
-      { key: "qrExpiryMinutes", label: "QR valid for (minutes)", type: "number", min: 2, max: 120 },
-      { key: "maxPerUpiPayment", label: "Maximum per UPI payment (₹)", type: "decimal", hint: "Most UPI merchant payments are limited to ₹1,00,000 each — larger bills are split." },
-      { key: "requireUpiReference", label: "Require the 12-digit UTR when confirming UPI payments", type: "checkbox" },
+      { key: "upiMerchantCode", label: "Merchant category code (MCC)", type: "text", hint: "Only if this UPI ID is a verified merchant account with an MCC. Leave blank otherwise.", advanced: true },
+      { key: "qrExpiryMinutes", label: "QR valid for (minutes)", type: "number", min: 2, max: 120, advanced: true },
+      { key: "maxPerUpiPayment", label: "Maximum per UPI payment (₹)", type: "decimal", hint: "Most UPI merchant payments are limited to ₹1,00,000 each — larger bills are split.", advanced: true },
+      { key: "requireUpiReference", label: "Require the 12-digit UTR when confirming UPI payments", type: "checkbox", advanced: true },
       { key: "cashEnabled", label: "Accept cash", type: "checkbox" },
       { key: "cardEnabled", label: "Accept card (via a separate card machine)", type: "checkbox" },
       { key: "bankTransferEnabled", label: "Accept bank transfer (NEFT/IMPS/RTGS)", type: "checkbox" },
@@ -99,6 +102,7 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
         key: "gatewayProvider",
         label: "Automatic payment confirmation",
         type: "select",
+        advanced: true,
         options: [
           { value: "none", label: "None — staff verify every payment manually" },
           { value: "razorpay", label: "Razorpay dynamic UPI QR (needs API keys)" },
@@ -111,8 +115,8 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
     description: "Business-wide discount policy. Individual limits are set per staff member under Staff & access.",
     fields: [
       { key: "minMarginPercent", label: "Minimum gross margin %", type: "decimal", blankAllowed: true, hint: "Sales below this margin need approval. Blank = no floor. Category/product overrides win." },
-      { key: "targetMarginPercent", label: "Target gross margin %", type: "decimal", blankAllowed: true, hint: "Used for price suggestions. Margin is on selling price, not markup on cost." },
-      { key: "requireReasonForAnyDiscount", label: "Require a reason for every discount", type: "checkbox" },
+      { key: "targetMarginPercent", label: "Target gross margin %", type: "decimal", blankAllowed: true, hint: "Used for price suggestions. Margin is on selling price, not markup on cost.", advanced: true },
+      { key: "requireReasonForAnyDiscount", label: "Require a reason for every discount", type: "checkbox", advanced: true },
       { key: "inPersonApprovalEnabled", label: "Allow a manager to approve at the counter with their own password", type: "checkbox" },
       { key: "allowCreditSales", label: "Allow bills with an unpaid balance (credit sales) for permitted staff", type: "checkbox" },
     ],
@@ -147,6 +151,15 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
       { key: "heroSubtitle", label: "Homepage sub-headline", type: "textarea", wide: true },
     ],
   },
+  alerts: {
+    title: "Owner alerts",
+    description: "Emails to the owner: a summary of the day every evening, and a note when staff ask for a discount approval. Sent from the shop's email.",
+    fields: [
+      { key: "ownerEmail", label: "Send to (owner's email)", type: "email", hint: "Leave blank to send nothing." },
+      { key: "dailySummary", label: "Evening summary at about 8:30 pm: sales, cash and UPI received, bills, discounts, what's waiting", type: "checkbox" },
+      { key: "approvalAlerts", label: "Email me when staff ask for a discount approval", type: "checkbox" },
+    ],
+  },
   inventory: {
     title: "Inventory",
     description: "Stock tracking is ready but OFF until opening stock has been counted and entered.",
@@ -157,7 +170,9 @@ const SECTIONS: Record<SectionKey, { title: string; description: string; fields:
   },
 };
 
-const ORDER: SectionKey[] = ["business", "tax", "documents", "payments", "discounts", "pricing", "website", "security", "inventory"];
+const ORDER: SectionKey[] = ["business", "tax", "documents", "payments", "discounts", "alerts", "website"];
+/** Tabs the owner rarely needs, listed under "Advanced". */
+const ADVANCED: SectionKey[] = ["pricing", "security", "inventory"];
 
 type TaxClass = { id: string; name: string; gstRate: string; cessRate: string; isExempt: boolean; description: string | null };
 
@@ -178,7 +193,9 @@ export function SettingsEditor({
   taxClasses: TaxClass[];
   canEditTaxClasses: boolean;
 }) {
-  const sections = ORDER.filter((k) => editable.includes(k));
+  const main = ORDER.filter((k) => editable.includes(k));
+  const advanced = ADVANCED.filter((k) => editable.includes(k));
+  const sections = [...main, ...advanced];
   const [active, setActive] = useState<SectionKey>(initial && sections.includes(initial) ? initial : sections[0]);
   if (!sections.length) return <Alert>You cannot edit any settings.</Alert>;
   return (
@@ -187,7 +204,12 @@ export function SettingsEditor({
         className="-mx-4 flex gap-5 overflow-x-auto border-b border-navy-200 px-4 max-lg:relative max-lg:scroll-fade-x sm:mx-0 sm:pl-0 lg:sticky lg:top-8 lg:flex-col lg:gap-0 lg:border-b-0 lg:border-l lg:px-0"
         label="Settings sections"
       >
-        {sections.map((k) => (
+        {sections.map((k) => [
+          k === advanced[0] && main.length > 0 && (
+            <span key="advanced-label" className="label-sm shrink-0 self-center whitespace-nowrap pb-2.5 pt-1 text-navy-400 lg:mt-4 lg:self-start lg:py-2 lg:pl-4">
+              Advanced
+            </span>
+          ),
           <button
             key={k}
             type="button"
@@ -199,14 +221,22 @@ export function SettingsEditor({
             )}
           >
             {SECTIONS[k].title}
-          </button>
-        ))}
+          </button>,
+        ])}
       </TabStrip>
       <div className="min-w-0 space-y-6">
         {active === "tax" && <RegistrationCard current={settings.tax.registrationType} gstin={settings.business.gstin} all={settings.tax} />}
         <SectionForm key={active} section={active} value={settings[active] as unknown as Record<string, unknown>} razorpayConfigured={razorpayConfigured} />
-        {active === "documents" && <PrefixesForm value={settings.documents} fy={currentFy} />}
-        {active === "tax" && <TaxClasses classes={taxClasses} canEdit={canEditTaxClasses} />}
+        {active === "documents" && (
+          <MoreCards label="Bill numbering">
+            <PrefixesForm value={settings.documents} fy={currentFy} />
+          </MoreCards>
+        )}
+        {active === "tax" && (
+          <MoreCards label="GST rate classes">
+            <TaxClasses classes={taxClasses} canEdit={canEditTaxClasses} />
+          </MoreCards>
+        )}
       </div>
     </div>
   );
@@ -239,7 +269,9 @@ function useSave(section: SectionKey) {
 function SectionForm({ section, value, razorpayConfigured }: { section: SectionKey; value: Record<string, unknown>; razorpayConfigured: boolean }) {
   const spec = SECTIONS[section];
   const [form, setForm] = useState<Record<string, unknown>>(value);
+  const [more, setMore] = useState(false);
   const { save, busy, error } = useSave(section);
+  const extra = spec.fields.filter((f) => f.advanced).length;
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
   return (
     <Card>
@@ -265,7 +297,7 @@ function SectionForm({ section, value, razorpayConfigured }: { section: SectionK
               Only turn on automatic deduction after opening stock for every product has been counted and recorded — otherwise stock levels will be wrong.
             </Alert>
           )}
-          {spec.fields.map((f) => {
+          {spec.fields.filter((f) => more || !f.advanced).map((f) => {
             const id = `${section}-${f.key}`;
             const v = form[f.key];
             if (f.type === "checkbox") {
@@ -306,7 +338,12 @@ function SectionForm({ section, value, razorpayConfigured }: { section: SectionK
               </Field>
             );
           })}
-          <div className="flex justify-end gap-2 border-t border-navy-100 pt-4 sm:col-span-2">
+          <div className="flex flex-wrap items-center justify-end gap-2 border-t border-navy-100 pt-4 sm:col-span-2">
+            {extra > 0 && (
+              <button type="button" onClick={() => setMore((m) => !m)} className="mr-auto text-sm font-semibold text-navy-600 underline underline-offset-[3px] hover:text-navy-950" aria-expanded={more}>
+                {more ? "Fewer settings" : `More settings (${extra})`}
+              </button>
+            )}
             <Button variant="outline" onClick={() => setForm(value)}>
               Reset
             </Button>
@@ -317,6 +354,18 @@ function SectionForm({ section, value, razorpayConfigured }: { section: SectionK
         </form>
       </CardBody>
     </Card>
+  );
+}
+
+/** Cards the owner rarely needs (bill numbering, GST rate classes), closed until asked for. */
+function MoreCards({ label, children }: { label: string; children: React.ReactNode }) {
+  const [open, setOpen] = useState(false);
+  return open ? (
+    <>{children}</>
+  ) : (
+    <button type="button" onClick={() => setOpen(true)} className="text-sm font-semibold text-navy-600 underline underline-offset-[3px] hover:text-navy-950">
+      Show {label.toLowerCase()} (advanced)
+    </button>
   );
 }
 

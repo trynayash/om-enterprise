@@ -4,7 +4,7 @@ import { LoginForm } from "./login-form";
 import { PaperSheet, SheetStamp } from "@/components/ui/paper-sheet";
 
 /** Shared sign-in screen for /login (staff) and /admin (owner & administrators). */
-export function SignInCard({ title, description, badge }: { title: string; description: string; badge?: ReactNode }) {
+export function SignInCard({ title, description, badge, allowPin, next }: { title: string; description: string; badge?: ReactNode; allowPin?: boolean; next?: string }) {
   return (
     <PaperSheet
       stamp={badge ?? <SheetStamp>Staff</SheetStamp>}
@@ -20,7 +20,7 @@ export function SignInCard({ title, description, badge }: { title: string; descr
       <h1 className="headline text-[1.625rem] font-bold text-navy-950">{title}</h1>
       <p className="mt-2 text-sm leading-relaxed text-navy-500">{description}</p>
       <Suspense>
-        <LoginForm />
+        <LoginForm allowPin={allowPin} next={next} />
       </Suspense>
     </PaperSheet>
   );

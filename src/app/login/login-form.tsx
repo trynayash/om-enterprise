@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,10 +11,29 @@ import type { PublicActor } from "@/server/auth/actor";
 
 type Step1 = { actor: PublicActor } | { secretKeyRequired: true; challenge: string; expiresAt: string };
 
-/** Two-step sign-in: username + password, then the secret key for accounts that have one. */
-export function LoginForm() {
+const LAST_USERNAME = "om:last-username";
+
+/**
+ * Two-step sign-in: username + password, then the secret key for accounts that have one. Counter staff
+ * can use their PIN instead of the password (where `allowPin`); the username is remembered on the device.
+ */
+export function LoginForm({ allowPin, next: defaultNext }: { allowPin?: boolean; next?: string }) {
   const params = useSearchParams();
-  const [username, setUsername] = useState("");
+  const last = useSyncExternalStore(
+    () => () => {},
+    () => {
+      try {
+        return localStorage.getItem(LAST_USERNAME) ?? "";
+      } catch {
+        return "";
+      }
+    },
+    () => "",
+  );
+  const [typed, setUsername] = useState<string | null>(null);
+  const username = typed ?? last;
+  const [usePin, setUsePin] = useState(false);
+  const [pin, setPin] = useState("");
   const [password, setPassword] = useState("");
   const [challenge, setChallenge] = useState<string | null>(null);
   const [secretKey, setSecretKey] = useState("");
@@ -22,7 +41,12 @@ export function LoginForm() {
   const [busy, setBusy] = useState(false);
 
   const enter = (actor: PublicActor) => {
-    const next = params.get("next");
+    try {
+      localStorage.setItem(LAST_USERNAME, username.trim());
+    } catch {
+      // storage unavailable
+    }
+    const next = params.get("next") ?? defaultNext ?? null;
     const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : null;
     window.location.href = actor.mustChangePassword ? "/account/password?required=1" : (safeNext ?? landingPath(actor.permissions, actor.isSuperAdmin));
   };
@@ -32,6 +56,11 @@ export function LoginForm() {
     setBusy(true);
     setError(null);
     try {
+      if (usePin) {
+        const { actor } = await apiFetch<{ actor: PublicActor }>("/api/auth/login/pin", { method: "POST", body: { username, pin } });
+        enter(actor);
+        return;
+      }
       const res = await apiFetch<Step1>("/api/auth/login", { method: "POST", body: { username, password } });
       if ("secretKeyRequired" in res) {
         setChallenge(res.challenge);
@@ -100,13 +129,41 @@ export function LoginForm() {
       <Field label="Username" htmlFor="username">
         <Input id="username" autoComplete="username" autoCapitalize="none" spellCheck={false} value={username} onChange={(e) => setUsername(e.target.value)} className="h-12 text-base" required autoFocus />
       </Field>
-      <Field label="Password" htmlFor="password">
-        <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 text-base" required />
-      </Field>
+      {usePin ? (
+        <Field label="PIN" htmlFor="pin">
+          <Input
+            id="pin"
+            type="password"
+            inputMode="numeric"
+            autoComplete="off"
+            maxLength={6}
+            value={pin}
+            onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+            className="h-12 text-lg tracking-[0.3em]"
+            required
+          />
+        </Field>
+      ) : (
+        <Field label="Password" htmlFor="password">
+          <Input id="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 text-base" required />
+        </Field>
+      )}
       <Button type="submit" size="lg" className="mt-2 w-full" loading={busy}>
         Sign in
       </Button>
-      <p className="text-center text-xs text-navy-500">Forgot your password? Ask the Super Admin to reset it.</p>
+      {allowPin && (
+        <button
+          type="button"
+          onClick={() => {
+            setUsePin((v) => !v);
+            setError(null);
+          }}
+          className="block w-full text-center text-sm font-semibold text-navy-700 underline underline-offset-[3px] hover:text-navy-950"
+        >
+          {usePin ? "Sign in with password instead" : "Sign in with PIN (counter staff)"}
+        </button>
+      )}
+      <p className="text-center text-xs text-navy-500">{usePin ? "No PIN yet, or forgot it? Ask the Super Admin." : "Forgot your password? Ask the Super Admin to reset it."}</p>
     </form>
   );
 }

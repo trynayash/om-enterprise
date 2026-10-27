@@ -1,0 +1,17 @@
+{
+  "name": "OM ENTERPRISE — Owner",
+  "short_name": "OM Shop",
+  "description": "Today's money, approvals, new sale and search for OM ENTERPRISE.",
+  "id": "/admin/app",
+  "start_url": "/admin/app",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#0d1b30",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -19,6 +19,7 @@ export const STAFF_NAV: NavGroup[] = [
     items: [
       { href: "/pos", label: "Point of Sale", icon: "store", any: ["sales.create"] },
       { href: "/dashboard", label: "Overview", icon: "gauge", any: ["dashboard.view"] },
+      { href: "/admin/app", label: "Owner app (phone)", icon: "smartphone", any: ["dashboard.view"] },
     ],
   },
   {
